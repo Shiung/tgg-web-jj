@@ -4,15 +4,58 @@
  * For more information, see https://remix.run/file-conventions/entry.client
  */
 
-import { RemixBrowser } from "@remix-run/react";
-import { startTransition, StrictMode } from "react";
-import { hydrateRoot } from "react-dom/client";
+import { RemixBrowser } from '@remix-run/react'
+import { startTransition, StrictMode } from 'react'
+import { hydrateRoot } from 'react-dom/client'
+import i18next from 'i18next'
+import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector'
+import Fetch from 'i18next-fetch-backend'
+import { I18nextProvider, initReactI18next } from 'react-i18next'
+import { getInitialNamespaces } from 'remix-i18next/client'
+import { defaultNS, fallbackLng, supportedLngs } from './i18n'
 
-startTransition(() => {
-  hydrateRoot(
-    document,
-    <StrictMode>
-      <RemixBrowser />
-    </StrictMode>
-  );
-});
+async function main() {
+  // eslint-disable-next-line import/no-named-as-default-member
+  i18next
+    // load translation using http -> see /public/locales (i.e. https://xxxx/public/locales)
+    // Tell i18next to use the Fetch backend
+    .use(Fetch)
+    // detect user language (client-side language detector)
+    // learn more: https://github.com/i18next/i18next-browser-languageDetector
+    .use(I18nextBrowserLanguageDetector)
+    // Tell i18next to use the react-i18next plugin
+    .use(initReactI18next)
+    // init i18next
+    // for all options read: https://www.i18next.com/overview/configuration-options
+    .init({
+      fallbackLng,
+      defaultNS,
+      supportedLngs,
+      debug: process.env.NODE_ENV === 'development',
+      ns: getInitialNamespaces(),
+      detection: {
+        order: ['path', 'querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag']
+      },
+      interpolation: {
+        escapeValue: false // not needed for react as it escapes by default
+      },
+      backend: {
+        // We will configure the backend to fetch the translations from the
+        // resource route /api/locales and pass the lng and ns as search params
+        loadPath: '/locales/{{lng}}.json'
+      }
+    })
+
+  startTransition(() => {
+    hydrateRoot(
+      document,
+      <I18nextProvider i18n={i18next}>
+        <StrictMode>
+          <RemixBrowser />
+        </StrictMode>
+      </I18nextProvider>
+    )
+  })
+}
+
+main().catch((error) => console.error(error))
