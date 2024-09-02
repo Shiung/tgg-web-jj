@@ -1,0 +1,3 @@
+include:
+  - remote: "https://git-ops.okkia.site/download/ci-template/tgg/base.yml"
+  - remote: "https://git-ops.okkia.site/download/ci-template/tgg/base_frontend_nodejs.yml"
