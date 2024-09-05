@@ -10,9 +10,7 @@ export function useInitI18n() {
     // 从 URL 中获取语言参数，例如 ?lng=ja
     const searchParams = new URLSearchParams(location.search)
     const language =
-      searchParams.get('lng') ||
-      localStorage.getItem('lng') ||
-      navigator.language.split('-')[0]
+      searchParams.get('lng') || localStorage.getItem('lng') || navigator.language.split('-')[0]
 
     // 切换 i18next 的语言
     i18n.changeLanguage(language)

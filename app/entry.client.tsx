@@ -34,16 +34,16 @@ async function main() {
       debug: process.env.NODE_ENV === 'development',
       ns: getInitialNamespaces(),
       detection: {
-        order: ['path', 'querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag']
+        order: ['path', 'querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
       },
       interpolation: {
-        escapeValue: false // not needed for react as it escapes by default
+        escapeValue: false, // not needed for react as it escapes by default
       },
       backend: {
         // We will configure the backend to fetch the translations from the
         // resource route /api/locales and pass the lng and ns as search params
-        loadPath: '/locales/{{lng}}.json'
-      }
+        loadPath: '/locales/{{lng}}.json',
+      },
     })
 
   startTransition(() => {
@@ -58,4 +58,4 @@ async function main() {
   })
 }
 
-main().catch((error) => console.error(error))
+main().catch(error => console.error(error))

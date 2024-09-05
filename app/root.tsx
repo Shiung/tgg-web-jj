@@ -1,48 +1,70 @@
-import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration
-} from '@remix-run/react'
-// import { useEffect } from 'react'
-// import { SDKProvider, useLaunchParams } from '@telegram-apps/sdk-react'
-import { TonConnectUIProvider } from '@tonconnect/ui-react'
+import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
+import type { LinksFunction } from '@remix-run/node'
 import MainNav from '~/components/main-nav'
 import Header from '~/components/header'
+import AppRoot from '~/components/app-root'
+import ParticleBackground from '~/components/particle-background'
+import AppLoading from '~/components/app-loading'
+
 import './tailwind.css'
 
-const manifestUrl =
-  'https://raw.githubusercontent.com/ton-community/tutorials/main/03-client/test/public/tonconnect-manifest.json'
+export const links: LinksFunction = () => {
+  return [
+    { rel: 'icon', href: '/favicon.ico', sizes: '16x16', type: 'image/x-icon' },
+    {
+      rel: 'icon',
+      href: '/favicon-32x32.png',
+      sizes: '32x32',
+      type: 'image/png',
+    },
+    {
+      rel: 'icon',
+      href: '/favicon-48x48.png',
+      sizes: '48x48',
+      type: 'image/png',
+    },
+    {
+      rel: 'icon',
+      href: '/favicon-64x64.png',
+      sizes: '64x64',
+      type: 'image/png',
+    },
+    {
+      rel: 'apple-touch-icon',
+      href: '/apple-touch-icon.png',
+      sizes: '180x180',
+    },
+    {
+      rel: 'icon',
+      href: '/android-chrome-192x192.png',
+      sizes: '192x192',
+      type: 'image/png',
+    },
+    {
+      rel: 'icon',
+      href: '/android-chrome-512x512.png',
+      sizes: '512x512',
+      type: 'image/png',
+    },
+  ]
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  // const debug = useLaunchParams().startParam === 'debug'
-
-  // Enable debug mode to see all the methods sent and events received.
-  // useEffect(() => {
-  //   if (debug) {
-  //     import('eruda').then((lib) => lib.default.init())
-  //   }
-  // }, [debug])
-
   return (
-    <html lang='en'>
+    <html lang="en">
       <head>
-        <meta charSet='utf-8' />
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body className='bg-background font-sans antialiased dark'>
-        <TonConnectUIProvider manifestUrl={manifestUrl}>
-          {/* <SDKProvider acceptCustomStyles debug={debug}> */}
+      <body className="dark bg-background font-sans antialiased">
+        <AppRoot>
           <Header />
-          <main className='mx-auto w-full max-w-screen-sm flex-1'>
-            {children}
-          </main>
+          <main className="main-container">{children}</main>
+          <ParticleBackground />
           <MainNav />
-          {/* </SDKProvider> */}
-        </TonConnectUIProvider>
+        </AppRoot>
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -55,7 +77,6 @@ export default function App() {
 }
 
 export function HydrateFallback() {
-  return (
-    <p className='grid h-screen grid-cols-1 place-items-center'>Loading...</p>
-  )
+  return <AppLoading />
+  // return <p className="absolute inset-0 overflow-hidden bg-background">Loading...</p>
 }
