@@ -6,7 +6,7 @@ const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-black backdrop-blur">
-      <div className="mx-auto flex h-12 max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-12 w-full items-center justify-between px-4 py-2">
         <Link to="/">
           <img src="/logo.svg" alt="Kokon Logo" width={90} height={24} />
         </Link>

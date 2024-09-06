@@ -5,6 +5,7 @@ import Header from '~/components/header'
 import AppRoot from '~/components/app-root'
 import ParticleBackground from '~/components/particle-background'
 import AppLoading from '~/components/app-loading'
+import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 
 import './tailwind.css'
 
@@ -50,6 +51,7 @@ export const links: LinksFunction = () => {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const maxWidth = useAppMaxWidth()
   return (
     <html lang="en">
       <head>
@@ -61,7 +63,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="dark bg-background font-sans antialiased">
         <AppRoot>
           <Header />
-          <main className="main-container">{children}</main>
+          <main
+            className="relative z-10 mx-auto w-full flex-1"
+            style={{ maxWidth: `${maxWidth}px` }}
+          >
+            {children}
+          </main>
           <ParticleBackground />
           <MainNav />
         </AppRoot>
@@ -77,6 +84,9 @@ export default function App() {
 }
 
 export function HydrateFallback() {
-  return <AppLoading />
-  // return <p className="absolute inset-0 overflow-hidden bg-background">Loading...</p>
+  return (
+    <div className="bg-background">
+      <AppLoading />
+    </div>
+  )
 }

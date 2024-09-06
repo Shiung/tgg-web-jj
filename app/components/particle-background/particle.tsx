@@ -38,7 +38,7 @@ const Particle: React.FC<ParticleProps> = ({ coordinates, friction, speed = 1, o
         if (newPosition < -100) {
           // 当粒子到达顶部时，标记为不活跃并触发移除逻辑
           isAlive.current = false
-          onRemove()
+          requestAnimationFrame(() => onRemove())
           return prevPosition // 返回上一个位置以停止移动
         }
         return newPosition
@@ -54,7 +54,7 @@ const Particle: React.FC<ParticleProps> = ({ coordinates, friction, speed = 1, o
     return () => {
       cancelAnimationFrame(animationFrameId) // 清除动画帧
     }
-  }, [friction, onRemove])
+  }, [friction, onRemove, speed])
 
   if (!isAlive.current) return null
 

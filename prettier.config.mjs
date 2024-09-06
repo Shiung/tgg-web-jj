@@ -1,4 +1,4 @@
-{
+export default {
   "semi": false,
   "bracketSpacing": true,
   "singleQuote": true,

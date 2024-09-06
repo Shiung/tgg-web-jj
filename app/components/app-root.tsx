@@ -26,7 +26,9 @@ export default function AppRoot({ children }: PropsWithChildren) {
   return (
     <TonConnectUIProvider manifestUrl={manifestUrl}>
       <SDKProvider acceptCustomStyles debug={debug}>
-        <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        <QueryClientProvider client={queryClient}>
+          <div className="flex min-h-dvh flex-col">{children}</div>
+        </QueryClientProvider>
       </SDKProvider>
     </TonConnectUIProvider>
   )
