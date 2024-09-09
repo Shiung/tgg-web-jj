@@ -22,15 +22,18 @@ export default function Playground() {
     <div className="container p-4 pb-safe">
       <h1 className="text-2xl font-bold">Playground</h1>
       <Tabs value={currentTab} className="mt-4 w-full">
-        <TabsList>
+        <TabsList className="max-w-full overflow-x-auto">
           <TabsTrigger value="telegram-sdk">
             <Link to="/playground/telegram-sdk">Telegram SDK</Link>
           </TabsTrigger>
           <TabsTrigger value="ui">
-            <Link to="/playground/ui">UI</Link>
+            <Link to="/playground/ui">Ui</Link>
           </TabsTrigger>
           <TabsTrigger value="i18next">
             <Link to="/playground/i18next">i18next</Link>
+          </TabsTrigger>
+          <TabsTrigger value="svg-icon">
+            <Link to="/playground/svg-icon">svg icon</Link>
           </TabsTrigger>
         </TabsList>
         <TabsContent value={currentTab}>

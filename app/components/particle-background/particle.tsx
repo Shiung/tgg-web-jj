@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import Rhombus from './svg/Rhombus'
-import Pentahedron from './svg/Pentahedron'
-import Circle from './svg/Circle'
-import X from './svg/X'
-import Point from './svg/Point'
+import Rhombus from './icons/rhombus'
+import Pentahedron from './icons/pentahedron'
+import Circle from './icons/circle'
+import X from './icons/x'
+import Point from './icons/point'
 
 const svgComponents = [Rhombus, Pentahedron, Circle, X, Point]
 

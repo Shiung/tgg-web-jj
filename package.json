@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@radix-ui/react-aspect-ratio": "^1.1.0",
+    "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
@@ -38,6 +39,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-i18next": "^15.0.1",
+    "react-number-format": "^5.4.2",
     "react-use": "^17.5.1",
     "remix-i18next": "^6.3.0",
     "remix-utils": "^7.6.0",
@@ -55,6 +57,7 @@
     "@typescript-eslint/eslint-plugin": "^6.7.4",
     "@typescript-eslint/parser": "^6.7.4",
     "autoprefixer": "^10.4.19",
+    "cssnano": "^7.0.6",
     "deepl-node": "^1.13.1",
     "eslint": "^8.38.0",
     "eslint-config-prettier": "^9.1.0",

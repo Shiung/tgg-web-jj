@@ -1,13 +1,14 @@
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useLocation } from '@remix-run/react'
-import { useCallback } from 'react'
+import { useHapticFeedback } from '@telegram-apps/sdk-react'
 import { useTranslation } from 'react-i18next'
 import useStore from '~/stores/useStore'
 import { cn } from '~/lib/utils'
-import NavGame from '~/icons/nav-game.svg?react'
-import NavRank from '~/icons/nav-rank.svg?react'
-import NavTask from '~/icons/nav-task.svg?react'
-import NavShare from '~/icons/nav-share.svg?react'
-import NavWallet from '~/icons/nav-wallet.svg?react'
+import NavGame from './icons/game'
+import NavRank from './icons/rank'
+import NavTask from './icons/task'
+import NavShare from './icons/share'
+import NavWallet from './icons/wallet'
 
 const links = [
   { href: '/', i18n: 'game', SvgComponent: NavGame },
@@ -20,12 +21,26 @@ const links = [
 const MainNav: React.FC = () => {
   const { t } = useTranslation()
   const location = useLocation()
+  const hapticFeedback = useHapticFeedback(true)
   const maxWidth = useStore(state => state.maxWidth)
+  const [activeLink, setActiveLink] = useState(location.pathname)
 
   const isActive = useCallback(
-    (href: (typeof links)[number]['href']) => href === location.pathname,
-    [location.pathname]
+    (href: (typeof links)[number]['href']) => href === activeLink,
+    [activeLink]
   )
+
+  const handleClick = useCallback(
+    (href: string) => {
+      setActiveLink(href)
+      hapticFeedback?.impactOccurred('medium')
+    },
+    [hapticFeedback]
+  )
+
+  useEffect(() => {
+    setActiveLink(location.pathname)
+  }, [location.pathname])
 
   return (
     <nav className="fixed inset-x-4 bottom-4 z-40 flex h-16 justify-center">
@@ -37,10 +52,14 @@ const MainNav: React.FC = () => {
           <Link
             key={index}
             to={link.href}
+            prefetch="viewport"
             className="relative flex shrink-0 grow basis-0 flex-col items-center justify-center"
+            onClick={() => handleClick(link.href)}
           >
             <div className="flex flex-col items-center">
               <link.SvgComponent
+                width={25}
+                height={24}
                 className={cn(
                   'transition-all duration-300',
                   isActive(link.href) ? 'opacity-100 grayscale-0' : 'opacity-50 grayscale'

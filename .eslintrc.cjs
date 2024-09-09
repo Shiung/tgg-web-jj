@@ -11,13 +11,13 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
     ecmaFeatures: {
-      jsx: true
-    }
+      jsx: true,
+    },
   },
   env: {
     browser: true,
     commonjs: true,
-    es6: true
+    es6: true,
   },
   ignorePatterns: ['!**/.server', '!**/.client'],
 
@@ -34,32 +34,35 @@ module.exports = {
         'plugin:react/jsx-runtime',
         'plugin:react-hooks/recommended',
         'plugin:jsx-a11y/recommended',
-        'plugin:prettier/recommended'
+        'plugin:prettier/recommended',
       ],
       settings: {
         react: {
-          version: 'detect'
+          version: 'detect',
         },
         formComponents: ['Form'],
         linkComponents: [
           { name: 'Link', linkAttribute: 'to' },
-          { name: 'NavLink', linkAttribute: 'to' }
+          { name: 'NavLink', linkAttribute: 'to' },
         ],
         'import/resolver': {
-          typescript: {}
-        }
-      }
+          typescript: {},
+        },
+      },
+      rules: {
+        'react/prop-types': 'off',
+      },
     },
 
     // avoid shadcn-ui lint error
-    // 
+    //
     {
       files: ['**/components/ui/*.tsx'],
       rules: {
         'react/prop-types': 'off',
         // 'react/prop-types': [2, { ignore: ['className'] }],
-        'react-refresh/only-export-components': 'off'
-      }
+        'react-refresh/only-export-components': 'off',
+      },
     },
 
     // Typescript
@@ -71,26 +74,26 @@ module.exports = {
         'import/internal-regex': '^~/',
         'import/resolver': {
           node: {
-            extensions: ['.ts', '.tsx']
+            extensions: ['.ts', '.tsx'],
           },
           typescript: {
-            alwaysTryTypes: true
-          }
-        }
+            alwaysTryTypes: true,
+          },
+        },
       },
       extends: [
         'plugin:@typescript-eslint/recommended',
         'plugin:import/recommended',
-        'plugin:import/typescript'
-      ]
+        'plugin:import/typescript',
+      ],
     },
 
     // Node
     {
       files: ['.eslintrc.cjs'],
       env: {
-        node: true
-      }
-    }
-  ]
+        node: true,
+      },
+    },
+  ],
 }

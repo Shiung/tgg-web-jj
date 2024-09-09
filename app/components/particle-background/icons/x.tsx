@@ -1,6 +1,13 @@
 import type { SVGProps } from 'react'
-const SvgX = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={16} height={17} fill="none" {...props}>
+const SvgComponent = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={16}
+    height={17}
+    fill="none"
+    viewBox="0 0 16 17"
+    {...props}
+  >
     <path
       fill="#FF4D48"
       fillRule="evenodd"
@@ -10,4 +17,4 @@ const SvgX = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 )
-export default SvgX
+export default SvgComponent

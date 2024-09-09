@@ -1,4 +1,5 @@
 import type { MetaFunction } from '@remix-run/node'
+import { Boxes } from 'lucide-react'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Kokon' }, { name: 'description', content: 'Welcome to Kokon!' }]
@@ -30,13 +31,14 @@ export default function Index() {
           </div>
         </div>
       </div>
-      {/* 內部測試頁面 */}
+
+      {/* 開發使用 */}
       <a
-        className="fixed bottom-24 left-0 z-50 rounded-r-2xl border border-transparent bg-white/75 p-2 shadow backdrop-blur-md backdrop-saturate-150 transition-colors"
+        className="fixed left-0 top-[15%] z-50 rounded-r-2xl border border-l-0 border-gray-600 bg-black/50 p-2 py-2 pl-1 pr-3 shadow backdrop-blur"
         href="/playground"
         rel="noopener noreferrer"
       >
-        <h2 className="text-2xl font-semibold text-red-400">playground</h2>
+        <Boxes />
       </a>
     </div>
   )

@@ -37,7 +37,7 @@ export default function ParticleBackground() {
               speed={PARTICLE_SPEED}
               onRemove={() => {
                 // console.log(`粒子 ${particleKey} 被移除`)
-                requestAnimationFrame(() => { 
+                requestAnimationFrame(() => {
                   setParticles(prevParticles => prevParticles.filter(p => p.id !== particleKey))
                 })
               }}

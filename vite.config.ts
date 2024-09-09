@@ -16,7 +16,13 @@ export default defineConfig({
     tsconfigPaths(),
     svgr({
       svgrOptions: {
+        dimensions: false,
+        // 將 fill="#000" 替換為 fill="currentColor"，從而支援單色icon通過 CSS 替換顏色
+        replaceAttrValues: { '#000': 'currentColor' },
         plugins: ['@svgr/plugin-svgo', '@svgr/plugin-jsx'],
+        svgoConfig: {
+          plugins: [{ name: 'preset-default', params: { overrides: { removeViewBox: false } } }],
+        },
       },
     }),
   ],

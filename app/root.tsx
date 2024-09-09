@@ -52,6 +52,7 @@ export const links: LinksFunction = () => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const maxWidth = useAppMaxWidth()
+
   return (
     <html lang="en">
       <head>
