@@ -116,7 +116,6 @@ export default function TelegramSdk() {
     ]
   }, [initData])
 
-  // 使用 useCallback 优化事件处理函数
   const triggerImpact = useCallback(
     (style: ImpactHapticFeedbackStyle) => {
       hapticFeedback.impactOccurred(style)
