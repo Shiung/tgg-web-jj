@@ -6,6 +6,8 @@ import AppRoot from '~/components/app-root'
 import ParticleBackground from '~/components/particle-background'
 import AppLoading from '~/components/app-loading'
 import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
+import useStore from '~/stores/useStore'
+import { cn } from '~/lib/utils'
 
 import './tailwind.css'
 
@@ -52,6 +54,7 @@ export const links: LinksFunction = () => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const maxWidth = useAppMaxWidth()
+  const isNavVisible = useStore(state => state.isNavVisible)
 
   return (
     <html lang="en">
@@ -64,11 +67,17 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="dark bg-background font-sans antialiased">
         <AppRoot>
           <Header />
-          <main className="relative z-10 mx-auto w-full flex-1" style={{ maxWidth: maxWidth }}>
+          <main
+            className={cn(
+              'relative z-10 mx-auto w-full flex-1 overflow-y-auto overflow-x-hidden rounded-xl pt-3',
+              isNavVisible ? 'max-h-main-with-nav' : 'max-h-main'
+            )}
+            style={{ maxWidth: maxWidth }}
+          >
             {children}
           </main>
           <ParticleBackground />
-          <MainNav />
+          {isNavVisible && <MainNav />}
         </AppRoot>
         <ScrollRestoration />
         <Scripts />

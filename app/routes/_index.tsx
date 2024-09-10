@@ -60,11 +60,11 @@ const newReleaseSlides = [
 
 export default function Index() {
   return (
-    <div className="container px-0 pb-safe pt-3">
+    <div className="container px-0">
       {/* banner carousel */}
       <div className="relative aspect-[375/168] w-full rounded-t-xl bg-black">
         <div className="absolute inset-0 py-3">
-          <div className="animate-background-wave h-full w-full bg-[url('/images/home/carousel/bg.png')] bg-cover bg-center bg-repeat-x" />
+          <div className="h-full w-full animate-background-wave bg-[url('/images/home/carousel/bg.png')] bg-cover bg-center bg-repeat-x" />
         </div>
         <Carousel className="w-full px-4 py-3" plugins={[Autoplay({ delay: 3000 })]}>
           <CarouselContent className="ml-0">
@@ -101,7 +101,7 @@ export default function Index() {
         <div className="my-6 flex aspect-[343/344] w-full flex-row space-x-2">
           <div className="flex flex-1 flex-col space-y-2 text-lg font-extrabold">
             <div className="relative flex-1 overflow-hidden rounded-2xl">
-              <p className="absolute left-[14px] top-[14px]">NEKO GO DOWN 100 FLOORS</p>
+              <p className="absolute inset-x-3 top-[14px]">NEKO GO DOWN 100 FLOORS</p>
               <img
                 src="/images/home/carousel/game-cover2.png"
                 alt=""
@@ -109,7 +109,7 @@ export default function Index() {
               />
             </div>
             <div className="relative flex-1 overflow-hidden rounded-2xl">
-              <p className="absolute left-[14px] top-[14px]">NEKO CRASH</p>
+              <p className="absolute inset-x-3 top-[14px]">NEKO CRASH</p>
               <img
                 src="/images/home/carousel/game-cover3.png"
                 alt=""
@@ -118,7 +118,7 @@ export default function Index() {
             </div>
           </div>
           <div className="flex flex-1 flex-col space-y-2">
-            <div className="bg-colorLinear-orange relative flex-1 rounded-xl">
+            <div className="relative flex-1 rounded-xl bg-colorLinear-orange">
               <div className="absolute inset-3 flex flex-col text-start text-lg font-extrabold">
                 <span>SMASH EGG</span>
                 <span className="text-sm font-normal">

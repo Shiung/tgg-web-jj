@@ -61,6 +61,11 @@ const config = {
       },
       height: {
         header: 'var(--header-height)',
+        nav: 'var(--bottom-nav-safe-padding)',
+      },
+      maxHeight: {
+        main: 'calc(100dvh - var(--header-height))',
+        'main-with-nav': 'calc(100dvh - var(--header-height) - var(--bottom-nav-safe-padding))',
       },
       padding: {
         safe: 'var(--bottom-nav-safe-padding)',

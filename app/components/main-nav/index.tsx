@@ -43,7 +43,7 @@ const MainNav: React.FC = () => {
   }, [location.pathname])
 
   return (
-    <nav className="fixed inset-x-4 bottom-4 z-40 flex h-16 justify-center">
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex h-nav justify-center p-3">
       <div
         className="flex h-full w-full rounded-lg bg-black px-2 py-4 shadow backdrop-blur-md backdrop-saturate-150"
         style={{ maxWidth: maxWidth }}
