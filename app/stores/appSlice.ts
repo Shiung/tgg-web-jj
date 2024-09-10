@@ -1,12 +1,12 @@
 import { StateCreator } from 'zustand'
 
 export interface AppSlice {
-  maxWidth: number
-  updateMaxWidth: (maxWidth: number) => void
+  maxWidth: string
+  updateMaxWidth: (maxWidth: string) => void
 }
 
 const createAppSlice: StateCreator<AppSlice, [], [], AppSlice> = set => ({
-  maxWidth: 375,
+  maxWidth: '640px',
   updateMaxWidth: maxWidth => set({ maxWidth }),
 })
 

@@ -43,7 +43,7 @@ const Header: React.FC = () => {
                 <RefreshIcon className="h-4 w-4 text-primary" onClick={handleRefresh} />
               </div>
             </PopoverTrigger>
-            <PopoverContent>Wallet Area</PopoverContent>
+            <PopoverContent className="w-auto p-3">Wallet Area</PopoverContent>
           </Popover>
           {/* Avatar */}
           <Avatar>

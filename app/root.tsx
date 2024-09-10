@@ -64,10 +64,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="dark bg-background font-sans antialiased">
         <AppRoot>
           <Header />
-          <main
-            className="relative z-10 mx-auto w-full flex-1"
-            style={{ maxWidth: `${maxWidth}px` }}
-          >
+          <main className="relative z-10 mx-auto w-full flex-1" style={{ maxWidth: maxWidth }}>
             {children}
           </main>
           <ParticleBackground />
