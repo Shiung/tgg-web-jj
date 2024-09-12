@@ -5,14 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatKMBT(
-  num: number,
-  precision: number = 2,
-  removeTrailingZeros: boolean = true
-) {
+export function formatKM(num: number, precision: number = 2, removeTrailingZeros: boolean = true) {
   const map = [
-    { suffix: 'T', threshold: 1e12 },
-    { suffix: 'B', threshold: 1e9 },
+    // { suffix: 'T', threshold: 1e12 },
+    // { suffix: 'B', threshold: 1e9 },
     { suffix: 'M', threshold: 1e6 },
     { suffix: 'K', threshold: 1e3 },
     { suffix: '', threshold: 1 },

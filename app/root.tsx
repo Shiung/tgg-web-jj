@@ -1,7 +1,8 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
 import type { LinksFunction } from '@remix-run/node'
+import { Toaster } from '~/components/ui/toaster'
 import MainNav from '~/components/main-nav'
-import Header from '~/components/header'
+import Header from '~/components/header/index'
 import AppRoot from '~/components/app-root'
 import ParticleBackground from '~/components/particle-background'
 import AppLoading from '~/components/app-loading'
@@ -78,6 +79,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </main>
           <ParticleBackground />
           {isNavVisible && <MainNav />}
+          <Toaster />
         </AppRoot>
         <ScrollRestoration />
         <Scripts />

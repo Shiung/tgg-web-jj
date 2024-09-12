@@ -28,33 +28,27 @@ const bannerSlides = [
 const newReleaseSlides = [
   {
     id: 1,
-    title: 'NEKO GAME',
-    imgSrc: '/images/home/carousel/game-cover1.png',
+    title: 'MINES',
+    imgSrc: '/images/home/carousel/mines.png',
     imgAlt: '',
   },
   {
     id: 2,
-    title: 'NEKO GAME 2',
-    imgSrc: '/images/home/carousel/game-cover2.png',
-    imgAlt: '',
+    title: 'CRASH',
+    imgSrc: '/images/home/carousel/crash.png',
+    imgAlt: 'crash',
   },
   {
     id: 3,
-    title: 'NEKO GAME 3',
-    imgSrc: '/images/home/carousel/game-cover3.png',
+    title: 'CAT RUSSIA',
+    imgSrc: '/images/home/carousel/cat-russia.png',
     imgAlt: '',
   },
   {
     id: 4,
-    title: 'NEKO GAME 4',
-    imgSrc: '/images/home/carousel/game-cover1.png',
-    imgAlt: '',
-  },
-  {
-    id: 5,
-    title: 'NEKO GAME 5',
-    imgSrc: '/images/home/carousel/game-cover2.png',
-    imgAlt: '',
+    title: 'GO DOWN 100 FLOOS',
+    imgSrc: '/images/home/carousel/go-down-100-floors.png',
+    imgAlt: 'go-down-100-floors',
   },
 ]
 
@@ -64,7 +58,7 @@ export default function Index() {
       {/* banner carousel */}
       <div className="relative aspect-[375/168] w-full rounded-t-xl bg-black">
         <div className="absolute inset-0 py-3">
-          <div className="h-full w-full animate-background-wave bg-[url('/images/home/carousel/bg.png')] bg-cover bg-center bg-repeat-x" />
+          <div className="h-full w-full animate-background-wave bg-[url('/images/long-wave.png')] bg-cover bg-center bg-repeat-x" />
         </div>
         <Carousel className="w-full px-4 py-3" plugins={[Autoplay({ delay: 3000 })]}>
           <CarouselContent className="ml-0">
@@ -101,18 +95,18 @@ export default function Index() {
         <div className="my-6 flex aspect-[343/344] w-full flex-row space-x-2">
           <div className="flex flex-1 flex-col space-y-2 text-lg font-extrabold">
             <div className="relative flex-1 overflow-hidden rounded-2xl">
-              <p className="absolute inset-x-3 top-[14px]">NEKO GO DOWN 100 FLOORS</p>
+              <p className="absolute inset-x-3 top-[14px]">GO DOWN 100 FLOORS</p>
               <img
-                src="/images/home/carousel/game-cover2.png"
-                alt=""
+                src="/images/home/carousel/go-down-100-floors.png"
+                alt="go-down-100-floors"
                 className="h-full w-full object-cover"
               />
             </div>
             <div className="relative flex-1 overflow-hidden rounded-2xl">
-              <p className="absolute inset-x-3 top-[14px]">NEKO CRASH</p>
+              <p className="absolute inset-x-3 top-[14px]">CRASH</p>
               <img
-                src="/images/home/carousel/game-cover3.png"
-                alt=""
+                src="/images/home/carousel/crash.png"
+                alt="crash"
                 className="h-full w-full object-cover"
               />
             </div>
@@ -155,7 +149,7 @@ export default function Index() {
                 className="relative flex basis-1/3 overflow-hidden pl-0 text-center"
               >
                 <div className="relative pr-2">
-                  <span className="absolute left-2 top-2 text-xs font-extrabold">
+                  <span className="absolute inset-x-0 top-2 mx-auto min-h-8 text-center text-sm font-black">
                     {slide.title}
                   </span>
                   <img

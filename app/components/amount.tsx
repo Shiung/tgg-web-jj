@@ -1,6 +1,6 @@
 import { NumberFormatBase, useNumericFormat } from 'react-number-format'
 import { FormatInputValueFunction, NumericFormatProps } from 'react-number-format/types/types'
-import { formatKMBT } from '~/lib/utils'
+import { formatKM } from '~/lib/utils'
 
 interface AmountProps extends Partial<NumericFormatProps> {
   value: number
@@ -29,7 +29,7 @@ const Amount: React.FC<AmountProps> = ({
 
   const _format: FormatInputValueFunction = inputValue => {
     if (useKMBT) {
-      return formatKMBT(Number(inputValue), precision, removeTrailingZeros)
+      return formatKM(Number(inputValue), precision, removeTrailingZeros)
     }
     return format?.(inputValue) ?? inputValue
   }
