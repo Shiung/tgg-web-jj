@@ -64,8 +64,10 @@ const config = {
         nav: 'var(--bottom-nav-safe-padding)',
       },
       maxHeight: {
-        main: 'calc(100dvh - var(--header-height))',
-        'main-with-nav': 'calc(100dvh - var(--header-height) - var(--bottom-nav-safe-padding))',
+        main: 'calc(100dvh - var(--header-height) - var(--bottom-nav-safe-padding))',
+        'main-without-nav': 'calc(100dvh - var(--header-height))',
+        'main-without-header': 'calc(100dvh - var(--bottom-nav-safe-padding))',
+        'main-without-header-nav': '100dvh',
       },
       padding: {
         safe: 'var(--bottom-nav-safe-padding)',

@@ -5,9 +5,9 @@ import useStore from '~/stores/useStore'
 /**
  * Returns the maximum width of the app based on the height of the window.
  */
-const NON_MOBILE_WIDTH = 440
-const MAX_SCREEN_WIDTH = 640
-const RATIO = 375 / 812
+export const NON_MOBILE_WIDTH = 448
+export const MAX_SCREEN_WIDTH = 640
+export const RATIO = 375 / 812
 
 export function useAppMaxWidth() {
   const { width, height } = useWindowSize()
@@ -15,7 +15,7 @@ export function useAppMaxWidth() {
   const setIsDesktop = useStore(state => state.setIsDesktop)
 
   const maxWidth = useMemo(() => {
-    if (typeof window === 'undefined') return `${MAX_SCREEN_WIDTH}px`
+    if (typeof window === 'undefined') return `${NON_MOBILE_WIDTH}px`
     return width < MAX_SCREEN_WIDTH ? `${width}px` : `${height * RATIO}px`
   }, [width, height])
 

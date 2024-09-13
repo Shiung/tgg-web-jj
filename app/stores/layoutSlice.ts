@@ -1,4 +1,5 @@
 import { StateCreator } from 'zustand'
+import { NON_MOBILE_WIDTH } from '~/hooks/useAppMaxWidth'
 
 export interface LayoutSlice {
   maxWidth: string
@@ -12,7 +13,7 @@ export interface LayoutSlice {
 }
 
 const createLayoutSlice: StateCreator<LayoutSlice, [], [], LayoutSlice> = set => ({
-  maxWidth: '640px',
+  maxWidth: `${NON_MOBILE_WIDTH}px`,
   isDesktop: false,
   isHeaderVisible: true,
   isNavVisible: true,

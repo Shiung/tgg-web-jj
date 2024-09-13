@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
 import type { LinksFunction } from '@remix-run/node'
 import { Toaster } from '~/components/ui/toaster'
@@ -55,7 +56,23 @@ export const links: LinksFunction = () => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const maxWidth = useAppMaxWidth()
+  const isHeaderVisible = useStore(state => state.isHeaderVisible)
   const isNavVisible = useStore(state => state.isNavVisible)
+
+  const mainMaxHClass = useMemo(() => {
+    const maxHeightMap = {
+      true: {
+        true: 'max-h-main', // header + nav
+        false: 'max-h-main-without-nav', // header + no nav
+      },
+      false: {
+        true: 'max-h-main-without-header', // no header + nav
+        false: 'max-h-main-without-header-nav', // no header + no nav
+      },
+    }
+
+    return maxHeightMap[`${isHeaderVisible}`][`${isNavVisible}`]
+  }, [isHeaderVisible, isNavVisible])
 
   return (
     <html lang="en">
@@ -67,11 +84,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className="dark bg-background font-sans antialiased">
         <AppRoot>
-          <Header />
+          {isHeaderVisible && <Header />}
           <main
             className={cn(
-              'relative z-10 mx-auto w-full flex-1 overflow-y-auto overflow-x-hidden rounded-xl pt-3',
-              isNavVisible ? 'max-h-main-with-nav' : 'max-h-main'
+              'relative z-10 mx-auto flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden rounded-xl pt-3',
+              mainMaxHClass
             )}
             style={{ maxWidth: maxWidth }}
           >
