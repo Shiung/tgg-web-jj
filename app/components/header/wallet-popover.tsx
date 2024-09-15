@@ -49,23 +49,23 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
           )}
         >
           <KokonIcon className="h-4 w-4" />
-          <Amount className="text-sm font-extrabold" value={amount} />
+          <Amount className="text-sm font-ultra" value={amount} />
           <RefreshIcon className="h-4 w-4 text-primary" onClick={handleRefresh} />
         </div>
       </PopoverTrigger>
-      <PopoverContent className="primary-gradient-radius flex w-auto flex-col p-3 text-white">
+      <PopoverContent className="primary-gradient-border-rounded flex w-auto flex-col p-3 text-white">
         <div className="flex items-center space-x-2">
-          <div className="flex flex-col text-sm font-extrabold">
+          <div className="flex flex-col text-sm font-ultra">
             Total balance
             <span className="text-xs text-white/70">Display all in USDT</span>
           </div>
-          <Amount className="text-xl font-extrabold text-primary" value={amount} />
+          <Amount className="text-xl font-ultra text-primary" value={amount} />
         </div>
         <div className="mt-3 space-y-2">
           {coins.map((coin, index) => (
             <div
               key={index}
-              className="flex items-center justify-between rounded-lg bg-[#1C1C1C] px-3 py-2 font-extrabold"
+              className="flex items-center justify-between rounded-lg bg-[#1C1C1C] px-3 py-2 font-ultra"
             >
               <div className="flex items-center space-x-1">
                 <coin.icon className="h-6 w-6" />

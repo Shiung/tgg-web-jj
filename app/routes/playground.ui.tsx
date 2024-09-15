@@ -1,5 +1,8 @@
 import Amount from '~/components/amount'
 import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+// import { Label } from '~/components/ui/label'
+// import WarningIcon from '~/icons/warning.svg?react'
 
 export default function Ui() {
   return (
@@ -16,6 +19,21 @@ export default function Ui() {
         <Button variant="outline">Button</Button>
         <Button variant="outlineSoft">Button</Button>
       </div>
+      <h1 className="mt-4 text-xl font-bold">Input</h1>
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <Input placeholder="Please enter" />
+        {/* <div className="relative space-y-2">
+          <Label htmlFor="amount">Amount</Label>
+          <Input id="amount" placeholder="Please enter" />
+          <span className="absolute inset-y-2 right-3">KOKON</span>
+          <p className={`text-app-red flex items-center space-x-1 pl-3`}>
+            <WarningIcon className="mr-1 h-3 w-3" />
+            error message
+          </p>
+        </div> */}
+        <Input disabled placeholder="Please enter" />
+      </div>
+
       <h1 className="mt-4 text-xl font-bold">Amount</h1>
       <div className="flex flex-col space-y-1">
         <h3>使用 KMBT 格式</h3>

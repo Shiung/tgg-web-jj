@@ -72,10 +72,11 @@
 }
 
 @layer utilities {
-  .primary-gradient-radius {
+  /* 主要漸層邊框色 */
+  .primary-gradient-border-rounded {
     position: relative;
   }
-  .primary-gradient-radius::before {
+  .primary-gradient-border-rounded::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -90,5 +91,31 @@
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
+  }
+
+  /* Tab 漸層邊框色 */
+  .primary-gradient-border-tab {
+    position: relative;
+  }
+  .primary-gradient-border-tab::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px 12px 0px 0px;
+    padding: 1px 1px 0 1px;
+    background: linear-gradient(180deg, rgba(255, 242, 0, 1), rgba(255, 242, 0, 0.3));
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+  }
+
+  /* input 錯誤 */
+  .input-error {
+    @apply border-app-red text-app-red focus-within:ring-app-red !important;
   }
 }

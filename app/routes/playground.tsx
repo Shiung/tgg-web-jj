@@ -20,19 +20,19 @@ export default function Playground() {
 
   return (
     <div className="container rounded-t-xl bg-black px-0 py-3">
-      <h1 className="text-2xl font-bold">Playground</h1>
+      <h1 className="pl-4 text-2xl font-bold">Playground</h1>
       <Tabs value={currentTab} className="mt-4 w-full">
-        <TabsList className="max-w-full overflow-x-auto">
-          <TabsTrigger value="telegram-sdk">
+        <TabsList variant="cardTab" className="w-full overflow-x-auto">
+          <TabsTrigger variant="cardTab" value="telegram-sdk" className="flex-1">
             <Link to="/playground/telegram-sdk">Telegram SDK</Link>
           </TabsTrigger>
-          <TabsTrigger value="ui">
+          <TabsTrigger variant="cardTab" value="ui" className="flex-1">
             <Link to="/playground/ui">Ui</Link>
           </TabsTrigger>
-          <TabsTrigger value="i18next">
+          <TabsTrigger variant="cardTab" value="i18next" className="flex-1">
             <Link to="/playground/i18next">i18next</Link>
           </TabsTrigger>
-          <TabsTrigger value="svg-icon">
+          <TabsTrigger variant="cardTab" value="svg-icon" className="flex-1">
             <Link to="/playground/svg-icon">svg icon</Link>
           </TabsTrigger>
         </TabsList>

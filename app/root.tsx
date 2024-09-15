@@ -7,6 +7,7 @@ import Header from '~/components/header/index'
 import AppRoot from '~/components/app-root'
 import ParticleBackground from '~/components/particle-background'
 import AppLoading from '~/components/app-loading'
+import CurrentUrlPopover from '~/components/current-url-popover'
 import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 import useStore from '~/stores/useStore'
 import { cn } from '~/lib/utils'
@@ -97,6 +98,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
           <ParticleBackground />
           {isNavVisible && <MainNav />}
           <Toaster />
+          {/* 開發使用 */}
+          <CurrentUrlPopover />
         </AppRoot>
         <ScrollRestoration />
         <Scripts />
@@ -110,9 +113,5 @@ export default function App() {
 }
 
 export function HydrateFallback() {
-  return (
-    <div className="bg-background">
-      <AppLoading />
-    </div>
-  )
+  return <AppLoading variant="system" />
 }

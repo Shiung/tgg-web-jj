@@ -23,6 +23,10 @@ const config = {
       xs: '375px',
       ...defaultTheme.screens,
     },
+    fontWeight: {
+      ...defaultTheme.fontWeight,
+      ultra: '1000',
+    },
     extend: {
       colors: {
         border: 'hsl(var(--border))',
@@ -58,6 +62,16 @@ const config = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        app: {
+          red: '#FF4D48',
+          orange: '#FEBC02',
+          yellow: '#FDCB04',
+          green: '#3AE45A',
+          cyan: '#25D7D8',
+          blue: '#2D9BE6',
+          pink: '#F54798',
+          purple: '#7D2FD7',
+        },
       },
       height: {
         header: 'var(--header-height)',
@@ -90,11 +104,17 @@ const config = {
           '0%': { backgroundPosition: '0 0' },
           '100%': { backgroundPosition: '200% 0' },
         },
+        'spin-with-pause': {
+          '0%': { transform: 'rotate(0deg)' },
+          '50%': { transform: 'rotate(180deg)' },
+          '100%': { transform: 'rotate(180deg)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'background-wave': 'background-wave 4s linear infinite',
+        'spin-with-pause': 'spin-with-pause 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite',
       },
       backgroundImage: {
         'colorLinear-red': 'linear-gradient(180deg, #FF8C8C 0%, #FF0E03 100%)',

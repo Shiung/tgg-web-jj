@@ -54,7 +54,7 @@ export function useTelegramMock(): void {
       mockTelegramEnv({
         themeParams: {
           accentTextColor: '#6ab2f2',
-          bgColor: '#17212b',
+          bgColor: '#000000',
           buttonColor: '#5288c1',
           buttonTextColor: '#ffffff',
           destructiveTextColor: '#ec3942',

@@ -1,8 +1,9 @@
-import { type PropsWithChildren, useEffect, useMemo } from 'react'
+import { type PropsWithChildren, useEffect } from 'react'
 import { useNavigate } from '@remix-run/react'
-import { SDKProvider, useLaunchParams } from '@telegram-apps/sdk-react'
+import { SDKProvider, useLaunchParams, useMiniApp } from '@telegram-apps/sdk-react'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import useStore from '~/stores/useStore'
 import { useTelegramMock } from '~/hooks/useTelegramMock'
 
 const queryClient = new QueryClient()
@@ -11,13 +12,14 @@ const queryClient = new QueryClient()
 const manifestUrl =
   'https://raw.githubusercontent.com/ton-community/tutorials/main/03-client/test/public/tonconnect-manifest.json'
 
-export default function AppRoot({ children }: PropsWithChildren) {
+const TelegramInit: React.FC = () => {
   const navigate = useNavigate()
-  useTelegramMock()
-
   const startParam = useLaunchParams(true)?.startParam
-  // Enable debug mode to see all the methods sent and events received.
-  const debug = useMemo(() => startParam === 'debug', [startParam])
+  const miniApp = useMiniApp()
+
+  useEffect(() => {
+    miniApp.setHeaderColor('#000000')
+  }, [miniApp])
 
   useEffect(() => {
     if (startParam === 'debug') {
@@ -31,11 +33,19 @@ export default function AppRoot({ children }: PropsWithChildren) {
     }
   }, [navigate, startParam])
 
+  return null
+}
+
+export default function AppRoot({ children }: PropsWithChildren) {
+  useTelegramMock()
+  const inTelegram = useStore(state => state.inTelegram)
+
   return (
     <TonConnectUIProvider manifestUrl={manifestUrl}>
-      <SDKProvider acceptCustomStyles debug={debug}>
+      <SDKProvider acceptCustomStyles>
         <QueryClientProvider client={queryClient}>
           <div className="flex min-h-dvh flex-col">{children}</div>
+          {inTelegram && <TelegramInit />}
         </QueryClientProvider>
       </SDKProvider>
     </TonConnectUIProvider>

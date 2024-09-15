@@ -67,7 +67,7 @@ const MainNav: React.FC = () => {
               />
               <span
                 className={cn(
-                  'mt-1 text-xs font-black',
+                  'mt-1 text-xs font-ultra',
                   isActive(link.href) ? 'text-primary' : 'text-while'
                 )}
               >

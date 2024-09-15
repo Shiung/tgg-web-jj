@@ -40,13 +40,13 @@ const TreasureSheet: React.FC<{ className: string }> = ({ className }) => {
           className={cn('h-8 w-8 object-cover', className)}
         />
       </PopoverTrigger>
-      <PopoverContent className="primary-gradient-radius h-auto w-screen max-w-md p-4">
+      <PopoverContent className="primary-gradient-border-rounded h-auto w-screen max-w-md p-4">
         <div className="space-y-2">
           {treasures.map(treasure => (
             <div key={treasure.id} className="flex flex-col rounded-xl bg-[#1c1c1c]">
               <ul className="list-disc rounded-t-xl bg-[#333] py-2 pl-6 pr-3 text-white">
                 {treasure.conditions.map((condition, index) => (
-                  <li key={index} className="text-xs font-black">
+                  <li key={index} className="text-xs font-ultra">
                     {condition}
                   </li>
                 ))}
@@ -59,7 +59,7 @@ const TreasureSheet: React.FC<{ className: string }> = ({ className }) => {
                   <div className="flex-1 text-center">
                     <Amount
                       useKMBT
-                      className="text-xl font-black text-primary"
+                      className="text-xl font-ultra text-primary"
                       value={treasure.unlockAmount}
                     />
                     <p className="text-xs text-white/70">Waiting for unlock</p>
@@ -68,7 +68,7 @@ const TreasureSheet: React.FC<{ className: string }> = ({ className }) => {
                 <div className="flex flex-[0_0_33%] flex-col items-center justify-center border-l border-dashed border-white/20 px-2 py-1">
                   <Amount
                     useKMBT
-                    className="text-base font-black text-[#3AE45A]"
+                    className="text-base font-ultra text-[#3AE45A]"
                     value={treasure.readyToClaimAmount}
                   />
                   <p className="text-xs text-white/70">Ready for claim</p>

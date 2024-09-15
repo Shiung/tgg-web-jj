@@ -5,24 +5,34 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '~/lib/utils'
 
 const buttonVariants = cva(
-  'group relative inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium font-black ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50  transition-transform transform active:scale-95',
+  'group relative inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium font-ultra transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed transition-transform transform active:scale-95',
   {
     variants: {
       variant: {
         default: 'bg-primary text-black hover:bg-[#FFF871]',
         gray: 'bg-white/20 text-primary hover:bg-white/30',
-        danger: 'bg-[#FF4D48] text-white hover:bg-[#FF716D]',
+        danger: 'bg-app-red text-white hover:bg-[#FF716D]',
         outline: 'border border-primary text-primary hover:border-[#FFF871] hover:text-[#FFF871]',
         outlineSoft: 'border border-primary text-primary hover:bg-[#FFF871]/30',
+        menu: 'bg-[#1C1C1C] rounded-xl border border-transparent text-white hover:border-primary hover:text-primary hover:bg-[#FFF871]/30',
+        icon: 'opacity-70 transition-opacity hover:opacity-100',
       },
       size: {
-        default: 'h-9 rounded-full py-1 px-4',
-        icon: 'h-10 w-10',
+        default: 'h-9 py-1 px-4', // 36px
+        md: 'h-7 py-1 px-4', // 28px
+        sm: 'h-6 px-3', // 24px
+        xs: 'h-[18px] px-2', // 18px
+        icon: 'h-6 w-6 p-0',
+      },
+      isSelected: {
+        true: '!bg-[#FFF871]/30 !border-primary !text-primary', // 選中樣式
+        false: '',
       },
     },
     defaultVariants: {
       variant: 'default',
       size: 'default',
+      isSelected: false,
     },
   }
 )
@@ -34,9 +44,11 @@ const earColorVariants = cva(
       variant: {
         default: 'text-primary group-hover:text-[#FFF871]',
         gray: 'text-white/20 group-hover:text-white/30',
-        danger: 'text-[#FF4D48] group-hover:text-[#FF716D]',
+        danger: 'text-app-red group-hover:text-[#FF716D]',
         outline: 'text-primary',
         outlineSoft: 'text-primary',
+        menu: '',
+        icon: '',
       },
     },
   }
@@ -63,15 +75,31 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
   catEars?: boolean
+  isSelected?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = 'default', size, asChild = false, catEars = false, ...props }, ref) => {
+  (
+    {
+      className,
+      variant = 'default',
+      size,
+      isSelected = false,
+      asChild = false,
+      catEars = false,
+      ...props
+    },
+    ref
+  ) => {
     const Comp = asChild ? Slot : 'button'
     const earColorClass = earColorVariants({ variant })
 
     return (
-      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props}>
+      <Comp
+        className={cn(buttonVariants({ variant, size, isSelected, className }))}
+        ref={ref}
+        {...props}
+      >
         {catEars && (
           <>
             {/* 左右貓耳 */}
