@@ -3,6 +3,8 @@ import { Boxes } from 'lucide-react'
 import { Button } from '~/components/ui/button'
 import Autoplay from 'embla-carousel-autoplay'
 import { Carousel, CarouselContent, CarouselItem } from '~/components/ui/carousel'
+import { Link } from '@remix-run/react'
+import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Kokon' }, { name: 'description', content: 'Welcome to Kokon!' }]
@@ -172,6 +174,15 @@ export default function Index() {
       >
         <Boxes />
       </a>
+
+      {/* 紅包使用 */}
+      <Link
+        className="fixed bottom-24 left-0 z-50"
+        to="/lucky-money/list"
+        rel="noopener noreferrer"
+      >
+        <SvgEnterByFloating imgurl="/images/lucky-money/lucky-money.png" />
+      </Link>
     </div>
   )
 }
