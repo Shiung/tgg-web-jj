@@ -55,17 +55,21 @@ const GetLuckyMoneyDialog: React.FC = () => {
         )}
         {bagOpen && (
           <div className="flex flex-col items-center justify-center gap-1 px-9 text-lg font-[1000] text-white">
-            <div>You got a Luck Battle Bag from</div>
-            <div>User1234</div>
-            <div className="flex">
-              <KokonIcon className="h-8 w-8" />
-              <div className="text-[#FFF200]">1,888</div>
+            <div className="text-center">
+              <span className="inline-block">You got a Luck Battle Bag from</span>
             </div>
-            <img
-              src="/public/images/lucky-money/happy-cat.png"
-              className="h-[344px] w-[375px]"
-              alt="happy-cat"
-            />
+            <div>User1234</div>
+            <div className="flex items-center">
+              <KokonIcon className="h-8 w-8" />
+              <div className="ml-1 text-[#FFF200]">1,888</div>
+            </div>
+            <div className="relative aspect-[375/344] w-full max-w-[375px]">
+              <img
+                src="/public/images/lucky-money/happy-cat.png"
+                className="absolute inset-0 h-full w-full object-contain"
+                alt="happy-cat"
+              />
+            </div>
             <Button catEars className="-mt-8 w-full">
               Got it
             </Button>

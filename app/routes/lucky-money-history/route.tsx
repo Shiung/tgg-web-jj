@@ -21,10 +21,10 @@ const LuckyMoneyHistory = () => {
     return () => {
       setNavVisibility(true)
     }
-  }, [])
+  }, [setNavVisibility])
 
   return (
-    <div className="container m-0 flex flex-col rounded-t-xl bg-black p-0 text-white">
+    <div className="container m-0 flex flex-1 flex-col rounded-t-xl bg-black p-0 text-white">
       {/* 頭部 */}
       <div className="flex h-14 items-center justify-between p-4">
         <Link to="/lucky-money/list">
@@ -37,7 +37,7 @@ const LuckyMoneyHistory = () => {
       </div>
 
       {/* 用户列表 */}
-      <div className="mt-4 flex-1 space-y-3 overflow-y-auto px-4">
+      <div className="flex-1 space-y-3 overflow-y-auto p-4">
         {fakeLuckyMoneyList.map((el, index) => (
           <LuckyMoneyItem key={index} type={el.type} status={el.status} />
         ))}
