@@ -25,3 +25,9 @@ export function formatKM(num: number, precision: number = 2, removeTrailingZeros
 
   return `${num}`
 }
+
+export const formatCountdown = (seconds: number) => {
+  const minutes = Math.floor(seconds / 60)
+  const remainingSeconds = seconds % 60
+  return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`
+}

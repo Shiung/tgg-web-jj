@@ -18,6 +18,7 @@ import AddIcon from '~/icons/add.svg?react'
 import EditIcon from '~/icons/edit.svg?react'
 import WarningIcon from '~/icons/warning.svg?react'
 import { useEffect, useState } from 'react'
+import { formatCountdown } from '~/lib/utils'
 
 interface EmailDialogProps {
   email: string
@@ -25,14 +26,8 @@ interface EmailDialogProps {
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Please enter email address' }),
-  verificationCode: z.string().nonempty({ message: 'Verification code is required' }),
+  verificationCode: z.string().min(1, 'Verification code is required'),
 })
-
-const formatCountdown = (seconds: number) => {
-  const minutes = Math.floor(seconds / 60)
-  const remainingSeconds = seconds % 60
-  return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`
-}
 
 const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
   const {
@@ -119,7 +114,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
                 {...register('email')}
               />
               {errors.email && (
-                <p className={`text-app-red flex items-center space-x-1 pl-3`}>
+                <p className={`flex items-center space-x-1 pl-3 text-app-red`}>
                   <WarningIcon className="mr-1 h-3 w-3" />
                   {errors.email.message}
                 </p>
@@ -135,7 +130,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
             >
               Send Verification Code{' '}
               {countdown > 0 && (
-                <span className="bg-app-red absolute inset-y-1 right-1 flex items-center rounded-full px-2 text-white">
+                <span className="absolute inset-y-1 right-1 flex items-center rounded-full bg-app-red px-2 text-white">
                   {formatCountdown(countdown)}
                 </span>
               )}
@@ -146,11 +141,11 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
               <Input
                 id="verificationCode"
                 placeholder="Please enter"
-                className={errors.email ? 'input-error' : ''}
+                className={errors.verificationCode ? 'input-error' : ''}
                 {...register('verificationCode')}
               />
               {errors.verificationCode && (
-                <p className="text-app-red flex items-center pl-3 peer-invalid:visible">
+                <p className="flex items-center pl-3 text-app-red peer-invalid:visible">
                   <WarningIcon className="mr-1 h-3 w-3" />
                   {errors.verificationCode.message}
                 </p>
