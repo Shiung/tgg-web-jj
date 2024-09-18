@@ -5,6 +5,7 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import useStore from '~/stores/useStore'
 import { useTelegramMock } from '~/hooks/useTelegramMock'
+import useTelegramNavigate from '~/hooks/useTelegramNavigate'
 
 const queryClient = new QueryClient()
 
@@ -13,6 +14,7 @@ const manifestUrl =
   'https://raw.githubusercontent.com/ton-community/tutorials/main/03-client/test/public/tonconnect-manifest.json'
 
 const TelegramInit: React.FC = () => {
+  useTelegramNavigate()
   const navigate = useNavigate()
   const startParam = useLaunchParams(true)?.startParam
   const miniApp = useMiniApp()

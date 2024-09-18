@@ -24,7 +24,7 @@ const LuckyMoneyDetail = () => {
   }
   const handleShare = async () => {
     try {
-      if (!navigator.share) {
+      if (typeof navigator === 'undefined' || !navigator.share) {
         return
       }
       await navigator.share({

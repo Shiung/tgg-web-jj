@@ -10,7 +10,7 @@ import NavTask from './icons/task'
 import NavShare from './icons/share'
 import NavWallet from './icons/wallet'
 
-const links = [
+export const links = [
   { href: '/', i18n: 'game', SvgComponent: NavGame },
   { href: '/rank', i18n: 'rank', SvgComponent: NavRank },
   { href: '/task', i18n: 'task', SvgComponent: NavTask },
