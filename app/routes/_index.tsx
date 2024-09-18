@@ -1,9 +1,16 @@
 import type { MetaFunction } from '@remix-run/node'
-import { Boxes } from 'lucide-react'
-import { Button } from '~/components/ui/button'
-import Autoplay from 'embla-carousel-autoplay'
-import { Carousel, CarouselContent, CarouselItem } from '~/components/ui/carousel'
 import { Link } from '@remix-run/react'
+import { Boxes } from 'lucide-react'
+import Autoplay from 'embla-carousel-autoplay'
+import { Button } from '~/components/ui/button'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselDots,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '~/components/ui/carousel'
 import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
 
 export const meta: MetaFunction = () => {
@@ -81,6 +88,7 @@ export default function Index() {
               </CarouselItem>
             ))}
           </CarouselContent>
+          <CarouselDots />
         </Carousel>
       </div>
       {/* Game entrance */}
@@ -140,10 +148,14 @@ export default function Index() {
       </div>
       {/* new release carousel */}
       <div className="rounded-b-xl bg-black px-4 pb-4">
-        <div>
-          <h1 className="text-base font-ultra">NEW RELEASE</h1>
-        </div>
-        <Carousel className="mt-3 aspect-[346/110] w-full">
+        <Carousel className="aspect-[346/144] w-full">
+          <div className="mb-3 flex items-center justify-between">
+            <h1 className="text-base font-ultra">NEW RELEASE</h1>
+            <div className="relative flex items-center space-x-[2px]">
+              <CarouselPrevious />
+              <CarouselNext />
+            </div>
+          </div>
           <CarouselContent className="-ml-0">
             {newReleaseSlides.map(slide => (
               <CarouselItem
