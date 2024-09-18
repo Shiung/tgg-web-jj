@@ -1,0 +1,112 @@
+:root {
+  --text-high-contrast-rgb-value: 49, 49, 49;
+  --background-site-rgb-value: 0, 0, 0;
+  --wheel-item-size: 30px;
+}
+
+.embla {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 86px;
+  max-width: 30rem;
+  margin-left: auto;
+  margin-right: auto;
+
+  &:before,
+  &:after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    content: '';
+    display: block;
+    height: calc(50% - var(--wheel-item-size) / 2);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  &:before {
+    top: -0.5px;
+    border-bottom: 0.5px solid rgba(var(--text-high-contrast-rgb-value), 0.3);
+    background: linear-gradient(
+      to top,
+      rgba(var(--background-site-rgb-value), 0.65) 0%,
+      rgba(var(--background-site-rgb-value), 1) 100%
+    );
+  }
+
+  &:after {
+    bottom: -0.5px;
+    border-top: 0.5px solid rgba(var(--text-high-contrast-rgb-value), 0.3);
+    background: linear-gradient(
+      to bottom,
+      rgba(var(--background-site-rgb-value), 0.65) 0%,
+      rgba(var(--background-site-rgb-value), 1) 100%
+    );
+  }
+
+  &__ios-picker {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    min-width: 50%;
+    justify-content: center;
+    line-height: 1;
+    font-size: 1.8rem;
+  }
+
+  &__ios-picker__scene {
+    min-width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    touch-action: pan-x;
+  }
+
+  &__ios-picker__viewport {
+    height: var(--wheel-item-size);
+    width: 100%;
+    perspective: 1000px;
+    user-select: none;
+    touch-action: none;
+    -webkit-tap-highlight-color: transparent;
+
+    &--perspective-left {
+      perspective-origin: calc(50% + 130px) 50%;
+      transform: translateX(27px);
+    }
+
+    &--perspective-right {
+      perspective-origin: calc(50% - 130px) 50%;
+      transform: translateX(-27px);
+    }
+  }
+
+  &__ios-picker__container {
+    height: 100%;
+    width: 100%;
+    transform-style: preserve-3d;
+    will-change: transform;
+  }
+
+  &__ios-picker__slide {
+    width: 100%;
+    height: 100%;
+    font-size: 16px;
+    font-weight: 1000;
+    line-height: 22px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backface-visibility: hidden;
+    opacity: 0;
+  }
+
+  &__ios-picker__label {
+    font-weight: 700;
+    transform: translateX(-55px);
+    pointer-events: none;
+  }
+}
