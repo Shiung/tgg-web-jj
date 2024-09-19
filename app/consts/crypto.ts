@@ -8,6 +8,8 @@ export enum Crypto {
   KOKON = 'KOKON',
 }
 
+export type CryptoUnion = keyof typeof Crypto
+
 export const CRYPTO_DETAILS: Record<
   Crypto,
   {
