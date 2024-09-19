@@ -21,6 +21,7 @@ const TelegramInit: React.FC = () => {
 
   useEffect(() => {
     miniApp.setHeaderColor('#000000')
+    miniApp.setBgColor('#242424')
   }, [miniApp])
 
   useEffect(() => {

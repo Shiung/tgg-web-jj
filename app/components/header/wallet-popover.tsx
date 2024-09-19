@@ -1,9 +1,6 @@
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
-import { KokonIcon } from '~/components/color-icons'
+import { KokonIcon, UsdtIcon, TonIcon } from '~/components/color-icons'
 import RefreshIcon from '~/icons/refresh.svg?react'
-import kokonIcon from '~/components/color-icons/kokon'
-import UsdtIcon from '~/components/color-icons/usdt'
-import TonIcon from '~/components/color-icons/ton'
 import { Button } from '~/components/ui/button'
 import Amount from '~/components/amount'
 import { cn } from '~/lib/utils'
@@ -12,7 +9,7 @@ const amount = 10000000000
 const coins = [
   {
     coin: 'KOKON',
-    icon: kokonIcon,
+    icon: KokonIcon,
     value: 1234567.12,
     conversionRateToUSDT: 0.5,
     valueInUSDT: 1234567.12 * 0.5,
@@ -71,10 +68,10 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
                 <coin.icon className="h-6 w-6" />
                 <div className="flex flex-col">
                   <p className="text-xs">{coin.coin}</p>
-                  <Amount className="text-[10px] font-normal leading-3" value={coin.value} />
+                  <Amount className="text-[10px] font-normal leading-3" value={coin.valueInUSDT} />
                 </div>
               </div>
-              <Amount className="text-right text-sm" value={coin.valueInUSDT} />
+              <Amount className="text-right text-sm" value={coin.value} />
             </div>
           ))}
         </div>

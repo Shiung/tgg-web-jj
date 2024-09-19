@@ -23,16 +23,16 @@ export default function Playground() {
       <h1 className="pl-4 text-2xl font-bold">Playground</h1>
       <Tabs value={currentTab} className="mt-4 w-full">
         <TabsList variant="cardTab" className="w-full overflow-x-auto">
-          <TabsTrigger variant="cardTab" value="telegram-sdk" className="flex-1">
+          <TabsTrigger variant="cardTab" value="telegram-sdk" className="flex-1" asChild>
             <Link to="/playground/telegram-sdk">Telegram SDK</Link>
           </TabsTrigger>
-          <TabsTrigger variant="cardTab" value="ui" className="flex-1">
+          <TabsTrigger variant="cardTab" value="ui" className="flex-1" asChild>
             <Link to="/playground/ui">Ui</Link>
           </TabsTrigger>
-          <TabsTrigger variant="cardTab" value="i18next" className="flex-1">
+          <TabsTrigger variant="cardTab" value="i18next" className="flex-1" asChild>
             <Link to="/playground/i18next">i18next</Link>
           </TabsTrigger>
-          <TabsTrigger variant="cardTab" value="svg-icon" className="flex-1">
+          <TabsTrigger variant="cardTab" value="svg-icon" className="flex-1" asChild>
             <Link to="/playground/svg-icon">svg icon</Link>
           </TabsTrigger>
         </TabsList>

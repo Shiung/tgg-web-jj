@@ -114,7 +114,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
                 {...register('email')}
               />
               {errors.email && (
-                <p className={`flex items-center space-x-1 pl-3 text-app-red`}>
+                <p className="flex items-center space-x-1 pl-3 text-app-red">
                   <WarningIcon className="mr-1 h-3 w-3" />
                   {errors.email.message}
                 </p>

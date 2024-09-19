@@ -24,7 +24,7 @@ const tabsTriggerVariants = cva(
       variant: {
         default: 'rounded-full',
         cardTab:
-          'h-8 px-4 rounded-tl-xl rounded-tr-xl data-[state=active]:bg-black data-[state=active]:text-primary data-[state=active]:border-none data-[state=active]:primary-gradient-border-tab',
+          'h-8 px-4 rounded-tl-xl rounded-tr-xl transition-all duration-300 ease-in-out data-[state=active]:bg-black data-[state=active]:text-primary data-[state=active]:border-none data-[state=active]:primary-gradient-border-tab',
       },
     },
     defaultVariants: {
