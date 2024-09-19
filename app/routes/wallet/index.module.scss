@@ -1,0 +1,22 @@
+.header {
+  @apply relative flex flex-col space-y-2 rounded-t-xl bg-colorLinear-blue px-4 pb-8 pt-6;
+
+  &::before {
+    @apply absolute bottom-0 left-0 right-0 aspect-[375/126] w-full;
+    content: '';
+    background: url('/images/long-wave.png') no-repeat;
+    background-size: cover;
+  }
+}
+
+.coins-wallet-bg {
+  &::before {
+    content: '';
+    position: absolute;
+    top: -84px;
+    right: -1rem;
+    width: 160px;
+    height: 100px;
+    background: url('/images/wallet/coins-wallet.png') no-repeat center/cover;
+  }
+}
