@@ -77,7 +77,7 @@ export default function Index() {
                 className="relative flex aspect-[343/140] justify-between"
               >
                 <div className="absolute inset-y-3 left-4 flex w-[43%] flex-col justify-center break-words">
-                  <h1 className="font-ultra text-2xl">{slide.title}</h1>
+                  <h1 className="text-2xl font-ultra">{slide.title}</h1>
                   <p className="mt-1 text-xs font-normal text-primary">{slide.content}</p>
                 </div>
                 <img
@@ -103,7 +103,7 @@ export default function Index() {
         </div>
         {/* 343 / 344 */}
         <div className="my-6 flex aspect-[343/344] w-full flex-row space-x-2">
-          <div className="font-ultra flex flex-1 flex-col space-y-2 text-lg">
+          <div className="flex flex-1 flex-col space-y-2 text-lg font-ultra">
             <div className="relative flex-1 overflow-hidden rounded-2xl">
               <p className="absolute inset-x-3 top-[14px]">GO DOWN 100 FLOORS</p>
               <img
@@ -123,7 +123,7 @@ export default function Index() {
           </div>
           <div className="flex flex-1 flex-col space-y-2">
             <Link to="/smash-egg" className="relative flex-1 rounded-xl bg-colorLinear-orange">
-              <div className="font-ultra absolute inset-3 flex flex-col text-start text-lg">
+              <div className="absolute inset-3 flex flex-col text-start text-lg font-ultra">
                 <span>SMASH EGG</span>
                 <span className="text-sm font-normal">
                   Up to <span className="font-ultra text-primary">1000</span> kokon
@@ -163,7 +163,7 @@ export default function Index() {
                 className="relative flex basis-1/3 overflow-hidden pl-0 text-center"
               >
                 <div className="relative pr-2">
-                  <span className="font-ultra absolute inset-x-0 top-2 mx-auto min-h-8 text-center text-sm">
+                  <span className="absolute inset-x-0 top-2 mx-auto min-h-8 pl-2 pr-4 text-center text-sm font-ultra">
                     {slide.title}
                   </span>
                   <img
