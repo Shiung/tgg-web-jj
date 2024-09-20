@@ -54,6 +54,7 @@ const ProfileDialog: React.FC = () => {
     if (!state.value) return
     toast({
       title: 'Copied',
+      variant: 'success',
     })
   }, [state, toast])
 

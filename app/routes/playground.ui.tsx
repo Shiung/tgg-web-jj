@@ -1,10 +1,14 @@
 import Amount from '~/components/amount'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
+import { useToast } from '~/hooks/use-toast'
+import InfoTooltip from '~/components/info-tooltip'
 // import { Label } from '~/components/ui/label'
 // import WarningIcon from '~/icons/warning.svg?react'
 
 export default function Ui() {
+  const { toast } = useToast()
+
   return (
     <div className="container p-4 pb-safe">
       <h1 className="text-xl font-bold">Button</h1>
@@ -33,6 +37,32 @@ export default function Ui() {
         </div> */}
         <Input disabled placeholder="Please enter" />
       </div>
+
+      <h1 className="mt-4 text-xl font-bold">Info Tooltip</h1>
+      <InfoTooltip content="這是點擊後顯示的 Tooltip 內容" />
+
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast({
+            title: 'info',
+            variant: 'success',
+          })
+        }
+      >
+        Show Success Toast
+      </Button>
+      <Button
+        variant="outline"
+        onClick={() =>
+          toast({
+            title: 'info',
+            variant: 'error',
+          })
+        }
+      >
+        Show success Toast
+      </Button>
 
       <h1 className="mt-4 text-xl font-bold">Amount</h1>
       <div className="flex flex-col space-y-1">
