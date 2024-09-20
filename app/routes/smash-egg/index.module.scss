@@ -1,0 +1,40 @@
+.standby-bg {
+  background: linear-gradient(
+    180deg,
+    #ff72b1 1.31%,
+    #ff90c2 16.46%,
+    #ffb3d6 26.84%,
+    #ff7bba 33.55%,
+    #ff63ae 99.99%
+  );
+}
+
+.progress-bar {
+  border-radius: 12px;
+  background: url('images/smash-egg/progress-bar.png'),
+    linear-gradient(180deg, #ff90c2 0%, #eb0070 100%);
+  transition: all 0.5s ease-in-out;
+}
+
+.card-bg {
+  width: 100%;
+  background: url('images/smash-egg/bg-mask.png'), linear-gradient(180deg, #fdcb04 0%, #ff4d00 100%);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.marquee {
+  padding-inline: 4px;
+  white-space: nowrap;
+  animation: marquee 5s linear infinite;
+  color: #fff;
+}
+
+@keyframes marquee {
+  0% {
+    text-indent: 0%;
+  }
+  100% {
+    text-indent: -100%;
+  }
+}
