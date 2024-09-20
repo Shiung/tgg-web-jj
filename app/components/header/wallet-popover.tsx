@@ -1,3 +1,4 @@
+import { useNavigate } from '@remix-run/react'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
 import { KokonIcon, UsdtIcon, TonIcon } from '~/components/color-icons'
 import RefreshIcon from '~/icons/refresh.svg?react'
@@ -31,6 +32,7 @@ const coins = [
 ]
 
 const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
+  const navigate = useNavigate()
   const handleRefresh = (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     event.stopPropagation()
     console.log('handleRefresh')
@@ -75,7 +77,7 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
             </div>
           ))}
         </div>
-        <Button className="mt-6 w-full" catEars>
+        <Button className="mt-6 w-full" catEars onClick={() => navigate('/wallet')}>
           Deposit
         </Button>
       </PopoverContent>

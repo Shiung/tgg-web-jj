@@ -3,6 +3,7 @@ import { useNavigate } from '@remix-run/react'
 import { SDKProvider, useLaunchParams, useMiniApp } from '@telegram-apps/sdk-react'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import useStore from '~/stores/useStore'
 import { useTelegramMock } from '~/hooks/useTelegramMock'
 import useTelegramNavigate from '~/hooks/useTelegramNavigate'
@@ -49,6 +50,7 @@ export default function AppRoot({ children }: PropsWithChildren) {
         <QueryClientProvider client={queryClient}>
           <div className="flex min-h-dvh flex-col">{children}</div>
           {inTelegram && <TelegramInit />}
+          <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
         </QueryClientProvider>
       </SDKProvider>
     </TonConnectUIProvider>
