@@ -1,48 +1,82 @@
+import { useState } from 'react'
 import Amount from '~/components/amount'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { useToast } from '~/hooks/use-toast'
 import InfoTooltip from '~/components/info-tooltip'
+import { Switch } from '~/components/ui/switch'
+import { Label } from '~/components/ui/label'
 // import { Label } from '~/components/ui/label'
-// import WarningIcon from '~/icons/warning.svg?react'
 
 export default function Ui() {
   const { toast } = useToast()
+  const [disabled, setDisabled] = useState(false)
+  const [loading, setLoading] = useState(false)
 
   return (
     <div className="container p-4 pb-safe">
-      <h1 className="text-xl font-bold">Button</h1>
+      {/* Button */}
+      <h1 className="flex items-center space-x-2 text-xl font-bold">
+        Button
+        <Switch
+          id="button-loading"
+          checked={loading}
+          onCheckedChange={checked => setLoading(checked)}
+        />
+        <Label htmlFor="button-loading">Loading</Label>
+        <Switch
+          id="button-disabled"
+          checked={disabled}
+          onCheckedChange={checked => setDisabled(checked)}
+        />
+        <Label htmlFor="button-disabled">Disabled</Label>
+      </h1>
       <div className="mt-2 grid grid-cols-2 gap-2">
-        <Button catEars>Default Button</Button>
-        <Button catEars variant="gray">
+        <Button disabled={disabled} loading={loading} catEars>
+          Default Button
+        </Button>
+        <Button disabled={disabled} loading={loading} catEars variant="gray">
           Button
         </Button>
-        <Button catEars variant="danger">
+        <Button disabled={disabled} loading={loading} catEars variant="danger">
           Button
         </Button>
-        <Button variant="outline">Button</Button>
-        <Button variant="outlineSoft">Button</Button>
+        <Button disabled={disabled} loading={loading} variant="outline">
+          Button
+        </Button>
+        <Button disabled={disabled} loading={loading} variant="outlineSoft">
+          Button
+        </Button>
       </div>
+      {/* Input */}
       <h1 className="mt-4 text-xl font-bold">Input</h1>
       <div className="mt-2 grid grid-cols-2 gap-2">
         <Input placeholder="Please enter" />
-        {/* <div className="relative space-y-2">
-          <Label htmlFor="amount">Amount</Label>
-          <Input id="amount" placeholder="Please enter" />
-          <span className="absolute inset-y-2 right-3">KOKON</span>
-          <p className={`text-app-red flex items-center space-x-1 pl-3`}>
-            <WarningIcon className="mr-1 h-3 w-3" />
-            error message
-          </p>
-        </div> */}
         <Input disabled placeholder="Please enter" />
+        {/* id 給 label 與 input 連動使用 */}
+        <Input id="label" label="label" placeholder="Please enter" suffix="USDT" clearable />
+        <Input
+          id="password"
+          label="password"
+          type="password"
+          placeholder="Please enter"
+          clearable
+        />
+        <Input
+          id="field"
+          label="field"
+          placeholder="Please enter"
+          error="error message"
+          hint="hint message"
+          clearable
+        />
       </div>
-
-      <h1 className="mt-4 text-xl font-bold">Info Tooltip</h1>
+      {/* Tooltip / Toast */}
+      <h1 className="mt-4 text-xl font-bold">Info Tooltip / Toast</h1>
       <InfoTooltip content="這是點擊後顯示的 Tooltip 內容" />
-
       <Button
         variant="outline"
+        className="ml-2"
         onClick={() =>
           toast({
             title: 'info',
@@ -54,6 +88,7 @@ export default function Ui() {
       </Button>
       <Button
         variant="outline"
+        className="ml-2"
         onClick={() =>
           toast({
             title: 'info',
@@ -64,6 +99,7 @@ export default function Ui() {
         Show success Toast
       </Button>
 
+      {/* Amount */}
       <h1 className="mt-4 text-xl font-bold">Amount</h1>
       <div className="flex flex-col space-y-1">
         <h3>使用 KMBT 格式</h3>

@@ -105,21 +105,14 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col px-3 pb-6 pt-4 text-sm text-white/70">
             {/* Email */}
-            <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                placeholder="Please enter"
-                className={errors.email ? 'input-error' : ''}
-                {...register('email')}
-              />
-              {errors.email && (
-                <p className="flex items-center space-x-1 pl-3 text-app-red">
-                  <WarningIcon className="mr-1 h-3 w-3" />
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
+            <Input
+              id="email"
+              label="Email"
+              placeholder="Please enter"
+              clearable
+              error={errors.email?.message}
+              {...register('email')}
+            />
             {/* Verification Button */}
             <Button
               className="mt-2 w-full"
@@ -136,21 +129,13 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
               )}
             </Button>
             {/* Verification Code */}
-            <div className="mt-3 space-y-1">
-              <Label htmlFor="verificationCode">Verification Code</Label>
-              <Input
-                id="verificationCode"
-                placeholder="Please enter"
-                className={errors.verificationCode ? 'input-error' : ''}
-                {...register('verificationCode')}
-              />
-              {errors.verificationCode && (
-                <p className="flex items-center pl-3 text-app-red peer-invalid:visible">
-                  <WarningIcon className="mr-1 h-3 w-3" />
-                  {errors.verificationCode.message}
-                </p>
-              )}
-            </div>
+            <Input
+              id="verificationCode"
+              label="Verification Code"
+              placeholder="Please enter"
+              error={errors.verificationCode?.message}
+              {...register('verificationCode')}
+            />
           </div>
           <DialogFooter className="flex flex-row space-x-2 px-3 pb-4">
             <DialogClose asChild>

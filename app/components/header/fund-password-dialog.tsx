@@ -98,22 +98,14 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ password }) => {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col px-3 pb-6 pt-4 text-sm text-white/70">
             {/* Fund Password */}
-            <div className="space-y-1">
-              <Label htmlFor="password">Fund Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="Please enter"
-                className={errors.password ? 'input-error' : ''}
-                {...register('password')}
-              />
-              {errors.password && (
-                <p className={`flex items-center space-x-1 pl-3 text-app-red`}>
-                  <WarningIcon className="mr-1 h-3 w-3" />
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
+            <Input
+              id="password"
+              label="Fund Password"
+              type="password"
+              placeholder="Please enter"
+              error={errors.password?.message}
+              {...register('password')}
+            />
             {/* Verification Button */}
             <Button
               className="mt-2 w-full"
@@ -130,21 +122,13 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ password }) => {
               )}
             </Button>
             {/* Verification Code */}
-            <div className="mt-3 space-y-1">
-              <Label htmlFor="verificationCode">Verification Code</Label>
-              <Input
-                id="verificationCode"
-                placeholder="Please enter"
-                className={errors.verificationCode ? 'input-error' : ''}
-                {...register('verificationCode')}
-              />
-              {errors.verificationCode && (
-                <p className="flex items-center pl-3 text-app-red peer-invalid:visible">
-                  <WarningIcon className="mr-1 h-3 w-3" />
-                  {errors.verificationCode.message}
-                </p>
-              )}
-            </div>
+            <Input
+              id="verificationCode"
+              label="Verification Code"
+              placeholder="Please enter"
+              error={errors.verificationCode?.message}
+              {...register('verificationCode')}
+            />
           </div>
           <DialogFooter className="flex flex-row space-x-2 px-3 pb-4">
             <DialogClose asChild>

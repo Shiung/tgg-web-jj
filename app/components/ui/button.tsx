@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
+import { Loader2 } from 'lucide-react'
 
 import { cn } from '~/lib/utils'
 
@@ -78,6 +79,7 @@ export interface ButtonProps
   asChild?: boolean
   catEars?: boolean
   isSelected?: boolean
+  loading?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -89,27 +91,33 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       isSelected = false,
       asChild = false,
       catEars = false,
+      loading = false,
+      disabled,
       ...props
     },
     ref
   ) => {
     const Comp = asChild ? Slot : 'button'
     const earColorClass = earColorVariants({ variant })
+    const isDisabled = loading || disabled
 
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, isSelected, className }))}
         ref={ref}
+        disabled={isDisabled}
         {...props}
       >
-        {catEars && (
-          <>
-            {/* 左右貓耳 */}
-            <CatEar className={cn('left-[18px]', earColorClass)} />
-            <CatEar className={cn('right-[18px]', earColorClass)} />
-          </>
-        )}
-        {props.children}
+        <>
+          {catEars && (
+            <>
+              {/* 左右貓耳 */}
+              <CatEar className={cn('left-[18px]', earColorClass)} />
+              <CatEar className={cn('right-[18px]', earColorClass)} />
+            </>
+          )}
+          {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : props.children}
+        </>
       </Comp>
     )
   }

@@ -34,10 +34,8 @@ const InfoTooltip: React.FC<InfoTooltipProps> = ({ content }) => (
         )}
       >
         {content}
-        <PopoverPrimitive.Arrow asChild width={22} height={10} className="translate-y-0">
-          <div className="-translate-y-[2px]">
-            <Arrow className="rotate-180" />
-          </div>
+        <PopoverPrimitive.Arrow asChild width={22} height={10} className="-translate-y-[2px]">
+          <Arrow className="rotate-180" />
         </PopoverPrimitive.Arrow>
       </PopoverPrimitive.Content>
     </PopoverPrimitive.Portal>
