@@ -3,9 +3,9 @@ import {
   useInitData,
   useLaunchParams,
   useBackButton,
-  useMainButton,
+  // useMainButton,
   useViewport,
-  useThemeParams,
+  // useThemeParams,
   useHapticFeedback,
   type ImpactHapticFeedbackStyle,
   type NotificationHapticFeedbackType,
@@ -67,7 +67,6 @@ export default function TelegramSdk() {
     if (!initData || !initDataRaw) {
       return
     }
-    console.log('tg data', initData, initDataRaw)
 
     const {
       hash,

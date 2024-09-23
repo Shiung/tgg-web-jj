@@ -74,8 +74,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     useEffect(() => {
       if (suffixRef.current) {
-        console.log('suffixRef.current.offsetWidth', suffixRef.current.offsetWidth)
-
         setSuffixWidth(suffixRef.current.offsetWidth)
       }
     }, [suffix])
