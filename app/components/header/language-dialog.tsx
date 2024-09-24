@@ -51,7 +51,7 @@ const LanguageDialog: React.FC = () => {
             <Button
               key={language.value}
               variant="menu"
-              className="h-10 space-x-2 border-transparent bg-[#1C1C1C]"
+              className="h-10 justify-start space-x-2 border-transparent bg-[#1C1C1C]"
               isSelected={selectedLanguage === language.value}
               onClick={() => handleLanguageSelect(language.value)}
             >

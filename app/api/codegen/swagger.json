@@ -1,0 +1,1263 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "website API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/_sys/api": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "sys"
+        ],
+        "responses": {}
+      }
+    },
+    "/_sys/api.json": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "sys"
+        ],
+        "responses": {}
+      }
+    },
+    "/_sys/cache": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "sys"
+        ],
+        "responses": {}
+      }
+    },
+    "/_sys/cache/{name}/{key}": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "sys"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: name",
+            "name": "name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Path parameter: key",
+            "name": "key",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {}
+      },
+      "delete": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "sys"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: name",
+            "name": "name",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Path parameter: key",
+            "name": "key",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/_sys/log": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "sys"
+        ],
+        "responses": {}
+      }
+    },
+    "/_sys/log/{level}": {
+      "put": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "sys"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: level",
+            "name": "level",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/_sys/log/{level}/{duration}": {
+      "put": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "sys"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: level",
+            "name": "level",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Path parameter: duration",
+            "name": "duration",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/ajax/customer/bindemail": {
+      "put": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*CustomerController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "code",
+                "email"
+              ],
+              "properties": {
+                "code": {
+                  "description": "驗證碼",
+                  "type": "string"
+                },
+                "email": {
+                  "description": "收信信箱",
+                  "type": "string",
+                  "format": "email"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "succeed": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/customer/bindpin": {
+      "put": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*CustomerController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "code",
+                "pin"
+              ],
+              "properties": {
+                "code": {
+                  "description": "驗證碼",
+                  "type": "string"
+                },
+                "pin": {
+                  "description": "資金密碼",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "succeed": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/customer/info": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*CustomerController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "customerId": {
+                  "description": "玩家Id",
+                  "type": "string"
+                },
+                "email": {
+                  "description": "信箱",
+                  "type": "string"
+                },
+                "language": {
+                  "description": "語系",
+                  "type": "string"
+                },
+                "pin": {
+                  "description": "資金密碼",
+                  "type": "string"
+                },
+                "productId": {
+                  "description": "產品Id",
+                  "type": "integer",
+                  "format": "uint64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/customer/locale": {
+      "put": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*CustomerController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "locale": {
+                  "description": "語系",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "succeed": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/customer/login": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*CustomerController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "id",
+                "productId",
+                "version",
+                "os",
+                "deviceId"
+              ],
+              "properties": {
+                "avatar": {
+                  "description": "使用者頭像",
+                  "type": "string"
+                },
+                "device": {
+                  "description": "裝置類型, 如:Mini App, Web",
+                  "type": "string"
+                },
+                "deviceId": {
+                  "description": "裝置設備號",
+                  "type": "string",
+                  "maxLength": 50
+                },
+                "firstName": {
+                  "description": "first_name",
+                  "type": "string"
+                },
+                "id": {
+                  "description": "Telegram id",
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "languageCode": {
+                  "description": "language_code",
+                  "type": "string"
+                },
+                "lastName": {
+                  "description": "last_name",
+                  "type": "string"
+                },
+                "os": {
+                  "description": "操作裝置系統, 如Android, Ios, Windows, MacOS",
+                  "type": "string",
+                  "maxLength": 15
+                },
+                "productId": {
+                  "description": "產品Id",
+                  "type": "integer",
+                  "format": "uint64",
+                  "minimum": 1
+                },
+                "startapp": {
+                  "description": "推薦轉介碼",
+                  "type": "string"
+                },
+                "userName": {
+                  "description": "username",
+                  "type": "string"
+                },
+                "version": {
+                  "description": "前端版本號",
+                  "type": "string",
+                  "maxLength": 15
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "description": "登入token",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/customer/validcode": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*CustomerController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "email"
+              ],
+              "properties": {
+                "email": {
+                  "description": "收信信箱",
+                  "type": "string",
+                  "format": "email"
+                },
+                "kind": {
+                  "description": "驗證類型",
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "succeed": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/games/{id}/enter": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*VenueController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "venueId",
+                "currency",
+                "language",
+                "ip"
+              ],
+              "properties": {
+                "currency": {
+                  "type": "string"
+                },
+                "ip": {
+                  "type": "string"
+                },
+                "language": {
+                  "type": "string"
+                },
+                "playerId": {
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "productId": {
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "subGameId": {
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "venueId": {
+                  "type": "integer",
+                  "format": "uint64"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "gameUrl"
+              ],
+              "properties": {
+                "gameUrl": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/header/wallet": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*WalletController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "name": "token",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "幣別(選填)",
+            "name": "currency",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "productId",
+                "memberId",
+                "totalBalanceInUsdt",
+                "wallets"
+              ],
+              "properties": {
+                "memberId": {
+                  "description": "會員id",
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "productId": {
+                  "description": "產品id",
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "totalBalanceInUsdt": {
+                  "description": "有效餘額總計(USDT)",
+                  "type": "string"
+                },
+                "wallets": {
+                  "description": "各幣別錢包",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "currency",
+                      "balance",
+                      "frozenFunds"
+                    ],
+                    "properties": {
+                      "balance": {
+                        "description": "可用餘額，已扣除凍結資金",
+                        "type": "string"
+                      },
+                      "currency": {
+                        "description": "幣別",
+                        "type": "string"
+                      },
+                      "frozenFunds": {
+                        "description": "凍結資金",
+                        "type": "string"
+                      },
+                      "id": {
+                        "description": "錢包id",
+                        "type": "integer",
+                        "format": "uint64"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/team/setting": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*SettingController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "classSetting": {
+                  "description": "升等設定",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "class",
+                      "activeMember",
+                      "totalBet",
+                      "totalDeposit"
+                    ],
+                    "properties": {
+                      "activeMember": {
+                        "description": "團隊有效用戶人數",
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "class": {
+                        "description": "星等",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 2
+                      },
+                      "totalBet": {
+                        "description": "團隊總投注",
+                        "type": "string"
+                      },
+                      "totalDeposit": {
+                        "description": "團隊總充值",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "commissionSetting": {
+                  "description": "佣金設定",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "class",
+                      "level1",
+                      "level2",
+                      "level3",
+                      "level4"
+                    ],
+                    "properties": {
+                      "class": {
+                        "description": "星等",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1
+                      },
+                      "level1": {
+                        "description": "一級佣金比例",
+                        "type": "string"
+                      },
+                      "level2": {
+                        "description": "二級佣金比例",
+                        "type": "string"
+                      },
+                      "level3": {
+                        "description": "三級佣金比例",
+                        "type": "string"
+                      },
+                      "level4": {
+                        "description": "四級佣金比例",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/wallet/deposit": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*DepositController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "depositAddress",
+                "comment"
+              ],
+              "properties": {
+                "comment": {
+                  "description": "ton交易的備註欄位，必填",
+                  "type": "string"
+                },
+                "depositAddress": {
+                  "description": "充值地址",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/wallet/withdraw": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*WithdrawController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "currency",
+                "chainNet",
+                "amount",
+                "recipientAddress"
+              ],
+              "properties": {
+                "amount": {
+                  "description": "申請金額. Greater than 0. Less than 10000000",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "chainNet": {
+                  "description": "區塊鏈網路，目前只有TON",
+                  "type": "string"
+                },
+                "currency": {
+                  "description": "幣別",
+                  "type": "string"
+                },
+                "memo": {
+                  "description": "自定義備註(選填)",
+                  "type": "string",
+                  "maxLength": 100
+                },
+                "recipientAddress": {
+                  "description": "出款地址",
+                  "type": "string"
+                },
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "withdrawId"
+              ],
+              "properties": {
+                "withdrawId": {
+                  "description": "提款單id",
+                  "type": "integer",
+                  "format": "uint64"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "BindEmailRequest": {
+      "type": "object",
+      "required": [
+        "code",
+        "email"
+      ],
+      "properties": {
+        "code": {
+          "description": "驗證碼",
+          "type": "string"
+        },
+        "email": {
+          "description": "收信信箱",
+          "type": "string",
+          "format": "email"
+        }
+      }
+    },
+    "BindEmailResponse": {
+      "type": "object",
+      "properties": {
+        "succeed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "BindPinRequest": {
+      "type": "object",
+      "required": [
+        "code",
+        "pin"
+      ],
+      "properties": {
+        "code": {
+          "description": "驗證碼",
+          "type": "string"
+        },
+        "pin": {
+          "description": "資金密碼",
+          "type": "string"
+        }
+      }
+    },
+    "BindPinResponse": {
+      "type": "object",
+      "properties": {
+        "succeed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "DepositRequest": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "DepositResponse": {
+      "type": "object",
+      "required": [
+        "depositAddress",
+        "comment"
+      ],
+      "properties": {
+        "comment": {
+          "description": "ton交易的備註欄位，必填",
+          "type": "string"
+        },
+        "depositAddress": {
+          "description": "充值地址",
+          "type": "string"
+        }
+      }
+    },
+    "EnterGameRequest": {
+      "type": "object",
+      "required": [
+        "venueId",
+        "currency",
+        "language",
+        "ip"
+      ],
+      "properties": {
+        "currency": {
+          "type": "string"
+        },
+        "ip": {
+          "type": "string"
+        },
+        "language": {
+          "type": "string"
+        },
+        "playerId": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "productId": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "subGameId": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "venueId": {
+          "type": "integer",
+          "format": "uint64"
+        }
+      }
+    },
+    "EnterGameResponse": {
+      "type": "object",
+      "required": [
+        "gameUrl"
+      ],
+      "properties": {
+        "gameUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "InfoRequest": {
+      "type": "object"
+    },
+    "InfoResponse": {
+      "type": "object",
+      "properties": {
+        "customerId": {
+          "description": "玩家Id",
+          "type": "string"
+        },
+        "email": {
+          "description": "信箱",
+          "type": "string"
+        },
+        "language": {
+          "description": "語系",
+          "type": "string"
+        },
+        "pin": {
+          "description": "資金密碼",
+          "type": "string"
+        },
+        "productId": {
+          "description": "產品Id",
+          "type": "integer",
+          "format": "uint64"
+        }
+      }
+    },
+    "LoginRequest": {
+      "type": "object",
+      "required": [
+        "id",
+        "productId",
+        "version",
+        "os",
+        "deviceId"
+      ],
+      "properties": {
+        "avatar": {
+          "description": "使用者頭像",
+          "type": "string"
+        },
+        "device": {
+          "description": "裝置類型, 如:Mini App, Web",
+          "type": "string"
+        },
+        "deviceId": {
+          "description": "裝置設備號",
+          "type": "string",
+          "maxLength": 50
+        },
+        "firstName": {
+          "description": "first_name",
+          "type": "string"
+        },
+        "id": {
+          "description": "Telegram id",
+          "type": "integer",
+          "format": "int64"
+        },
+        "languageCode": {
+          "description": "language_code",
+          "type": "string"
+        },
+        "lastName": {
+          "description": "last_name",
+          "type": "string"
+        },
+        "os": {
+          "description": "操作裝置系統, 如Android, Ios, Windows, MacOS",
+          "type": "string",
+          "maxLength": 15
+        },
+        "productId": {
+          "description": "產品Id",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 1
+        },
+        "startapp": {
+          "description": "推薦轉介碼",
+          "type": "string"
+        },
+        "userName": {
+          "description": "username",
+          "type": "string"
+        },
+        "version": {
+          "description": "前端版本號",
+          "type": "string",
+          "maxLength": 15
+        }
+      }
+    },
+    "LoginResponse": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "description": "登入token",
+          "type": "string"
+        }
+      }
+    },
+    "SettingResponse": {
+      "type": "object",
+      "properties": {
+        "classSetting": {
+          "description": "升等設定",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "class",
+              "activeMember",
+              "totalBet",
+              "totalDeposit"
+            ],
+            "properties": {
+              "activeMember": {
+                "description": "團隊有效用戶人數",
+                "type": "integer",
+                "format": "int64"
+              },
+              "class": {
+                "description": "星等",
+                "type": "integer",
+                "format": "int64",
+                "minimum": 2
+              },
+              "totalBet": {
+                "description": "團隊總投注",
+                "type": "string"
+              },
+              "totalDeposit": {
+                "description": "團隊總充值",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "commissionSetting": {
+          "description": "佣金設定",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "class",
+              "level1",
+              "level2",
+              "level3",
+              "level4"
+            ],
+            "properties": {
+              "class": {
+                "description": "星等",
+                "type": "integer",
+                "format": "int64",
+                "minimum": 1
+              },
+              "level1": {
+                "description": "一級佣金比例",
+                "type": "string"
+              },
+              "level2": {
+                "description": "二級佣金比例",
+                "type": "string"
+              },
+              "level3": {
+                "description": "三級佣金比例",
+                "type": "string"
+              },
+              "level4": {
+                "description": "四級佣金比例",
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "UpdateLocaleRequest": {
+      "type": "object",
+      "properties": {
+        "locale": {
+          "description": "語系",
+          "type": "string"
+        }
+      }
+    },
+    "UpdateLocaleResponse": {
+      "type": "object",
+      "properties": {
+        "succeed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ValidCodeRequest": {
+      "type": "object",
+      "required": [
+        "email"
+      ],
+      "properties": {
+        "email": {
+          "description": "收信信箱",
+          "type": "string",
+          "format": "email"
+        },
+        "kind": {
+          "description": "驗證類型",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "ValidCodeResponse": {
+      "type": "object",
+      "properties": {
+        "succeed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "WalletInfoRequest": {
+      "type": "object"
+    },
+    "WalletInfoResponse": {
+      "type": "object",
+      "required": [
+        "productId",
+        "memberId",
+        "totalBalanceInUsdt",
+        "wallets"
+      ],
+      "properties": {
+        "memberId": {
+          "description": "會員id",
+          "type": "integer",
+          "format": "uint64"
+        },
+        "productId": {
+          "description": "產品id",
+          "type": "integer",
+          "format": "uint64"
+        },
+        "totalBalanceInUsdt": {
+          "description": "有效餘額總計(USDT)",
+          "type": "string"
+        },
+        "wallets": {
+          "description": "各幣別錢包",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "currency",
+              "balance",
+              "frozenFunds"
+            ],
+            "properties": {
+              "balance": {
+                "description": "可用餘額，已扣除凍結資金",
+                "type": "string"
+              },
+              "currency": {
+                "description": "幣別",
+                "type": "string"
+              },
+              "frozenFunds": {
+                "description": "凍結資金",
+                "type": "string"
+              },
+              "id": {
+                "description": "錢包id",
+                "type": "integer",
+                "format": "uint64"
+              }
+            }
+          }
+        }
+      }
+    },
+    "WithdrawRequest": {
+      "type": "object",
+      "required": [
+        "currency",
+        "chainNet",
+        "amount",
+        "recipientAddress"
+      ],
+      "properties": {
+        "amount": {
+          "description": "申請金額. Greater than 0. Less than 10000000",
+          "type": "string",
+          "format": "decimal"
+        },
+        "chainNet": {
+          "description": "區塊鏈網路，目前只有TON",
+          "type": "string"
+        },
+        "currency": {
+          "description": "幣別",
+          "type": "string"
+        },
+        "memo": {
+          "description": "自定義備註(選填)",
+          "type": "string",
+          "maxLength": 100
+        },
+        "recipientAddress": {
+          "description": "出款地址",
+          "type": "string"
+        },
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "WithdrawResponse": {
+      "type": "object",
+      "required": [
+        "withdrawId"
+      ],
+      "properties": {
+        "withdrawId": {
+          "description": "提款單id",
+          "type": "integer",
+          "format": "uint64"
+        }
+      }
+    }
+  }
+}

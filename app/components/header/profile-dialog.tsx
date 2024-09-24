@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useCopyToClipboard } from 'react-use'
+import { useQuery } from '@tanstack/react-query'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '~/components/ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
@@ -9,28 +10,10 @@ import { useToast } from '~/hooks/use-toast'
 import EmailDialog from './email-dialog'
 import LanguageDialog from './language-dialog'
 import FundPasswordDialog from './fund-password-dialog'
+import { apis } from '~/api/index'
+import useStore from '~/stores/useStore'
 
-const userData = {
-  playerId: {
-    title: 'Player ID',
-    value: '1234567890',
-  },
-  name: {
-    title: 'Name',
-    value: 'Name',
-  },
-  email: {
-    title: 'Email',
-    value: 'test@test.com',
-  },
-  fundPassword: {
-    title: 'Fund Password',
-    value: false,
-  },
-  language: {
-    title: 'Language',
-    value: 'en',
-  },
+const links = {
   support: {
     title: 'Support',
     value: 'www.kokon.io',
@@ -48,9 +31,15 @@ const userData = {
 const ProfileDialog: React.FC = () => {
   const [state, copyToClipboard] = useCopyToClipboard()
   const { toast } = useToast()
+  const { token, telegramInitData } = useStore(state => state)
+  const { data } = useQuery({
+    queryKey: ['customerInfo'],
+    queryFn: apis.customer.customerInfoList,
+    enabled: !!token,
+  })
+  const userData = data?.data ?? {}
 
   useEffect(() => {
-    console.log('state', state)
     if (!state.value) return
     toast({
       title: 'Copied',
@@ -62,7 +51,7 @@ const ProfileDialog: React.FC = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Avatar className="cursor-pointer">
-          <AvatarImage src="https://github.com/shadcn.png" />
+          <AvatarImage src={telegramInitData?.user?.photoUrl || ''} />
           <AvatarFallback delayMs={600} />
         </Avatar>
       </DialogTrigger>
@@ -74,19 +63,19 @@ const ProfileDialog: React.FC = () => {
             alt="profile"
             className="h-20 w-20 object-contain"
           />
-          <span className="mt-1 text-base font-ultra">Name</span>
+          <span className="mt-1 text-base font-ultra">{`${telegramInitData?.user?.firstName} ${telegramInitData?.user?.lastName}`}</span>
         </DialogHeader>
         <div className="flex flex-col space-y-4 p-3 text-sm text-white/70">
           {/* Player ID */}
           <div className="flex items-center justify-between">
-            <span>{userData.playerId.title}</span>
+            <span>Player ID</span>
             <div className="flex items-center space-x-2">
-              <span className="font-ultra text-white">{userData.playerId.value}</span>
+              <span className="font-ultra text-white">{userData.customerId}</span>
               <Button
                 variant="icon"
                 size="icon"
                 className="h-4 w-4 text-white"
-                onClick={() => copyToClipboard(userData.playerId.value)}
+                onClick={() => copyToClipboard(userData.customerId || '')}
               >
                 <CopyIcon className="h-full w-full" />
               </Button>
@@ -94,17 +83,17 @@ const ProfileDialog: React.FC = () => {
           </div>
           {/* Email */}
           <div className="flex items-center justify-between">
-            <span>{userData.email.title}</span>
-            <EmailDialog email={userData.email.value} />
+            <span>Email</span>
+            <EmailDialog email={userData.email || ''} />
           </div>
           {/* Fund Password */}
           <div className="flex items-center justify-between">
-            <span>{userData.fundPassword.title}</span>
+            <span>Fund Password</span>
             <FundPasswordDialog password="" />
           </div>
           {/* Language */}
           <div className="flex items-center justify-between">
-            <span>{userData.language.title}</span>
+            <span>Language</span>
             <LanguageDialog />
           </div>
 
@@ -112,9 +101,9 @@ const ProfileDialog: React.FC = () => {
 
           {/* Support */}
           <div className="flex items-center justify-between">
-            <span>{userData.support.title}</span>
-            <a href={userData.support.value} className="font-ultra text-[#2D9BE6]">
-              {userData.support.text}
+            <span>{links.support.title}</span>
+            <a href={links.support.value} className="font-ultra text-[#2D9BE6]">
+              {links.support.text}
             </a>
           </div>
 
@@ -122,7 +111,7 @@ const ProfileDialog: React.FC = () => {
           <div className="flex items-center justify-between">
             <span>Official Links</span>
             <div className="flex space-x-2">
-              {userData.officialLinks.value.map((link, index) => (
+              {links.officialLinks.value.map((link, index) => (
                 <a key={index} href={link.url}>
                   <link.icon className="h-6 w-6" />
                 </a>

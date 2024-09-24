@@ -33,7 +33,7 @@ const LuckyMoneyDetail = () => {
         url: 'shareLink',
       })
     } catch (err) {
-      console.log('errerrerr', err)
+      console.log('err', err)
     }
   }
 

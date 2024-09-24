@@ -16,7 +16,7 @@
     "typecheck": "tsc",
     "prettier:check": "prettier --check .",
     "prettier:write": "prettier --write  \"app/**/*.{js,ts,json,tsx,css,scss,vue,html,md}\"",
-    "translate": "node translate.js",
+    "translate": "node scripts/translate.js",
     "generate-api": "node scripts/generate-api-client.js"
   },
   "dependencies": {

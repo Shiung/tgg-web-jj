@@ -11,12 +11,10 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog'
 import { Input } from '~/components/ui/input'
-import { Label } from '~/components/ui/label'
 import { Button } from '~/components/ui/button'
 
 import AddIcon from '~/icons/add.svg?react'
 import EditIcon from '~/icons/edit.svg?react'
-import WarningIcon from '~/icons/warning.svg?react'
 import { useEffect, useState } from 'react'
 import { formatCountdown } from '~/lib/utils'
 

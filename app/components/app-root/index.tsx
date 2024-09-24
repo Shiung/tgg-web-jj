@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import useStore from '~/stores/useStore'
 import { useTelegramMock } from '~/hooks/useTelegramMock'
 import useTelegramNavigate from '~/hooks/useTelegramNavigate'
+import { useAutoLogin } from '~/hooks/api/useAuth'
 
 const queryClient = new QueryClient()
 
@@ -17,13 +18,23 @@ const manifestUrl =
 const TelegramInit: React.FC = () => {
   useTelegramNavigate()
   const navigate = useNavigate()
-  const startParam = useLaunchParams(true)?.startParam
+  const setTelegramInitData = useStore(state => state.setTelegramInitData)
+  const launchParams = useLaunchParams(true)
+  const startParam = launchParams?.startParam
   const miniApp = useMiniApp()
+
+  // 自動登入
+  useAutoLogin()
 
   useEffect(() => {
     miniApp.setHeaderColor('#000000')
     miniApp.setBgColor('#242424')
   }, [miniApp])
+
+  useEffect(() => {
+    if (!launchParams?.initData) return
+    setTelegramInitData(launchParams.initData)
+  }, [launchParams, setTelegramInitData])
 
   useEffect(() => {
     if (startParam === 'debug') {
