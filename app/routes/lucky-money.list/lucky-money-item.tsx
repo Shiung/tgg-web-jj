@@ -25,14 +25,14 @@ const LuckyMoneyItem: React.FC<LuckyMoneyItemProps> = ({ type, status }) => {
           alt="normal"
         />
         <div className="ml-2 flex flex-col items-start justify-center">
-          <div className="text-sm font-[1000]">{type === 0 ? 'Normal' : 'Luck Battle'}</div>
+          <div className="text-sm font-ultra">{type === 0 ? 'Normal' : 'Luck Battle'}</div>
           <div className="mt-1 text-xs font-normal text-[#FFFFFFB2]">2024-06-17</div>
         </div>
       </div>
       <div className="flex flex-col items-end">
         <div className="flex items-center">
           <div className="flex flex-col items-end">
-            <div className="flex items-center text-sm font-[1000]">
+            <div className="flex items-center text-sm font-ultra">
               <KokonIcon className="h-4 w-4" />
               <div className="ml-1">18.88K</div>
             </div>
@@ -44,12 +44,12 @@ const LuckyMoneyItem: React.FC<LuckyMoneyItemProps> = ({ type, status }) => {
         </div>
         {status === 0 && (
           <div className="-mb-3 -mr-3 mt-3 h-5 rounded-br-lg rounded-tl-lg bg-[#333333] px-2 py-1">
-            <div className="text-[10px] font-[1000] leading-3 text-[#FF4D48]">Terminated</div>
+            <div className="text-[10px] font-ultra leading-3 text-[#FF4D48]">Terminated</div>
           </div>
         )}
         {status === 1 && (
           <div className="-mb-3 -mr-3 mt-3 h-5 rounded-br-lg rounded-tl-lg bg-[#333333] px-2 py-1">
-            <div className="text-[10px] font-[1000] leading-3 text-[#3AE45A]">Completed</div>
+            <div className="text-[10px] font-ultra leading-3 text-[#3AE45A]">Completed</div>
           </div>
         )}
       </div>

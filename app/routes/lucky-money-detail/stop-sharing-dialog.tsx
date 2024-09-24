@@ -22,10 +22,10 @@ const StopSharingDialog: React.FC = () => {
         <DialogHeader className="">
           <DialogTitle className="">Stop Sharing</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-2 p-3 pb-0 text-sm text-white/70">
-          <div className="flex items-center justify-between rounded-xl bg-[#1C1C1C] p-3 font-[1000]">
+        <div className="flex flex-col space-y-2 p-3 pb-0 text-sm text-white/70">
+          <div className="flex items-center justify-between rounded-xl bg-[#1C1C1C] p-3 font-ultra">
             <div>Remaining</div>
-            <div className="text-2xl text-[#FFF200]">500</div>
+            <div className="text-2xl text-primary">500</div>
           </div>
           <div className="text-sm">
             <div>The unused budget will be refunded.</div>

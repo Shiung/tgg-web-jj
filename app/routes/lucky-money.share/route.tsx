@@ -18,38 +18,38 @@ export default function LuckyMoneyShare() {
     <div className="mt-[-7px] flex w-full flex-1 flex-col items-center justify-between rounded-[12px] bg-black p-4">
       <div className="flex w-full flex-1 flex-col">
         {/* 上方兩顆按鈕 */}
-        <div className="mb-6 flex w-full gap-2">
+        <div className="mb-6 flex w-full space-x-2">
           <Link to="/lucky-money/list" className="flex-1">
-            <Button variant="outlineSoft" className="h-7 w-full text-xs font-[1000] text-[#FFF200]">
+            <Button variant="outlineSoft" className="h-7 w-full text-xs font-ultra text-primary">
               My share
             </Button>
           </Link>
           <Link to="/lucky-money/share" className="flex-1">
             <Button
               variant="outlineSoft"
-              className="h-7 w-full bg-[#FFF2004D] text-xs font-[1000] text-[#FFF200]"
+              className="h-7 w-full bg-[#FFF2004D] text-xs font-ultra text-primary"
             >
               Share New Bags
             </Button>
           </Link>
         </div>
-        <div className="mb-3 text-sm font-[1000]">Share My Lucky Money</div>
+        <div className="mb-3 text-sm font-ultra">Share My Lucky Money</div>
         {/* 紅包類型選擇 */}
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex items-center justify-center space-x-2">
           <div
             onClick={() => setLuckBagType(0)}
             onKeyDown={() => {}}
             role="button"
             tabIndex={0}
             className={cn(
-              'flex-1 rounded-xl border-[0.5px] border-solid border-[#FFF200]',
+              'flex-1 rounded-xl border-[0.5px] border-solid border-primary',
               luckBagType === 0 ? 'bg-[#FFF2004D]' : ''
             )}
           >
             <div className="relative flex max-h-8 items-center border-b border-[#FFF2004D] px-3 py-2">
-              <span className="text-xs font-[1000]">Normal</span>
+              <span className="text-xs font-ultra">Normal</span>
               <img
-                src="/public/images/lucky-money/planBtnBg-normal.png"
+                src="/images/lucky-money/planBtnBg-normal.png"
                 alt="PlanBtnBgNormal"
                 className={cn(
                   'absolute bottom-0 right-0',
@@ -67,14 +67,14 @@ export default function LuckyMoneyShare() {
             role="button"
             tabIndex={0}
             className={cn(
-              'flex-1 rounded-xl border-[0.5px] border-solid border-[#FFF200]',
+              'flex-1 rounded-xl border-[0.5px] border-solid border-primary',
               luckBagType === 1 ? 'bg-[#FFF2004D]' : ''
             )}
           >
             <div className="relative flex max-h-8 items-center border-b border-[#FFF2004D] px-3 py-2">
-              <span className="text-xs font-[1000]">Luck Battle</span>
+              <span className="text-xs font-ultra">Luck Battle</span>
               <img
-                src="/public/images/lucky-money/planBtnBg-Luck.png"
+                src="/images/lucky-money/planBtnBg-Luck.png"
                 alt="PlanBtnBgNormal"
                 className={cn(
                   'absolute bottom-0 right-0',

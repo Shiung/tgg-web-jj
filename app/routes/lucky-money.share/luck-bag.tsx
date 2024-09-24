@@ -22,7 +22,7 @@ const LuckBag = () => {
           <span className="text-[#FFFFFF80]">KOKON</span>
         </div>
 
-        <div className="mt-3 flex gap-2">
+        <div className="mt-3 flex space-x-2">
           {[10, 100, 500, 1000].map(el => (
             <Button
               variant="outlineSoft"
@@ -36,9 +36,9 @@ const LuckBag = () => {
         </div>
       </div>
       <div className="mt-2">
-        <div className="flex flex-col gap-2 rounded-lg bg-[#1C1C1C] p-3">
+        <div className="flex flex-col space-y-2 rounded-lg bg-[#1C1C1C] p-3">
           <div className="mb-1 px-3 pb-1 text-xs text-[#FFFFFFB2]">Amount range of each bag</div>
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center space-y-1">
             <div className="flex w-full justify-between px-3 text-xs text-[#FFFFFFB2]">
               <div>Minimum</div>
               <div>(no under 100)</div>
@@ -54,7 +54,7 @@ const LuckBag = () => {
               <span className="text-[#FFFFFF80]">KOKON</span>
             </div>
           </div>
-          <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center space-y-1">
             <div className="flex w-full justify-between px-3 text-xs text-[#FFFFFFB2]">
               <div>Maximum</div>
               <div>(no over 1M)</div>

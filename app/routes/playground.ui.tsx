@@ -6,6 +6,7 @@ import { useToast } from '~/hooks/use-toast'
 import InfoTooltip from '~/components/info-tooltip'
 import { Switch } from '~/components/ui/switch'
 import { Label } from '~/components/ui/label'
+import SvgHistory from '~/icons/history.svg?react'
 // import { Label } from '~/components/ui/label'
 
 export default function Ui() {
@@ -46,6 +47,9 @@ export default function Ui() {
         </Button>
         <Button disabled={disabled} loading={loading} variant="outlineSoft">
           Button
+        </Button>
+        <Button disabled={disabled} loading={loading} variant="icon" size="icon">
+          <SvgHistory className="h-4 w-4" />
         </Button>
       </div>
       {/* Input */}

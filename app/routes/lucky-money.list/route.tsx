@@ -14,17 +14,17 @@ export default function LuckyMoneyList() {
   return (
     <div className="mt-[-7px] flex w-full flex-1 flex-col items-center justify-between rounded-[12px] bg-black p-4">
       <div className="flex w-full flex-1 flex-col">
-        <div className="flex w-full gap-2">
+        <div className="flex w-full space-x-2">
           <Link to="/lucky-money/list" className="flex-1">
             <Button
               variant="outlineSoft"
-              className="h-7 w-full bg-[#FFF2004D] text-xs font-[1000] text-[#FFF200]"
+              className="h-7 w-full bg-[#FFF2004D] text-xs font-ultra text-primary"
             >
               My share
             </Button>
           </Link>
           <Link to="/lucky-money/share" className="flex-1">
-            <Button variant="outlineSoft" className="h-7 w-full text-xs font-[1000] text-[#FFF200]">
+            <Button variant="outlineSoft" className="h-7 w-full text-xs font-ultra text-primary">
               Share New Bags
             </Button>
           </Link>

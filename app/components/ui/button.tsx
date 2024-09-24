@@ -2,6 +2,7 @@ import * as React from 'react'
 import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 import { Loader2 } from 'lucide-react'
+import CatEarIcon from '~/icons/cat-ear.svg?react'
 
 import { cn } from '~/lib/utils'
 
@@ -56,23 +57,6 @@ const earColorVariants = cva(
     },
   }
 )
-
-const CatEar: React.FC<{ className?: string }> = ({ className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="12"
-    height="6"
-    viewBox="0 0 12 6"
-    fill="none"
-    className={cn(className)}
-  >
-    <path
-      d="M4.93934 1.06066C5.52513 0.474874 6.47487 0.474874 7.06066 1.06066L12 6H0L4.93934 1.06066Z"
-      fill="currentColor"
-    />
-  </svg>
-)
-
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -112,8 +96,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           {catEars && (
             <>
               {/* 左右貓耳 */}
-              <CatEar className={cn('left-[18px]', earColorClass)} />
-              <CatEar className={cn('right-[18px]', earColorClass)} />
+              <CatEarIcon className={cn('left-[18px] h-[6px] w-3', earColorClass)} />
+              <CatEarIcon className={cn('right-[18px] h-[6px] w-3', earColorClass)} />
             </>
           )}
           {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : props.children}
@@ -124,4 +108,4 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 )
 Button.displayName = 'Button'
 
-export { Button, buttonVariants }
+export { Button, buttonVariants, earColorVariants }
