@@ -14,7 +14,7 @@ export const links = [
   { href: '/', i18n: 'game', SvgComponent: NavGame },
   { href: '/rank', i18n: 'rank', SvgComponent: NavRank },
   { href: '/task', i18n: 'task', SvgComponent: NavTask },
-  { href: '/share', i18n: 'share', SvgComponent: NavShare },
+  { href: '/share-invite', i18n: 'share', SvgComponent: NavShare },
   { href: '/wallet', i18n: 'wallet', SvgComponent: NavWallet },
 ] as const
 

@@ -30,7 +30,7 @@ const LuckyMoneyHistory = () => {
         <Link to="/lucky-money/list">
           <ArrowLineLeftIcon className="h-6 w-6 text-[#FFFFFFB2]" />
         </Link>
-        <div className="text-lg font-[1000]">History</div>
+        <div className="text-lg font-ultra">History</div>
         <Link to="/">
           <X className="h-6 w-6 text-[#FFFFFFB2]" />
         </Link>

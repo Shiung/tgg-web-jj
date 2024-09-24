@@ -22,7 +22,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
       </DialogTrigger>
       <DialogContent className="bg-transparent">
         {!bagOpen && (
-          <div className="flex flex-col items-center justify-center gap-1 px-9 text-lg font-[1000] text-white">
+          <div className="flex flex-col items-center justify-center gap-1 px-9 text-lg font-ultra text-white">
             <div>You got chance to earn</div>
             <div>a Luck Battle Bag from</div>
             <div>User1234</div>
@@ -36,36 +36,36 @@ const GetLuckyMoneyDialog: React.FC = () => {
               tabIndex={0}
             >
               <img
-                src="/public/images/lucky-money/open-lucky-bag.png"
+                src="/images/lucky-money/open-lucky-bag.png"
                 className="h-[336px] w-[279px]"
                 alt="open-lucky-bag"
               />
-              <div className="absolute bottom-[44%] w-full text-center text-lg font-[1000] text-[#FE8C02]">
+              <div className="absolute bottom-[44%] w-full text-center text-lg font-ultra text-[#FE8C02]">
                 OPEN
               </div>
-              <div className="absolute bottom-4 flex w-full flex-col items-center gap-1 font-[1000]">
+              <div className="absolute bottom-4 flex w-full flex-col items-center gap-1 font-ultra">
                 <div className="text-base text-white">Potential Gain</div>
                 <div className="flex text-sm">
                   <KokonIcon className="h-5 w-5" />
-                  <div className="text-[#FFF200]">1,000~2,000</div>
+                  <div className="text-primary">1,000~2,000</div>
                 </div>
               </div>
             </div>
           </div>
         )}
         {bagOpen && (
-          <div className="flex flex-col items-center justify-center gap-1 px-9 text-lg font-[1000] text-white">
+          <div className="flex flex-col items-center justify-center gap-1 px-9 text-lg font-ultra text-white">
             <div className="text-center">
               <span className="inline-block">You got a Luck Battle Bag from</span>
             </div>
             <div>User1234</div>
             <div className="flex items-center">
               <KokonIcon className="h-8 w-8" />
-              <div className="ml-1 text-[#FFF200]">1,888</div>
+              <div className="ml-1 text-primary">1,888</div>
             </div>
             <div className="relative aspect-[375/344] w-full max-w-[375px]">
               <img
-                src="/public/images/lucky-money/happy-cat.png"
+                src="/images/lucky-money/happy-cat.png"
                 className="absolute inset-0 h-full w-full object-contain"
                 alt="happy-cat"
               />

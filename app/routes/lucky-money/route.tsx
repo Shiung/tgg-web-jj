@@ -18,13 +18,13 @@ export default function LuckyMoney() {
       <div className="flex h-[136px] w-full flex-col items-center rounded-t-lg bg-gradient-to-b from-[#FDCB04] to-[#FF4D00]">
         <div className="flex h-[136px] w-full flex-col bg-[url('/images/lucky-money/lucky-money-bg.svg')]">
           <div className="flex w-full items-center justify-center p-4 pb-0">
-            <div className="text-lg font-[1000]">Lucky Money</div>
+            <div className="text-lg font-ultra">Lucky Money</div>
             <Link to="/" className="absolute right-[16px]">
               <X className="h-6 w-6 text-[#FFFFFFB2]" />
             </Link>
           </div>
           <div className="ml-4 flex">
-            <div className="mt-4 w-full text-sm font-[1000]">
+            <div className="mt-4 w-full text-sm font-ultra">
               <div>Invite your friends</div>
               <div>with Lucky Money!</div>
             </div>

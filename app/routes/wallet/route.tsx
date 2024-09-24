@@ -159,13 +159,19 @@ export default function Wallet() {
         <Tabs defaultValue="deposit" value={currentTab} className="w-full">
           <TabsList variant="cardTab" className="w-full overflow-x-auto">
             <TabsTrigger variant="cardTab" value="deposit" className="flex-1" asChild>
-              <Link to="deposit">Deposit</Link>
+              <Link prefetch="viewport" to="deposit">
+                Deposit
+              </Link>
             </TabsTrigger>
             <TabsTrigger variant="cardTab" value="withdraw" className="flex-1" asChild>
-              <Link to="withdraw">Withdraw</Link>
+              <Link prefetch="viewport" to="withdraw">
+                Withdraw
+              </Link>
             </TabsTrigger>
             <TabsTrigger variant="cardTab" value="swap" className="flex-1" asChild>
-              <Link to="swap">Swap</Link>
+              <Link prefetch="viewport" to="swap">
+                Swap
+              </Link>
             </TabsTrigger>
           </TabsList>
           <TabsContent value={currentTab} className="mt-0">

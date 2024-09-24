@@ -24,7 +24,7 @@ const NormalBag = () => {
           <span className="text-[#FFFFFF80]">KOKON</span>
         </div>
 
-        <div className="mt-3 flex gap-2">
+        <div className="mt-3 flex space-x-2">
           {[10, 100, 500, 1000].map(el => (
             <Button
               onClick={() => setAmountEachBag(el)}
@@ -40,7 +40,7 @@ const NormalBag = () => {
       <div className="mt-2">
         <div className="rounded-lg bg-[#1C1C1C] p-3">
           <div className="mb-1 px-3 pb-1 text-xs text-[#FFFFFFB2]">Quantity</div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center space-x-2">
             <div className="flex flex-1 items-center justify-between rounded-[100px] bg-[#333333] px-3 py-[10px] text-xs">
               <input
                 type="number"
@@ -66,24 +66,24 @@ const NormalBag = () => {
           </div>
         </div>
         <div className="mt-2 flex items-center p-3 text-xs text-[#FFFFFF80]">
-          <div className="flex flex-1 flex-col items-center gap-1">
-            <div className="flex items-center gap-1">
+          <div className="flex flex-1 flex-col items-center space-y-1">
+            <div className="flex items-center space-x-1">
               <KokonIcon className="h-5 w-5" />
-              <div className="text-sm font-[1000] text-[#FFFFFF]">{amountEachBag}</div>
+              <div className="text-sm font-ultra text-[#FFFFFF]">{amountEachBag}</div>
             </div>
             <div className="">Each bag</div>
           </div>
           <div>X</div>
-          <div className="flex flex-1 flex-col items-center gap-1">
-            <div className="flex items-center gap-1">
-              <div className="text-sm font-[1000] text-[#FFFFFF]">{quantity}</div>
+          <div className="flex flex-1 flex-col items-center space-y-1">
+            <div className="flex items-center space-x-1">
+              <div className="text-sm font-ultra text-[#FFFFFF]">{quantity}</div>
             </div>
             <div className="">Quantity</div>
           </div>
           <div>=</div>
-          <div className="flex flex-1 flex-col items-center gap-1">
-            <div className="flex items-center gap-1">
-              <div className="text-sm font-[1000] text-[#FFFFFF]">{amountEachBag * quantity}</div>
+          <div className="flex flex-1 flex-col items-center space-y-1">
+            <div className="flex items-center space-x-1">
+              <div className="text-sm font-ultra text-[#FFFFFF]">{amountEachBag * quantity}</div>
             </div>
             <div className="">Total Amount</div>
           </div>

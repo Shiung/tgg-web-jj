@@ -51,7 +51,7 @@ const LuckyMoneyDetail = () => {
   }, [setNavVisibility])
 
   return (
-    <div className="container m-0 flex flex-col bg-black p-0 text-white">
+    <div className="container m-0 flex flex-1 flex-col bg-black p-0 text-white">
       {/* 顶部卡片 */}
       <div
         className={cn(
@@ -71,35 +71,35 @@ const LuckyMoneyDetail = () => {
           >
             <ArrowLineLeftIcon className="h-6 w-6 text-[#FFFFFFB2]" />
           </Link>
-          <h1 className="text-lg font-[1000]">
+          <h1 className="text-lg font-ultra">
             {luckyMoneyType === '0' ? 'Normal' : 'Luck Battle'}
           </h1>
           <Link to="/">
             <X className="h-6 w-6 text-[#FFFFFFB2]" />
           </Link>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col space-y-2">
           <div className="flex justify-between text-xs font-normal">
             <div>2024-06-17</div>
             {luckyMoneyStatus && +luckyMoneyStatus === 1 && (
-              <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-[1000] text-[#3AE45A]">
+              <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-ultra text-[#3AE45A]">
                 Completed
               </div>
             )}
             {luckyMoneyStatus && +luckyMoneyStatus === 0 && (
-              <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-[1000] text-[#FF4D48]">
+              <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-ultra text-[#FF4D48]">
                 Terminated
               </div>
             )}
           </div>
-          <div className="flex items-center justify-between font-[1000]">
+          <div className="flex items-center justify-between font-ultra">
             <p className="text-base">Normal</p>
             <div className="flex items-center justify-center text-lg">
               <KokonIcon className="h-4 w-4" />
               <div className="ml-1">18.88K</div>
             </div>
           </div>
-          <div className="flex justify-between font-[1000]">
+          <div className="flex justify-between font-ultra">
             <p className="text-base">Remaining</p>
             <div className="flex items-center justify-center text-lg">
               <KokonIcon className="h-4 w-4" />
@@ -117,8 +117,8 @@ const LuckyMoneyDetail = () => {
           </div>
           <div className="flex items-center justify-center text-xs font-normal">
             <div className="text-[#FFFFFFB2]">Quantity</div>
-            <div className="ml-2 flex items-center justify-center gap-1">
-              <div className="font-[1000]">5</div>
+            <div className="ml-2 flex items-center justify-center space-x-1">
+              <div className="font-ultra">5</div>
               <div>/</div>
               <div>10</div>
             </div>
@@ -133,11 +133,11 @@ const LuckyMoneyDetail = () => {
             type="text"
             value={shareLink}
             onChange={e => setShareLink(e.target.value)}
-            className="flex-grow bg-transparent text-sm outline-none"
+            className="flex-grow bg-transparent text-xs font-ultra outline-none"
           />
-          <SvgCopy className="h-4 w-4" onClick={handleCopyShareLink} />
+          <SvgCopy className="h-4 w-4 text-[#FFFFFFB2]" onClick={handleCopyShareLink} />
         </div>
-        <Button catEars onClick={handleShare}>
+        <Button className="min-w-[120px]" catEars onClick={handleShare}>
           Share
         </Button>
       </div>
@@ -160,7 +160,7 @@ const LuckyMoneyDetail = () => {
             </div>
             <div className="flex items-center justify-center">
               <KokonIcon className="h-4 w-4" />
-              <div className="ml-[5px] text-sm font-[1000]">1,888</div>
+              <div className="ml-[5px] text-sm font-ultra">1,888</div>
             </div>
           </div>
         ))}

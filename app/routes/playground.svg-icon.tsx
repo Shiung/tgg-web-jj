@@ -26,6 +26,8 @@ import SwapIcon from '~/icons/swap.svg?react'
 import TreeIcon from '~/icons/tree.svg?react'
 import WarningIcon from '~/icons/warning.svg?react'
 import XIcon from '~/icons/x.svg?react'
+import SortAscIcon from '~/icons/sort-asc.svg?react'
+import SortDescIcon from '~/icons/sort-desc.svg?react'
 
 const singleColorIcons = [
   { name: 'arrow-left.svg', Component: ArrowLeftIcon },
@@ -53,6 +55,8 @@ const singleColorIcons = [
   { name: 'tree.svg', Component: TreeIcon },
   { name: 'warning.svg', Component: WarningIcon },
   { name: 'x.svg', Component: XIcon },
+  { name: 'sort-asc.svg', Component: SortAscIcon },
+  { name: 'sort-desc.svg', Component: SortDescIcon },
 ]
 
 export default function SvgIcon() {

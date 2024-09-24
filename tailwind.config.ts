@@ -109,12 +109,17 @@ const config = {
           '50%': { transform: 'rotate(180deg)' },
           '100%': { transform: 'rotate(180deg)' },
         },
+        'fall-down': {
+          '0%': { opacity: '0', transform: 'translateY(-16px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         'background-wave': 'background-wave 4s linear infinite',
         'spin-with-pause': 'spin-with-pause 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite',
+        'fall-down': 'fall-down 0.3s ease-out forwards',
       },
       backgroundImage: {
         'colorLinear-red': 'linear-gradient(180deg, #FF8C8C 0%, #FF0E03 100%)',

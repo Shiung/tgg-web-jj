@@ -10,8 +10,6 @@ const Sheet = SheetPrimitive.Root
 
 const SheetTrigger = SheetPrimitive.Trigger
 
-const SheetClose = SheetPrimitive.Close
-
 const SheetPortal = SheetPrimitive.Portal
 
 const SheetOverlay = React.forwardRef<
@@ -68,10 +66,6 @@ const SheetContent = React.forwardRef<
         {...props}
       >
         {children}
-        <SheetPrimitive.Close className="absolute right-3 top-2 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-          <XIcon className="h-6 w-6" />
-          <span className="sr-only">Close</span>
-        </SheetPrimitive.Close>
       </SheetPrimitive.Content>
     </SheetPortal>
   )
@@ -88,6 +82,24 @@ const SheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElemen
   />
 )
 SheetHeader.displayName = 'SheetHeader'
+
+const SheetClose = React.forwardRef<
+  React.ElementRef<typeof SheetPrimitive.Close>,
+  React.ComponentPropsWithoutRef<typeof SheetPrimitive.Close>
+>(({ className, ...props }, ref) => (
+  <SheetPrimitive.Close
+    ref={ref}
+    className={cn(
+      'absolute right-3 top-2 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary',
+      className
+    )}
+    {...props}
+  >
+    <XIcon className="h-6 w-6" />
+    <span className="sr-only">Close</span>
+  </SheetPrimitive.Close>
+))
+SheetClose.displayName = SheetPrimitive.Close.displayName
 
 const SheetFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div className={cn('flex space-x-2', className)} {...props} />
