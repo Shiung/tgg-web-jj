@@ -21,6 +21,81 @@ export class Team<SecurityDataType = unknown> {
   /**
    * @description Auto-generated API documentation
    *
+   * @tags (*CommissionController)
+   * @name TeamCommissionListList
+   * @request GET:/ajax/team/commission/list
+   */
+  teamCommissionListList = (
+    query: {
+      /** 玩家名稱 */
+      displayName?: string;
+      /**
+       * 玩家差距層級
+       * @format int64
+       */
+      level?: number;
+      /**
+       *  (Required). Format: 2006-01-02T15:04:05Z08:00
+       * @format date-time
+       */
+      startTime: string;
+      /**
+       *  (Required). Format: 2006-01-02T15:04:05Z08:00
+       * @format date-time
+       */
+      endTime: string;
+      /**
+       * 分頁頁數 (Required, Minimum: 1)
+       * @format int64
+       * @min 1
+       */
+      page: number;
+      /**
+       * 分頁筆數 (Required, Minimum: 20)
+       * @format int64
+       * @min 20
+       */
+      pageSize: number;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<
+      {
+        /** 佣金明細 */
+        list?: {
+          /** 有效投注金額 */
+          betAmount?: string;
+          /** 反佣金額 */
+          commissionAmount?: string;
+          /** 玩家名稱 */
+          displayName?: string;
+          /**
+           * 玩家差距層級
+           * @format int64
+           */
+          level?: number;
+          /**
+           * 玩家Id
+           * @format uint64
+           */
+          memberId?: number;
+          /**
+           * 佣金發放狀態
+           * @format int64
+           */
+          sendStatus?: number;
+        }[];
+      },
+      any
+    >({
+      path: `/ajax/team/commission/list`,
+      method: "GET",
+      query: query,
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
    * @tags (*SettingController)
    * @name TeamSettingList
    * @request GET:/ajax/team/setting

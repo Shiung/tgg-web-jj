@@ -27,7 +27,6 @@ export class Header<SecurityDataType = unknown> {
    */
   headerWalletList = (
     query?: {
-      token?: string;
       /** 幣別(選填) */
       currency?: string;
     },

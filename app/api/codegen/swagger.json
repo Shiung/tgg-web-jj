@@ -235,6 +235,10 @@
             "schema": {
               "type": "object",
               "properties": {
+                "avatar": {
+                  "description": "頭像",
+                  "type": "string"
+                },
                 "customerId": {
                   "description": "玩家Id",
                   "type": "string"
@@ -440,11 +444,215 @@
         }
       }
     },
+    "/ajax/game/energy": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*GameController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "amount"
+              ],
+              "properties": {
+                "amount": {
+                  "type": "integer",
+                  "format": "uint64"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*GameController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "gameId"
+              ],
+              "properties": {
+                "gameId": {
+                  "type": "integer",
+                  "format": "uint64"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "balance",
+                "currency"
+              ],
+              "properties": {
+                "balance": {
+                  "type": "string"
+                },
+                "currency": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/game/transactions": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*GameController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "description": " (Required). Format: 2006-01-02T15:04:05Z08:00",
+            "name": "startTime",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "format": "date-time",
+            "description": " (Required). Format: 2006-01-02T15:04:05Z08:00",
+            "name": "endTime",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "integer",
+            "format": "uint64",
+            "description": " (Required)",
+            "name": "gameId",
+            "in": "query",
+            "required": true
+          },
+          {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64",
+            "description": "分頁頁數 (Required, Minimum: 1)",
+            "name": "page",
+            "in": "query",
+            "required": true
+          },
+          {
+            "minimum": 20,
+            "type": "integer",
+            "format": "int64",
+            "description": "分頁筆數 (Required, Minimum: 20)",
+            "name": "pageSize",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "pagination": {
+                  "type": "object",
+                  "required": [
+                    "pageSize",
+                    "totalRecord",
+                    "totalPage"
+                  ],
+                  "properties": {
+                    "pageSize": {
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 20
+                    },
+                    "totalPage": {
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 0
+                    },
+                    "totalRecord": {
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 0
+                    }
+                  }
+                },
+                "records": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "transactionId",
+                      "subGameId",
+                      "betGold",
+                      "betGoldKokon",
+                      "winGold",
+                      "winGoldKokon",
+                      "betTime"
+                    ],
+                    "properties": {
+                      "betGold": {
+                        "description": "投注金額",
+                        "type": "string"
+                      },
+                      "betGoldKokon": {
+                        "description": "投注金額(KOKON)",
+                        "type": "string"
+                      },
+                      "betTime": {
+                        "description": "投注時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "subGameId": {
+                        "description": "遊戲id",
+                        "type": "integer",
+                        "format": "uint64"
+                      },
+                      "transactionId": {
+                        "description": "投注單號",
+                        "type": "string"
+                      },
+                      "winGold": {
+                        "description": "輸贏金額",
+                        "type": "string"
+                      },
+                      "winGoldKokon": {
+                        "description": "輸贏金額(KOKON)",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ajax/games/{id}/enter": {
       "post": {
         "description": "Auto-generated API documentation",
         "tags": [
-          "(*VenueController)"
+          "(*GameController)"
         ],
         "parameters": [
           {
@@ -475,18 +683,6 @@
                 },
                 "language": {
                   "type": "string"
-                },
-                "playerId": {
-                  "type": "integer",
-                  "format": "uint64"
-                },
-                "productId": {
-                  "type": "integer",
-                  "format": "uint64"
-                },
-                "subGameId": {
-                  "type": "integer",
-                  "format": "uint64"
                 },
                 "venueId": {
                   "type": "integer",
@@ -521,11 +717,6 @@
           "(*WalletController)"
         ],
         "parameters": [
-          {
-            "type": "string",
-            "name": "token",
-            "in": "query"
-          },
           {
             "type": "string",
             "description": "幣別(選填)",
@@ -587,6 +778,109 @@
                         "description": "錢包id",
                         "type": "integer",
                         "format": "uint64"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/team/commission/list": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*CommissionController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "玩家名稱",
+            "name": "displayName",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "玩家差距層級",
+            "name": "level",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "format": "date-time",
+            "description": " (Required). Format: 2006-01-02T15:04:05Z08:00",
+            "name": "startTime",
+            "in": "query",
+            "required": true
+          },
+          {
+            "type": "string",
+            "format": "date-time",
+            "description": " (Required). Format: 2006-01-02T15:04:05Z08:00",
+            "name": "endTime",
+            "in": "query",
+            "required": true
+          },
+          {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64",
+            "description": "分頁頁數 (Required, Minimum: 1)",
+            "name": "page",
+            "in": "query",
+            "required": true
+          },
+          {
+            "minimum": 20,
+            "type": "integer",
+            "format": "int64",
+            "description": "分頁筆數 (Required, Minimum: 20)",
+            "name": "pageSize",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "list": {
+                  "description": "佣金明細",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "betAmount": {
+                        "description": "有效投注金額",
+                        "type": "string"
+                      },
+                      "commissionAmount": {
+                        "description": "反佣金額",
+                        "type": "string"
+                      },
+                      "displayName": {
+                        "description": "玩家名稱",
+                        "type": "string"
+                      },
+                      "level": {
+                        "description": "玩家差距層級",
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "memberId": {
+                        "description": "玩家Id",
+                        "type": "integer",
+                        "format": "uint64"
+                      },
+                      "sendStatus": {
+                        "description": "佣金發放狀態",
+                        "type": "integer",
+                        "format": "int64"
                       }
                     }
                   }
@@ -699,12 +993,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "token": {
-                  "type": "string"
-                }
-              }
+              "type": "object"
             }
           }
         ],
@@ -772,9 +1061,6 @@
                 },
                 "recipientAddress": {
                   "description": "出款地址",
-                  "type": "string"
-                },
-                "token": {
                   "type": "string"
                 }
               }
@@ -854,13 +1140,79 @@
         }
       }
     },
-    "DepositRequest": {
+    "BuyEnergyRequest": {
       "type": "object",
+      "required": [
+        "gameId"
+      ],
       "properties": {
-        "token": {
+        "gameId": {
+          "type": "integer",
+          "format": "uint64"
+        }
+      }
+    },
+    "BuyEnergyResponse": {
+      "type": "object",
+      "required": [
+        "balance",
+        "currency"
+      ],
+      "properties": {
+        "balance": {
+          "type": "string"
+        },
+        "currency": {
           "type": "string"
         }
       }
+    },
+    "CommissionListRequest": {
+      "type": "object"
+    },
+    "CommissionListResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "description": "佣金明細",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "betAmount": {
+                "description": "有效投注金額",
+                "type": "string"
+              },
+              "commissionAmount": {
+                "description": "反佣金額",
+                "type": "string"
+              },
+              "displayName": {
+                "description": "玩家名稱",
+                "type": "string"
+              },
+              "level": {
+                "description": "玩家差距層級",
+                "type": "integer",
+                "format": "int64"
+              },
+              "memberId": {
+                "description": "玩家Id",
+                "type": "integer",
+                "format": "uint64"
+              },
+              "sendStatus": {
+                "description": "佣金發放狀態",
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        }
+      }
+    },
+    "DepositRequest": {
+      "type": "object"
     },
     "DepositResponse": {
       "type": "object",
@@ -897,18 +1249,6 @@
         "language": {
           "type": "string"
         },
-        "playerId": {
-          "type": "integer",
-          "format": "uint64"
-        },
-        "productId": {
-          "type": "integer",
-          "format": "uint64"
-        },
-        "subGameId": {
-          "type": "integer",
-          "format": "uint64"
-        },
         "venueId": {
           "type": "integer",
           "format": "uint64"
@@ -926,12 +1266,28 @@
         }
       }
     },
+    "GetEnergyResponse": {
+      "type": "object",
+      "required": [
+        "amount"
+      ],
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "uint64"
+        }
+      }
+    },
     "InfoRequest": {
       "type": "object"
     },
     "InfoResponse": {
       "type": "object",
       "properties": {
+        "avatar": {
+          "description": "頭像",
+          "type": "string"
+        },
         "customerId": {
           "description": "玩家Id",
           "type": "string"
@@ -952,6 +1308,86 @@
           "description": "產品Id",
           "type": "integer",
           "format": "uint64"
+        }
+      }
+    },
+    "ListGameTransactionRequest": {
+      "type": "object"
+    },
+    "ListGameTransactionResponse": {
+      "type": "object",
+      "properties": {
+        "pagination": {
+          "type": "object",
+          "required": [
+            "pageSize",
+            "totalRecord",
+            "totalPage"
+          ],
+          "properties": {
+            "pageSize": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 20
+            },
+            "totalPage": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            },
+            "totalRecord": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          }
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "transactionId",
+              "subGameId",
+              "betGold",
+              "betGoldKokon",
+              "winGold",
+              "winGoldKokon",
+              "betTime"
+            ],
+            "properties": {
+              "betGold": {
+                "description": "投注金額",
+                "type": "string"
+              },
+              "betGoldKokon": {
+                "description": "投注金額(KOKON)",
+                "type": "string"
+              },
+              "betTime": {
+                "description": "投注時間",
+                "type": "string",
+                "format": "date-time"
+              },
+              "subGameId": {
+                "description": "遊戲id",
+                "type": "integer",
+                "format": "uint64"
+              },
+              "transactionId": {
+                "description": "投注單號",
+                "type": "string"
+              },
+              "winGold": {
+                "description": "輸贏金額",
+                "type": "string"
+              },
+              "winGoldKokon": {
+                "description": "輸贏金額(KOKON)",
+                "type": "string"
+              }
+            }
+          }
         }
       }
     },
@@ -1239,9 +1675,6 @@
         },
         "recipientAddress": {
           "description": "出款地址",
-          "type": "string"
-        },
-        "token": {
           "type": "string"
         }
       }

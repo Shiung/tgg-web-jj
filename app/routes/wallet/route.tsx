@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from '@remix-run/react'
+import { usePrevious } from 'react-use'
 import { cn } from '~/lib/utils'
 import { Button } from '~/components/ui/button'
 import { KokonIcon, UsdtIcon, TonIcon } from '~/components/color-icons'
@@ -41,7 +42,14 @@ export default function Wallet() {
   const location = useLocation()
   const navigate = useNavigate()
   const [currentTab, setCurrentTab] = useState(DEFAULT_TAB)
+  const previousTab = usePrevious(currentTab)
   const [isExpanded, setIsExpanded] = useState(true)
+  const [hasUserToggled, setHasUserToggled] = useState(false)
+
+  const handleToggleExpand = () => {
+    setIsExpanded(val => !val)
+    setHasUserToggled(true)
+  }
 
   useEffect(() => {
     const pathToTab = location.pathname.split('/').pop() || DEFAULT_TAB
@@ -50,18 +58,16 @@ export default function Wallet() {
       navigate('/wallet/deposit', { replace: true })
     } else {
       // currentTab 和 URL 同步
-      console.log('setCurrentTab', pathToTab)
-
       setCurrentTab(pathToTab)
-
-      // 只在 deposit 路由中展开
-      if (pathToTab === 'deposit') {
-        setIsExpanded(true)
-      } else {
-        setIsExpanded(false)
-      }
     }
   }, [location.pathname, navigate])
+
+  // 收合邏輯
+  useEffect(() => {
+    if (previousTab && currentTab !== previousTab && !hasUserToggled) {
+      setIsExpanded(false)
+    }
+  }, [currentTab, hasUserToggled, previousTab])
 
   return (
     <div className="container mx-auto flex-1 rounded-t-xl bg-black p-0">
@@ -82,7 +88,7 @@ export default function Wallet() {
                 }`}
                 variant="icon"
                 size="icon"
-                onClick={() => setIsExpanded(val => !val)}
+                onClick={handleToggleExpand}
               >
                 <ArrowLineDownIcon className="h-2 w-2 text-white" />
               </Button>

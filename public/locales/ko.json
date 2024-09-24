@@ -23,6 +23,6 @@
   "keyPluralMultipleEgArabic_other": "복수형 5",
   "keyWithArrayValue[0]": "여러",
   "keyWithArrayValue[1]": "things",
-  "keyWithObjectValue.valueA": "이것을 값B로 반환합니다.",
+  "keyWithObjectValue.valueA": "이를 값B로 반환합니다.",
   "keyWithObjectValue.valueB": "텍스트 추가"
 }

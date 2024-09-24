@@ -8,7 +8,7 @@ import { RemixBrowser } from '@remix-run/react'
 import { startTransition, StrictMode } from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import i18next from 'i18next'
-import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector'
+// import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector'
 import Fetch from 'i18next-fetch-backend'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
 import { getInitialNamespaces } from 'remix-i18next/client'
@@ -22,7 +22,7 @@ async function main() {
     .use(Fetch)
     // detect user language (client-side language detector)
     // learn more: https://github.com/i18next/i18next-browser-languageDetector
-    .use(I18nextBrowserLanguageDetector)
+    // .use(I18nextBrowserLanguageDetector)
     // Tell i18next to use the react-i18next plugin
     .use(initReactI18next)
     // init i18next
@@ -34,7 +34,7 @@ async function main() {
       debug: process.env.NODE_ENV === 'development',
       ns: getInitialNamespaces(),
       detection: {
-        order: ['path', 'querystring', 'cookie', 'localStorage', 'navigator', 'htmlTag'],
+        order: ['localStorage', 'htmlTag'],
       },
       interpolation: {
         escapeValue: false, // not needed for react as it escapes by default

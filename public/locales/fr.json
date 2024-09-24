@@ -22,7 +22,7 @@
   "keyPluralMultipleEgArabic_many": "la forme plurielle 4",
   "keyPluralMultipleEgArabic_other": "la forme plurielle 5",
   "keyWithArrayValue[0]": "multiples",
-  "keyWithArrayValue[1]": "choses",
+  "keyWithArrayValue[1]": "les choses",
   "keyWithObjectValue.valueA": "retourner ceci avec la valeurB",
   "keyWithObjectValue.valueB": "plus de texte"
 }

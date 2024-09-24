@@ -13,7 +13,7 @@
   "keyInterpolateWithFormatting": "この{{value, format}}を置き換える。",
   "keyContext_male": "男性変種",
   "keyContext_female": "女性変種",
-  "keyPluralSimple_one": "単数",
+  "keyPluralSimple_one": "特異点",
   "keyPluralSimple_other": "複数形",
   "keyPluralMultipleEgArabic_zero": "複数形の 0",
   "keyPluralMultipleEgArabic_one": "複数形 1",

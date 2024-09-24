@@ -8,6 +8,8 @@ import useStore from '~/stores/useStore'
 import { useTelegramMock } from '~/hooks/useTelegramMock'
 import useTelegramNavigate from '~/hooks/useTelegramNavigate'
 import { useAutoLogin } from '~/hooks/api/useAuth'
+import { useTranslation } from 'react-i18next'
+import { mapSystemLanguageCode } from '~/lib/utils'
 
 const queryClient = new QueryClient()
 
@@ -17,6 +19,7 @@ const manifestUrl =
 
 const TelegramInit: React.FC = () => {
   useTelegramNavigate()
+  const { i18n } = useTranslation()
   const navigate = useNavigate()
   const setTelegramInitData = useStore(state => state.setTelegramInitData)
   const launchParams = useLaunchParams(true)
@@ -26,15 +29,21 @@ const TelegramInit: React.FC = () => {
   // 自動登入
   useAutoLogin()
 
+  // 設置 miniapp 的header和背景顏色
   useEffect(() => {
     miniApp.setHeaderColor('#000000')
     miniApp.setBgColor('#242424')
   }, [miniApp])
 
+  // 設置系統語言 與 initData
   useEffect(() => {
     if (!launchParams?.initData) return
-    setTelegramInitData(launchParams.initData)
-  }, [launchParams, setTelegramInitData])
+
+    const initData = launchParams.initData
+    const systemLanguageCode = mapSystemLanguageCode(initData.user?.languageCode)
+    setTelegramInitData(initData)
+    i18n.changeLanguage(systemLanguageCode)
+  }, [i18n, launchParams, miniApp, setTelegramInitData])
 
   useEffect(() => {
     if (startParam === 'debug') {

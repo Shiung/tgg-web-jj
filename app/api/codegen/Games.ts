@@ -21,7 +21,7 @@ export class Games<SecurityDataType = unknown> {
   /**
    * @description Auto-generated API documentation
    *
-   * @tags (*VenueController)
+   * @tags (*GameController)
    * @name GamesEnterCreate
    * @request POST:/ajax/games/{id}/enter
    */
@@ -31,12 +31,6 @@ export class Games<SecurityDataType = unknown> {
       currency: string;
       ip: string;
       language: string;
-      /** @format uint64 */
-      playerId?: number;
-      /** @format uint64 */
-      productId?: number;
-      /** @format uint64 */
-      subGameId?: number;
       /** @format uint64 */
       venueId: number;
     },

@@ -87,6 +87,8 @@ export class Customer<SecurityDataType = unknown> {
   customerInfoList = (params: RequestParams = {}) =>
     this.http.request<
       {
+        /** 頭像 */
+        avatar?: string;
         /** 玩家Id */
         customerId?: string;
         /** 信箱 */

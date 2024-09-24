@@ -34,9 +34,46 @@ export interface BindPinResponse {
   succeed?: boolean;
 }
 
-export interface DepositRequest {
-  token?: string;
+export interface BuyEnergyRequest {
+  /** @format uint64 */
+  gameId: number;
 }
+
+export interface BuyEnergyResponse {
+  balance: string;
+  currency: string;
+}
+
+export type CommissionListRequest = object;
+
+export interface CommissionListResponse {
+  /** 佣金明細 */
+  list?: {
+    /** 有效投注金額 */
+    betAmount?: string;
+    /** 反佣金額 */
+    commissionAmount?: string;
+    /** 玩家名稱 */
+    displayName?: string;
+    /**
+     * 玩家差距層級
+     * @format int64
+     */
+    level?: number;
+    /**
+     * 玩家Id
+     * @format uint64
+     */
+    memberId?: number;
+    /**
+     * 佣金發放狀態
+     * @format int64
+     */
+    sendStatus?: number;
+  }[];
+}
+
+export type DepositRequest = object;
 
 export interface DepositResponse {
   /** ton交易的備註欄位，必填 */
@@ -50,12 +87,6 @@ export interface EnterGameRequest {
   ip: string;
   language: string;
   /** @format uint64 */
-  playerId?: number;
-  /** @format uint64 */
-  productId?: number;
-  /** @format uint64 */
-  subGameId?: number;
-  /** @format uint64 */
   venueId: number;
 }
 
@@ -63,9 +94,16 @@ export interface EnterGameResponse {
   gameUrl: string;
 }
 
+export interface GetEnergyResponse {
+  /** @format uint64 */
+  amount: number;
+}
+
 export type InfoRequest = object;
 
 export interface InfoResponse {
+  /** 頭像 */
+  avatar?: string;
   /** 玩家Id */
   customerId?: string;
   /** 信箱 */
@@ -79,6 +117,50 @@ export interface InfoResponse {
    * @format uint64
    */
   productId?: number;
+}
+
+export type ListGameTransactionRequest = object;
+
+export interface ListGameTransactionResponse {
+  pagination?: {
+    /**
+     * @format int64
+     * @min 20
+     */
+    pageSize: number;
+    /**
+     * @format int64
+     * @min 0
+     */
+    totalPage: number;
+    /**
+     * @format int64
+     * @min 0
+     */
+    totalRecord: number;
+  };
+  records?: {
+    /** 投注金額 */
+    betGold: string;
+    /** 投注金額(KOKON) */
+    betGoldKokon: string;
+    /**
+     * 投注時間
+     * @format date-time
+     */
+    betTime: string;
+    /**
+     * 遊戲id
+     * @format uint64
+     */
+    subGameId: number;
+    /** 投注單號 */
+    transactionId: string;
+    /** 輸贏金額 */
+    winGold: string;
+    /** 輸贏金額(KOKON) */
+    winGoldKokon: string;
+  }[];
 }
 
 export interface LoginRequest {
@@ -241,7 +323,6 @@ export interface WithdrawRequest {
   memo?: string;
   /** 出款地址 */
   recipientAddress: string;
-  token?: string;
 }
 
 export interface WithdrawResponse {

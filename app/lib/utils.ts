@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { fallbackLng, supportedLngs } from '~/consts/i18n'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -31,6 +32,22 @@ export const formatCountdown = (seconds: number) => {
   const minutes = Math.floor(seconds / 60)
   const remainingSeconds = seconds % 60
   return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`
+}
+
+export function mapSystemLanguageCode(code?: string): string {
+  if (!code) return fallbackLng
+  code = code.toLowerCase()
+
+  if (supportedLngs.includes(code)) {
+    return code
+  }
+
+  const primaryCode = code.split('-')[0]
+  if (supportedLngs.includes(primaryCode)) {
+    return primaryCode
+  }
+
+  return fallbackLng
 }
 
 export function detectOS() {

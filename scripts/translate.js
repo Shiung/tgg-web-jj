@@ -32,7 +32,7 @@ const languages = ['es', 'fr', 'ar', 'ja', 'ko'] // 目標語言代碼（ISO 639
 
 // 讀取原始的 en.json 文件
 const enTranslations = JSON.parse(
-  fs.readFileSync(path.join(__dirname, './public/locales/en.json'), 'utf8')
+  fs.readFileSync(path.join(__dirname, '../public/locales/en.json'), 'utf8')
 )
 
 const isDebugMode = false
@@ -137,7 +137,7 @@ async function translateAndSave() {
       translatedContent[item.key] = translatedText
     })
 
-    const outputPath = path.join(__dirname, `./public/locales/${lang}.json`)
+    const outputPath = path.join(__dirname, `../public/locales/${lang}.json`)
     fs.writeFileSync(outputPath, JSON.stringify(translatedContent, null, 2))
     spinner.succeed(`翻譯至 ${lang} 完成，並已儲存至 ${outputPath}。`)
   }

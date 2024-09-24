@@ -9,6 +9,7 @@
  * ---------------------------------------------------------------
  */
 
+import { CommissionListRequest } from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Wallet<SecurityDataType = unknown> {
@@ -25,12 +26,7 @@ export class Wallet<SecurityDataType = unknown> {
    * @name WalletDepositCreate
    * @request POST:/ajax/wallet/deposit
    */
-  walletDepositCreate = (
-    body: {
-      token?: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  walletDepositCreate = (body: CommissionListRequest, params: RequestParams = {}) =>
     this.http.request<
       {
         /** ton交易的備註欄位，必填 */
@@ -71,7 +67,6 @@ export class Wallet<SecurityDataType = unknown> {
       memo?: string;
       /** 出款地址 */
       recipientAddress: string;
-      token?: string;
     },
     params: RequestParams = {},
   ) =>
