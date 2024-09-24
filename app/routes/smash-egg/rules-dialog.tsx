@@ -1,3 +1,4 @@
+import { Button } from '~/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -13,9 +14,9 @@ const RulesDialog: React.FC<RulesDialogProps> = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className="z-40 h-6 w-6">
+        <Button variant="icon" size="icon" className="z-40 h-6 w-6 opacity-100">
           <img src="/images/smash-egg/icon-qustion.png" alt="" />
-        </div>
+        </Button>
       </DialogTrigger>
       <DialogContent className="">
         <DialogHeader className="">

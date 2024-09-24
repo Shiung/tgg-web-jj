@@ -495,7 +495,7 @@ export default function SmashEgg() {
       </div>
 
       {/* Tool bar */}
-      <div className="z-30 flex aspect-[375/30] justify-between">
+      <div className="z-30 flex aspect-[375/30] w-full justify-between">
         {/* 可用工具數量 */}
         <div
           className={`relative flex w-[78px] items-center justify-end rounded-xl bg-white bg-opacity-30 px-3 py-1 text-right text-lg font-extrabold dark:text-white`}
