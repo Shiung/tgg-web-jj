@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from '@remix-run/react'
 
 import { Button } from '~/components/ui/button'
@@ -15,6 +15,8 @@ import TeamLevelCarousel from './teamlevel-carousel'
 import RuleSheet from './rule-sheet'
 
 const ShareInvite: React.FC = () => {
+  const [teamLevel, setTeamLevel] = useState(0)
+
   const images = [
     '/images/share/teamStar-1.png',
     '/images/share/teamStar-2.png',
@@ -22,6 +24,15 @@ const ShareInvite: React.FC = () => {
     '/images/share/teamStar-4.png',
     '/images/share/teamStar-5.png',
   ]
+
+  const handleTeamLevelChange = (newLevel: number) => {
+    console.log('New Team Level:', newLevel)
+    setTeamLevel(newLevel)
+  }
+  const generateRandomProgress = (baseProgress: number) => {
+    const maxProgress = Math.min(baseProgress + teamLevel * 20, 100)
+    return Math.floor(Math.random() * (maxProgress - baseProgress + 1)) + baseProgress
+  }
 
   return (
     <div className="container flex flex-1 flex-col p-0">
@@ -153,7 +164,11 @@ const ShareInvite: React.FC = () => {
         </div>
         <div className="mt-2 w-full rounded-xl bg-colorLinear-green p-3">
           {/* 團隊層級輪播 */}
-          <TeamLevelCarousel images={images} teamLevel={2} />
+          <TeamLevelCarousel
+            images={images}
+            teamLevel={2}
+            onTeamLevelChange={handleTeamLevelChange}
+          />
           {/* Team's Commission Ratio Section */}
           <CatEarsCard className="relative mt-8 w-full rounded-[12px] bg-[#1C1C1C] text-center text-[#FFFFFFB2]">
             <div className="flex items-center justify-between rounded-t-[12px] bg-[#333333] px-6 py-2">
@@ -178,7 +193,11 @@ const ShareInvite: React.FC = () => {
             <div className="flex w-full flex-col items-center space-y-3 p-3 text-xs">
               {[0, 30, 50].map(el => (
                 <div key={`level-${el}`} className="flex w-full flex-col">
-                  <ProgressBar progress={el} total={100} label={`Task-${el}`} />
+                  <ProgressBar
+                    progress={generateRandomProgress(el)}
+                    total={100}
+                    label={`Task-${el}`}
+                  />
                 </div>
               ))}
             </div>

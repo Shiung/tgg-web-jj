@@ -9,9 +9,14 @@ import ArrowRightIcon from '~/icons/arrow-right.svg?react'
 interface TeamLevelCarouselProps {
   images: string[]
   teamLevel: number
+  onTeamLevelChange: (level: number) => void
 }
 
-const TeamLevelCarousel: React.FC<TeamLevelCarouselProps> = ({ images, teamLevel }) => {
+const TeamLevelCarousel: React.FC<TeamLevelCarouselProps> = ({
+  images,
+  teamLevel,
+  onTeamLevelChange,
+}) => {
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -26,8 +31,9 @@ const TeamLevelCarousel: React.FC<TeamLevelCarouselProps> = ({ images, teamLevel
     const timer = setInterval(() => {
       setAnimatedStars(prev => (prev < selectedIndex + 1 ? prev + 1 : prev))
     }, 200)
+    onTeamLevelChange(selectedIndex + 1)
     return () => clearInterval(timer)
-  }, [selectedIndex])
+  }, [selectedIndex, onTeamLevelChange])
 
   useEffect(() => {
     if (!emblaApi) return

@@ -3,12 +3,12 @@ import { useMemo } from 'react'
 import { cn } from '~/lib/utils'
 
 const appLoadingVariants = cva(
-  'absolute inset-0 top-3 z-50 flex flex-col items-center justify-center overflow-hidden rounded-xl',
+  'inset-0 top-3 z-50 flex flex-col items-center justify-center overflow-hidden rounded-xl',
   {
     variants: {
       variant: {
-        blur: 'bg-[#333333]/50 backdrop-blur',
-        system: 'bg-black bg-top bg-no-repeat',
+        blur: 'fixed bg-[#333333]/50 backdrop-blur',
+        system: 'absolute bg-black bg-top bg-no-repeat',
       },
     },
     defaultVariants: {

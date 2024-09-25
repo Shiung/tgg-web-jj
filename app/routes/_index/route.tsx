@@ -14,6 +14,9 @@ import {
 import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
 import NeedLoginDialog from '~/components/need-login-dialog'
 import Footer from './footer'
+import AppLoading from '~/components/app-loading'
+
+import { useGetGameUrl } from '~/hooks/api/useGetGameUrl'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Kokon' }, { name: 'description', content: 'Welcome to Kokon!' }]
@@ -65,6 +68,9 @@ const newReleaseSlides = [
 
 /* Home */
 export default function Index() {
+  // 遊戲url獲取
+  const { mutate, isPending } = useGetGameUrl()
+
   return (
     <div className="container px-0">
       {/* banner carousel */}
@@ -172,7 +178,15 @@ export default function Index() {
                 className="relative flex basis-1/3 overflow-hidden pl-0 text-center"
               >
                 <NeedLoginDialog>
-                  <div className="relative cursor-pointer pr-2">
+                  <div
+                    className="relative cursor-pointer pr-2"
+                    onClick={() => {
+                      mutate(slide.id.toString())
+                    }}
+                    onKeyDown={() => {}}
+                    role="button"
+                    tabIndex={0}
+                  >
                     <span className="absolute inset-x-0 top-2 mx-auto min-h-8 pl-2 pr-4 text-center text-sm font-ultra">
                       {slide.title}
                     </span>
@@ -208,6 +222,8 @@ export default function Index() {
       >
         <SvgEnterByFloating imgurl="/images/lucky-money/lucky-money.png" />
       </Link>
+
+      {isPending && <AppLoading variant="blur" />}
     </div>
   )
 }
