@@ -23,7 +23,7 @@ export default function LuckyMoneyList() {
               My share
             </Button>
           </Link>
-          <Link to="/lucky-money/share" className="flex-1">
+          <Link prefetch="viewport" to="/lucky-money/share" className="flex-1">
             <Button variant="outlineSoft" className="h-7 w-full text-xs font-ultra text-primary">
               Share New Bags
             </Button>
@@ -44,7 +44,7 @@ export default function LuckyMoneyList() {
         </div>
       </div>
       <div className="mt-6 w-full">
-        <Link to="/lucky-money-history">
+        <Link prefetch="viewport" to="/lucky-money-history">
           <Button className="w-full" catEars>
             History
           </Button>

@@ -130,7 +130,11 @@ export default function Index() {
           </div>
           <div className="flex flex-1 flex-col space-y-2">
             <NeedLoginDialog>
-              <Link to="/smash-egg" className="relative flex-1 rounded-xl bg-colorLinear-orange">
+              <Link
+                prefetch="viewport"
+                to="/smash-egg"
+                className="relative flex-1 rounded-xl bg-colorLinear-orange"
+              >
                 <div className="absolute inset-3 flex flex-col text-start text-lg font-ultra">
                   <span>SMASH EGG</span>
                   <span className="text-sm font-normal">
@@ -202,6 +206,7 @@ export default function Index() {
 
       {/* 紅包使用 */}
       <Link
+        prefetch="viewport"
         className="fixed bottom-24 left-0 z-50"
         to="/lucky-money/list"
         rel="noopener noreferrer"

@@ -23,10 +23,14 @@ const ShareTeam: React.FC = () => {
       <Tabs defaultValue="My Team">
         <TabsList className="w-full">
           <TabsTrigger value="Invite" className="flex-1" asChild>
-            <Link to="/share-invite">Invite</Link>
+            <Link prefetch="viewport" to="/share-invite">
+              Invite
+            </Link>
           </TabsTrigger>
           <TabsTrigger value="My Team" className="flex-1" asChild>
-            <Link to="/share-team">My Team</Link>
+            <Link prefetch="viewport" to="/share-team">
+              My Team
+            </Link>
           </TabsTrigger>
         </TabsList>
       </Tabs>

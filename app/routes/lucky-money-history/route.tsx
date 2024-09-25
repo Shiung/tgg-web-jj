@@ -27,7 +27,7 @@ const LuckyMoneyHistory = () => {
     <div className="container m-0 flex flex-1 flex-col rounded-t-xl bg-black p-0 text-white">
       {/* 頭部 */}
       <div className="flex h-14 items-center justify-between p-4">
-        <Link to="/lucky-money/list">
+        <Link prefetch="viewport" to="/lucky-money/list">
           <ArrowLineLeftIcon className="h-6 w-6 text-[#FFFFFFB2]" />
         </Link>
         <div className="text-lg font-ultra">History</div>

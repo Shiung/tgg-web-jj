@@ -24,16 +24,24 @@ export default function Playground() {
       <Tabs value={currentTab} className="mt-4 w-full">
         <TabsList variant="cardTab" className="w-full overflow-x-auto">
           <TabsTrigger variant="cardTab" value="telegram-sdk" className="flex-1" asChild>
-            <Link to="/playground/telegram-sdk">Telegram SDK</Link>
+            <Link prefetch="viewport" to="/playground/telegram-sdk">
+              Telegram SDK
+            </Link>
           </TabsTrigger>
           <TabsTrigger variant="cardTab" value="ui" className="flex-1" asChild>
-            <Link to="/playground/ui">Ui</Link>
+            <Link prefetch="viewport" to="/playground/ui">
+              Ui
+            </Link>
           </TabsTrigger>
           <TabsTrigger variant="cardTab" value="i18next" className="flex-1" asChild>
-            <Link to="/playground/i18next">i18next</Link>
+            <Link prefetch="viewport" to="/playground/i18next">
+              i18next
+            </Link>
           </TabsTrigger>
           <TabsTrigger variant="cardTab" value="svg-icon" className="flex-1" asChild>
-            <Link to="/playground/svg-icon">svg icon</Link>
+            <Link prefetch="viewport" to="/playground/svg-icon">
+              svg icon
+            </Link>
           </TabsTrigger>
         </TabsList>
         <TabsContent value={currentTab}>

@@ -19,12 +19,12 @@ export default function LuckyMoneyShare() {
       <div className="flex w-full flex-1 flex-col">
         {/* 上方兩顆按鈕 */}
         <div className="mb-6 flex w-full space-x-2">
-          <Link to="/lucky-money/list" className="flex-1">
+          <Link prefetch="viewport" to="/lucky-money/list" className="flex-1">
             <Button variant="outlineSoft" className="h-7 w-full text-xs font-ultra text-primary">
               My share
             </Button>
           </Link>
-          <Link to="/lucky-money/share" className="flex-1">
+          <Link prefetch="viewport" to="/lucky-money/share" className="flex-1">
             <Button
               variant="outlineSoft"
               className="h-7 w-full bg-[#FFF2004D] text-xs font-ultra text-primary"
