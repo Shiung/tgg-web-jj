@@ -558,7 +558,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -1059,6 +1059,87 @@
         }
       }
     },
+    "/ajax/wallet/deposit/setting": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*DepositController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "productId",
+                "memberId",
+                "totalBalanceInUsdt",
+                "withdrawingCount"
+              ],
+              "properties": {
+                "memberId": {
+                  "description": "會員id",
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "productId": {
+                  "description": "產品id",
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "totalBalanceInUsdt": {
+                  "description": "有效餘額總計(USDT)",
+                  "type": "string"
+                },
+                "wallets": {
+                  "description": "各幣別錢包",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "currency",
+                      "balance",
+                      "balanceUsdt",
+                      "frozenFunds"
+                    ],
+                    "properties": {
+                      "balance": {
+                        "description": "可用餘額，已扣除凍結資金",
+                        "type": "string"
+                      },
+                      "balanceUsdt": {
+                        "description": "可用餘額Usdt，已扣除凍結資金",
+                        "type": "string"
+                      },
+                      "currency": {
+                        "description": "幣別",
+                        "type": "string"
+                      },
+                      "frozenFunds": {
+                        "description": "凍結資金",
+                        "type": "string"
+                      },
+                      "id": {
+                        "description": "錢包id",
+                        "type": "integer",
+                        "format": "uint64"
+                      }
+                    }
+                  }
+                },
+                "withdrawingCount": {
+                  "description": "進行中提款單數量",
+                  "type": "integer",
+                  "format": "int64",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ajax/wallet/list": {
       "get": {
         "description": "Auto-generated API documentation",
@@ -1207,6 +1288,110 @@
                   "description": "提款單id",
                   "type": "integer",
                   "format": "uint64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/wallet/withdraw/setting": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*WithdrawController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "settings"
+              ],
+              "properties": {
+                "settings": {
+                  "description": "提現設置列表",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "switch",
+                      "chainNet",
+                      "currency",
+                      "availableForWithdraw",
+                      "feeType",
+                      "feeSettingValue",
+                      "usedAmount",
+                      "dailyLimitAmount",
+                      "minimumAmount",
+                      "maximumAmount",
+                      "presentAmounts"
+                    ],
+                    "properties": {
+                      "appliedTimes": {
+                        "description": "今日已申請次數",
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "availableForWithdraw": {
+                        "description": "可提現金額(已扣除提現流水)",
+                        "type": "string"
+                      },
+                      "chainNet": {
+                        "description": "區塊鏈網路 TON",
+                        "type": "string"
+                      },
+                      "currency": {
+                        "description": "幣種 TON USDT",
+                        "type": "string"
+                      },
+                      "dailyLimitAmount": {
+                        "description": "每日提現上限金額",
+                        "type": "string"
+                      },
+                      "dailyLimitTimes": {
+                        "description": "每日提現上限次數",
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "feeSettingValue": {
+                        "description": "手續費設定值",
+                        "type": "string"
+                      },
+                      "feeType": {
+                        "description": "手續費類型 fixed:固定金額 percentage:百分比",
+                        "type": "string"
+                      },
+                      "maximumAmount": {
+                        "description": "最高提領金額",
+                        "type": "string"
+                      },
+                      "minimumAmount": {
+                        "description": "最低提領金額",
+                        "type": "string"
+                      },
+                      "presentAmounts": {
+                        "description": "快選金額",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "switch": {
+                        "description": "開關",
+                        "type": "boolean"
+                      },
+                      "usedAmount": {
+                        "description": "今日已申請金額",
+                        "type": "string"
+                      },
+                      "wagerRequirement": {
+                        "description": "提現流水",
+                        "type": "string"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -1922,6 +2107,97 @@
           "description": "提款單id",
           "type": "integer",
           "format": "uint64"
+        }
+      }
+    },
+    "WithdrawSettingGetResponse": {
+      "type": "object",
+      "required": [
+        "settings"
+      ],
+      "properties": {
+        "settings": {
+          "description": "提現設置列表",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "switch",
+              "chainNet",
+              "currency",
+              "availableForWithdraw",
+              "feeType",
+              "feeSettingValue",
+              "usedAmount",
+              "dailyLimitAmount",
+              "minimumAmount",
+              "maximumAmount",
+              "presentAmounts"
+            ],
+            "properties": {
+              "appliedTimes": {
+                "description": "今日已申請次數",
+                "type": "integer",
+                "format": "int64"
+              },
+              "availableForWithdraw": {
+                "description": "可提現金額(已扣除提現流水)",
+                "type": "string"
+              },
+              "chainNet": {
+                "description": "區塊鏈網路 TON",
+                "type": "string"
+              },
+              "currency": {
+                "description": "幣種 TON USDT",
+                "type": "string"
+              },
+              "dailyLimitAmount": {
+                "description": "每日提現上限金額",
+                "type": "string"
+              },
+              "dailyLimitTimes": {
+                "description": "每日提現上限次數",
+                "type": "integer",
+                "format": "int64"
+              },
+              "feeSettingValue": {
+                "description": "手續費設定值",
+                "type": "string"
+              },
+              "feeType": {
+                "description": "手續費類型 fixed:固定金額 percentage:百分比",
+                "type": "string"
+              },
+              "maximumAmount": {
+                "description": "最高提領金額",
+                "type": "string"
+              },
+              "minimumAmount": {
+                "description": "最低提領金額",
+                "type": "string"
+              },
+              "presentAmounts": {
+                "description": "快選金額",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "switch": {
+                "description": "開關",
+                "type": "boolean"
+              },
+              "usedAmount": {
+                "description": "今日已申請金額",
+                "type": "string"
+              },
+              "wagerRequirement": {
+                "description": "提現流水",
+                "type": "string"
+              }
+            }
+          }
         }
       }
     }

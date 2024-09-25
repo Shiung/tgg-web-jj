@@ -396,3 +396,43 @@ export interface WithdrawResponse {
    */
   withdrawId: number;
 }
+
+export interface WithdrawSettingGetResponse {
+  /** 提現設置列表 */
+  settings: {
+    /**
+     * 今日已申請次數
+     * @format int64
+     */
+    appliedTimes?: number;
+    /** 可提現金額(已扣除提現流水) */
+    availableForWithdraw: string;
+    /** 區塊鏈網路 TON */
+    chainNet: string;
+    /** 幣種 TON USDT */
+    currency: string;
+    /** 每日提現上限金額 */
+    dailyLimitAmount: string;
+    /**
+     * 每日提現上限次數
+     * @format int64
+     */
+    dailyLimitTimes?: number;
+    /** 手續費設定值 */
+    feeSettingValue: string;
+    /** 手續費類型 fixed:固定金額 percentage:百分比 */
+    feeType: string;
+    /** 最高提領金額 */
+    maximumAmount: string;
+    /** 最低提領金額 */
+    minimumAmount: string;
+    /** 快選金額 */
+    presentAmounts: string[];
+    /** 開關 */
+    switch: boolean;
+    /** 今日已申請金額 */
+    usedAmount: string;
+    /** 提現流水 */
+    wagerRequirement?: string;
+  }[];
+}
