@@ -27,7 +27,9 @@ const MainNav: React.FC = () => {
   const [activeLink, setActiveLink] = useState(location.pathname)
 
   const isActive = useCallback(
-    (href: (typeof links)[number]['href']) => href === activeLink,
+    (href: (typeof links)[number]['href']) => {
+      return href === '/' ? activeLink === href : activeLink.startsWith(href)
+    },
     [activeLink]
   )
 

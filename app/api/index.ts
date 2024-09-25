@@ -1,6 +1,7 @@
 import { apiClient } from './api-client'
 import { Customer } from './codegen/Customer'
 import { Games } from './codegen/Games'
+import { Game } from './codegen/Game'
 import { Header } from './codegen/Header'
 import { Team } from './codegen/Team'
 import { Wallet } from './codegen/Wallet'
@@ -8,6 +9,7 @@ import { Wallet } from './codegen/Wallet'
 export const apis = {
   customer: new Customer(apiClient),
   games: new Games(apiClient),
+  game: new Game(apiClient),
   header: new Header(apiClient),
   team: new Team(apiClient),
   wallet: new Wallet(apiClient),
