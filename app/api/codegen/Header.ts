@@ -47,9 +47,11 @@ export class Header<SecurityDataType = unknown> {
         /** 有效餘額總計(USDT) */
         totalBalanceInUsdt: string;
         /** 各幣別錢包 */
-        wallets: {
+        wallets?: {
           /** 可用餘額，已扣除凍結資金 */
           balance: string;
+          /** 可用餘額Usdt，已扣除凍結資金 */
+          balanceUsdt: string;
           /** 幣別 */
           currency: string;
           /** 凍結資金 */

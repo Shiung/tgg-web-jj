@@ -35,12 +35,12 @@ export class Team<SecurityDataType = unknown> {
        */
       level?: number;
       /**
-       *  (Required). Format: 2006-01-02T15:04:05Z08:00
+       *  (Required). Format: 2006-01-02T15:04:05Z07:00
        * @format date-time
        */
       startTime: string;
       /**
-       *  (Required). Format: 2006-01-02T15:04:05Z08:00
+       *  (Required). Format: 2006-01-02T15:04:05Z07:00
        * @format date-time
        */
       endTime: string;
@@ -85,6 +85,34 @@ export class Team<SecurityDataType = unknown> {
            */
           sendStatus?: number;
         }[];
+        pagination?: {
+          /**
+           * @format int64
+           * @min 20
+           */
+          pageSize: number;
+          /**
+           * @format int64
+           * @min 0
+           */
+          totalPage: number;
+          /**
+           * @format int64
+           * @min 0
+           */
+          totalRecord: number;
+        };
+        summary?: {
+          /** 總下注金額 */
+          totalBet?: string;
+          /** 總反佣金額 */
+          totalCommission?: string;
+          /**
+           * 總筆數
+           * @format int64
+           */
+          totalCount?: number;
+        };
       },
       any
     >({

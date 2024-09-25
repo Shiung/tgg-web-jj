@@ -71,6 +71,34 @@ export interface CommissionListResponse {
      */
     sendStatus?: number;
   }[];
+  pagination?: {
+    /**
+     * @format int64
+     * @min 20
+     */
+    pageSize: number;
+    /**
+     * @format int64
+     * @min 0
+     */
+    totalPage: number;
+    /**
+     * @format int64
+     * @min 0
+     */
+    totalRecord: number;
+  };
+  summary?: {
+    /** 總下注金額 */
+    totalBet?: string;
+    /** 總反佣金額 */
+    totalCommission?: string;
+    /**
+     * 總筆數
+     * @format int64
+     */
+    totalCount?: number;
+  };
 }
 
 export type DepositRequest = object;
@@ -84,10 +112,7 @@ export interface DepositResponse {
 
 export interface EnterGameRequest {
   currency: string;
-  ip: string;
   language: string;
-  /** @format uint64 */
-  venueId: number;
 }
 
 export interface EnterGameResponse {
@@ -97,6 +122,37 @@ export interface EnterGameResponse {
 export interface GetEnergyResponse {
   /** @format uint64 */
   amount: number;
+}
+
+export interface HeaderWalletResponse {
+  /**
+   * 會員id
+   * @format uint64
+   */
+  memberId: number;
+  /**
+   * 產品id
+   * @format uint64
+   */
+  productId: number;
+  /** 有效餘額總計(USDT) */
+  totalBalanceInUsdt: string;
+  /** 各幣別錢包 */
+  wallets?: {
+    /** 可用餘額，已扣除凍結資金 */
+    balance: string;
+    /** 可用餘額Usdt，已扣除凍結資金 */
+    balanceUsdt: string;
+    /** 幣別 */
+    currency: string;
+    /** 凍結資金 */
+    frozenFunds: string;
+    /**
+     * 錢包id
+     * @format uint64
+     */
+    id: number;
+  }[];
 }
 
 export type InfoRequest = object;
@@ -277,7 +333,7 @@ export interface ValidCodeResponse {
 
 export type WalletInfoRequest = object;
 
-export interface WalletInfoResponse {
+export interface WalletListResponse {
   /**
    * 會員id
    * @format uint64
@@ -291,9 +347,11 @@ export interface WalletInfoResponse {
   /** 有效餘額總計(USDT) */
   totalBalanceInUsdt: string;
   /** 各幣別錢包 */
-  wallets: {
+  wallets?: {
     /** 可用餘額，已扣除凍結資金 */
     balance: string;
+    /** 可用餘額Usdt，已扣除凍結資金 */
+    balanceUsdt: string;
     /** 幣別 */
     currency: string;
     /** 凍結資金 */
@@ -304,6 +362,12 @@ export interface WalletInfoResponse {
      */
     id: number;
   }[];
+  /**
+   * 進行中提款單數量
+   * @format int64
+   * @min 0
+   */
+  withdrawingCount: number;
 }
 
 export interface WithdrawRequest {

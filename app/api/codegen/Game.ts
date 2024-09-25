@@ -74,12 +74,12 @@ export class Game<SecurityDataType = unknown> {
   gameTransactionsList = (
     query: {
       /**
-       *  (Required). Format: 2006-01-02T15:04:05Z08:00
+       *  (Required). Format: 2006-01-02T15:04:05Z07:00
        * @format date-time
        */
       startTime: string;
       /**
-       *  (Required). Format: 2006-01-02T15:04:05Z08:00
+       *  (Required). Format: 2006-01-02T15:04:05Z07:00
        * @format date-time
        */
       endTime: string;

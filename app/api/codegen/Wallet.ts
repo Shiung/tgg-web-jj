@@ -45,6 +45,64 @@ export class Wallet<SecurityDataType = unknown> {
   /**
    * @description Auto-generated API documentation
    *
+   * @tags (*WalletController)
+   * @name WalletListList
+   * @request GET:/ajax/wallet/list
+   */
+  walletListList = (
+    query?: {
+      /** 幣別(選填) */
+      currency?: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<
+      {
+        /**
+         * 會員id
+         * @format uint64
+         */
+        memberId: number;
+        /**
+         * 產品id
+         * @format uint64
+         */
+        productId: number;
+        /** 有效餘額總計(USDT) */
+        totalBalanceInUsdt: string;
+        /** 各幣別錢包 */
+        wallets?: {
+          /** 可用餘額，已扣除凍結資金 */
+          balance: string;
+          /** 可用餘額Usdt，已扣除凍結資金 */
+          balanceUsdt: string;
+          /** 幣別 */
+          currency: string;
+          /** 凍結資金 */
+          frozenFunds: string;
+          /**
+           * 錢包id
+           * @format uint64
+           */
+          id: number;
+        }[];
+        /**
+         * 進行中提款單數量
+         * @format int64
+         * @min 0
+         */
+        withdrawingCount: number;
+      },
+      any
+    >({
+      path: `/ajax/wallet/list`,
+      method: "GET",
+      query: query,
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
    * @tags (*WithdrawController)
    * @name WalletWithdrawCreate
    * @request POST:/ajax/wallet/withdraw

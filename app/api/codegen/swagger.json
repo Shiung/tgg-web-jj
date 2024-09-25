@@ -524,7 +524,7 @@
           {
             "type": "string",
             "format": "date-time",
-            "description": " (Required). Format: 2006-01-02T15:04:05Z08:00",
+            "description": " (Required). Format: 2006-01-02T15:04:05Z07:00",
             "name": "startTime",
             "in": "query",
             "required": true
@@ -532,7 +532,7 @@
           {
             "type": "string",
             "format": "date-time",
-            "description": " (Required). Format: 2006-01-02T15:04:05Z08:00",
+            "description": " (Required). Format: 2006-01-02T15:04:05Z07:00",
             "name": "endTime",
             "in": "query",
             "required": true
@@ -669,24 +669,15 @@
             "schema": {
               "type": "object",
               "required": [
-                "venueId",
                 "currency",
-                "language",
-                "ip"
+                "language"
               ],
               "properties": {
                 "currency": {
                   "type": "string"
                 },
-                "ip": {
-                  "type": "string"
-                },
                 "language": {
                   "type": "string"
-                },
-                "venueId": {
-                  "type": "integer",
-                  "format": "uint64"
                 }
               }
             }
@@ -732,8 +723,7 @@
               "required": [
                 "productId",
                 "memberId",
-                "totalBalanceInUsdt",
-                "wallets"
+                "totalBalanceInUsdt"
               ],
               "properties": {
                 "memberId": {
@@ -759,11 +749,16 @@
                       "id",
                       "currency",
                       "balance",
+                      "balanceUsdt",
                       "frozenFunds"
                     ],
                     "properties": {
                       "balance": {
                         "description": "可用餘額，已扣除凍結資金",
+                        "type": "string"
+                      },
+                      "balanceUsdt": {
+                        "description": "可用餘額Usdt，已扣除凍結資金",
                         "type": "string"
                       },
                       "currency": {
@@ -811,7 +806,7 @@
           {
             "type": "string",
             "format": "date-time",
-            "description": " (Required). Format: 2006-01-02T15:04:05Z08:00",
+            "description": " (Required). Format: 2006-01-02T15:04:05Z07:00",
             "name": "startTime",
             "in": "query",
             "required": true
@@ -819,7 +814,7 @@
           {
             "type": "string",
             "format": "date-time",
-            "description": " (Required). Format: 2006-01-02T15:04:05Z08:00",
+            "description": " (Required). Format: 2006-01-02T15:04:05Z07:00",
             "name": "endTime",
             "in": "query",
             "required": true
@@ -882,6 +877,49 @@
                         "type": "integer",
                         "format": "int64"
                       }
+                    }
+                  }
+                },
+                "pagination": {
+                  "type": "object",
+                  "required": [
+                    "pageSize",
+                    "totalRecord",
+                    "totalPage"
+                  ],
+                  "properties": {
+                    "pageSize": {
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 20
+                    },
+                    "totalPage": {
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 0
+                    },
+                    "totalRecord": {
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 0
+                    }
+                  }
+                },
+                "summary": {
+                  "type": "object",
+                  "properties": {
+                    "totalBet": {
+                      "description": "總下注金額",
+                      "type": "string"
+                    },
+                    "totalCommission": {
+                      "description": "總反佣金額",
+                      "type": "string"
+                    },
+                    "totalCount": {
+                      "description": "總筆數",
+                      "type": "integer",
+                      "format": "int64"
                     }
                   }
                 }
@@ -1014,6 +1052,95 @@
                 "depositAddress": {
                   "description": "充值地址",
                   "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/wallet/list": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*WalletController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "幣別(選填)",
+            "name": "currency",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "productId",
+                "memberId",
+                "totalBalanceInUsdt",
+                "withdrawingCount"
+              ],
+              "properties": {
+                "memberId": {
+                  "description": "會員id",
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "productId": {
+                  "description": "產品id",
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "totalBalanceInUsdt": {
+                  "description": "有效餘額總計(USDT)",
+                  "type": "string"
+                },
+                "wallets": {
+                  "description": "各幣別錢包",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "currency",
+                      "balance",
+                      "balanceUsdt",
+                      "frozenFunds"
+                    ],
+                    "properties": {
+                      "balance": {
+                        "description": "可用餘額，已扣除凍結資金",
+                        "type": "string"
+                      },
+                      "balanceUsdt": {
+                        "description": "可用餘額Usdt，已扣除凍結資金",
+                        "type": "string"
+                      },
+                      "currency": {
+                        "description": "幣別",
+                        "type": "string"
+                      },
+                      "frozenFunds": {
+                        "description": "凍結資金",
+                        "type": "string"
+                      },
+                      "id": {
+                        "description": "錢包id",
+                        "type": "integer",
+                        "format": "uint64"
+                      }
+                    }
+                  }
+                },
+                "withdrawingCount": {
+                  "description": "進行中提款單數量",
+                  "type": "integer",
+                  "format": "int64",
+                  "minimum": 0
                 }
               }
             }
@@ -1208,6 +1335,49 @@
               }
             }
           }
+        },
+        "pagination": {
+          "type": "object",
+          "required": [
+            "pageSize",
+            "totalRecord",
+            "totalPage"
+          ],
+          "properties": {
+            "pageSize": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 20
+            },
+            "totalPage": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            },
+            "totalRecord": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          }
+        },
+        "summary": {
+          "type": "object",
+          "properties": {
+            "totalBet": {
+              "description": "總下注金額",
+              "type": "string"
+            },
+            "totalCommission": {
+              "description": "總反佣金額",
+              "type": "string"
+            },
+            "totalCount": {
+              "description": "總筆數",
+              "type": "integer",
+              "format": "int64"
+            }
+          }
         }
       }
     },
@@ -1234,24 +1404,15 @@
     "EnterGameRequest": {
       "type": "object",
       "required": [
-        "venueId",
         "currency",
-        "language",
-        "ip"
+        "language"
       ],
       "properties": {
         "currency": {
           "type": "string"
         },
-        "ip": {
-          "type": "string"
-        },
         "language": {
           "type": "string"
-        },
-        "venueId": {
-          "type": "integer",
-          "format": "uint64"
         }
       }
     },
@@ -1275,6 +1436,67 @@
         "amount": {
           "type": "integer",
           "format": "uint64"
+        }
+      }
+    },
+    "HeaderWalletResponse": {
+      "type": "object",
+      "required": [
+        "productId",
+        "memberId",
+        "totalBalanceInUsdt"
+      ],
+      "properties": {
+        "memberId": {
+          "description": "會員id",
+          "type": "integer",
+          "format": "uint64"
+        },
+        "productId": {
+          "description": "產品id",
+          "type": "integer",
+          "format": "uint64"
+        },
+        "totalBalanceInUsdt": {
+          "description": "有效餘額總計(USDT)",
+          "type": "string"
+        },
+        "wallets": {
+          "description": "各幣別錢包",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "currency",
+              "balance",
+              "balanceUsdt",
+              "frozenFunds"
+            ],
+            "properties": {
+              "balance": {
+                "description": "可用餘額，已扣除凍結資金",
+                "type": "string"
+              },
+              "balanceUsdt": {
+                "description": "可用餘額Usdt，已扣除凍結資金",
+                "type": "string"
+              },
+              "currency": {
+                "description": "幣別",
+                "type": "string"
+              },
+              "frozenFunds": {
+                "description": "凍結資金",
+                "type": "string"
+              },
+              "id": {
+                "description": "錢包id",
+                "type": "integer",
+                "format": "uint64"
+              }
+            }
+          }
         }
       }
     },
@@ -1589,13 +1811,13 @@
     "WalletInfoRequest": {
       "type": "object"
     },
-    "WalletInfoResponse": {
+    "WalletListResponse": {
       "type": "object",
       "required": [
         "productId",
         "memberId",
         "totalBalanceInUsdt",
-        "wallets"
+        "withdrawingCount"
       ],
       "properties": {
         "memberId": {
@@ -1621,11 +1843,16 @@
               "id",
               "currency",
               "balance",
+              "balanceUsdt",
               "frozenFunds"
             ],
             "properties": {
               "balance": {
                 "description": "可用餘額，已扣除凍結資金",
+                "type": "string"
+              },
+              "balanceUsdt": {
+                "description": "可用餘額Usdt，已扣除凍結資金",
                 "type": "string"
               },
               "currency": {
@@ -1643,6 +1870,12 @@
               }
             }
           }
+        },
+        "withdrawingCount": {
+          "description": "進行中提款單數量",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 0
         }
       }
     },

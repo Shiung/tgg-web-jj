@@ -29,10 +29,7 @@ export class Games<SecurityDataType = unknown> {
     id: string,
     body: {
       currency: string;
-      ip: string;
       language: string;
-      /** @format uint64 */
-      venueId: number;
     },
     params: RequestParams = {},
   ) =>
