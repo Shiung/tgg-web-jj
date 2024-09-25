@@ -6,6 +6,7 @@ import {
   ReactElement,
   useState,
 } from 'react'
+import { useNavigate } from '@remix-run/react'
 import {
   Dialog,
   DialogClose,
@@ -23,28 +24,32 @@ interface NeedLoginDialogProps extends PropsWithChildren {}
 
 export default function NeedLoginDialog({ children }: NeedLoginDialogProps) {
   const [open, setOpen] = useState(false)
-  const [pendingClick, setPendingClick] = useState<(() => void) | null>(null)
+  const [pendingAction, setPendingAction] = useState<(() => void) | null>(null)
   const isLoggedin = useStore(state => !!state.token)
   const { handleLogin, scriptLoaded } = useTelegramLogin({
     onSuccess() {
       // 登入成功后，执行原始的 onClick 事件
-      if (pendingClick) {
-        pendingClick?.()
-        setPendingClick(null)
+      if (pendingAction) {
+        pendingAction()
+        setPendingAction(null)
       }
     },
   })
+  const navigate = useNavigate()
 
-  const handleTriggerClick = (e: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
+  const handleTriggerClick = (e: MouseEvent<HTMLElement>) => {
     if (!isLoggedin) {
-      e.preventDefault()
+      e.preventDefault() // 阻止默认行为，等待登录成功
       setOpen(true)
 
-      // 如果 children 有 onClick，保存它以便登入成功后执行
-      if (isValidElement(children) && children.props.onClick) {
-        setPendingClick(() => () => {
-          children.props.onClick(e)
-        })
+      if (isValidElement(children)) {
+        if (children.props.to) {
+          // 如果 children 是 Link 组件，保存导航操作
+          setPendingAction(() => navigate(children.props.to))
+        } else if (children.props.onClick) {
+          // 如果有 onClick 事件，保存原始的点击行为
+          setPendingAction(() => children.props.onClick(e))
+        }
       }
     }
   }
