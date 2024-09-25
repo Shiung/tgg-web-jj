@@ -19,6 +19,7 @@ const buttonVariants = cva(
         menu: 'bg-[#1C1C1C] rounded-xl border border-transparent text-white hover:border-primary hover:text-primary hover:bg-[#FFF871]/30',
         select: 'bg-[#333] border-[0.5px] border-white/20 text-white',
         icon: 'opacity-70 transition-opacity rounded-full hover:opacity-100',
+        link: '',
       },
       size: {
         default: 'h-9 py-1 px-4', // 36px
@@ -26,6 +27,7 @@ const buttonVariants = cva(
         sm: 'h-6 px-3', // 24px
         xs: 'h-[18px] px-2', // 18px
         icon: 'h-6 w-6 p-0',
+        link: 'h-auto p-0',
       },
       isSelected: {
         true: '!bg-[#FFF871]/30 !border-primary !text-primary', // 選中樣式
@@ -53,6 +55,7 @@ const earColorVariants = cva(
         menu: '',
         select: '',
         icon: '',
+        link: '',
       },
     },
   }

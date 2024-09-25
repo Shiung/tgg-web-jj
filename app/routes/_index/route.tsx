@@ -12,6 +12,8 @@ import {
   CarouselPrevious,
 } from '~/components/ui/carousel'
 import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
+import Footer from './footer'
+import NeedLoginDialog from '~/components/need-login-dialog'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Kokon' }, { name: 'description', content: 'Welcome to Kokon!' }]
@@ -61,6 +63,7 @@ const newReleaseSlides = [
   },
 ]
 
+/* Home */
 export default function Index() {
   return (
     <div className="container px-0">
@@ -104,42 +107,48 @@ export default function Index() {
         {/* 343 / 344 */}
         <div className="my-6 flex aspect-[343/344] w-full flex-row space-x-2">
           <div className="flex flex-1 flex-col space-y-2 text-lg font-ultra">
-            <div className="relative flex-1 overflow-hidden rounded-2xl">
-              <p className="absolute inset-x-3 top-[14px]">GO DOWN 100 FLOORS</p>
-              <img
-                src="/images/home/carousel/go-down-100-floors.png"
-                alt="go-down-100-floors"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="relative flex-1 overflow-hidden rounded-2xl">
-              <p className="absolute inset-x-3 top-[14px]">CRASH</p>
-              <img
-                src="/images/home/carousel/crash.png"
-                alt="crash"
-                className="h-full w-full object-cover"
-              />
-            </div>
+            <NeedLoginDialog>
+              <div className="relative flex-1 cursor-pointer overflow-hidden rounded-2xl">
+                <p className="absolute inset-x-3 top-[14px]">GO DOWN 100 FLOORS</p>
+                <img
+                  src="/images/home/carousel/go-down-100-floors.png"
+                  alt="go-down-100-floors"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            </NeedLoginDialog>
+            <NeedLoginDialog>
+              <div className="relative flex-1 cursor-pointer overflow-hidden rounded-2xl">
+                <p className="absolute inset-x-3 top-[14px]">CRASH</p>
+                <img
+                  src="/images/home/carousel/crash.png"
+                  alt="crash"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            </NeedLoginDialog>
           </div>
           <div className="flex flex-1 flex-col space-y-2">
-            <Link to="/smash-egg" className="relative flex-1 rounded-xl bg-colorLinear-orange">
-              <div className="absolute inset-3 flex flex-col text-start text-lg font-ultra">
-                <span>SMASH EGG</span>
-                <span className="text-sm font-normal">
-                  Up to <span className="font-ultra text-primary">1000</span> kokon
-                </span>
-              </div>
-              <img
-                src="/images/home/wave.png"
-                alt="wave bg"
-                className="absolute inset-x-0 bottom-2 h-auto"
-              />
-              <img
-                src="/images/home/smash-egg.png"
-                alt="wave bg"
-                className="absolute inset-x-0 bottom-2 z-10 h-auto"
-              />
-            </Link>
+            <NeedLoginDialog>
+              <Link to="/smash-egg" className="relative flex-1 rounded-xl bg-colorLinear-orange">
+                <div className="absolute inset-3 flex flex-col text-start text-lg font-ultra">
+                  <span>SMASH EGG</span>
+                  <span className="text-sm font-normal">
+                    Up to <span className="font-ultra text-primary">1000</span> kokon
+                  </span>
+                </div>
+                <img
+                  src="/images/home/wave.png"
+                  alt="wave bg"
+                  className="absolute inset-x-0 bottom-2 h-auto"
+                />
+                <img
+                  src="/images/home/smash-egg.png"
+                  alt="wave bg"
+                  className="absolute inset-x-0 bottom-2 z-10 h-auto"
+                />
+              </Link>
+            </NeedLoginDialog>
             <Button className="h-10" variant="outline">
               MORE GAME
             </Button>
@@ -147,7 +156,7 @@ export default function Index() {
         </div>
       </div>
       {/* new release carousel */}
-      <div className="rounded-b-xl bg-black px-4 pb-4">
+      <div className="bg-black px-4 pb-6">
         <Carousel className="aspect-[346/144] w-full">
           <div className="mb-3 flex items-center justify-between">
             <h1 className="text-base font-ultra">NEW RELEASE</h1>
@@ -162,21 +171,25 @@ export default function Index() {
                 key={slide.id}
                 className="relative flex basis-1/3 overflow-hidden pl-0 text-center"
               >
-                <div className="relative pr-2">
-                  <span className="absolute inset-x-0 top-2 mx-auto min-h-8 pl-2 pr-4 text-center text-sm font-ultra">
-                    {slide.title}
-                  </span>
-                  <img
-                    src={slide.imgSrc}
-                    alt={slide.imgAlt}
-                    className="h-full w-full rounded-lg object-contain"
-                  />
-                </div>
+                <NeedLoginDialog>
+                  <div className="relative cursor-pointer pr-2">
+                    <span className="absolute inset-x-0 top-2 mx-auto min-h-8 pl-2 pr-4 text-center text-sm font-ultra">
+                      {slide.title}
+                    </span>
+                    <img
+                      src={slide.imgSrc}
+                      alt={slide.imgAlt}
+                      className="h-full w-full rounded-lg object-contain"
+                    />
+                  </div>
+                </NeedLoginDialog>
               </CarouselItem>
             ))}
           </CarouselContent>
         </Carousel>
       </div>
+      {/* footer */}
+      <Footer />
       {/* 開發使用 */}
       {/* playground */}
       <a
