@@ -5,7 +5,7 @@ import { LoginRequest, LoginResponse } from '~/api/codegen/data-contracts'
 import { detectOS } from '~/lib/utils'
 import { TelegramUser } from '~/components/telegram-login-button/types'
 
-const BOT_ID = /* import.meta.env.VITE_BOT_ID */ '5000868057'
+const BOT_ID = import.meta.env.VITE_BOT_ID
 
 interface UseTelegramLoginProps {
   onSuccess?: (data: AxiosResponse<LoginResponse>, telegramUserData?: TelegramUser) => void // 新增的 callback 类型
