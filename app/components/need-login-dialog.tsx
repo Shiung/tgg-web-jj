@@ -12,15 +12,28 @@ import { Button } from '~/components/ui/button'
 import useStore from '~/stores/useStore'
 import { useTelegramLogin } from '~/hooks/useTelegramLogin'
 
-export default function NeedLoginDialog({ children }: PropsWithChildren) {
+interface NeedLoginDialogProps extends PropsWithChildren {
+  onClick?: (e?: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => void
+}
+
+export default function NeedLoginDialog({ children, onClick }: NeedLoginDialogProps) {
   const [open, setOpen] = useState(false)
   const isLoggedin = useStore(state => !!state.token)
-  const { handleLogin, scriptLoaded } = useTelegramLogin()
+  const { handleLogin, scriptLoaded } = useTelegramLogin({
+    onSuccess() {
+      // 登入成功后，执行原始的 onClick 事件
+      if (onClick) {
+        onClick()
+      }
+    },
+  })
 
-  const handleTriggerClick = (e: MouseEvent<HTMLButtonElement>) => {
+  const handleTriggerClick = (e: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
     if (!isLoggedin) {
       e.preventDefault()
       setOpen(true)
+    } else if (onClick) {
+      onClick(e) // 原始的 onClick 事件
     }
   }
 

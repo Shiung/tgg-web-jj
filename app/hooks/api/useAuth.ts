@@ -1,8 +1,9 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 import { InitDataParsed } from '@telegram-apps/sdk-react'
+import { type AxiosResponse } from 'axios'
 import { useEffect } from 'react'
 import { setHeaderToken } from '~/api/api-client'
-import { LoginRequest } from '~/api/codegen/data-contracts'
+import { LoginRequest, LoginResponse } from '~/api/codegen/data-contracts'
 import { apis } from '~/api/index'
 import { detectOS } from '~/lib/utils'
 import useStore from '~/stores/useStore'
@@ -27,22 +28,34 @@ function prepareLoginRequest(telegramInitData: InitDataParsed): LoginRequest | n
   }
 }
 
-const useLogin = () => {
+type MutationFn = (variables: LoginRequest) => Promise<AxiosResponse<LoginResponse>>
+
+interface UseLoginOptions
+  extends Partial<UseMutationOptions<AxiosResponse<LoginResponse>, Error, LoginRequest>> {}
+
+const useLogin = (options?: UseLoginOptions) => {
   const { setToken } = useStore(state => state)
 
   return useMutation({
-    mutationFn: apis.customer.customerLoginCreate,
-    onSuccess: data => {
+    mutationFn: apis.customer.customerLoginCreate as MutationFn,
+    onSuccess: (data, variables, context) => {
       console.log('Login successful, onSuccess:', data)
       const token = data?.data.token
       if (token) {
         setToken(token)
         setHeaderToken(token)
       }
+
+      if (options?.onSuccess) {
+        options.onSuccess(data, variables, context)
+      }
     },
-    onError: error => {
+    onError: (error, variables, context) => {
       console.error('Login failed, onError:', error)
       // 處理錯誤
+      if (options?.onError) {
+        options.onError(error, variables, context)
+      }
     },
   })
 }

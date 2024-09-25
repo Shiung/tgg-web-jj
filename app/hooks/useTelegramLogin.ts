@@ -1,13 +1,24 @@
 import { useCallback, useEffect, useState } from 'react'
+import { type AxiosResponse } from 'axios'
 import { useLogin } from '~/hooks/api/useAuth'
-import { LoginRequest } from '~/api/codegen/data-contracts'
+import { LoginRequest, LoginResponse } from '~/api/codegen/data-contracts'
 import { detectOS } from '~/lib/utils'
+import { TelegramUser } from '~/components/telegram-login-button/types'
 
 const BOT_ID = import.meta.env.VITE_BOT_ID
 
-export const useTelegramLogin = () => {
+interface UseTelegramLoginProps {
+  onSuccess?: (data: AxiosResponse<LoginResponse>, telegramUserData?: TelegramUser) => void // 新增的 callback 类型
+}
+
+export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
   const [scriptLoaded, setScriptLoaded] = useState(false)
-  const { mutate: doLogin } = useLogin()
+  const [telegramUserData, setTelegramUserData] = useState<TelegramUser>()
+  const { mutate: doLogin } = useLogin({
+    onSuccess(data) {
+      if (onSuccess) onSuccess(data, telegramUserData)
+    },
+  })
 
   const handleLogin = useCallback(() => {
     if (scriptLoaded && window.Telegram?.Login) {
@@ -18,6 +29,7 @@ export const useTelegramLogin = () => {
         },
         async user => {
           if (user) {
+            setTelegramUserData(user)
             console.log('login tg data', user)
             const loginData: LoginRequest = {
               avatar: user?.photo_url || '',

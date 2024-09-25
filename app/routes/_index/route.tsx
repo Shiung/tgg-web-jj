@@ -12,8 +12,8 @@ import {
   CarouselPrevious,
 } from '~/components/ui/carousel'
 import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
-import Footer from './footer'
 import NeedLoginDialog from '~/components/need-login-dialog'
+import Footer from './footer'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Kokon' }, { name: 'description', content: 'Welcome to Kokon!' }]
