@@ -39,7 +39,6 @@ const useLogin = (options?: UseLoginOptions) => {
   return useMutation({
     mutationFn: apis.customer.customerLoginCreate as MutationFn,
     onSuccess: (data, variables, context) => {
-      console.log('Login successful, onSuccess:', data)
       const token = data?.data.token
       if (token) {
         setToken(token)

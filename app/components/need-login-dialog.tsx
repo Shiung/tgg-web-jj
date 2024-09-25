@@ -1,4 +1,11 @@
-import { type PropsWithChildren, MouseEvent, useState } from 'react'
+import {
+  type PropsWithChildren,
+  cloneElement,
+  isValidElement,
+  MouseEvent,
+  ReactElement,
+  useState,
+} from 'react'
 import {
   Dialog,
   DialogClose,
@@ -12,18 +19,18 @@ import { Button } from '~/components/ui/button'
 import useStore from '~/stores/useStore'
 import { useTelegramLogin } from '~/hooks/useTelegramLogin'
 
-interface NeedLoginDialogProps extends PropsWithChildren {
-  onClick?: (e?: MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => void
-}
+interface NeedLoginDialogProps extends PropsWithChildren {}
 
-export default function NeedLoginDialog({ children, onClick }: NeedLoginDialogProps) {
+export default function NeedLoginDialog({ children }: NeedLoginDialogProps) {
   const [open, setOpen] = useState(false)
+  const [pendingClick, setPendingClick] = useState<(() => void) | null>(null)
   const isLoggedin = useStore(state => !!state.token)
   const { handleLogin, scriptLoaded } = useTelegramLogin({
     onSuccess() {
       // 登入成功后，执行原始的 onClick 事件
-      if (onClick) {
-        onClick()
+      if (pendingClick) {
+        pendingClick?.()
+        setPendingClick(null)
       }
     },
   })
@@ -32,8 +39,13 @@ export default function NeedLoginDialog({ children, onClick }: NeedLoginDialogPr
     if (!isLoggedin) {
       e.preventDefault()
       setOpen(true)
-    } else if (onClick) {
-      onClick(e) // 原始的 onClick 事件
+
+      // 如果 children 有 onClick，保存它以便登入成功后执行
+      if (isValidElement(children) && children.props.onClick) {
+        setPendingClick(() => () => {
+          children.props.onClick(e)
+        })
+      }
     }
   }
 
@@ -45,11 +57,18 @@ export default function NeedLoginDialog({ children, onClick }: NeedLoginDialogPr
   }
 
   if (isLoggedin) return children
+
+  const enhancedChildren =
+    isValidElement(children) && typeof children.type !== 'string'
+      ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        cloneElement(children as ReactElement<any>, {
+          onClick: handleTriggerClick,
+        })
+      : children
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild onClick={handleTriggerClick}>
-        {children}
-      </DialogTrigger>
+      <DialogTrigger asChild>{enhancedChildren}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Notice</DialogTitle>

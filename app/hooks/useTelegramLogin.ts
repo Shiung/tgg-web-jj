@@ -5,7 +5,7 @@ import { LoginRequest, LoginResponse } from '~/api/codegen/data-contracts'
 import { detectOS } from '~/lib/utils'
 import { TelegramUser } from '~/components/telegram-login-button/types'
 
-const BOT_ID = import.meta.env.VITE_BOT_ID
+const BOT_ID = /* import.meta.env.VITE_BOT_ID */ '5000868057'
 
 interface UseTelegramLoginProps {
   onSuccess?: (data: AxiosResponse<LoginResponse>, telegramUserData?: TelegramUser) => void // 新增的 callback 类型
@@ -16,6 +16,8 @@ export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
   const [telegramUserData, setTelegramUserData] = useState<TelegramUser>()
   const { mutate: doLogin } = useLogin({
     onSuccess(data) {
+      console.log('useTelegramLogin success:', data, onSuccess)
+
       if (onSuccess) onSuccess(data, telegramUserData)
     },
   })

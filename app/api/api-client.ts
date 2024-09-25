@@ -15,7 +15,6 @@ export const apiClient = new HttpClient<SecurityDataType>({
   },
   secure: true,
   securityWorker: securityData => {
-    console.log('securityWorker called with securityData:', securityData)
     if (securityData && securityData.token) {
       return {
         headers: {

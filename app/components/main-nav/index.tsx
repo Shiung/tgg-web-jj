@@ -35,6 +35,8 @@ const MainNav: React.FC = () => {
 
   const handleClick = useCallback(
     (href: string) => {
+      console.log('MainNav handleClick', href, hapticFeedback)
+
       setActiveLink(href)
       hapticFeedback?.impactOccurred('medium')
     },
@@ -54,11 +56,12 @@ const MainNav: React.FC = () => {
         {links.map((link, index) => {
           const Comp = link.needLogin ? NeedLoginDialog : Fragment
           return (
-            <Comp key={index} onClick={() => handleClick(link.href)}>
+            <Comp key={index}>
               <Link
                 to={link.href}
                 prefetch="viewport"
                 className="relative flex shrink-0 grow basis-0 flex-col items-center justify-center"
+                onClick={() => handleClick(link.href)}
               >
                 <div className="flex flex-col items-center">
                   <link.SvgComponent
