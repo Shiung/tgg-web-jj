@@ -43,6 +43,9 @@ export default function Playground() {
               svg icon
             </Link>
           </TabsTrigger>
+          <TabsTrigger variant="cardTab" value="lottie" className="flex-1" asChild>
+            <Link to="/playground/lottie">lottie</Link>
+          </TabsTrigger>
         </TabsList>
         <TabsContent value={currentTab}>
           <Outlet />
