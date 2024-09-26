@@ -47,10 +47,7 @@ export interface BuyEnergyResponse {
 export interface CommissionListRequest {
   /** 玩家名稱 */
   DisplayName?: string;
-  /**
-   * Time format: 2006-01-02T15:04:05Z07:00
-   * @format date-time
-   */
+  /** @format date-time */
   EndTime: string;
   /**
    * 玩家差距層級
@@ -69,10 +66,7 @@ export interface CommissionListRequest {
    * @min 20
    */
   PageSize: number;
-  /**
-   * Time format: 2006-01-02T15:04:05Z07:00
-   * @format date-time
-   */
+  /** @format date-time */
   StartTime: string;
 }
 
@@ -225,10 +219,7 @@ export interface InfoResponse {
 }
 
 export interface ListGameTransactionRequest {
-  /**
-   * Time format: 2006-01-02T15:04:05Z07:00
-   * @format date-time
-   */
+  /** @format date-time */
   EndTime: string;
   /** @format uint64 */
   GameId: number;
@@ -244,10 +235,7 @@ export interface ListGameTransactionRequest {
    * @min 20
    */
   PageSize: number;
-  /**
-   * Time format: 2006-01-02T15:04:05Z07:00
-   * @format date-time
-   */
+  /** @format date-time */
   StartTime: string;
 }
 
@@ -404,6 +392,15 @@ export interface ValidCodeRequest {
 }
 
 export interface ValidCodeResponse {
+  succeed?: boolean;
+}
+
+export interface VerifyCodeRequest {
+  /** 驗證碼 */
+  code: string;
+}
+
+export interface VerifyCodeResponse {
   succeed?: boolean;
 }
 

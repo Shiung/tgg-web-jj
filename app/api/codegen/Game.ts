@@ -74,12 +74,12 @@ export class Game<SecurityDataType = unknown> {
   gameTransactionsList = (
     query: {
       /**
-       *  (Required). Format: 2006-01-02T15:04:05Z07:00
+       *  (Required)
        * @format date-time
        */
       startTime: string;
       /**
-       *  (Required). Format: 2006-01-02T15:04:05Z07:00
+       *  (Required)
        * @format date-time
        */
       endTime: string;
@@ -89,7 +89,7 @@ export class Game<SecurityDataType = unknown> {
        */
       gameId: number;
       /**
-       * 分頁頁數 (Required, Minimum: 1)
+       * 分頁頁數 (Minimum: 1, Required)
        * @format int64
        * @min 1
        */

@@ -235,4 +235,30 @@ export class Customer<SecurityDataType = unknown> {
       type: ContentType.Json,
       ...params,
     });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*CustomerController)
+   * @name CustomerVerifycodeCreate
+   * @request POST:/ajax/customer/verifycode
+   */
+  customerVerifycodeCreate = (
+    body: {
+      /** 驗證碼 */
+      code: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<
+      {
+        succeed?: boolean;
+      },
+      any
+    >({
+      path: `/ajax/customer/verifycode`,
+      method: "POST",
+      body: body,
+      type: ContentType.Json,
+      ...params,
+    });
 }

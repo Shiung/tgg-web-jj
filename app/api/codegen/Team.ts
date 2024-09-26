@@ -35,12 +35,12 @@ export class Team<SecurityDataType = unknown> {
        */
       level?: number;
       /**
-       *  (Required). Format: 2006-01-02T15:04:05Z07:00
+       *  (Required)
        * @format date-time
        */
       startTime: string;
       /**
-       *  (Required). Format: 2006-01-02T15:04:05Z07:00
+       *  (Required)
        * @format date-time
        */
       endTime: string;
