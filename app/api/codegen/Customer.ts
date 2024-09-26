@@ -217,6 +217,7 @@ export class Customer<SecurityDataType = unknown> {
       /**
        * 驗證類型
        * @format int64
+       * @min 0
        */
       kind?: number;
     },

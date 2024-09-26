@@ -423,7 +423,8 @@
                 "kind": {
                   "description": "驗證類型",
                   "type": "integer",
-                  "format": "int64"
+                  "format": "int64",
+                  "minimum": 0
                 }
               }
             }
@@ -558,7 +559,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -569,36 +570,23 @@
             "description": "OK",
             "schema": {
               "type": "object",
+              "required": [
+                "pageSize",
+                "totalRecord",
+                "totalPage"
+              ],
               "properties": {
-                "pagination": {
-                  "type": "object",
-                  "required": [
-                    "pageSize",
-                    "totalRecord",
-                    "totalPage"
-                  ],
-                  "properties": {
-                    "pageSize": {
-                      "type": "integer",
-                      "format": "int64",
-                      "minimum": 20
-                    },
-                    "totalPage": {
-                      "type": "integer",
-                      "format": "int64",
-                      "minimum": 0
-                    },
-                    "totalRecord": {
-                      "type": "integer",
-                      "format": "int64",
-                      "minimum": 0
-                    }
-                  }
+                "pageSize": {
+                  "description": "分頁筆數",
+                  "type": "integer",
+                  "format": "int64",
+                  "minimum": 20
                 },
                 "records": {
                   "type": "array",
                   "items": {
                     "type": "object",
+                    "nullable": true,
                     "required": [
                       "transactionId",
                       "subGameId",
@@ -641,6 +629,20 @@
                       }
                     }
                   }
+                },
+                "totalPage": {
+                  "description": "總頁數",
+                  "type": "integer",
+                  "nullable": true,
+                  "format": "int64",
+                  "minimum": 0
+                },
+                "totalRecord": {
+                  "description": "總筆數",
+                  "type": "integer",
+                  "nullable": true,
+                  "format": "int64",
+                  "minimum": 0
                 }
               }
             }
@@ -881,6 +883,7 @@
                   }
                 },
                 "pagination": {
+                  "description": "分頁資訊",
                   "type": "object",
                   "required": [
                     "pageSize",
@@ -889,23 +892,29 @@
                   ],
                   "properties": {
                     "pageSize": {
+                      "description": "分頁筆數",
                       "type": "integer",
                       "format": "int64",
                       "minimum": 20
                     },
                     "totalPage": {
+                      "description": "總頁數",
                       "type": "integer",
+                      "nullable": true,
                       "format": "int64",
                       "minimum": 0
                     },
                     "totalRecord": {
+                      "description": "總筆數",
                       "type": "integer",
+                      "nullable": true,
                       "format": "int64",
                       "minimum": 0
                     }
                   }
                 },
                 "summary": {
+                  "description": "總計",
                   "type": "object",
                   "properties": {
                     "totalBet": {
@@ -1071,68 +1080,42 @@
             "schema": {
               "type": "object",
               "required": [
-                "productId",
-                "memberId",
-                "totalBalanceInUsdt",
-                "withdrawingCount"
+                "settings"
               ],
               "properties": {
-                "memberId": {
-                  "description": "會員id",
-                  "type": "integer",
-                  "format": "uint64"
-                },
-                "productId": {
-                  "description": "產品id",
-                  "type": "integer",
-                  "format": "uint64"
-                },
-                "totalBalanceInUsdt": {
-                  "description": "有效餘額總計(USDT)",
-                  "type": "string"
-                },
-                "wallets": {
-                  "description": "各幣別錢包",
+                "settings": {
+                  "description": "充值設置列表",
                   "type": "array",
                   "items": {
                     "type": "object",
                     "required": [
-                      "id",
+                      "switch",
+                      "chainNet",
                       "currency",
-                      "balance",
-                      "balanceUsdt",
-                      "frozenFunds"
+                      "presentAmounts"
                     ],
                     "properties": {
-                      "balance": {
-                        "description": "可用餘額，已扣除凍結資金",
-                        "type": "string"
-                      },
-                      "balanceUsdt": {
-                        "description": "可用餘額Usdt，已扣除凍結資金",
+                      "chainNet": {
+                        "description": "區塊鏈網路 TON",
                         "type": "string"
                       },
                       "currency": {
-                        "description": "幣別",
+                        "description": "幣種 TON USDT",
                         "type": "string"
                       },
-                      "frozenFunds": {
-                        "description": "凍結資金",
-                        "type": "string"
+                      "presentAmounts": {
+                        "description": "快選金額",
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
                       },
-                      "id": {
-                        "description": "錢包id",
-                        "type": "integer",
-                        "format": "uint64"
+                      "switch": {
+                        "description": "開關",
+                        "type": "boolean"
                       }
                     }
                   }
-                },
-                "withdrawingCount": {
-                  "description": "進行中提款單數量",
-                  "type": "integer",
-                  "format": "int64",
-                  "minimum": 0
                 }
               }
             }
@@ -1480,7 +1463,46 @@
       }
     },
     "CommissionListRequest": {
-      "type": "object"
+      "type": "object",
+      "required": [
+        "StartTime",
+        "EndTime",
+        "Page",
+        "PageSize"
+      ],
+      "properties": {
+        "DisplayName": {
+          "description": "玩家名稱",
+          "type": "string"
+        },
+        "EndTime": {
+          "description": "Time format: 2006-01-02T15:04:05Z07:00",
+          "type": "string",
+          "format": "date-time"
+        },
+        "Level": {
+          "description": "玩家差距層級",
+          "type": "integer",
+          "format": "int64"
+        },
+        "Page": {
+          "description": "分頁頁數",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        },
+        "PageSize": {
+          "description": "分頁筆數",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 20
+        },
+        "StartTime": {
+          "description": "Time format: 2006-01-02T15:04:05Z07:00",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     },
     "CommissionListResponse": {
       "type": "object",
@@ -1522,6 +1544,7 @@
           }
         },
         "pagination": {
+          "description": "分頁資訊",
           "type": "object",
           "required": [
             "pageSize",
@@ -1530,23 +1553,29 @@
           ],
           "properties": {
             "pageSize": {
+              "description": "分頁筆數",
               "type": "integer",
               "format": "int64",
               "minimum": 20
             },
             "totalPage": {
+              "description": "總頁數",
               "type": "integer",
+              "nullable": true,
               "format": "int64",
               "minimum": 0
             },
             "totalRecord": {
+              "description": "總筆數",
               "type": "integer",
+              "nullable": true,
               "format": "int64",
               "minimum": 0
             }
           }
         },
         "summary": {
+          "description": "總計",
           "type": "object",
           "properties": {
             "totalBet": {
@@ -1583,6 +1612,48 @@
         "depositAddress": {
           "description": "充值地址",
           "type": "string"
+        }
+      }
+    },
+    "DepositSettingGetResponse": {
+      "type": "object",
+      "required": [
+        "settings"
+      ],
+      "properties": {
+        "settings": {
+          "description": "充值設置列表",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "switch",
+              "chainNet",
+              "currency",
+              "presentAmounts"
+            ],
+            "properties": {
+              "chainNet": {
+                "description": "區塊鏈網路 TON",
+                "type": "string"
+              },
+              "currency": {
+                "description": "幣種 TON USDT",
+                "type": "string"
+              },
+              "presentAmounts": {
+                "description": "快選金額",
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "switch": {
+                "description": "開關",
+                "type": "boolean"
+              }
+            }
+          }
         }
       }
     },
@@ -1719,40 +1790,62 @@
       }
     },
     "ListGameTransactionRequest": {
-      "type": "object"
+      "type": "object",
+      "required": [
+        "StartTime",
+        "EndTime",
+        "GameId",
+        "Page",
+        "PageSize"
+      ],
+      "properties": {
+        "EndTime": {
+          "description": "Time format: 2006-01-02T15:04:05Z07:00",
+          "type": "string",
+          "format": "date-time"
+        },
+        "GameId": {
+          "type": "integer",
+          "format": "uint64"
+        },
+        "Page": {
+          "description": "分頁頁數",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        },
+        "PageSize": {
+          "description": "分頁筆數",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 20
+        },
+        "StartTime": {
+          "description": "Time format: 2006-01-02T15:04:05Z07:00",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
     },
     "ListGameTransactionResponse": {
       "type": "object",
+      "required": [
+        "pageSize",
+        "totalRecord",
+        "totalPage"
+      ],
       "properties": {
-        "pagination": {
-          "type": "object",
-          "required": [
-            "pageSize",
-            "totalRecord",
-            "totalPage"
-          ],
-          "properties": {
-            "pageSize": {
-              "type": "integer",
-              "format": "int64",
-              "minimum": 20
-            },
-            "totalPage": {
-              "type": "integer",
-              "format": "int64",
-              "minimum": 0
-            },
-            "totalRecord": {
-              "type": "integer",
-              "format": "int64",
-              "minimum": 0
-            }
-          }
+        "pageSize": {
+          "description": "分頁筆數",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 20
         },
         "records": {
           "type": "array",
           "items": {
             "type": "object",
+            "nullable": true,
             "required": [
               "transactionId",
               "subGameId",
@@ -1795,6 +1888,20 @@
               }
             }
           }
+        },
+        "totalPage": {
+          "description": "總頁數",
+          "type": "integer",
+          "nullable": true,
+          "format": "int64",
+          "minimum": 0
+        },
+        "totalRecord": {
+          "description": "總筆數",
+          "type": "integer",
+          "nullable": true,
+          "format": "int64",
+          "minimum": 0
         }
       }
     },
@@ -1981,7 +2088,8 @@
         "kind": {
           "description": "驗證類型",
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "minimum": 0
         }
       }
     },
@@ -1994,7 +2102,13 @@
       }
     },
     "WalletInfoRequest": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "Currency": {
+          "description": "幣別(選填)",
+          "type": "string"
+        }
+      }
     },
     "WalletListResponse": {
       "type": "object",

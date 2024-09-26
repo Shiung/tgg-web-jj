@@ -44,7 +44,37 @@ export interface BuyEnergyResponse {
   currency: string;
 }
 
-export type CommissionListRequest = object;
+export interface CommissionListRequest {
+  /** 玩家名稱 */
+  DisplayName?: string;
+  /**
+   * Time format: 2006-01-02T15:04:05Z07:00
+   * @format date-time
+   */
+  EndTime: string;
+  /**
+   * 玩家差距層級
+   * @format int64
+   */
+  Level?: number;
+  /**
+   * 分頁頁數
+   * @format int64
+   * @min 1
+   */
+  Page: number;
+  /**
+   * 分頁筆數
+   * @format int64
+   * @min 20
+   */
+  PageSize: number;
+  /**
+   * Time format: 2006-01-02T15:04:05Z07:00
+   * @format date-time
+   */
+  StartTime: string;
+}
 
 export interface CommissionListResponse {
   /** 佣金明細 */
@@ -71,23 +101,28 @@ export interface CommissionListResponse {
      */
     sendStatus?: number;
   }[];
+  /** 分頁資訊 */
   pagination?: {
     /**
+     * 分頁筆數
      * @format int64
      * @min 20
      */
     pageSize: number;
     /**
+     * 總頁數
      * @format int64
      * @min 0
      */
-    totalPage: number;
+    totalPage?: number | null;
     /**
+     * 總筆數
      * @format int64
      * @min 0
      */
-    totalRecord: number;
+    totalRecord?: number | null;
   };
+  /** 總計 */
   summary?: {
     /** 總下注金額 */
     totalBet?: string;
@@ -108,6 +143,20 @@ export interface DepositResponse {
   comment: string;
   /** 充值地址 */
   depositAddress: string;
+}
+
+export interface DepositSettingGetResponse {
+  /** 充值設置列表 */
+  settings: {
+    /** 區塊鏈網路 TON */
+    chainNet: string;
+    /** 幣種 TON USDT */
+    currency: string;
+    /** 快選金額 */
+    presentAmounts: string[];
+    /** 開關 */
+    switch: boolean;
+  }[];
 }
 
 export interface EnterGameRequest {
@@ -175,27 +224,41 @@ export interface InfoResponse {
   productId?: number;
 }
 
-export type ListGameTransactionRequest = object;
+export interface ListGameTransactionRequest {
+  /**
+   * Time format: 2006-01-02T15:04:05Z07:00
+   * @format date-time
+   */
+  EndTime: string;
+  /** @format uint64 */
+  GameId: number;
+  /**
+   * 分頁頁數
+   * @format int64
+   * @min 1
+   */
+  Page: number;
+  /**
+   * 分頁筆數
+   * @format int64
+   * @min 20
+   */
+  PageSize: number;
+  /**
+   * Time format: 2006-01-02T15:04:05Z07:00
+   * @format date-time
+   */
+  StartTime: string;
+}
 
 export interface ListGameTransactionResponse {
-  pagination?: {
-    /**
-     * @format int64
-     * @min 20
-     */
-    pageSize: number;
-    /**
-     * @format int64
-     * @min 0
-     */
-    totalPage: number;
-    /**
-     * @format int64
-     * @min 0
-     */
-    totalRecord: number;
-  };
-  records?: {
+  /**
+   * 分頁筆數
+   * @format int64
+   * @min 20
+   */
+  pageSize: number;
+  records?: ({
     /** 投注金額 */
     betGold: string;
     /** 投注金額(KOKON) */
@@ -216,7 +279,19 @@ export interface ListGameTransactionResponse {
     winGold: string;
     /** 輸贏金額(KOKON) */
     winGoldKokon: string;
-  }[];
+  } | null)[];
+  /**
+   * 總頁數
+   * @format int64
+   * @min 0
+   */
+  totalPage?: number | null;
+  /**
+   * 總筆數
+   * @format int64
+   * @min 0
+   */
+  totalRecord?: number | null;
 }
 
 export interface LoginRequest {
@@ -323,6 +398,7 @@ export interface ValidCodeRequest {
   /**
    * 驗證類型
    * @format int64
+   * @min 0
    */
   kind?: number;
 }
@@ -331,7 +407,10 @@ export interface ValidCodeResponse {
   succeed?: boolean;
 }
 
-export type WalletInfoRequest = object;
+export interface WalletInfoRequest {
+  /** 幣別(選填) */
+  Currency?: string;
+}
 
 export interface WalletListResponse {
   /**

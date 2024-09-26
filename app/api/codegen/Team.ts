@@ -85,23 +85,28 @@ export class Team<SecurityDataType = unknown> {
            */
           sendStatus?: number;
         }[];
+        /** 分頁資訊 */
         pagination?: {
           /**
+           * 分頁筆數
            * @format int64
            * @min 20
            */
           pageSize: number;
           /**
+           * 總頁數
            * @format int64
            * @min 0
            */
-          totalPage: number;
+          totalPage?: number | null;
           /**
+           * 總筆數
            * @format int64
            * @min 0
            */
-          totalRecord: number;
+          totalRecord?: number | null;
         };
+        /** 總計 */
         summary?: {
           /** 總下注金額 */
           totalBet?: string;

@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { CommissionListRequest } from "./data-contracts";
+import { DepositRequest } from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Wallet<SecurityDataType = unknown> {
@@ -26,7 +26,7 @@ export class Wallet<SecurityDataType = unknown> {
    * @name WalletDepositCreate
    * @request POST:/ajax/wallet/deposit
    */
-  walletDepositCreate = (body: CommissionListRequest, params: RequestParams = {}) =>
+  walletDepositCreate = (body: DepositRequest, params: RequestParams = {}) =>
     this.http.request<
       {
         /** ton交易的備註欄位，必填 */
@@ -52,40 +52,17 @@ export class Wallet<SecurityDataType = unknown> {
   walletDepositSettingList = (params: RequestParams = {}) =>
     this.http.request<
       {
-        /**
-         * 會員id
-         * @format uint64
-         */
-        memberId: number;
-        /**
-         * 產品id
-         * @format uint64
-         */
-        productId: number;
-        /** 有效餘額總計(USDT) */
-        totalBalanceInUsdt: string;
-        /** 各幣別錢包 */
-        wallets?: {
-          /** 可用餘額，已扣除凍結資金 */
-          balance: string;
-          /** 可用餘額Usdt，已扣除凍結資金 */
-          balanceUsdt: string;
-          /** 幣別 */
+        /** 充值設置列表 */
+        settings: {
+          /** 區塊鏈網路 TON */
+          chainNet: string;
+          /** 幣種 TON USDT */
           currency: string;
-          /** 凍結資金 */
-          frozenFunds: string;
-          /**
-           * 錢包id
-           * @format uint64
-           */
-          id: number;
+          /** 快選金額 */
+          presentAmounts: string[];
+          /** 開關 */
+          switch: boolean;
         }[];
-        /**
-         * 進行中提款單數量
-         * @format int64
-         * @min 0
-         */
-        withdrawingCount: number;
       },
       any
     >({
