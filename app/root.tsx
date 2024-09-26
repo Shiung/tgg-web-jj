@@ -13,10 +13,12 @@ import { useMainMaxHeightClass } from '~/hooks/useMainMaxHeightClass'
 import useAuthGuard from './hooks/useAuthGuard'
 import { cn } from '~/lib/utils'
 
-import './tailwind.css'
+// import './tailwind.css'
+import stylesheet from '~/tailwind.css?url'
 
 export const links: LinksFunction = () => {
   return [
+    { rel: 'stylesheet', href: stylesheet },
     { rel: 'icon', href: '/favicon.ico', sizes: '16x16', type: 'image/x-icon' },
     {
       rel: 'icon',
