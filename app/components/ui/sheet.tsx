@@ -41,7 +41,7 @@ const sheetVariants = cva(
       },
     },
     defaultVariants: {
-      side: 'right',
+      side: 'bottom',
     },
   }
 )
@@ -53,7 +53,7 @@ interface SheetContentProps
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   SheetContentProps
->(({ side = 'right', className, children, ...props }, ref) => {
+>(({ side = 'bottom', className, children, ...props }, ref) => {
   const maxWidth = useStore(state => state.maxWidth)
 
   return (

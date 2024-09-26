@@ -19,17 +19,19 @@ interface DropdownBottomSheetContextType {
 const DropdownBottomSheetContext = createContext<DropdownBottomSheetContextType | null>(null)
 
 interface DropdownBottomSheetProps {
+  id?: string
   title: string
-  value: string // 受控值
-  onChange?: (value: string) => void
+  value: string
+  placeholder?: string
   onConfirm?: (value: string) => void
   children: ReactNode
 }
 
-const DropdownBottomSheet = ({
+const DropdownSheet = ({
+  id,
   title,
   value,
-  onChange,
+  placeholder,
   onConfirm,
   children,
 }: DropdownBottomSheetProps) => {
@@ -44,13 +46,11 @@ const DropdownBottomSheet = ({
     if (onConfirm) {
       onConfirm(selectedValue || '')
     }
+    setOpen(false)
   }
 
   const handleOptionSelect = (selected: string) => {
     setSelectedValue(selected)
-    if (onChange) {
-      onChange(selected) // 触发受控模式的变化
-    }
   }
 
   return (
@@ -59,11 +59,9 @@ const DropdownBottomSheet = ({
     >
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
-          <Button variant="select">
-            <div className="flex items-center justify-between space-x-2">
-              <span>{selectedValue || 'Select an option'}</span>
-              <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
-            </div>
+          <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
+            <span>{value || placeholder}</span>
+            <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
           </Button>
         </SheetTrigger>
         <SheetContent side="bottom">
@@ -81,7 +79,7 @@ const DropdownBottomSheet = ({
     </DropdownBottomSheetContext.Provider>
   )
 }
-DropdownBottomSheet.displayName = 'DropdownBottomSheet'
+DropdownSheet.displayName = 'DropdownSheet'
 
 interface DropdownOptionProps {
   value: string
@@ -94,7 +92,7 @@ const DropdownOption: React.FC<DropdownOptionProps> = ({ value, label, suffix, c
   const context = useContext(DropdownBottomSheetContext)
 
   if (!context) {
-    throw new Error('DropdownOption must be used within DropdownBottomSheet')
+    throw new Error('DropdownOption must be used within DropdownSheet')
   }
 
   const { selectedValue, setSelectedValue } = context
@@ -113,4 +111,4 @@ const DropdownOption: React.FC<DropdownOptionProps> = ({ value, label, suffix, c
 }
 DropdownOption.displayName = 'DropdownOption'
 
-export { DropdownBottomSheet, DropdownOption }
+export { DropdownSheet, DropdownOption }

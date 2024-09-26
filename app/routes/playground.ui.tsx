@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { Controller, useForm, SubmitHandler } from 'react-hook-form'
 import Amount from '~/components/amount'
 import DatePickerBottomSheet from '~/components/date-picker-bottom-sheet/index'
-import { DropdownBottomSheet, DropdownOption } from '~/components/dropdown-bottom-sheet'
+import { DropdownSheet, DropdownOption } from '~/components/dropdown-sheet'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { useToast } from '~/hooks/use-toast'
@@ -9,12 +10,48 @@ import InfoTooltip from '~/components/info-tooltip'
 import { Switch } from '~/components/ui/switch'
 import { Label } from '~/components/ui/label'
 import SvgHistory from '~/icons/history.svg?react'
-// import { Label } from '~/components/ui/label'
+import WarningIcon from '~/icons/warning.svg?react'
+
+interface FormValues {
+  email: string
+  level: string
+  date: Date
+  dateRange: { from: Date; to: Date }
+  dateTime: Date
+  dateTimeRange: { from: Date; to: Date }
+}
 
 export default function Ui() {
   const { toast } = useToast()
   const [disabled, setDisabled] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  const {
+    register,
+    control,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>({
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      level: '',
+      date: new Date(),
+      dateRange: { from: new Date(), to: new Date() },
+      dateTime: new Date(),
+      dateTimeRange: { from: new Date(), to: new Date() },
+    },
+  })
+  const formValues = watch()
+
+  const onSubmit: SubmitHandler<FormValues> = data => {
+    console.log('form submit', data)
+  }
+
+  useEffect(() => {
+    console.log('form values', formValues)
+  }, [formValues])
 
   return (
     <div className="container p-4 pb-safe">
@@ -39,16 +76,16 @@ export default function Ui() {
           Default Button
         </Button>
         <Button disabled={disabled} loading={loading} catEars variant="gray">
-          Button
+          Gray Button
         </Button>
         <Button disabled={disabled} loading={loading} catEars variant="danger">
-          Button
+          Danger Button
         </Button>
         <Button disabled={disabled} loading={loading} variant="outline">
-          Button
+          Outline Button
         </Button>
         <Button disabled={disabled} loading={loading} variant="outlineSoft">
-          Button
+          OutlineSoft Button
         </Button>
         <Button disabled={disabled} loading={loading} variant="icon" size="icon">
           <SvgHistory className="h-4 w-4" />
@@ -77,33 +114,159 @@ export default function Ui() {
           clearable
         />
       </div>
+
       {/* Tooltip / Toast */}
       <h1 className="mt-4 text-xl font-bold">Info Tooltip / Toast</h1>
-      <InfoTooltip content="這是點擊後顯示的 Tooltip 內容" />
-      <Button
-        variant="outline"
-        className="ml-2"
-        onClick={() =>
-          toast({
-            title: 'info',
-            variant: 'success',
-          })
-        }
-      >
-        Show Success Toast
-      </Button>
-      <Button
-        variant="outline"
-        className="ml-2"
-        onClick={() =>
-          toast({
-            title: 'info',
-            variant: 'error',
-          })
-        }
-      >
-        Show success Toast
-      </Button>
+      <div className="mt-2 grid grid-cols-2 gap-2">
+        <Button
+          variant="outline"
+          className="ml-2"
+          onClick={() =>
+            toast({
+              title: 'info',
+              variant: 'success',
+            })
+          }
+        >
+          Show Success Toast
+        </Button>
+        <Button
+          variant="outline"
+          className="ml-2"
+          onClick={() =>
+            toast({
+              title: 'info',
+              variant: 'error',
+            })
+          }
+        >
+          Show success Toast
+        </Button>
+        {/* 漸層邊框 Tooltip */}
+        <InfoTooltip content="這是點擊後顯示的 Tooltip 內容" />
+      </div>
+
+      {/* 表單 */}
+      <h1 className="mt-4 text-xl font-bold">Form</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-2">
+        {/* email - Input */}
+        <Input
+          id="email"
+          label="Email"
+          placeholder="Please enter"
+          clearable
+          error={errors.email?.message}
+          {...register('email')}
+        />
+        {/* level - Dropdown */}
+        <Controller
+          name="level"
+          control={control}
+          render={({ field }) => (
+            <div className="flex flex-col">
+              <Label htmlFor="level-dropdown" className="mb-2">
+                Level Dropdown
+              </Label>
+              <DropdownSheet
+                id="level-dropdown"
+                title="LV"
+                value={field.value}
+                onConfirm={(selectedValue: string) => field.onChange(selectedValue)}
+              >
+                <DropdownOption
+                  value="lv1"
+                  label="LV1"
+                  suffix={<WarningIcon className="h-4 w-4" />}
+                />
+                <DropdownOption
+                  value="lv2"
+                  label="LV2"
+                  suffix={<WarningIcon className="h-4 w-4" />}
+                />
+                <DropdownOption value="lv3" label="LV3" />
+                <DropdownOption value="lv4" label="LV4" />
+                <DropdownOption value="all" label="LV: ALL" />
+              </DropdownSheet>
+            </div>
+          )}
+        />
+        {/* date - 单个日期选择 */}
+        <div className="mb-4 flex flex-col">
+          <Label htmlFor="date-picker" className="mb-2">
+            Select Date
+          </Label>
+          <Controller
+            name="date" // name 與 form 的 key 對應
+            control={control}
+            render={({ field }) => (
+              <DatePickerBottomSheet
+                id="date-picker" // 确保 id 与 Label 的 htmlFor 匹配
+                title="Select Date"
+                value={field.value} // 从控制器绑定的值
+                onChange={field.onChange} // 确认时更新控制器的值
+              />
+            )}
+          />
+        </div>
+        {/* dateRange - 日期范围选择 */}
+        <div className="mb-4 flex flex-col">
+          <Label htmlFor="date-range-picker" className="mb-2">
+            Select Date Range
+          </Label>
+          <Controller
+            name="dateRange"
+            control={control}
+            render={({ field }) => (
+              <DatePickerBottomSheet
+                id="date-range-picker"
+                title="Select Date"
+                value={field.value}
+                onChange={field.onChange}
+                range
+              />
+            )}
+          />
+        </div>
+        {/* dateTime - 日期和时间选择 */}
+        <div className="mb-4 flex flex-col">
+          <Label htmlFor="datetime-picker" className="mb-2">
+            Select Datetime
+          </Label>
+          <Controller
+            name="dateTime"
+            control={control}
+            render={({ field }) => (
+              <DatePickerBottomSheet
+                id="datetime-picker"
+                title="Select Date"
+                value={field.value}
+                onChange={field.onChange}
+                showTimePicker
+              />
+            )}
+          />
+        </div>
+        {/* dateTimeRange - 日期范围和时间选择 */}
+        <div className="mb-4 flex flex-col">
+          <Label htmlFor="datetime-range-picker" className="mb-2">
+            Select Datetime Range
+          </Label>
+          <Controller
+            name="dateTimeRange"
+            control={control}
+            render={({ field }) => (
+              <DatePickerBottomSheet
+                id="datetime-range-picker"
+                title="Select Date"
+                value={field.value}
+                onChange={field.onChange}
+                range
+                showTimePicker
+              />
+            )}
+          />
+        </div>
+      </form>
 
       {/* Amount */}
       <h1 className="mt-4 text-xl font-bold">Amount</h1>

@@ -78,3 +78,13 @@ export function detectOS() {
   // 未知操作系统
   return 'Unknown'
 }
+
+export function debounce(func: (...args: any[]) => void, delay: number) {
+  let timeout: NodeJS.Timeout
+  return (...args: any[]) => {
+    clearTimeout(timeout)
+    timeout = setTimeout(() => {
+      func(...args)
+    }, delay)
+  }
+}

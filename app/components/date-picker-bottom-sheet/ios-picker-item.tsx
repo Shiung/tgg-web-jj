@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { EmblaCarouselType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
 import classes from './embla.module.scss'
@@ -6,7 +6,7 @@ import classes from './embla.module.scss'
 const CIRCLE_DEGREES = 360
 const WHEEL_ITEM_SIZE = 30
 const WHEEL_ITEM_COUNT = 18
-const WHEEL_ITEMS_IN_VIEW = 3
+const WHEEL_ITEMS_IN_VIEW = 2
 
 export const WHEEL_ITEM_RADIUS = CIRCLE_DEGREES / WHEEL_ITEM_COUNT
 export const IN_VIEW_DEGREES = WHEEL_ITEM_RADIUS * WHEEL_ITEMS_IN_VIEW
@@ -62,17 +62,19 @@ export const setContainerStyles = (emblaApi: EmblaCarouselType, wheelRotation: n
 
 type PropType = {
   loop?: boolean
-  label: string
+  // label: string
   slides: string[]
   perspective: 'left' | 'right'
+  value?: string
   onChange?: (value: string) => void
 }
 
 const IosPickerItem: React.FC<PropType> = ({
+  loop = true,
   slides,
   perspective,
-  label,
-  loop = true,
+  // label,
+  value,
   onChange,
 }) => {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -108,13 +110,22 @@ const IosPickerItem: React.FC<PropType> = ({
         setSlideStyles(emblaApi, index, loop, slideCount, totalRadius)
       })
 
-      const selectedValue = `${slides[emblaApi.selectedScrollSnap()]}`
-      if (onChange) {
-        onChange(selectedValue) // 触发 onChange 回调
+      const selectedValue = slides[emblaApi.selectedScrollSnap()]
+      if (onChange && selectedValue !== value) {
+        onChange(selectedValue)
       }
     },
-    [slideCount, rotationOffset, slides, onChange, loop, totalRadius]
+    [slideCount, rotationOffset, slides, onChange, value, loop, totalRadius]
   )
+
+  useEffect(() => {
+    if (emblaApi && value) {
+      const index = slides.indexOf(value)
+      if (index !== -1) {
+        emblaApi.scrollTo(index, false) // 滚动到对应的值
+      }
+    }
+  }, [value, emblaApi, slides])
 
   useEffect(() => {
     if (!emblaApi) return
