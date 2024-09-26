@@ -3,8 +3,11 @@ import { setHeaderToken } from '~/api/api-client'
 
 export interface AuthSlice {
   token?: string
+  needLoginDialogOpen: boolean
   setToken: (token: string) => void
   clearToken: () => void
+  openNeedLoginDialog: () => void
+  closeNeedLoginDialog: () => void
 }
 
 let initialToken: string | undefined = undefined
@@ -16,6 +19,7 @@ if (typeof window !== 'undefined') {
 
 const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = set => ({
   token: initialToken,
+  needLoginDialogOpen: false,
   setToken: (token: string) => {
     set({ token })
     setHeaderToken(token)
@@ -29,6 +33,8 @@ const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = set => ({
       localStorage.removeItem('token')
     }
   },
+  openNeedLoginDialog: () => set({ needLoginDialogOpen: true }),
+  closeNeedLoginDialog: () => set({ needLoginDialogOpen: false }),
 })
 
 export default createAuthSlice

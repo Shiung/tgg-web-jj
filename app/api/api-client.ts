@@ -59,7 +59,6 @@ export const setHeaderToken = (token: string) => {
 
 if (typeof localStorage !== 'undefined') {
   const cacheToken = localStorage.getItem('token')
-  console.log('cacheToken', cacheToken)
 
   if (cacheToken) {
     setHeaderToken(cacheToken)

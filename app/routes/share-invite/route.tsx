@@ -26,7 +26,6 @@ const ShareInvite: React.FC = () => {
   ]
 
   const handleTeamLevelChange = (newLevel: number) => {
-    console.log('New Team Level:', newLevel)
     setTeamLevel(newLevel)
   }
   const generateRandomProgress = (baseProgress: number) => {

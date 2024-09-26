@@ -22,6 +22,9 @@ const UserActions: React.FC = () => {
 }
 
 const Header: React.FC = () => {
+  const isHeaderVisible = useStore(state => state.isHeaderVisible)
+
+  if (!isHeaderVisible) return null
   return (
     <header className="sticky top-0 z-40 bg-black backdrop-blur">
       <div className="mx-auto flex h-12 w-full items-center justify-between px-4 py-2">

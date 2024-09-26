@@ -11,6 +11,11 @@ import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 
 import classes from './index.module.scss'
 
+// 配合 useMatches 聲明需要登录才能访问
+export const handle = {
+  requiresAuth: true,
+}
+
 const DEFAULT_TAB = 'deposit'
 
 const amount = 123456789.12

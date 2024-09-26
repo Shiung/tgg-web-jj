@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
 import type { LinksFunction } from '@remix-run/node'
 import { Toaster } from '~/components/ui/toaster'
@@ -8,8 +7,10 @@ import AppRoot from '~/components/app-root/index'
 import ParticleBackground from '~/components/particle-background'
 import AppLoading from '~/components/app-loading'
 import CurrentUrlPopover from '~/components/current-url-popover'
+import NeedLoginDialog from '~/components/need-login-dialog'
 import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
-import useStore from '~/stores/useStore'
+import { useMainMaxHeightClass } from '~/hooks/useMainMaxHeightClass'
+import useAuthGuard from './hooks/useAuthGuard'
 import { cn } from '~/lib/utils'
 
 import './tailwind.css'
@@ -56,24 +57,9 @@ export const links: LinksFunction = () => {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  useAuthGuard()
   const maxWidth = useAppMaxWidth()
-  const isHeaderVisible = useStore(state => state.isHeaderVisible)
-  const isNavVisible = useStore(state => state.isNavVisible)
-
-  const mainMaxHClass = useMemo(() => {
-    const maxHeightMap = {
-      true: {
-        true: 'max-h-main', // header + nav
-        false: 'max-h-main-without-nav', // header + no nav
-      },
-      false: {
-        true: 'max-h-main-without-header', // no header + nav
-        false: 'max-h-main-without-header-nav', // no header + no nav
-      },
-    }
-
-    return maxHeightMap[`${isHeaderVisible}`][`${isNavVisible}`]
-  }, [isHeaderVisible, isNavVisible])
+  const mainMaxHClass = useMainMaxHeightClass()
 
   return (
     <html lang="en">
@@ -88,7 +74,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body className="dark bg-background font-sans antialiased">
         <AppRoot>
-          {isHeaderVisible && <Header />}
+          <Header />
           <main
             className={cn(
               'relative z-10 mx-auto flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden rounded-xl pt-3',
@@ -99,7 +85,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {children}
           </main>
           <ParticleBackground />
-          {isNavVisible && <MainNav />}
+          <MainNav />
+          <NeedLoginDialog />
           <Toaster />
           {/* 開發使用 */}
           <CurrentUrlPopover />

@@ -12,6 +12,11 @@ import CardTemplate from './card-template'
 import AlertDialog from './alert-dialog'
 import { Button } from '~/components/ui/button'
 
+// 配合 useMatches 聲明需要登录才能访问
+export const handle = {
+  requiresAuth: true,
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let PAG: any
 let PAGInit: any

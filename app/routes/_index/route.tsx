@@ -12,11 +12,10 @@ import {
   CarouselPrevious,
 } from '~/components/ui/carousel'
 import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
-import NeedLoginDialog from '~/components/need-login-dialog'
-import Footer from './footer'
+import ProtectedLink from '~/components/protected-link'
 import AppLoading from '~/components/app-loading'
-
 import { useGetGameUrl } from '~/hooks/api/useGetGameUrl'
+import Footer from './footer'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Kokon' }, { name: 'description', content: 'Welcome to Kokon!' }]
@@ -113,52 +112,46 @@ export default function Index() {
         {/* 343 / 344 */}
         <div className="my-6 flex aspect-[343/344] w-full flex-row space-x-2">
           <div className="flex flex-1 flex-col space-y-2 text-lg font-ultra">
-            <NeedLoginDialog>
-              <div className="relative flex-1 cursor-pointer overflow-hidden rounded-2xl">
-                <p className="absolute inset-x-3 top-[14px]">GO DOWN 100 FLOORS</p>
-                <img
-                  src="/images/home/carousel/go-down-100-floors.png"
-                  alt="go-down-100-floors"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </NeedLoginDialog>
-            <NeedLoginDialog>
-              <div className="relative flex-1 cursor-pointer overflow-hidden rounded-2xl">
-                <p className="absolute inset-x-3 top-[14px]">CRASH</p>
-                <img
-                  src="/images/home/carousel/crash.png"
-                  alt="crash"
-                  className="h-full w-full object-cover"
-                />
-              </div>
-            </NeedLoginDialog>
+            <div className="relative flex-1 cursor-pointer overflow-hidden rounded-2xl">
+              <p className="absolute inset-x-3 top-[14px]">GO DOWN 100 FLOORS</p>
+              <img
+                src="/images/home/carousel/go-down-100-floors.png"
+                alt="go-down-100-floors"
+                className="h-full w-full object-cover"
+              />
+            </div>
+            <div className="relative flex-1 cursor-pointer overflow-hidden rounded-2xl">
+              <p className="absolute inset-x-3 top-[14px]">CRASH</p>
+              <img
+                src="/images/home/carousel/crash.png"
+                alt="crash"
+                className="h-full w-full object-cover"
+              />
+            </div>
           </div>
           <div className="flex flex-1 flex-col space-y-2">
-            <NeedLoginDialog>
-              <Link
-                prefetch="viewport"
-                to="/smash-egg"
-                className="relative flex-1 rounded-xl bg-colorLinear-orange"
-              >
-                <div className="absolute inset-3 flex flex-col text-start text-lg font-ultra">
-                  <span>SMASH EGG</span>
-                  <span className="text-sm font-normal">
-                    Up to <span className="font-ultra text-primary">1000</span> kokon
-                  </span>
-                </div>
-                <img
-                  src="/images/home/wave.png"
-                  alt="wave bg"
-                  className="absolute inset-x-0 bottom-2 h-auto"
-                />
-                <img
-                  src="/images/home/smash-egg.png"
-                  alt="wave bg"
-                  className="absolute inset-x-0 bottom-2 z-10 h-auto"
-                />
-              </Link>
-            </NeedLoginDialog>
+            <ProtectedLink
+              prefetch="viewport"
+              to="/smash-egg"
+              className="relative flex-1 rounded-xl bg-colorLinear-orange"
+            >
+              <div className="absolute inset-3 flex flex-col text-start text-lg font-ultra">
+                <span>SMASH EGG</span>
+                <span className="text-sm font-normal">
+                  Up to <span className="font-ultra text-primary">1000</span> kokon
+                </span>
+              </div>
+              <img
+                src="/images/home/wave.png"
+                alt="wave bg"
+                className="absolute inset-x-0 bottom-2 h-auto"
+              />
+              <img
+                src="/images/home/smash-egg.png"
+                alt="wave bg"
+                className="absolute inset-x-0 bottom-2 z-10 h-auto"
+              />
+            </ProtectedLink>
             <Button className="h-10" variant="outline">
               MORE GAME
             </Button>
@@ -181,26 +174,24 @@ export default function Index() {
                 key={slide.id}
                 className="relative flex basis-1/3 overflow-hidden pl-0 text-center"
               >
-                <NeedLoginDialog>
-                  <div
-                    className="relative cursor-pointer pr-2"
-                    onClick={() => {
-                      mutate(slide.id.toString())
-                    }}
-                    onKeyDown={() => {}}
-                    role="button"
-                    tabIndex={0}
-                  >
-                    <span className="absolute inset-x-0 top-2 mx-auto min-h-8 pl-2 pr-4 text-center text-sm font-ultra">
-                      {slide.title}
-                    </span>
-                    <img
-                      src={slide.imgSrc}
-                      alt={slide.imgAlt}
-                      className="h-full w-full rounded-lg object-contain"
-                    />
-                  </div>
-                </NeedLoginDialog>
+                <div
+                  className="relative cursor-pointer pr-2"
+                  onClick={() => {
+                    mutate(slide.id.toString())
+                  }}
+                  onKeyDown={() => {}}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <span className="absolute inset-x-0 top-2 mx-auto min-h-8 pl-2 pr-4 text-center text-sm font-ultra">
+                    {slide.title}
+                  </span>
+                  <img
+                    src={slide.imgSrc}
+                    alt={slide.imgAlt}
+                    className="h-full w-full rounded-lg object-contain"
+                  />
+                </div>
               </CarouselItem>
             ))}
           </CarouselContent>
