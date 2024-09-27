@@ -119,7 +119,7 @@ export class Wallet<SecurityDataType = unknown> {
          * @format int64
          * @min 0
          */
-        withdrawingCount: number;
+        withdrawingCount?: number | null;
       },
       any
     >({

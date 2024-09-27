@@ -1,6 +1,4 @@
-import UsdtIcon from '~/components/color-icons/usdt'
-import TonIcon from '~/components/color-icons/ton'
-import KokonIcon from '~/components/color-icons/kokon'
+import { KokonIcon, UsdtIcon, TonIcon } from '~/components/color-icons'
 
 export enum Crypto {
   USDT = 'USDT',
@@ -10,7 +8,7 @@ export enum Crypto {
 
 export type CryptoUnion = keyof typeof Crypto
 
-export const CRYPTO_DETAILS: Record<
+export const cryptoDetails: Record<
   Crypto,
   {
     name: string
@@ -25,4 +23,4 @@ export const CRYPTO_DETAILS: Record<
 }
 
 /* 存款幣種 */
-export const DEPOSIT_CURRENCIES = [Crypto.USDT, Crypto.TON] as const
+export const depositCurrencies = [Crypto.USDT, Crypto.TON] as const

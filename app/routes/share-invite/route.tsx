@@ -36,7 +36,7 @@ const ShareInvite: React.FC = () => {
   return (
     <div className="container flex flex-1 flex-col p-0">
       {/* Top Navigation */}
-      <Tabs defaultValue="Invite">
+      <Tabs defaultValue="Invite" className="px-3">
         <TabsList className="w-full">
           <TabsTrigger value="Invite" className="flex-1" asChild>
             <Link prefetch="viewport" to="/share-invite">

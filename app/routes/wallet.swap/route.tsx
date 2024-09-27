@@ -5,13 +5,13 @@ import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import Amount from '~/components/amount'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
-import { CRYPTO_DETAILS, DEPOSIT_CURRENCIES } from '~/consts/crypto'
+import { cryptoDetails, depositCurrencies } from '~/consts/crypto'
 import InfoIcon from '~/icons/info.svg?react'
 import WarningIcon from '~/icons/warning.svg?react'
 
-const coins = DEPOSIT_CURRENCIES.map(crypto => ({
-  name: CRYPTO_DETAILS[crypto].name,
-  icon: CRYPTO_DETAILS[crypto].icon,
+const coins = depositCurrencies.map(crypto => ({
+  name: cryptoDetails[crypto].name,
+  icon: cryptoDetails[crypto].icon,
   amount: 123456789.12,
 }))
 

@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from '@remix-run/react'
 import { usePrevious } from 'react-use'
-import { cn } from '~/lib/utils'
+import { cn, parseAmount } from '~/lib/utils'
 import { Button } from '~/components/ui/button'
-import { KokonIcon, UsdtIcon, TonIcon } from '~/components/color-icons'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import Amount from '~/components/amount'
+import { useGetWalletList, UserWallet } from '~/hooks/api/useWallet'
 import HistoryIcon from '~/icons/history.svg?react'
 import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
+import { cryptoDetails, CryptoUnion } from '~/consts/crypto'
 
 import classes from './index.module.scss'
 
@@ -18,38 +19,23 @@ export const handle = {
 
 const DEFAULT_TAB = 'deposit'
 
-const amount = 123456789.12
-const coins = [
-  {
-    coin: 'KOKON',
-    icon: KokonIcon,
-    value: 1234567.12,
-    conversionRateToUSDT: 0.5,
-    valueInUSDT: 1234567.12 * 0.5,
-  },
-  {
-    coin: 'USDT',
-    icon: UsdtIcon,
-    value: 500000.0,
-    conversionRateToUSDT: 1,
-    valueInUSDT: 500000.0 * 1,
-  },
-  {
-    coin: 'TON',
-    icon: TonIcon,
-    value: 2500000.75,
-    conversionRateToUSDT: 1.2,
-    valueInUSDT: 2500000.75 * 1.2,
-  },
-]
+type UserWalletItem = UserWallet & {
+  icon: React.FC<React.SVGProps<SVGSVGElement>>
+}
 
 export default function Wallet() {
+  const { data, isLoading } = useGetWalletList()
   const location = useLocation()
   const navigate = useNavigate()
   const [currentTab, setCurrentTab] = useState(DEFAULT_TAB)
   const previousTab = usePrevious(currentTab)
   const [isExpanded, setIsExpanded] = useState(true)
   const [hasUserToggled, setHasUserToggled] = useState(false)
+
+  const wallets = (data?.data.wallets || []).map<UserWalletItem>(wallet => ({
+    ...wallet,
+    icon: cryptoDetails[wallet.currency as CryptoUnion].icon,
+  }))
 
   const handleToggleExpand = () => {
     setIsExpanded(val => !val)
@@ -86,7 +72,10 @@ export default function Wallet() {
               <p className="text-xs font-normal">Display all in USDT</p>
             </div>
             <div className="mt-3 flex items-center space-x-1">
-              <Amount className="text-xl font-ultra leading-6 text-primary" value={amount} />
+              <Amount
+                className="text-xl font-ultra leading-6 text-primary"
+                value={parseAmount(data?.data.totalBalanceInUsdt)}
+              />
               <Button
                 className={`h-4 w-4 transform bg-white/50 opacity-100 transition-transform ${
                   isExpanded ? 'rotate-180' : 'rotate-0'
@@ -127,7 +116,10 @@ export default function Wallet() {
               {/* withdrawal is under processing */}
               <div className="cursor primary-gradient-border-rounded flex items-center justify-between rounded-lg bg-black px-3 py-2">
                 <span className="text-sm font-normal text-white/70">
-                  <span className="font-ultra text-white">2 withdrawal</span> is under processing.
+                  <span className="font-ultra text-white">
+                    {data?.data.withdrawingCount} withdrawal
+                  </span>{' '}
+                  is under processing.
                 </span>
                 <Button
                   className="flex h-6 items-center justify-center px-3"
@@ -136,22 +128,22 @@ export default function Wallet() {
                   Check
                 </Button>
               </div>
-              {coins.map((coin, index) => (
+              {wallets.map((wallet, index) => (
                 <div
                   key={index}
                   className="flex items-center justify-between rounded-lg bg-[#1C1C1C] px-3 py-2 font-ultra"
                 >
                   <div className="flex items-center space-x-1">
-                    <coin.icon className="h-6 w-6" />
+                    <wallet.icon className="h-6 w-6" />
                     <div className="flex flex-col space-y-[2px]">
-                      <p className="text-xs">{coin.coin}</p>
+                      <p className="text-xs">{wallet.currency}</p>
                       <Amount
                         className="text-[10px] font-normal leading-3 text-white/70"
-                        value={coin.valueInUSDT}
+                        value={parseAmount(wallet.balanceUsdt)}
                       />
                     </div>
                   </div>
-                  <Amount className="text-right text-sm" value={coin.value} />
+                  <Amount className="text-right text-sm" value={parseAmount(wallet.balance)} />
                 </div>
               ))}
             </div>

@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    --header-height: 50px;
+    --top-header-safe-padding: 60px;
     --bottom-nav-safe-padding: 88px;
 
     --background: 0 0% 100%;
@@ -117,5 +117,35 @@
   /* input 錯誤 */
   .input-error {
     @apply border-app-red text-app-red focus-within:ring-app-red !important;
+  }
+}
+
+/* main 框上方模擬右內凹圓角遮罩 */
+.top-corner {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 60px;
+  height: 12px;
+  margin: 0 auto;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle at 100% 100%, rgba(255, 255, 255, 0) 71%, #242424 71%);
+    z-index: 40;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    background: radial-gradient(circle at 0% 100%, rgba(255, 255, 255, 0) 71%, #242424 71%);
+    z-index: 40;
   }
 }

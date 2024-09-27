@@ -167,6 +167,36 @@ export interface GetEnergyResponse {
   amount: number;
 }
 
+export interface GoldenEggClaimRequest {
+  /** 領取ID */
+  transactionId: string;
+}
+
+export interface GoldenEggSmashRequest {
+  /** 金蛋等級 */
+  eggLevel: string;
+}
+
+export interface GoldenEggSmashResponse {
+  /** 金蛋等級 */
+  eggLevel: string;
+  /**
+   * 進度
+   * @format decimal
+   */
+  progress: string;
+  /**
+   * 獎勵
+   * @format decimal
+   */
+  reward: string;
+  /**
+   * 總次數
+   * @format uint64
+   */
+  totalCount: number;
+}
+
 export interface HeaderWalletResponse {
   /**
    * 會員id
@@ -443,7 +473,7 @@ export interface WalletListResponse {
    * @format int64
    * @min 0
    */
-  withdrawingCount: number;
+  withdrawingCount?: number | null;
 }
 
 export interface WithdrawRequest {

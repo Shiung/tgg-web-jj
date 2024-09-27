@@ -3,12 +3,12 @@ import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import InfoIcon from '~/icons/info.svg?react'
 import WarningIcon from '~/icons/warning.svg?react'
-import { CRYPTO_DETAILS, DEPOSIT_CURRENCIES } from '~/consts/crypto'
+import { cryptoDetails, depositCurrencies } from '~/consts/crypto'
 import { Label } from '~/components/ui/label'
 
-const coins = DEPOSIT_CURRENCIES.map(crypto => ({
-  name: CRYPTO_DETAILS[crypto].name,
-  icon: CRYPTO_DETAILS[crypto].icon,
+const coins = depositCurrencies.map(crypto => ({
+  name: cryptoDetails[crypto].name,
+  icon: cryptoDetails[crypto].icon,
 }))
 
 export default function Withdraw() {

@@ -1,32 +1,26 @@
-import { SVGProps, useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from '@remix-run/react'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
-import { KokonIcon, UsdtIcon, TonIcon } from '~/components/color-icons'
-import RefreshIcon from '~/icons/refresh.svg?react'
 import { Button } from '~/components/ui/button'
 import Amount from '~/components/amount'
-import { cn } from '~/lib/utils'
-import { useHeaderWallet } from '~/hooks/api/useWallet'
-import { WalletInfoResponse } from '~/api/codegen/data-contracts'
+import RefreshIcon from '~/icons/refresh.svg?react'
+import { KokonIcon } from '~/components/color-icons'
+import { cn, parseAmount } from '~/lib/utils'
+import { useGetHeaderWallet, UserWallet } from '~/hooks/api/useWallet'
 import { Skeleton } from '~/components/ui/skeleton'
+import { cryptoDetails, CryptoUnion } from '~/consts/crypto'
 
-const icons = {
-  KOKON: KokonIcon,
-  USDT: UsdtIcon,
-  TON: TonIcon,
-}
-
-type UserWallets = WalletInfoResponse['wallets'][number] & {
-  icon: (props: SVGProps<SVGSVGElement>) => JSX.Element
+type UserWalletItem = UserWallet & {
+  icon: React.FC<React.SVGProps<SVGSVGElement>>
 }
 
 const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
   const navigate = useNavigate()
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const { data, isLoading, isFetching, refetch } = useHeaderWallet()
-  const wallets = (data?.data.wallets || []).map<UserWallets>(wallet => ({
+  const { data, isLoading, isFetching, refetch } = useGetHeaderWallet()
+  const wallets = (data?.data.wallets || []).map<UserWalletItem>(wallet => ({
     ...wallet,
-    icon: icons[wallet.currency as keyof typeof icons],
+    icon: cryptoDetails[wallet.currency as CryptoUnion].icon,
   }))
 
   const handleRefresh = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
@@ -69,14 +63,14 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
         )}
       </PopoverTrigger>
       <PopoverContent className="primary-gradient-border-rounded flex w-auto min-w-[260px] flex-col p-3 text-white">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center justify-between space-x-2">
           <div className="flex flex-col text-sm font-ultra">
             Total balance
             <span className="text-xs text-white/70">Display all in USDT</span>
           </div>
           <Amount
             className="text-xl font-ultra text-primary"
-            value={Number(data?.data.totalBalanceInUsdt)}
+            value={parseAmount(data?.data.totalBalanceInUsdt)}
           />
         </div>
         <div className="mt-3 space-y-2">
@@ -89,11 +83,13 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
                 <wallet.icon className="h-6 w-6" />
                 <div className="flex flex-col">
                   <p className="text-xs">{wallet.currency}</p>
-                  <Amount className="text-[10px] font-normal leading-3 text-white/70" value={0} />
-                  {/* USDT估值 待確認欄位 */}
+                  <Amount
+                    className="text-[10px] font-normal leading-3 text-white/70"
+                    value={parseAmount(wallet.balanceUsdt)}
+                  />
                 </div>
               </div>
-              <Amount className="text-right text-sm" value={+wallet.balance} />
+              <Amount className="text-right text-sm" value={parseAmount(wallet.balance)} />
             </div>
           ))}
         </div>

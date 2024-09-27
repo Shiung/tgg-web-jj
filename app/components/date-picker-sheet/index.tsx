@@ -16,7 +16,7 @@ import LightArrowRightIcon from '~/icons/light-arrow-right.svg?react'
 import { TimePicker } from './time-picker'
 import { Input } from '../ui/input'
 
-interface DatePickerBottomSheetProps {
+interface DatePickerSheetProps {
   id?: string
   title: string
   value: Date | DateRange | undefined
@@ -41,7 +41,7 @@ const applyTimeToDate = (date: Date | undefined, time: string): Date | undefined
   return setMinutes(setHours(date, hours), minutes)
 }
 
-export default function DatePickerBottomSheet({
+export default function DatePickerSheet({
   id,
   title,
   value,
@@ -49,7 +49,7 @@ export default function DatePickerBottomSheet({
   range = false, // 默认为单个日期
   showTimePicker = false, // 默认为不显示时间选择器
   placeholder = 'Select Date',
-}: DatePickerBottomSheetProps) {
+}: DatePickerSheetProps) {
   const [open, setOpen] = useState(false)
   const [internalDate, setInternalDate] = useState<Date | DateRange | undefined>(value)
   const [internalTimeFrom, setInternalTimeFrom] = useState('00:00')

@@ -26,8 +26,8 @@ const Header: React.FC = () => {
 
   if (!isHeaderVisible) return null
   return (
-    <header className="sticky top-0 z-40 bg-black backdrop-blur">
-      <div className="mx-auto flex h-12 w-full items-center justify-between px-4 py-2">
+    <header className="fixed inset-x-0 top-0 z-40 h-header bg-background pb-3 backdrop-blur">
+      <div className="mx-auto flex w-full items-center justify-between bg-black px-4 py-2">
         <Link to="/">
           <img src="/logo.svg" alt="Kokon Logo" width={90} height={24} />
         </Link>

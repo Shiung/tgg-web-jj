@@ -1,18 +1,30 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
-import { DEPOSIT_CURRENCIES, CRYPTO_DETAILS } from '~/consts/crypto'
+import { depositCurrencies, cryptoDetails } from '~/consts/crypto'
 import InfoIcon from '~/icons/info.svg?react'
 import WarningIcon from '~/icons/warning.svg?react'
+import { apis } from '~/api'
+import DepositViaAddressDialog from './deposit-via-address-sheet'
+import TonConnectButton from './ton-connect-button'
 
-const coins = DEPOSIT_CURRENCIES.map(crypto => ({
-  name: CRYPTO_DETAILS[crypto].name,
-  icon: CRYPTO_DETAILS[crypto].icon,
+const coins = depositCurrencies.map(crypto => ({
+  name: cryptoDetails[crypto].name,
+  icon: cryptoDetails[crypto].icon,
 }))
 
 export default function Deposit() {
+  const { data: depositSettingData, isLoading } = useQuery({
+    queryKey: ['getDepositSetting'],
+    queryFn: apis.wallet.walletDepositSettingList,
+  })
   const [selectedCurrency, setSelectedCurrency] = useState('USDT')
+
+  useEffect(() => {
+    console.log('depositSettingData', depositSettingData)
+  }, [depositSettingData])
 
   return (
     <div className="bg-black p-4">
@@ -65,10 +77,8 @@ export default function Deposit() {
       </div>
 
       <div className="mt-6 flex flex-col items-stretch space-y-3">
-        <Button catEars>Connect Wallet</Button>
-        <Button catEars variant="gray">
-          Deposit via Address
-        </Button>
+        <TonConnectButton />
+        <DepositViaAddressDialog />
       </div>
     </div>
   )

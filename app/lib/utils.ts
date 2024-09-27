@@ -28,6 +28,10 @@ export function formatKM(num: number, precision: number = 2, removeTrailingZeros
   return `${num}`
 }
 
+export const parseAmount = (amount: string | undefined, defaultValue: number = 0): number => {
+  return parseFloat(amount || '') || defaultValue
+}
+
 export const formatCountdown = (seconds: number) => {
   const minutes = Math.floor(seconds / 60)
   const remainingSeconds = seconds % 60

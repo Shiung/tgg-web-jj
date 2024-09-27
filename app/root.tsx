@@ -9,16 +9,14 @@ import AppLoading from '~/components/app-loading'
 import CurrentUrlPopover from '~/components/current-url-popover'
 import NeedLoginDialog from '~/components/need-login-dialog'
 import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
-import { useMainMaxHeightClass } from '~/hooks/useMainMaxHeightClass'
+import { useSafePaddingClass } from '~/hooks/useSafePaddingClass'
 import useAuthGuard from './hooks/useAuthGuard'
 import { cn } from '~/lib/utils'
 
-// import './tailwind.css'
-import stylesheet from '~/tailwind.css?url'
+import './tailwind.css'
 
 export const links: LinksFunction = () => {
   return [
-    { rel: 'stylesheet', href: stylesheet },
     { rel: 'icon', href: '/favicon.ico', sizes: '16x16', type: 'image/x-icon' },
     {
       rel: 'icon',
@@ -59,10 +57,6 @@ export const links: LinksFunction = () => {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
-  useAuthGuard()
-  const maxWidth = useAppMaxWidth()
-  const mainMaxHClass = useMainMaxHeightClass()
-
   return (
     <html lang="en">
       <head>
@@ -75,24 +69,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="dark bg-background font-sans antialiased">
-        <AppRoot>
-          <Header />
-          <main
-            className={cn(
-              'relative z-10 mx-auto flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden rounded-xl pt-3',
-              mainMaxHClass
-            )}
-            style={{ maxWidth: maxWidth }}
-          >
-            {children}
-          </main>
-          <ParticleBackground />
-          <MainNav />
-          <NeedLoginDialog />
-          <Toaster />
-          {/* 開發使用 */}
-          <CurrentUrlPopover />
-        </AppRoot>
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -101,7 +78,34 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  return <Outlet />
+  useAuthGuard()
+  const maxWidth = useAppMaxWidth()
+  const safePaddingClass = useSafePaddingClass()
+
+  return (
+    <>
+      <AppRoot>
+        <Header />
+        <main
+          className={cn(
+            'main relative z-10 mx-auto flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden rounded-xl',
+            safePaddingClass
+          )}
+          style={{ maxWidth: maxWidth }}
+        >
+          {/* 上方模擬圓角效果 */}
+          <div className="top-corner" style={{ maxWidth: maxWidth }} />
+          <Outlet />
+        </main>
+        <MainNav />
+        <NeedLoginDialog />
+      </AppRoot>
+      <ParticleBackground />
+      <Toaster />
+      {/* 開發使用 */}
+      <CurrentUrlPopover />
+    </>
+  )
 }
 
 export function HydrateFallback() {

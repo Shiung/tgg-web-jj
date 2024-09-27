@@ -492,7 +492,7 @@ export default function SmashEgg() {
 
   return (
     <div
-      className={`container relative flex flex-1 flex-col rounded-t-xl bg-[url('/images/smash-egg/bg-main.png')] bg-cover bg-no-repeat px-4 pt-3`}
+      className={`container relative flex flex-1 flex-col rounded-xl bg-[url('/images/smash-egg/bg-main.png')] bg-cover bg-no-repeat px-4 pt-3`}
     >
       {/* PAG View */}
       <div className={`absolute left-2 top-0 z-40 aspect-[41/51] w-[46px]`}>

@@ -11,6 +11,8 @@ import NavShare from './icons/share'
 import NavWallet from './icons/wallet'
 import ProtectedLink from '../protected-link'
 
+import classes from './index.module.scss'
+
 export const links = [
   { href: '/', i18n: 'game', SvgComponent: NavGame, needLogin: false },
   { href: '/rank', i18n: 'rank', SvgComponent: NavRank, needLogin: false },
@@ -50,11 +52,14 @@ const MainNav: React.FC = () => {
 
   if (!isNavVisible) return null
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex h-nav justify-center p-3">
-      <div
-        className="flex h-full w-full rounded-lg bg-black px-2 py-4 shadow backdrop-blur-md backdrop-saturate-150"
-        style={{ maxWidth: maxWidth }}
-      >
+    <nav
+      className={cn(
+        'fixed inset-x-0 bottom-0 z-40 mx-auto flex h-nav justify-center bg-background p-3',
+        classes.nav
+      )}
+      style={{ maxWidth: maxWidth }}
+    >
+      <div className="flex h-full w-full rounded-lg bg-black px-2 py-4 shadow backdrop-blur-md backdrop-saturate-150">
         {links.map((link, index) => {
           const LinkComp = link.needLogin ? ProtectedLink : Link
           return (

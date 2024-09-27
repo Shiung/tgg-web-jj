@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Controller, useForm, SubmitHandler } from 'react-hook-form'
 import Amount from '~/components/amount'
-import DatePickerBottomSheet from '~/components/date-picker-bottom-sheet/index'
+import DatePickerSheet from '~/components/date-picker-sheet/index'
 import { DropdownSheet, DropdownOption } from '~/components/dropdown-sheet'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
@@ -199,7 +199,7 @@ export default function Ui() {
             name="date" // name 與 form 的 key 對應
             control={control}
             render={({ field }) => (
-              <DatePickerBottomSheet
+              <DatePickerSheet
                 id="date-picker" // 确保 id 与 Label 的 htmlFor 匹配
                 title="Select Date"
                 value={field.value} // 从控制器绑定的值
@@ -217,7 +217,7 @@ export default function Ui() {
             name="dateRange"
             control={control}
             render={({ field }) => (
-              <DatePickerBottomSheet
+              <DatePickerSheet
                 id="date-range-picker"
                 title="Select Date"
                 value={field.value}
@@ -236,7 +236,7 @@ export default function Ui() {
             name="dateTime"
             control={control}
             render={({ field }) => (
-              <DatePickerBottomSheet
+              <DatePickerSheet
                 id="datetime-picker"
                 title="Select Date"
                 value={field.value}
@@ -255,7 +255,7 @@ export default function Ui() {
             name="dateTimeRange"
             control={control}
             render={({ field }) => (
-              <DatePickerBottomSheet
+              <DatePickerSheet
                 id="datetime-range-picker"
                 title="Select Date"
                 value={field.value}

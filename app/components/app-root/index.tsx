@@ -1,4 +1,4 @@
-import { type PropsWithChildren, useEffect } from 'react'
+import { type PropsWithChildren, useEffect, useMemo } from 'react'
 import { useNavigate } from '@remix-run/react'
 import { SDKProvider, useLaunchParams, useMiniApp } from '@telegram-apps/sdk-react'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
@@ -11,11 +11,13 @@ import { useAutoLogin } from '~/hooks/api/useAuth'
 import { useTranslation } from 'react-i18next'
 import { mapSystemLanguageCode } from '~/lib/utils'
 
-const queryClient = new QueryClient()
-
-// test
-const manifestUrl =
-  'https://raw.githubusercontent.com/ton-community/tutorials/main/03-client/test/public/tonconnect-manifest.json'
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 3,
+    },
+  },
+})
 
 const TelegramInit: React.FC = () => {
   useTelegramNavigate()
@@ -63,12 +65,17 @@ const TelegramInit: React.FC = () => {
 export default function AppRoot({ children }: PropsWithChildren) {
   useTelegramMock()
   const inTelegram = useStore(state => state.inTelegram)
+  const manifestUrl = useMemo(() => {
+    if (typeof window !== 'undefined')
+      return new URL('tonconnect-manifest.json', window.location.href).toString()
+    return ''
+  }, [])
 
   return (
     <TonConnectUIProvider manifestUrl={manifestUrl}>
       <SDKProvider acceptCustomStyles>
         <QueryClientProvider client={queryClient}>
-          <div className="flex min-h-dvh flex-col">{children}</div>
+          <div className="flex h-dvh flex-col">{children}</div>
           {inTelegram && <TelegramInit />}
           <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
         </QueryClientProvider>

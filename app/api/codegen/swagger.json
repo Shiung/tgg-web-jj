@@ -132,6 +132,149 @@
         "responses": {}
       }
     },
+    "/ajax/campaign/egg/claim": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*EggController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "transactionId"
+              ],
+              "properties": {
+                "transactionId": {
+                  "description": "領取ID",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/ajax/campaign/egg/giveup": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*EggController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "eggLevel"
+              ],
+              "properties": {
+                "eggLevel": {
+                  "description": "金蛋等級",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/ajax/campaign/egg/info": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*EggController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "eggLevel"
+              ],
+              "properties": {
+                "eggLevel": {
+                  "description": "金蛋等級",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/campaign/egg/smash": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*EggController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "eggLevel"
+              ],
+              "properties": {
+                "eggLevel": {
+                  "description": "金蛋等級",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "eggLevel",
+                "progress",
+                "reward",
+                "totalCount"
+              ],
+              "properties": {
+                "eggLevel": {
+                  "description": "金蛋等級",
+                  "type": "string"
+                },
+                "progress": {
+                  "description": "進度",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "reward": {
+                  "description": "獎勵",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "totalCount": {
+                  "description": "總次數",
+                  "type": "integer",
+                  "format": "uint64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ajax/customer/bindemail": {
       "put": {
         "description": "Auto-generated API documentation",
@@ -865,7 +1008,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Required, Minimum: 1)",
+            "description": "分頁頁數 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -874,7 +1017,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -1243,6 +1386,7 @@
                 "withdrawingCount": {
                   "description": "進行中提款單數量",
                   "type": "integer",
+                  "nullable": true,
                   "format": "int64",
                   "minimum": 0
                 }
@@ -1728,6 +1872,60 @@
       ],
       "properties": {
         "amount": {
+          "type": "integer",
+          "format": "uint64"
+        }
+      }
+    },
+    "GoldenEggClaimRequest": {
+      "type": "object",
+      "required": [
+        "transactionId"
+      ],
+      "properties": {
+        "transactionId": {
+          "description": "領取ID",
+          "type": "string"
+        }
+      }
+    },
+    "GoldenEggSmashRequest": {
+      "type": "object",
+      "required": [
+        "eggLevel"
+      ],
+      "properties": {
+        "eggLevel": {
+          "description": "金蛋等級",
+          "type": "string"
+        }
+      }
+    },
+    "GoldenEggSmashResponse": {
+      "type": "object",
+      "required": [
+        "eggLevel",
+        "progress",
+        "reward",
+        "totalCount"
+      ],
+      "properties": {
+        "eggLevel": {
+          "description": "金蛋等級",
+          "type": "string"
+        },
+        "progress": {
+          "description": "進度",
+          "type": "string",
+          "format": "decimal"
+        },
+        "reward": {
+          "description": "獎勵",
+          "type": "string",
+          "format": "decimal"
+        },
+        "totalCount": {
+          "description": "總次數",
           "type": "integer",
           "format": "uint64"
         }
@@ -2229,6 +2427,7 @@
         "withdrawingCount": {
           "description": "進行中提款單數量",
           "type": "integer",
+          "nullable": true,
           "format": "int64",
           "minimum": 0
         }
