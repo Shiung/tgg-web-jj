@@ -1,15 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from '@remix-run/react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
+import { useNavigate, useParams } from '@remix-run/react'
 import useStore from '~/stores/useStore'
+import { useGetGameUrl } from '~/hooks/api/useGetGameUrl'
+import { gameList, GameId } from '~/consts/game'
 
+import AppLoading from '~/components/app-loading'
 import BuyEnergyDialog from './buy-energy-dialog'
 
-const GameRoute: React.FC = () => {
-  const location = useLocation()
+const CasualGame: React.FC = () => {
+  const params = useParams()
   const navigate = useNavigate()
-  const params = new URLSearchParams(location.search)
-  const src = params.get('src')
 
+  // 只請求一次的flag
+  const hasRequestedRef = useRef(false)
+
+  // 隱藏 導航欄 ＆ Header
   const setNavVisibility = useStore(state => state.setNavVisibility)
   const setHeaderVisibility = useStore(state => state.setHeaderVisibility)
   useEffect(() => {
@@ -21,12 +26,29 @@ const GameRoute: React.FC = () => {
     }
   }, [setNavVisibility, setHeaderVisibility])
 
-  const iframeRef = useRef<HTMLIFrameElement>(null)
+  // 進入頁面去要遊戲連結
+  const gameId: string = params.gameId || ''
+  const { gameUrl, getUrl, isPending } = useGetGameUrl()
+
+  const fetchGameUrl = useCallback(() => {
+    if (gameId && gameList[gameId as unknown as GameId] && !hasRequestedRef.current) {
+      getUrl(gameId, gameList[gameId as unknown as GameId].currency)
+      hasRequestedRef.current = true
+    }
+  }, [gameId, getUrl])
+
+  useEffect(() => {
+    fetchGameUrl()
+  }, [fetchGameUrl])
+
+  // 買能量
   const [isBuyEnergyDialogOpen, setIsBuyEnergyDialogOpen] = useState(false)
   const handleCloseBuyEnergyDialog = () => {
     setIsBuyEnergyDialogOpen(false)
   }
 
+  // 建立事件監聽器
+  const iframeRef = useRef<HTMLIFrameElement>(null)
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       // 確保消息來自我們的遊戲 iframe
@@ -52,23 +74,23 @@ const GameRoute: React.FC = () => {
   }, [navigate, setIsBuyEnergyDialogOpen])
 
   return (
-    <div className="container flex w-full flex-1 items-center justify-center rounded-xl bg-red-300 p-0">
-      {src ? (
+    <div className="container relative flex flex-1 flex-col items-center justify-center rounded-xl bg-black p-0">
+      {gameUrl ? (
         <iframe
           id="apple"
           ref={iframeRef}
-          src={src}
-          title="遊戲"
-          className="h-dvh w-full rounded-xl border-none object-contain"
-          style={{ backgroundColor: 'black' }}
+          src={gameUrl}
+          title="Game"
+          className="absolute inset-0 h-full w-full rounded-xl border-none bg-black object-contain"
         />
       ) : (
-        <p className="text-center text-white">沒有提供遊戲 URL</p>
+        <p className="text-center text-white">No game URL provided</p>
       )}
 
       <BuyEnergyDialog isOpen={isBuyEnergyDialogOpen} onClose={handleCloseBuyEnergyDialog} />
+      {isPending && <AppLoading variant="blur" />}
     </div>
   )
 }
 
-export default GameRoute
+export default CasualGame

@@ -1,46 +1,72 @@
 import { useMutation } from '@tanstack/react-query'
 import { apis } from '~/api/index'
 import { useNavigate } from '@remix-run/react'
+import { type GameCurrency } from '~/consts/game'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { useToast } from '~/hooks/use-toast'
 import { AxiosError } from 'axios'
 
-// NOTICE: 1: bc, 2: bc, 3: 消消樂
-const mockGameID = '3'
+interface MutationVariables {
+  gameID: string
+  currency: GameCurrency
+}
 
 const useGetGameUrl = () => {
   const navigate = useNavigate()
+  const [gameUrl, setGameUrl] = useState<string | null>(null)
   const { toast } = useToast()
+  const mutateRef = useRef<(variables: MutationVariables) => void>()
 
   const mutation = useMutation({
-    mutationFn: (gameID: string = mockGameID) =>
+    mutationFn: ({ gameID, currency }: MutationVariables) =>
       apis.games.gamesEnterCreate(gameID, {
-        currency: 'K9',
+        currency: currency,
         language: 'en',
       }),
-    onSuccess: (data: { data: { gameUrl: string } }) => {
-      const gameUrl = data.data.gameUrl
-      if (gameUrl) {
-        // TODO: casual-game 與 crypto-game
-        const encodedGameUrl = encodeURIComponent(gameUrl)
-        navigate(`/casual-game?src=${encodedGameUrl}`)
+    onSuccess: data => {
+      const url = data.data.gameUrl
+      mutation.reset()
+      if (url) {
+        setGameUrl(url)
       } else {
         toast({
-          title: 'game url not found',
+          title: '未找到遊戲 URL',
           variant: 'error',
         })
+        navigate('/')
         console.error('[ERROR] gameUrl URL 不存在')
       }
     },
-    onError: (error: AxiosError<{ message: string }>) => {
+    onError: (error: AxiosError<any>) => {
       toast({
-        title: error.response?.data.message || '未知錯誤',
+        title: error.response?.data?.message || 'Unknown error',
         variant: 'error',
       })
-      console.error('[ERROR] gamesEnterCreate failed ', error)
+      navigate('/')
+      console.error('[ERROR] gamesEnterCreate 失敗 ', error)
+      setGameUrl(null)
+      mutation.reset()
     },
   })
 
-  return mutation
+  useEffect(() => {
+    mutateRef.current = mutation.mutate
+  }, [mutation.mutate])
+
+  const getUrl = useCallback((gameID: string, currency: GameCurrency): void => {
+    if (mutateRef.current) {
+      setGameUrl(null)
+      mutateRef.current({ gameID, currency })
+    }
+  }, [])
+
+  return {
+    gameUrl,
+    getUrl,
+    isPending: mutation.isPending,
+    isError: mutation.isError,
+    error: mutation.error,
+  }
 }
 
 export { useGetGameUrl }
