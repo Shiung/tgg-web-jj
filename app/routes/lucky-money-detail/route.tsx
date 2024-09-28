@@ -6,12 +6,13 @@ import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
 import X from '~/icons/x.svg?react'
 import SvgCopy from '~/icons/copy.svg?react'
 import { Button } from '~/components/ui/button'
-import { Link, useSearchParams } from '@remix-run/react'
+import { Link, useSearchParams, useNavigate } from '@remix-run/react'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { KokonIcon } from '~/components/color-icons'
 import StopSharingDialog from './stop-sharing-dialog'
 
 const LuckyMoneyDetail = () => {
+  const navigate = useNavigate()
   const [shareLink, setShareLink] = useState('http://kokon.com/test')
   const handleCopyShareLink = () => {
     const tempInput = document.createElement('input')
@@ -66,7 +67,7 @@ const LuckyMoneyDetail = () => {
             to="#"
             onClick={e => {
               e.preventDefault()
-              window.history.go(-1)
+              navigate(-1)
             }}
           >
             <ArrowLineLeftIcon className="h-6 w-6 text-[#FFFFFFB2]" />

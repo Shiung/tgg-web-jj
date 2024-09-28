@@ -13,8 +13,8 @@ import {
 } from '~/components/ui/carousel'
 import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
 import ProtectedLink from '~/components/protected-link'
-import AppLoading from '~/components/app-loading'
-import { useGetGameUrl } from '~/hooks/api/useGetGameUrl'
+import { gameList, GameId, getGameRoute } from '~/consts/game'
+
 import Footer from './footer'
 
 export const meta: MetaFunction = () => {
@@ -38,38 +38,8 @@ const bannerSlides = [
   },
 ]
 
-const newReleaseSlides = [
-  {
-    id: 1,
-    title: 'MINES',
-    imgSrc: '/images/home/carousel/mines.png',
-    imgAlt: '',
-  },
-  {
-    id: 2,
-    title: 'CRASH',
-    imgSrc: '/images/home/carousel/crash.png',
-    imgAlt: 'crash',
-  },
-  {
-    id: 3,
-    title: 'CAT RUSSIA',
-    imgSrc: '/images/home/carousel/cat-russia.png',
-    imgAlt: '',
-  },
-  {
-    id: 4,
-    title: 'GO DOWN 100 FLOOS',
-    imgSrc: '/images/home/carousel/go-down-100-floors.png',
-    imgAlt: 'go-down-100-floors',
-  },
-]
-
 /* Home */
 export default function Index() {
-  // 遊戲url獲取
-  const { mutate, isPending } = useGetGameUrl()
-
   return (
     <div className="container px-0">
       {/* banner carousel */}
@@ -109,25 +79,25 @@ export default function Index() {
             CRYPTO GAME
           </Button>
         </div>
-        {/* 343 / 344 */}
         <div className="my-6 flex aspect-[343/344] w-full flex-row space-x-2">
           <div className="flex flex-1 flex-col space-y-2 text-lg font-ultra">
-            <div className="relative flex-1 cursor-pointer overflow-hidden rounded-2xl">
-              <p className="absolute inset-x-3 top-[14px]">GO DOWN 100 FLOORS</p>
-              <img
-                src="/images/home/carousel/go-down-100-floors.png"
-                alt="go-down-100-floors"
-                className="h-full w-full object-cover"
-              />
-            </div>
-            <div className="relative flex-1 cursor-pointer overflow-hidden rounded-2xl">
-              <p className="absolute inset-x-3 top-[14px]">CRASH</p>
-              <img
-                src="/images/home/carousel/crash.png"
-                alt="crash"
-                className="h-full w-full object-cover"
-              />
-            </div>
+            {[GameId.GoDown100Floors, GameId.Crash].map(id => {
+              return (
+                <ProtectedLink
+                  key={`game-${id}`}
+                  prefetch="viewport"
+                  to={getGameRoute(id, gameList[id].venueType)}
+                  className="relative flex-1 overflow-hidden rounded-2xl"
+                >
+                  <p className="absolute inset-x-3 top-[14px]">{gameList[id].name.toUpperCase()}</p>
+                  <img
+                    src={gameList[id].imgSrc}
+                    alt={gameList[id].imgAlt}
+                    className="h-full w-full object-cover"
+                  />
+                </ProtectedLink>
+              )
+            })}
           </div>
           <div className="flex flex-1 flex-col space-y-2">
             <ProtectedLink
@@ -169,29 +139,25 @@ export default function Index() {
             </div>
           </div>
           <CarouselContent className="-ml-0">
-            {newReleaseSlides.map(slide => (
+            {Object.entries(gameList).map(([id, game]) => (
               <CarouselItem
-                key={slide.id}
+                key={`carousel-game-${id}`}
                 className="relative flex basis-1/3 overflow-hidden pl-0 text-center"
               >
-                <div
-                  className="relative cursor-pointer pr-2"
-                  onClick={() => {
-                    mutate(slide.id.toString())
-                  }}
-                  onKeyDown={() => {}}
-                  role="button"
-                  tabIndex={0}
+                <ProtectedLink
+                  className="relative pr-2"
+                  prefetch="viewport"
+                  to={getGameRoute(id as unknown as GameId, game.venueType)}
                 >
                   <span className="absolute inset-x-0 top-2 mx-auto min-h-8 pl-2 pr-4 text-center text-sm font-ultra">
-                    {slide.title}
+                    {game.name.toUpperCase()}
                   </span>
                   <img
-                    src={slide.imgSrc}
-                    alt={slide.imgAlt}
+                    src={game.imgSrc}
+                    alt={game.imgAlt}
                     className="h-full w-full rounded-lg object-contain"
                   />
-                </div>
+                </ProtectedLink>
               </CarouselItem>
             ))}
           </CarouselContent>
@@ -218,8 +184,6 @@ export default function Index() {
       >
         <SvgEnterByFloating imgurl="/images/lucky-money/lucky-money.png" />
       </Link>
-
-      {isPending && <AppLoading variant="blur" />}
     </div>
   )
 }
