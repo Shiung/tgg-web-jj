@@ -120,32 +120,32 @@
   }
 }
 
-/* main 框上方模擬右內凹圓角遮罩 */
-.top-corner {
-  position: fixed;
-  left: 0px;
-  right: 0px;
-  top: 60px;
-  height: 12px;
-  margin: 0 auto;
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle at 100% 100%, rgba(255, 255, 255, 0) 71%, #242424 71%);
-    z-index: 40;
-  }
-  &::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 12px;
-    height: 12px;
-    background: radial-gradient(circle at 0% 100%, rgba(255, 255, 255, 0) 71%, #242424 71%);
-    z-index: 40;
-  }
+/* Custom srcollbar */
+::-webkit-scrollbar {
+  width: 8px; /* 設定滾動條的寬度 */
+  height: 8px; /* 設定水平滾動條的高度 */
+}
+
+::-webkit-scrollbar-track {
+  background: #2c2c2c; /*滾動條軌道的背景顏色 */
+  border-radius: 10px; /* 軌道的圓角設定 */
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2); /* 滾動條滑塊的顏色 */
+  border-radius: 10px; /* 滑塊的圓角 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4); /* 當滑鼠懸停在滑塊上時，顏色變得稍微深一點 */
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent; /* 處理滾動條交界處的背景，設置為透明 */
+}
+
+/* 針對 Firefox 瀏覽器的設定 */
+* {
+  scrollbar-width: thin; /* 設定滾動條為較細的樣式 */
+  scrollbar-color: rgba(255, 255, 255, 0.2) #2c2c2c; /* 定滑塊的顏色為半透明白色，軌道為深灰色 */
 }

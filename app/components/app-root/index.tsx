@@ -16,7 +16,7 @@ import { useAutoLogin } from '~/hooks/api/useAuth'
 import { useTranslation } from 'react-i18next'
 import { cn, mapSystemLanguageCode } from '~/lib/utils'
 
-import { useAppMinHeightClass } from './useAppMinHeightClass'
+import classes from './index.module.scss'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -79,7 +79,14 @@ const TelegramInit: React.FC = () => {
 export default function AppRoot({ children }: PropsWithChildren) {
   useTelegramMock()
   const inTelegram = useStore(state => state.inTelegram)
-  const minHClass = useAppMinHeightClass()
+  const isHeaderVisible = useStore(state => state.isHeaderVisible)
+  const maxWidth = useStore(state => state.maxWidth)
+
+  const minHClass = useMemo(() => {
+    if (inTelegram) return 'h-dvh'
+    return 'min-h-dvh'
+  }, [inTelegram])
+
   const manifestUrl = useMemo(() => {
     if (typeof window !== 'undefined')
       return new URL('tonconnect-manifest.json', window.location.href).toString()
@@ -90,7 +97,14 @@ export default function AppRoot({ children }: PropsWithChildren) {
     <TonConnectUIProvider manifestUrl={manifestUrl}>
       <SDKProvider acceptCustomStyles>
         <QueryClientProvider client={queryClient}>
+          {/* 上方模擬圓角遮罩 */}
+          <div
+            className={cn(classes['top-corner'], isHeaderVisible ? 'top-[60px]' : 'top-3')}
+            style={{ maxWidth }}
+          />
+          {/* app框容器 */}
           <div className={cn('flex flex-col', minHClass)}>{children}</div>
+          {/* Telegram 相關初始化 */}
           {inTelegram && <TelegramInit />}
           <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
         </QueryClientProvider>

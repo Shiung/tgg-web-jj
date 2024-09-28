@@ -77,12 +77,6 @@ const config = {
         header: 'var(--top-header-safe-padding)',
         nav: 'var(--bottom-nav-safe-padding)',
       },
-      minHeight: {
-        'with-header-nav':
-          'calc(100dvh - var(--top-header-safe-padding) - var(--bottom-nav-safe-padding))',
-        'with-header': 'calc(100dvh - var(--top-header-safe-padding))',
-        'with-nav': 'calc(100dvh - var(--bottom-nav-safe-padding))',
-      },
       padding: {
         'header-safe': 'var(--top-header-safe-padding)',
         'nav-safe': 'var(--bottom-nav-safe-padding)',

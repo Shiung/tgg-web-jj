@@ -58,8 +58,6 @@ export default function App() {
           )}
           style={{ maxWidth: maxWidth }}
         >
-          {/* 上方模擬圓角效果 */}
-          <div className="top-corner" style={{ maxWidth: maxWidth }} />
           <Outlet />
         </main>
         <MainNav />
