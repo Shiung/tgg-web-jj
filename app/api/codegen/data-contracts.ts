@@ -173,12 +173,12 @@ export interface GoldenEggClaimRequest {
 }
 
 export interface GoldenEggSmashRequest {
-  /** 金蛋等級 */
+  /** 金蛋等級:GOLD,SILVER,NORMAL */
   eggLevel: string;
 }
 
 export interface GoldenEggSmashResponse {
-  /** 金蛋等級 */
+  /** 金蛋等級:GOLD,SILVER,NORMAL */
   eggLevel: string;
   /**
    * 進度

@@ -48,7 +48,7 @@ export class Campaign<SecurityDataType = unknown> {
    */
   campaignEggGiveupCreate = (
     body: {
-      /** 金蛋等級 */
+      /** 金蛋等級:GOLD,SILVER,NORMAL */
       eggLevel: string;
     },
     params: RequestParams = {},
@@ -69,7 +69,7 @@ export class Campaign<SecurityDataType = unknown> {
   campaignEggInfoCreate = (params: RequestParams = {}) =>
     this.http.request<
       {
-        /** 金蛋等級 */
+        /** 金蛋等級:GOLD,SILVER,NORMAL */
         eggLevel: string;
       },
       any
@@ -87,14 +87,14 @@ export class Campaign<SecurityDataType = unknown> {
    */
   campaignEggSmashCreate = (
     body: {
-      /** 金蛋等級 */
+      /** 金蛋等級:GOLD,SILVER,NORMAL */
       eggLevel: string;
     },
     params: RequestParams = {},
   ) =>
     this.http.request<
       {
-        /** 金蛋等級 */
+        /** 金蛋等級:GOLD,SILVER,NORMAL */
         eggLevel: string;
         /**
          * 進度

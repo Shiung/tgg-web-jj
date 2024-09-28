@@ -178,7 +178,7 @@
               ],
               "properties": {
                 "eggLevel": {
-                  "description": "金蛋等級",
+                  "description": "金蛋等級:GOLD,SILVER,NORMAL",
                   "type": "string"
                 }
               }
@@ -204,7 +204,7 @@
               ],
               "properties": {
                 "eggLevel": {
-                  "description": "金蛋等級",
+                  "description": "金蛋等級:GOLD,SILVER,NORMAL",
                   "type": "string"
                 }
               }
@@ -231,7 +231,7 @@
               ],
               "properties": {
                 "eggLevel": {
-                  "description": "金蛋等級",
+                  "description": "金蛋等級:GOLD,SILVER,NORMAL",
                   "type": "string"
                 }
               }
@@ -251,7 +251,7 @@
               ],
               "properties": {
                 "eggLevel": {
-                  "description": "金蛋等級",
+                  "description": "金蛋等級:GOLD,SILVER,NORMAL",
                   "type": "string"
                 },
                 "progress": {
@@ -1896,7 +1896,7 @@
       ],
       "properties": {
         "eggLevel": {
-          "description": "金蛋等級",
+          "description": "金蛋等級:GOLD,SILVER,NORMAL",
           "type": "string"
         }
       }
@@ -1911,7 +1911,7 @@
       ],
       "properties": {
         "eggLevel": {
-          "description": "金蛋等級",
+          "description": "金蛋等級:GOLD,SILVER,NORMAL",
           "type": "string"
         },
         "progress": {
