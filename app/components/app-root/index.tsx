@@ -1,6 +1,11 @@
 import { type PropsWithChildren, useEffect, useMemo } from 'react'
 import { useNavigate } from '@remix-run/react'
-import { SDKProvider, useLaunchParams, useMiniApp } from '@telegram-apps/sdk-react'
+import {
+  SDKProvider,
+  useLaunchParams,
+  useMiniApp,
+  useSwipeBehavior,
+} from '@telegram-apps/sdk-react'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
@@ -9,7 +14,9 @@ import { useTelegramMock } from '~/hooks/useTelegramMock'
 import useTelegramNavigate from '~/hooks/useTelegramNavigate'
 import { useAutoLogin } from '~/hooks/api/useAuth'
 import { useTranslation } from 'react-i18next'
-import { mapSystemLanguageCode } from '~/lib/utils'
+import { cn, mapSystemLanguageCode } from '~/lib/utils'
+
+import { useAppMinHeightClass } from './useAppMinHeightClass'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -22,14 +29,21 @@ const queryClient = new QueryClient({
 const TelegramInit: React.FC = () => {
   useTelegramNavigate()
   const { i18n } = useTranslation()
-  const navigate = useNavigate()
   const setTelegramInitData = useStore(state => state.setTelegramInitData)
+  const navigate = useNavigate()
+  const swipeBehavior = useSwipeBehavior()
   const launchParams = useLaunchParams(true)
   const startParam = launchParams?.startParam
   const miniApp = useMiniApp()
 
   // 自動登入
   useAutoLogin()
+
+  // 避免下滑意外關閉 miniapp
+  useEffect(() => {
+    swipeBehavior.disableVerticalSwipe()
+    return () => swipeBehavior.enableVerticalSwipe()
+  }, [swipeBehavior])
 
   // 設置 miniapp 的header和背景顏色
   useEffect(() => {
@@ -65,6 +79,7 @@ const TelegramInit: React.FC = () => {
 export default function AppRoot({ children }: PropsWithChildren) {
   useTelegramMock()
   const inTelegram = useStore(state => state.inTelegram)
+  const minHClass = useAppMinHeightClass()
   const manifestUrl = useMemo(() => {
     if (typeof window !== 'undefined')
       return new URL('tonconnect-manifest.json', window.location.href).toString()
@@ -75,7 +90,7 @@ export default function AppRoot({ children }: PropsWithChildren) {
     <TonConnectUIProvider manifestUrl={manifestUrl}>
       <SDKProvider acceptCustomStyles>
         <QueryClientProvider client={queryClient}>
-          <div className="flex h-dvh flex-col">{children}</div>
+          <div className={cn('flex flex-col', minHClass)}>{children}</div>
           {inTelegram && <TelegramInit />}
           <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
         </QueryClientProvider>
