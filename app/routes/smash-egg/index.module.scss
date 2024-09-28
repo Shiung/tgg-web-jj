@@ -11,14 +11,14 @@
 
 .progress-bar {
   border-radius: 12px;
-  background: url('images/smash-egg/progress-bar.png'),
+  background: url('/images/smash-egg/progress-bar.png'),
     linear-gradient(180deg, #ff90c2 0%, #eb0070 100%);
   transition: all 0.5s ease-in-out;
 }
 
 .card-bg {
   width: 100%;
-  background: url('images/smash-egg/bg-mask.png'), linear-gradient(180deg, #fdcb04 0%, #ff4d00 100%);
+  background: url('/images/smash-egg/bg-mask.png'), linear-gradient(180deg, #fdcb04 0%, #ff4d00 100%);
   background-size: cover;
   background-repeat: no-repeat;
 }
