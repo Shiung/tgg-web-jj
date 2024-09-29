@@ -1,4 +1,4 @@
-import { useNavigate } from '@remix-run/react'
+import { Link } from '@remix-run/react'
 import { useState } from 'react'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
@@ -16,7 +16,6 @@ const coins = depositCurrencies.map(crypto => ({
 }))
 
 export default function Swap() {
-  const navigate = useNavigate()
   const [currentTab, setCurrentTab] = useState('buy')
 
   return (
@@ -97,12 +96,9 @@ export default function Swap() {
             <WarningIcon className="h-4 w-4" />
             <span>Insufficient balance</span>
           </span>
-          <Button
-            className="flex h-6 items-center justify-center px-3"
-            onClick={() => navigate('/wallet/deposit')}
-          >
-            Go to deposit
-          </Button>
+          <Link to="/wallet/deposit">
+            <Button className="flex h-6 items-center justify-center px-3">Go to deposit</Button>
+          </Link>
         </div>
       </div>
 

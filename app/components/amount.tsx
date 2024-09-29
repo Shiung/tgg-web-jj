@@ -1,6 +1,6 @@
 import { NumberFormatBase, useNumericFormat } from 'react-number-format'
 import { FormatInputValueFunction, NumericFormatProps } from 'react-number-format/types/types'
-import { formatKM } from '~/lib/utils'
+import { formatKM } from '~/lib/amount'
 
 interface AmountProps extends Partial<NumericFormatProps> {
   value: number

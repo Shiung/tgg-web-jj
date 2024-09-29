@@ -1,13 +1,14 @@
 import { useState } from 'react'
-import { useNavigate } from '@remix-run/react'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
 import { Button } from '~/components/ui/button'
 import Amount from '~/components/amount'
 import RefreshIcon from '~/icons/refresh.svg?react'
 import { KokonIcon } from '~/components/color-icons'
-import { cn, parseAmount } from '~/lib/utils'
-import { useGetHeaderWallet, UserWallet } from '~/hooks/api/useWallet'
 import { Skeleton } from '~/components/ui/skeleton'
+import ProtectedLink from '~/components/protected-link'
+import { cn } from '~/lib/utils'
+import { parseAmount } from '~/lib/amount'
+import { useGetHeaderWallet, UserWallet } from '~/hooks/api/useWallet'
 import { cryptoDetails, CryptoUnion } from '~/consts/crypto'
 
 type UserWalletItem = UserWallet & {
@@ -15,7 +16,6 @@ type UserWalletItem = UserWallet & {
 }
 
 const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
-  const navigate = useNavigate()
   const [isRefreshing, setIsRefreshing] = useState(false)
   const { data, isLoading, isFetching, refetch } = useGetHeaderWallet()
   const wallets = (data?.data.wallets || []).map<UserWalletItem>(wallet => ({
@@ -93,9 +93,11 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
             </div>
           ))}
         </div>
-        <Button className="mt-6 w-full" catEars onClick={() => navigate('/wallet')}>
-          Deposit
-        </Button>
+        <ProtectedLink to="/wallet/deposit" prefetch="viewport">
+          <Button className="mt-6 w-full" catEars>
+            Deposit
+          </Button>
+        </ProtectedLink>
       </PopoverContent>
     </Popover>
   )

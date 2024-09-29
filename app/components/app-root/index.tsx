@@ -88,6 +88,8 @@ export default function AppRoot({ children }: PropsWithChildren) {
   }, [inTelegram])
 
   const manifestUrl = useMemo(() => {
+    if (process.env.NODE_ENV === 'development')
+      return 'https://tgg-web.ljbdev.site/tonconnect-manifest.json'
     if (typeof window !== 'undefined')
       return new URL('tonconnect-manifest.json', window.location.href).toString()
     return ''

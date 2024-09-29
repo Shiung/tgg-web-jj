@@ -20,31 +20,13 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
-    {
-      className,
-      type,
-      value,
-      clearable = false,
-      error,
-      label,
-      id,
-      hint,
-      suffix,
-      onClear,
-      onFocus,
-      onBlur,
-      ...props
-    },
+    { className, type, clearable = false, error, label, id, hint, suffix, onClear, ...props },
     ref
   ) => {
     const [inputType, setInputType] = useState(type)
-    const [isFocused, setIsFocused] = useState(false)
     const suffixRef = useRef<HTMLDivElement>(null)
     const [suffixWidth, setSuffixWidth] = useState(0)
 
-    const showClearButton = useMemo(() => {
-      return clearable && isFocused
-    }, [clearable, isFocused])
 
     const paddingRight = useMemo(() => {
       let padding = 12
@@ -56,20 +38,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const handleTogglePassword = () => {
       setInputType(inputType === 'password' ? 'text' : 'password')
-    }
-
-    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(true)
-      if (onFocus) {
-        onFocus(e)
-      }
-    }
-
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      setIsFocused(false)
-      if (onBlur) {
-        onBlur(e)
-      }
     }
 
     useEffect(() => {
@@ -87,24 +55,25 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             id={id}
             className={cn(
               'flex h-10 w-full rounded-full border-[0.5px] border-white/20 bg-[#333] px-3 py-2 text-sm font-ultra file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:font-ultra placeholder:text-white/50 focus-within:ring-1 focus-within:ring-primary focus-within:ring-offset-0 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50',
-              error ? 'input-error' : '',
+              'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none', // 隱藏自帶輸入框數字控件
+              error ? 'input-error' : '', // 錯誤樣式
               className
             )}
             style={{ paddingRight }}
             ref={ref}
-            value={value}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
             {...props}
           />
           {/* suffix */}
           <div className="absolute inset-y-0 right-3 flex items-center space-x-1" ref={suffixRef}>
             {suffix && (
-              <div ref={suffixRef} className="text-xs font-normal text-white/50 focus:outline-none">
+              <div
+                ref={suffixRef}
+                className="flex items-center text-xs font-normal text-white/50 focus:outline-none"
+              >
                 {suffix}
               </div>
             )}
-            {showClearButton && (
+            {clearable && (
               <Button
                 variant="icon"
                 size="icon"
@@ -133,13 +102,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           </div>
         </div>
         {error && (
-          <p className="flex items-center pl-3 text-app-red">
+          <p className="flex items-center pl-3 text-xs text-app-red">
             <WarningIcon className="mr-1 h-3 w-3" />
             {error}
           </p>
         )}
         {hint && (
-          <p className="flex items-center pl-3 text-white/50">
+          <p className="flex items-center pl-3 text-xs text-white/50">
             <InfoIcon className="mr-1 h-3 w-3" /> {hint}
           </p>
         )}

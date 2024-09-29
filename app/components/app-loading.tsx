@@ -4,12 +4,12 @@ import { cn } from '~/lib/utils'
 import useStore from '~/stores/useStore'
 
 const appLoadingVariants = cva(
-  'inset-x-0 inset-y-3 mx-auto z-50 flex flex-col items-center justify-center overflow-hidden rounded-xl',
+  'mx-auto z-50 flex flex-col items-center justify-center overflow-hidden rounded-xl',
   {
     variants: {
       variant: {
-        blur: 'absolute bg-[#333333]/50 backdrop-blur',
-        system: 'fixed bg-black bg-top bg-no-repeat',
+        blur: 'absolute inset-0 bg-[#333333]/50 backdrop-blur',
+        system: 'fixed inset-x-0 inset-y-3 bg-black bg-top bg-no-repeat',
       },
     },
     defaultVariants: {

@@ -1,85 +1,173 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
 import { useQuery } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
-import { Label } from '~/components/ui/label'
-import { depositCurrencies, cryptoDetails } from '~/consts/crypto'
-import InfoIcon from '~/icons/info.svg?react'
-import WarningIcon from '~/icons/warning.svg?react'
+import { cryptoDetails, isValidCrypto } from '~/consts/crypto'
 import { apis } from '~/api'
-import DepositViaAddressDialog from './deposit-via-address-sheet'
-import TonConnectButton from './ton-connect-button'
 
-const coins = depositCurrencies.map(crypto => ({
-  name: cryptoDetails[crypto].name,
-  icon: cryptoDetails[crypto].icon,
-}))
+import { CurrenciesSkeleton } from './skeleton'
+import DepositAddress from './deposit-address'
+import TonConnectButton from './ton-connect-button'
+import DepositViaAddressDialog from './deposit-via-address-sheet'
+import { removeTrailingZerosByCurrency, sanitizeAmountInputByCurrency } from '~/lib/amount'
+
+interface DepositFormData {
+  currency: string // 幣種
+  address: string // 地址
+  amount: string // 金额
+}
 
 export default function Deposit() {
-  const { data: depositSettingData, isLoading } = useQuery({
+  /* 充值設定 */
+  const { data: depositSettingData, isLoading: settingLoading } = useQuery({
     queryKey: ['getDepositSetting'],
     queryFn: apis.wallet.walletDepositSettingList,
   })
-  const [selectedCurrency, setSelectedCurrency] = useState('USDT')
+  /* 充值資訊 */
+  const { data: depositCreateData } = useQuery({
+    queryKey: ['walletDepositCreate'],
+    queryFn: apis.wallet.walletDepositCreate,
+  })
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    watch,
+    formState: { errors, isValid },
+  } = useForm<DepositFormData>({
+    defaultValues: { currency: '', address: '', amount: '' },
+  })
+  const selectedCurrency = watch('currency')
+
+  // ton-connect 相關
+  const [tonConnectUI] = useTonConnectUI()
+  const tonWallet = useTonWallet()
+
+  const currencies = useMemo(
+    () =>
+      depositSettingData?.data?.settings
+        ?.map(e => {
+          if (isValidCrypto(e.currency)) {
+            return {
+              name: e.currency as string,
+              icon: cryptoDetails[e.currency]?.icon,
+            }
+          }
+          return null
+        })
+        .filter((currency): currency is NonNullable<typeof currency> => Boolean(currency)),
+    [depositSettingData?.data?.settings]
+  )
+
+  const selectedCurrencySetting = useMemo(() => {
+    const settings = depositSettingData?.data?.settings
+    return settings?.find(item => item.currency === selectedCurrency)
+  }, [depositSettingData?.data, selectedCurrency])
+
+  const handleCurrencySelect = useCallback(
+    (currencyName: string) => {
+      setValue('currency', currencyName)
+    },
+    [setValue]
+  )
+
+  const onSubmit = (data: DepositFormData) => {
+    console.log('Form Data:', data)
+  }
 
   useEffect(() => {
-    console.log('depositSettingData', depositSettingData)
-  }, [depositSettingData])
+    if (currencies?.length && currencies[0]?.name) {
+      handleCurrencySelect(currencies[0].name)
+    }
+  }, [currencies, handleCurrencySelect, setValue])
+
+  useEffect(() => {
+    setValue('address', tonWallet?.account?.address || '')
+  }, [tonWallet, setValue])
+
+  useEffect(() => {
+    console.log('form errors', errors)
+  }, [errors])
 
   return (
     <div className="bg-black p-4">
-      <div className="flex flex-col justify-between space-y-2 rounded-xl bg-[#1C1C1C] p-3">
-        <p className="pl-3 text-xs text-white/70">Choose currency</p>
-        <div className="flex justify-between space-x-2">
-          {coins.map((coin, index) => (
-            <Button
-              key={`${coin}_${index}`}
-              className="h-7 flex-1"
-              variant="outlineSoft"
-              isSelected={selectedCurrency === coin.name}
-              onClick={() => setSelectedCurrency(coin.name)}
-            >
-              <coin.icon className="h-[18px] w-[18px]" />
-              <span className="pl-1">{coin.name}</span>
-            </Button>
-          ))}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        {/* Choose currency */}
+        <div className="flex flex-col justify-between space-y-2 rounded-xl bg-[#1C1C1C] p-3">
+          <p className="pl-3 text-xs text-white/70">Choose currency</p>
+          {settingLoading || !currencies?.length ? (
+            <CurrenciesSkeleton />
+          ) : (
+            <div className="flex justify-between space-x-2">
+              {currencies.map((currency, index) => (
+                <Button
+                  key={`${currency.name}_${index}`}
+                  className="h-7 flex-1"
+                  variant="outlineSoft"
+                  isSelected={selectedCurrency === currency.name}
+                  onClick={() => handleCurrencySelect(currency.name)}
+                >
+                  <currency.icon className="h-[18px] w-[18px]" />
+                  <span className="pl-1">{currency.name}</span>
+                </Button>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
+        <div className="mt-3 flex flex-col space-y-2 rounded-xl bg-[#1C1C1C] p-3">
+          {/* Deposit address */}
+          <DepositAddress />
 
-      <div className="mt-3 flex flex-col space-y-2 rounded-xl bg-[#1C1C1C] p-3">
-        {/* Amount */}
-        <div className="space-y-1">
-          <Label htmlFor="amount" className="text-xs">
-            Amount
-          </Label>
-          <Input className="h-9" id="amount" placeholder="Please enter" />
-          {
-            /* errors.amount */ false && (
-              <p className="flex items-center space-x-1 pl-3 text-xs text-app-red">
-                <WarningIcon className="h-3 w-3" />
-                {/* {errors.email.message} */}
-              </p>
-            )
-          }
-          <p className="flex items-center space-x-1 pl-3 text-xs text-white/50">
-            <InfoIcon className="h-3 w-3" />
-            <span>Range: 1,234,567.123456 ~ 123,456,789.123456</span>
-          </p>
+          {/* Amount */}
+          <Input
+            type="number"
+            inputMode="decimal"
+            pattern="[0-9.]*"
+            autoComplete="off"
+            className="h-9"
+            id="amount"
+            label="Amount"
+            placeholder="Please enter"
+            suffix={selectedCurrency}
+            error={errors.amount?.message}
+            clearable
+            onClear={() => setValue('amount', '', { shouldValidate: true })}
+            {...register('amount', {
+              setValueAs: value => sanitizeAmountInputByCurrency(value, selectedCurrency), // 在输入时处理格式
+              onBlur: e => {
+                const finalValue = removeTrailingZerosByCurrency(e.target.value, selectedCurrency) // 失去焦点或提交时去除尾随0
+                setValue('amount', finalValue, { shouldValidate: true })
+              },
+              required: 'Amount is required',
+              // validate,
+            })}
+          />
+          <div className="flex justify-between space-x-2">
+            {(selectedCurrencySetting?.presentAmounts || []).map(amount => (
+              <Button
+                key={amount}
+                className="h-7 flex-1"
+                variant="outlineSoft"
+                onClick={() => setValue('amount', amount, { shouldValidate: true })}
+              >
+                {amount}
+              </Button>
+            ))}
+          </div>
         </div>
-        {/* 快捷按钮 */}
-        <div className="flex justify-between space-x-2">
-          {[10, 100, 500, 1000].map(amount => (
-            <Button key={amount} className="h-7 flex-1" variant="outlineSoft">
-              {amount}
+        <div className="mt-6 flex flex-col items-stretch space-y-3">
+          {tonConnectUI.connected ? (
+            <Button disabled={!isValid} type="submit">
+              Deposit
             </Button>
-          ))}
+          ) : (
+            <TonConnectButton />
+          )}
+          <DepositViaAddressDialog currency={selectedCurrency} info={depositCreateData?.data} />
         </div>
-      </div>
-
-      <div className="mt-6 flex flex-col items-stretch space-y-3">
-        <TonConnectButton />
-        <DepositViaAddressDialog />
-      </div>
+      </form>
     </div>
   )
 }

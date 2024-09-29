@@ -892,14 +892,6 @@
         "tags": [
           "(*WalletController)"
         ],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "幣別(選填)",
-            "name": "currency",
-            "in": "query"
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1008,7 +1000,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Minimum: 1, Required)",
+            "description": "分頁頁數 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -1217,16 +1209,6 @@
         "tags": [
           "(*DepositController)"
         ],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -1311,14 +1293,6 @@
         "description": "Auto-generated API documentation",
         "tags": [
           "(*WalletController)"
-        ],
-        "parameters": [
-          {
-            "type": "string",
-            "description": "幣別(選填)",
-            "name": "currency",
-            "in": "query"
-          }
         ],
         "responses": {
           "200": {
@@ -1776,9 +1750,6 @@
           }
         }
       }
-    },
-    "DepositRequest": {
-      "type": "object"
     },
     "DepositResponse": {
       "type": "object",
@@ -2352,15 +2323,6 @@
       "properties": {
         "succeed": {
           "type": "boolean"
-        }
-      }
-    },
-    "WalletInfoRequest": {
-      "type": "object",
-      "properties": {
-        "Currency": {
-          "description": "幣別(選填)",
-          "type": "string"
         }
       }
     },

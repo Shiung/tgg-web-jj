@@ -9,7 +9,6 @@
  * ---------------------------------------------------------------
  */
 
-import { DepositRequest } from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Wallet<SecurityDataType = unknown> {
@@ -26,7 +25,7 @@ export class Wallet<SecurityDataType = unknown> {
    * @name WalletDepositCreate
    * @request POST:/ajax/wallet/deposit
    */
-  walletDepositCreate = (body: DepositRequest, params: RequestParams = {}) =>
+  walletDepositCreate = (params: RequestParams = {}) =>
     this.http.request<
       {
         /** ton交易的備註欄位，必填 */
@@ -38,8 +37,6 @@ export class Wallet<SecurityDataType = unknown> {
     >({
       path: `/ajax/wallet/deposit`,
       method: "POST",
-      body: body,
-      type: ContentType.Json,
       ...params,
     });
   /**
@@ -77,13 +74,7 @@ export class Wallet<SecurityDataType = unknown> {
    * @name WalletListList
    * @request GET:/ajax/wallet/list
    */
-  walletListList = (
-    query?: {
-      /** 幣別(選填) */
-      currency?: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  walletListList = (params: RequestParams = {}) =>
     this.http.request<
       {
         /**
@@ -125,7 +116,6 @@ export class Wallet<SecurityDataType = unknown> {
     >({
       path: `/ajax/wallet/list`,
       method: "GET",
-      query: query,
       ...params,
     });
   /**

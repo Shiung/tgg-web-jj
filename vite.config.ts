@@ -2,6 +2,7 @@ import { vitePlugin as remix } from '@remix-run/dev'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import svgr from 'vite-plugin-svgr'
+import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 export default defineConfig({
   css: {
@@ -32,6 +33,7 @@ export default defineConfig({
         },
       },
     }),
+    nodePolyfills({ include: ['buffer'] }),
   ],
   ssr: {
     noExternal: ['react-use'],

@@ -14,11 +14,17 @@ import ProtectedLink from '../protected-link'
 import classes from './index.module.scss'
 
 export const links = [
-  { href: '/', i18n: 'game', SvgComponent: NavGame, needLogin: false },
-  { href: '/rank', i18n: 'rank', SvgComponent: NavRank, needLogin: false },
-  { href: '/task', i18n: 'task', SvgComponent: NavTask, needLogin: false },
-  { href: '/share-invite', i18n: 'share', SvgComponent: NavShare, needLogin: false },
-  { href: '/wallet', i18n: 'wallet', SvgComponent: NavWallet, needLogin: true },
+  { href: '/', i18n: 'game', SvgComponent: NavGame, needLogin: false, comp: Link },
+  { href: '/rank', i18n: 'rank', SvgComponent: NavRank, needLogin: false, comp: Link },
+  { href: '/task', i18n: 'task', SvgComponent: NavTask, needLogin: false, comp: Link },
+  { href: '/share-invite', i18n: 'share', SvgComponent: NavShare, needLogin: false, comp: Link },
+  {
+    href: '/wallet/deposit',
+    i18n: 'wallet',
+    SvgComponent: NavWallet,
+    needLogin: true,
+    comp: ProtectedLink,
+  },
 ] as const
 
 const MainNav: React.FC = () => {
@@ -60,37 +66,34 @@ const MainNav: React.FC = () => {
       style={{ maxWidth: maxWidth }}
     >
       <div className="flex h-full w-full rounded-lg bg-black px-2 py-4 shadow backdrop-blur-md backdrop-saturate-150">
-        {links.map((link, index) => {
-          const LinkComp = link.needLogin ? ProtectedLink : Link
-          return (
-            <LinkComp
-              key={index}
-              to={link.href}
-              prefetch="viewport"
-              className="relative flex shrink-0 grow basis-0 flex-col items-center justify-center"
-              onClick={() => handleClick(link.href)}
-            >
-              <div className="flex flex-col items-center">
-                <link.SvgComponent
-                  width={25}
-                  height={24}
-                  className={cn(
-                    'transition-all duration-300',
-                    isActive(link.href) ? 'opacity-100 grayscale-0' : 'opacity-50 grayscale'
-                  )}
-                />
-                <span
-                  className={cn(
-                    'mt-1 text-xs font-ultra',
-                    isActive(link.href) ? 'text-primary' : 'text-while'
-                  )}
-                >
-                  {t(link.i18n)}
-                </span>
-              </div>
-            </LinkComp>
-          )
-        })}
+        {links.map((link, index) => (
+          <link.comp
+            key={index}
+            to={link.href}
+            prefetch="viewport"
+            className="relative flex shrink-0 grow basis-0 flex-col items-center justify-center"
+            onClick={() => handleClick(link.href)}
+          >
+            <div className="flex flex-col items-center">
+              <link.SvgComponent
+                width={25}
+                height={24}
+                className={cn(
+                  'transition-all duration-300',
+                  isActive(link.href) ? 'opacity-100 grayscale-0' : 'opacity-50 grayscale'
+                )}
+              />
+              <span
+                className={cn(
+                  'mt-1 text-xs font-ultra',
+                  isActive(link.href) ? 'text-primary' : 'text-while'
+                )}
+              >
+                {t(link.i18n)}
+              </span>
+            </div>
+          </link.comp>
+        ))}
       </div>
     </nav>
   )

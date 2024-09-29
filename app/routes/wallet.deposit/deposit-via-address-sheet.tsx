@@ -14,10 +14,21 @@ import { Button } from '~/components/ui/button'
 import { Label } from '~/components/ui/label'
 import { Input } from '~/components/ui/input'
 import { useToast } from '~/hooks/use-toast'
+import { Skeleton } from '~/components/ui/skeleton'
+import QRCode from '~/components/qr-code'
 import CopyIcon from '~/icons/copy.svg?react'
 import InfoIcon from '~/icons/info.svg?react'
+import { cryptoDetails, isValidCrypto } from '~/consts/crypto'
 
-export default function DepositViaAddressDialog() {
+interface DepositViaAddressDialogProps {
+  currency: string
+  info?: {
+    depositAddress: string
+    comment: string
+  }
+}
+
+const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ currency, info }) => {
   const [state, copyToClipboard] = useCopyToClipboard()
   const { toast } = useToast()
 
@@ -29,6 +40,7 @@ export default function DepositViaAddressDialog() {
     })
   }, [state, toast])
 
+  if (!info) return <Skeleton className="h-9 w-full rounded-full" />
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -42,9 +54,19 @@ export default function DepositViaAddressDialog() {
         </SheetHeader>
         <SheetClose />
 
-        <div className="flex flex-col items-center px-3 py-4">
+        <div className="flex flex-col items-center px-3 pt-4">
           {/* qr code */}
-          <div className="aspect-square w-[160px] bg-primary"></div>
+          {info?.depositAddress ? (
+            <QRCode
+              value={info?.depositAddress}
+              size={160}
+              logoImage={isValidCrypto(currency) ? cryptoDetails[currency].img : undefined}
+              logoSize={30}
+              backgroundColor="#ffffff"
+            />
+          ) : (
+            <Skeleton className="h-[160px] w-[160px]" />
+          )}
           {/* Deposit Address */}
           <div className="mt-6 w-full space-y-1">
             <Label htmlFor="address" className="text-xs">
@@ -54,12 +76,13 @@ export default function DepositViaAddressDialog() {
               readOnly
               className="h-9"
               id="address"
+              value={info?.depositAddress}
               suffix={
                 <Button
                   variant="icon"
                   size="icon"
                   className="h-4 w-4 text-white"
-                  onClick={() => copyToClipboard('')}
+                  onClick={() => copyToClipboard(info?.depositAddress || '')}
                 >
                   <CopyIcon className="h-full w-full" />
                 </Button>
@@ -75,12 +98,13 @@ export default function DepositViaAddressDialog() {
               readOnly
               className="h-9"
               id="comment"
+              value={info?.comment}
               suffix={
                 <Button
                   variant="icon"
                   size="icon"
                   className="h-4 w-4 text-white"
-                  onClick={() => copyToClipboard('')}
+                  onClick={() => copyToClipboard(info?.comment || '')}
                 >
                   <CopyIcon className="h-full w-full" />
                 </Button>
@@ -111,3 +135,5 @@ export default function DepositViaAddressDialog() {
     </Sheet>
   )
 }
+
+export default DepositViaAddressDialog

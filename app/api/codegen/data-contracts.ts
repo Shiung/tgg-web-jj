@@ -130,8 +130,6 @@ export interface CommissionListResponse {
   };
 }
 
-export type DepositRequest = object;
-
 export interface DepositResponse {
   /** ton交易的備註欄位，必填 */
   comment: string;
@@ -432,11 +430,6 @@ export interface VerifyCodeRequest {
 
 export interface VerifyCodeResponse {
   succeed?: boolean;
-}
-
-export interface WalletInfoRequest {
-  /** 幣別(選填) */
-  Currency?: string;
 }
 
 export interface WalletListResponse {

@@ -25,13 +25,7 @@ export class Header<SecurityDataType = unknown> {
    * @name HeaderWalletList
    * @request GET:/ajax/header/wallet
    */
-  headerWalletList = (
-    query?: {
-      /** 幣別(選填) */
-      currency?: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  headerWalletList = (params: RequestParams = {}) =>
     this.http.request<
       {
         /**
@@ -67,7 +61,6 @@ export class Header<SecurityDataType = unknown> {
     >({
       path: `/ajax/header/wallet`,
       method: "GET",
-      query: query,
       ...params,
     });
 }
