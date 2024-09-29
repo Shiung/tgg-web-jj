@@ -65,10 +65,6 @@ const useAutoLogin = () => {
   const { mutate: doLogin } = useLogin()
 
   useEffect(() => {
-    if (token) {
-      setHeaderToken(token)
-      return
-    }
     if (!telegramInitData) return
 
     // 有 telegram launch params 时，自動登入
