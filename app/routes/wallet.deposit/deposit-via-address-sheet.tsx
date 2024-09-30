@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Close as SheetPrimitiveClose } from '@radix-ui/react-dialog'
 import { useCopyToClipboard } from 'react-use'
+import { QRCode } from 'react-qrcode-logo'
 import {
   Sheet,
   SheetTrigger,
@@ -15,7 +16,6 @@ import { Label } from '~/components/ui/label'
 import { Input } from '~/components/ui/input'
 import { useToast } from '~/hooks/use-toast'
 import { Skeleton } from '~/components/ui/skeleton'
-import QRCode from '~/components/qr-code'
 import CopyIcon from '~/icons/copy.svg?react'
 import InfoIcon from '~/icons/info.svg?react'
 import { cryptoDetails, isValidCrypto } from '~/consts/crypto'
@@ -60,9 +60,10 @@ const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ curre
             <QRCode
               value={info?.depositAddress}
               size={160}
+              enableCORS
               logoImage={isValidCrypto(currency) ? cryptoDetails[currency].img : undefined}
-              logoSize={30}
-              backgroundColor="#ffffff"
+              logoPadding={2}
+              removeQrCodeBehindLogo
             />
           ) : (
             <Skeleton className="h-[160px] w-[160px]" />

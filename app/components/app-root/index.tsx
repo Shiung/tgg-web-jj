@@ -8,12 +8,12 @@ import {
 } from '@telegram-apps/sdk-react'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import useStore from '~/stores/useStore'
 import { useTelegramMock } from '~/hooks/useTelegramMock'
 import useTelegramNavigate from '~/hooks/useTelegramNavigate'
-import { useAutoLogin } from '~/hooks/api/useAuth'
-import { useTranslation } from 'react-i18next'
+import { useTelegramAutoLogin } from '~/hooks/useTelegramLogin'
 import { cn, mapSystemLanguageCode } from '~/lib/utils'
 
 import classes from './index.module.scss'
@@ -29,7 +29,7 @@ const queryClient = new QueryClient({
 const TelegramInit: React.FC = () => {
   useTelegramNavigate()
   const { i18n } = useTranslation()
-  const setTelegramInitData = useStore(state => state.setTelegramInitData)
+  const setTelegramInitDataByInitData = useStore(state => state.setTelegramInitDataByInitData)
   const navigate = useNavigate()
   const swipeBehavior = useSwipeBehavior()
   const launchParams = useLaunchParams(true)
@@ -37,7 +37,7 @@ const TelegramInit: React.FC = () => {
   const miniApp = useMiniApp()
 
   // 自動登入
-  useAutoLogin()
+  useTelegramAutoLogin(launchParams?.initData)
 
   // 避免下滑意外關閉 miniapp
   useEffect(() => {
@@ -57,9 +57,9 @@ const TelegramInit: React.FC = () => {
 
     const initData = launchParams.initData
     const systemLanguageCode = mapSystemLanguageCode(initData.user?.languageCode)
-    setTelegramInitData(initData)
+    initData?.user && setTelegramInitDataByInitData(initData.user)
     i18n.changeLanguage(systemLanguageCode)
-  }, [i18n, launchParams, miniApp, setTelegramInitData])
+  }, [i18n, launchParams, miniApp, setTelegramInitDataByInitData])
 
   useEffect(() => {
     if (startParam === 'debug') {

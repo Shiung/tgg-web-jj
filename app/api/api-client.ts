@@ -7,13 +7,15 @@ interface SecurityDataType {
 
 // 初始化全局的 HttpClient 实例
 export const apiClient = new HttpClient<SecurityDataType>({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: process.env.NODE_ENV === 'development' ? '/' : import.meta.env.VITE_API_BASE_URL,
   timeout: 5000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',
   },
   secure: true,
+  withCredentials: true,
+  // TODO: 待 session 管理方案实现后移除
   securityWorker: securityData => {
     if (securityData && securityData.token) {
       return {
@@ -53,6 +55,7 @@ apiClient.instance.interceptors.response.use(
   }
 )
 
+// TODO: 待 session 管理方案实现后移除
 export const setHeaderToken = (token: string) => {
   apiClient.setSecurityData({ token })
 }

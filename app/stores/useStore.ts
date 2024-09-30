@@ -13,4 +13,9 @@ const useStore = create<Store>((...a) => ({
   ...createUserSlice(...a),
 }))
 
+/**
+ * Getting non-reactive fresh state
+ * https://github.com/pmndrs/zustand?tab=readme-ov-file#readingwriting-state-and-reacting-to-changes-outside-of-components
+ */
+export const getState = useStore.getState
 export default useStore

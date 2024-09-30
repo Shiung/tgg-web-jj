@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { type AxiosResponse } from 'axios'
-import { useLogin } from '~/hooks/api/useAuth'
+import { prepareLoginRequest, useLogin } from '~/hooks/api/useAuth'
 import { LoginRequest, LoginResponse } from '~/api/codegen/data-contracts'
 import { detectOS } from '~/lib/utils'
 import { TelegramUser } from '~/components/telegram-login-button/types'
+import { InitDataParsed } from '@telegram-apps/sdk-react'
+import useStore from '~/stores/useStore'
 
 const BOT_ID = import.meta.env.VITE_BOT_ID
 
@@ -13,12 +15,11 @@ interface UseTelegramLoginProps {
 
 export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
   const [scriptLoaded, setScriptLoaded] = useState(false)
-  const [telegramUserData, setTelegramUserData] = useState<TelegramUser>()
+  const setTelegramInitDataByWidgetLogin = useStore(state => state.setTelegramInitDataByWidgetLogin)
   const { mutate: doLogin } = useLogin({
     onSuccess(data) {
       console.log('useTelegramLogin success:', data, onSuccess)
-
-      if (onSuccess) onSuccess(data, telegramUserData)
+      if (onSuccess) onSuccess(data)
     },
   })
 
@@ -31,7 +32,7 @@ export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
         },
         async user => {
           if (user) {
-            setTelegramUserData(user)
+            setTelegramInitDataByWidgetLogin(user)
             console.log('login tg data', user)
             const loginData: LoginRequest = {
               avatar: user?.photo_url || '',
@@ -58,7 +59,7 @@ export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
         }
       )
     }
-  }, [doLogin, scriptLoaded])
+  }, [doLogin, scriptLoaded, setTelegramInitDataByWidgetLogin])
 
   useEffect(() => {
     // 避免重複載入
@@ -87,4 +88,28 @@ export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
   }, [])
 
   return { handleLogin, scriptLoaded }
+}
+
+export const useTelegramAutoLogin = (initData: InitDataParsed | undefined) => {
+  const token = useStore(state => state.token)
+  const isLoggedIn = useStore(state => state.isLoggedIn)
+
+  const { mutate: doLogin } = useLogin()
+
+  useEffect(() => {
+    if (!initData || isLoggedIn) return
+
+    // 有 telegram launch params 时，自動登入
+    const handleLogin = async () => {
+      const loginData = prepareLoginRequest(initData)
+      if (!loginData) return
+      try {
+        await doLogin(loginData)
+      } catch (error) {
+        console.error('Login failed inline:', error)
+      }
+    }
+
+    handleLogin()
+  }, [doLogin, token, initData, isLoggedIn])
 }

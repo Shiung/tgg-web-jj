@@ -44,8 +44,6 @@ const MainNav: React.FC = () => {
 
   const handleClick = useCallback(
     (href: string) => {
-      console.log('MainNav handleClick', href, hapticFeedback)
-
       setActiveLink(href)
       hapticFeedback?.impactOccurred('medium')
     },

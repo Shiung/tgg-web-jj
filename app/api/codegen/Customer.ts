@@ -159,7 +159,7 @@ export class Customer<SecurityDataType = unknown> {
        * Telegram id
        * @format int64
        */
-      id: number;
+      id?: number;
       /** language_code */
       languageCode?: string;
       /** last_name */

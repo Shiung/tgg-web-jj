@@ -1,14 +1,13 @@
-import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
+import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
 import AlertDialog from '~/components/alert-dialog'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
-import { convertToUserFriendlyAddress } from '~/lib/ton'
 import UnlinkIcon from '~/icons/unlink.svg?react'
 import { useState } from 'react'
 
 const DepositAddress: React.FC = () => {
   const [tonConnectUI] = useTonConnectUI()
-  const tonWallet = useTonWallet()
+  const userFriendlyAddress = useTonAddress()
   const [isAlertOpen, setIsAlertOpen] = useState(false)
 
   const openDialog = () => setIsAlertOpen(true)
@@ -33,7 +32,7 @@ const DepositAddress: React.FC = () => {
           className="h-9"
           id="address"
           label="Deposit address"
-          value={convertToUserFriendlyAddress(tonWallet?.account?.address || '')}
+          value={userFriendlyAddress}
           suffix={
             <Button
               variant="icon"

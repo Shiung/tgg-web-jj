@@ -6,22 +6,22 @@ import useStore from '~/stores/useStore'
 type UserWallet = NonNullable<WalletListResponse['wallets']>[number]
 
 const useGetHeaderWallet = (query: { currency?: string } = {}) => {
-  const token = useStore(state => state.token)
+  const isLoggedIn = useStore(state => state.isLoggedIn)
 
   return useQuery({
     queryKey: ['getHeaderWallet'],
     queryFn: () => apis.header.headerWalletList(query),
-    enabled: !!token,
+    enabled: !!isLoggedIn,
   })
 }
 
 const useGetWalletList = (query: { currency?: string } = {}) => {
-  const token = useStore(state => state.token)
+  const isLoggedIn = useStore(state => state.isLoggedIn)
 
   return useQuery({
     queryKey: ['getWalletList'],
     queryFn: () => apis.wallet.walletListList(query),
-    enabled: !!token,
+    enabled: !!isLoggedIn,
   })
 }
 

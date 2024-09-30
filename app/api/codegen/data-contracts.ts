@@ -326,7 +326,7 @@ export interface LoginRequest {
    * Telegram id
    * @format int64
    */
-  id: number;
+  id?: number;
   /** language_code */
   languageCode?: string;
   /** last_name */

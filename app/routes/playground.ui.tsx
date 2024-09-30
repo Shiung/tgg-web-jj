@@ -174,17 +174,17 @@ export default function Ui() {
                 onConfirm={(selectedValue: string) => field.onChange(selectedValue)}
               >
                 <DropdownOption
-                  value="lv1"
+                  value="1"
                   label="LV1"
                   suffix={<WarningIcon className="h-4 w-4" />}
                 />
                 <DropdownOption
-                  value="lv2"
+                  value="2"
                   label="LV2"
                   suffix={<WarningIcon className="h-4 w-4" />}
                 />
-                <DropdownOption value="lv3" label="LV3" />
-                <DropdownOption value="lv4" label="LV4" />
+                <DropdownOption value="3" label="LV3" />
+                <DropdownOption value="4" label="LV4" />
                 <DropdownOption value="all" label="LV: ALL" />
               </DropdownSheet>
             </div>

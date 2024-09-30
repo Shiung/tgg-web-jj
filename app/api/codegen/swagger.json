@@ -460,7 +460,6 @@
             "schema": {
               "type": "object",
               "required": [
-                "id",
                 "productId",
                 "version",
                 "os",
@@ -742,7 +741,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -2113,7 +2112,6 @@
     "LoginRequest": {
       "type": "object",
       "required": [
-        "id",
         "productId",
         "version",
         "os",

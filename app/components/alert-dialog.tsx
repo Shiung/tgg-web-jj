@@ -14,7 +14,7 @@ interface AlertDialogProps {
   onClose: () => void
   title?: string
   message: string
-  variant?: 'warning' | 'success'
+  variant?: 'notice' | 'success'
   onConfirm?: () => void
 }
 
@@ -23,11 +23,11 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   onClose,
   title = 'Notice',
   message,
-  variant = 'warning',
+  variant = 'notice',
   onConfirm,
 }) => {
   const imageSrc = useMemo(
-    () => (variant === 'warning' ? '/images/system-warning.png' : '/images/system-notice.png'),
+    () => (variant === 'notice' ? '/images/system-notice.png' : '/images/system-success.png'),
     [variant]
   )
   const handleOk = () => {

@@ -37,16 +37,15 @@ const ProfileDialog: React.FC = () => {
   const [state, copyToClipboard] = useCopyToClipboard()
   const { toast } = useToast()
   const { i18n } = useTranslation()
-  const { token, telegramInitData, setInfo } = useStore(state => state)
+  const { isLoggedIn, telegramUserData, setInfo } = useStore(state => state)
   const { data, refetch } = useQuery({
     queryKey: ['customerInfo'],
     queryFn: apis.customer.customerInfoList,
-    enabled: !!token,
+    enabled: !!isLoggedIn,
   })
   const userData = data?.data ?? empty
 
   useEffect(() => {
-    console.log('store update ***')
     setInfo(userData)
   }, [userData, setInfo])
 
@@ -62,7 +61,7 @@ const ProfileDialog: React.FC = () => {
     <Dialog>
       <DialogTrigger asChild>
         <Avatar className="cursor-pointer">
-          <AvatarImage src={telegramInitData?.user?.photoUrl || ''} />
+          <AvatarImage src={telegramUserData?.photoUrl || ''} />
           <AvatarFallback delayMs={600} />
         </Avatar>
       </DialogTrigger>
@@ -74,7 +73,7 @@ const ProfileDialog: React.FC = () => {
             alt="profile"
             className="h-20 w-20 object-contain"
           />
-          <span className="mt-1 text-base font-ultra">{`${telegramInitData?.user?.firstName} ${telegramInitData?.user?.lastName}`}</span>
+          <span className="mt-1 text-base font-ultra">{`${telegramUserData?.firstName || ''} ${telegramUserData?.lastName || ''}`}</span>
         </DialogHeader>
         <div className="flex flex-col space-y-4 p-3 text-sm text-white/70">
           {/* Player ID */}
