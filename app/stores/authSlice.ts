@@ -31,7 +31,8 @@ const getStoredValue = (key: string): string | undefined => {
   return undefined
 }
 
-const initialLoginStatus = !!getCookie('website_session')
+// TODO: 待 session 管理方案实现后移除
+const initialLoginStatus = !!getCookie('website_session') || !!getStoredValue('token')
 const initialToken: string | undefined = getStoredValue('token')
 let initialDeviceId: string | undefined = getStoredValue('deviceId')
 

@@ -42,7 +42,7 @@ export const cryptoRules: Record<
 > = {
   [Crypto.USDT]: { maxInt: 9, maxDec: 6 },
   [Crypto.TON]: { maxInt: 6, maxDec: 9 },
-  [Crypto.KOKON]: { maxInt: 9, maxDec: 0 },
+  [Crypto.KOKON]: { maxInt: 15, maxDec: 0 },
 }
 
 export const isValidCrypto = (currency: string): currency is Crypto => {

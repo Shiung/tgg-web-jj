@@ -78,14 +78,14 @@ const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ curre
               className="h-9"
               id="address"
               value={info?.depositAddress}
-              suffix={
+              fieldSuffix={
                 <Button
                   variant="icon"
                   size="icon"
-                  className="h-4 w-4 text-white"
+                  className="h-6 w-6 text-white"
                   onClick={() => copyToClipboard(info?.depositAddress || '')}
                 >
-                  <CopyIcon className="h-full w-full" />
+                  <CopyIcon className="h-4 w-4" />
                 </Button>
               }
             />
@@ -100,14 +100,14 @@ const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ curre
               className="h-9"
               id="comment"
               value={info?.comment}
-              suffix={
+              fieldSuffix={
                 <Button
                   variant="icon"
                   size="icon"
-                  className="h-4 w-4 text-white"
+                  className="h-6 w-6 text-white"
                   onClick={() => copyToClipboard(info?.comment || '')}
                 >
-                  <CopyIcon className="h-full w-full" />
+                  <CopyIcon className="h-4 w-4" />
                 </Button>
               }
             />

@@ -1,6 +1,7 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 import { InitDataParsed } from '@telegram-apps/sdk-react'
 import { type AxiosResponse } from 'axios'
+import { setHeaderToken } from '~/api/api-client'
 import { LoginRequest, LoginResponse } from '~/api/codegen/data-contracts'
 import { apis } from '~/api/index'
 import { detectOS } from '~/lib/utils'
@@ -39,8 +40,9 @@ const useLogin = (options?: UseLoginOptions) => {
     onSuccess: (data, variables, context) => {
       const token = data?.data.token
       if (token) {
+        // TODO: 待 session 管理方案实现后移除
         setToken(token)
-        // setHeaderToken(token)
+        setHeaderToken(token)
       }
 
       if (options?.onSuccess) {

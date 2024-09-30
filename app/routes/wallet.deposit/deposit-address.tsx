@@ -33,12 +33,12 @@ const DepositAddress: React.FC = () => {
           id="address"
           label="Deposit address"
           value={userFriendlyAddress}
-          suffix={
+          fieldSuffix={
             <Button
               variant="icon"
               size="icon"
               type="button"
-              className="h-4 w-4"
+              className="h-8 w-6"
               onClick={handleWalletDisconnect}
             >
               <UnlinkIcon className="h-4 w-4" />

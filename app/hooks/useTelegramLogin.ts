@@ -97,7 +97,8 @@ export const useTelegramAutoLogin = (initData: InitDataParsed | undefined) => {
   const { mutate: doLogin } = useLogin()
 
   useEffect(() => {
-    if (!initData || isLoggedIn) return
+    // TODO: 待 session 管理方案实现后移除
+    if (!initData /* || isLoggedIn */) return
 
     // 有 telegram launch params 时，自動登入
     const handleLogin = async () => {

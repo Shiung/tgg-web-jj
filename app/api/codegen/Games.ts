@@ -21,6 +21,65 @@ export class Games<SecurityDataType = unknown> {
   /**
    * @description Auto-generated API documentation
    *
+   * @tags (*VenueController)
+   * @name GamesList
+   * @request GET:/ajax/games
+   */
+  gamesList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /** 列表 */
+        list: {
+          /**
+           * 遊戲ID
+           * @min 1
+           * @max 50
+           */
+          gameCode: string;
+          /**
+           * 遊戲Logo
+           * @min 1
+           * @max 200
+           */
+          gameLogo: string;
+          /**
+           * 遊戲名稱
+           * @min 1
+           * @max 50
+           */
+          gameName: string;
+          /**
+           * 遊戲類型
+           * @format uint64
+           */
+          gameType: number;
+          /**
+           * SubGameID
+           * @format uint64
+           */
+          id: number;
+          /** 語言翻譯 */
+          translations: ({
+            /**
+             * 遊戲名稱
+             * @min 0
+             * @max 50
+             */
+            gameName?: string;
+            /** 語言代碼ex: 'en','ja','ko','ar','es','fr'. Allowed Enum */
+            language: "en" | "ja" | "ko" | "ar" | "es" | "fr";
+          } | null)[];
+        }[];
+      },
+      any
+    >({
+      path: `/ajax/games`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
    * @tags (*GameController)
    * @name GamesEnterCreate
    * @request POST:/ajax/games/{id}/enter

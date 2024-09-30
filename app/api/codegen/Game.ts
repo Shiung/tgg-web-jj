@@ -83,11 +83,8 @@ export class Game<SecurityDataType = unknown> {
        * @format date-time
        */
       endTime: string;
-      /**
-       *  (Required)
-       * @format uint64
-       */
-      gameId: number;
+      /** @format uint64 */
+      gameId?: number;
       /**
        * 分頁頁數 (Required, Minimum: 1)
        * @format int64
@@ -95,7 +92,7 @@ export class Game<SecurityDataType = unknown> {
        */
       page: number;
       /**
-       * 分頁筆數 (Minimum: 20, Required)
+       * 分頁筆數 (Required, Minimum: 20)
        * @format int64
        * @min 20
        */
@@ -105,12 +102,27 @@ export class Game<SecurityDataType = unknown> {
   ) =>
     this.http.request<
       {
-        /**
-         * 分頁筆數
-         * @format int64
-         * @min 20
-         */
-        pageSize: number;
+        /** 分頁 */
+        pagination?: {
+          /**
+           * 分頁筆數
+           * @format int64
+           * @min 20
+           */
+          pageSize: number;
+          /**
+           * 總頁數
+           * @format int64
+           * @min 0
+           */
+          totalPage?: number | null;
+          /**
+           * 總筆數
+           * @format int64
+           * @min 0
+           */
+          totalRecord?: number | null;
+        };
         records?: ({
           /** 投注金額 */
           betGold: string;
@@ -133,18 +145,6 @@ export class Game<SecurityDataType = unknown> {
           /** 輸贏金額(KOKON) */
           winGoldKokon: string;
         } | null)[];
-        /**
-         * 總頁數
-         * @format int64
-         * @min 0
-         */
-        totalPage?: number | null;
-        /**
-         * 總筆數
-         * @format int64
-         * @min 0
-         */
-        totalRecord?: number | null;
       },
       any
     >({

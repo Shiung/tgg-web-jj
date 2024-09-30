@@ -1,4 +1,12 @@
-import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
+import {
+  Children,
+  createContext,
+  isValidElement,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 import {
   Sheet,
   SheetTrigger,
@@ -12,8 +20,8 @@ import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import { cn } from '~/lib/utils'
 
 interface DropdownBottomSheetContextType {
-  selectedValue: string | undefined
-  setSelectedValue: (value: string) => void
+  innerSelectedOption: { value: string; label: string | ReactNode } | undefined
+  setInnerSelectedOption: (option: { value: string; label: string | ReactNode }) => void
 }
 
 const DropdownBottomSheetContext = createContext<DropdownBottomSheetContextType | null>(null)
@@ -36,31 +44,48 @@ const DropdownSheet = ({
   children,
 }: DropdownBottomSheetProps) => {
   const [open, setOpen] = useState(false)
-  const [selectedValue, setSelectedValue] = useState<string | undefined>(value)
+  const [selectedOption, setSelectedOption] = useState<
+    { value: string; label: string | ReactNode } | undefined
+  >()
+  const [innerSelectedOption, setInnerSelectedOption] = useState<
+    { value: string; label: string | ReactNode } | undefined
+  >()
 
   useEffect(() => {
-    setSelectedValue(value)
-  }, [value])
+    if (value && children) {
+      // Find the label corresponding to the initial value
+      let foundLabel: string | ReactNode | undefined
+      Children.forEach(children, child => {
+        if (isValidElement(child) && child.props.value === value) {
+          foundLabel = child.props.label
+        }
+      })
+      setSelectedOption({ value, label: foundLabel || value })
+    } else {
+      setSelectedOption(undefined)
+    }
+  }, [value, children])
+
+  useEffect(() => {
+    if (open) {
+      setInnerSelectedOption(selectedOption)
+    }
+  }, [open, selectedOption])
 
   const handleConfirm = () => {
+    setSelectedOption(innerSelectedOption)
     if (onConfirm) {
-      onConfirm(selectedValue || '')
+      onConfirm(innerSelectedOption?.value || '')
     }
     setOpen(false)
   }
 
-  const handleOptionSelect = (selected: string) => {
-    setSelectedValue(selected)
-  }
-
   return (
-    <DropdownBottomSheetContext.Provider
-      value={{ selectedValue, setSelectedValue: handleOptionSelect }}
-    >
+    <DropdownBottomSheetContext.Provider value={{ innerSelectedOption, setInnerSelectedOption }}>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger asChild>
           <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
-            <span>{value || placeholder}</span>
+            <span>{selectedOption?.label || placeholder}</span>
             <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
           </Button>
         </SheetTrigger>
@@ -95,13 +120,13 @@ const DropdownOption: React.FC<DropdownOptionProps> = ({ value, label, suffix, c
     throw new Error('DropdownOption must be used within DropdownSheet')
   }
 
-  const { selectedValue, setSelectedValue } = context
+  const { innerSelectedOption, setInnerSelectedOption } = context
 
   return (
     <Button
       variant="menu"
-      isSelected={selectedValue === value}
-      onClick={() => setSelectedValue(value)}
+      isSelected={innerSelectedOption?.value === value}
+      onClick={() => setInnerSelectedOption({ value, label })}
       className={cn('flex w-full items-center justify-between space-x-2', className)}
     >
       {typeof label === 'string' ? <span>{label}</span> : label}

@@ -1,50 +1,60 @@
-import { useCallback, useEffect, useMemo } from 'react'
-import { useTonConnectUI, useTonWallet } from '@tonconnect/ui-react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { ConnectedWallet, useTonConnectUI } from '@tonconnect/ui-react'
+import { beginCell, toNano } from '@ton/ton'
 import { useQuery } from '@tanstack/react-query'
-import { useForm } from 'react-hook-form'
+import { NumericFormat } from 'react-number-format'
+import { Controller, useForm } from 'react-hook-form'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
-import { cryptoDetails, isValidCrypto } from '~/consts/crypto'
+import { cryptoDetails, cryptoRules, isValidCrypto, Crypto } from '~/consts/crypto'
+import { useToast } from '~/hooks/use-toast'
 import { apis } from '~/api'
 
 import { CurrenciesSkeleton } from './skeleton'
 import DepositAddress from './deposit-address'
 import TonConnectButton from './ton-connect-button'
 import DepositViaAddressDialog from './deposit-via-address-sheet'
-import { removeTrailingZerosByCurrency, sanitizeAmountInputByCurrency } from '~/lib/amount'
 
 interface DepositFormData {
   currency: string // 幣種
   address: string // 地址
+  comment: string // 備註
   amount: string // 金额
 }
 
 export default function Deposit() {
-  /* 充值設定 */
+  // ton-connect 相關
+  const [tonConnectUI] = useTonConnectUI()
+  const [isConnected, setIsConnected] = useState(tonConnectUI.connected)
+
+  /* 獲取充值設定 */
   const { data: depositSettingData, isLoading: settingLoading } = useQuery({
     queryKey: ['getDepositSetting'],
     queryFn: apis.wallet.walletDepositSettingList,
   })
-  /* 充值資訊 */
+  /* 獲取充值資訊 */
   const { data: depositCreateData } = useQuery({
     queryKey: ['walletDepositCreate'],
     queryFn: apis.wallet.walletDepositCreate,
   })
+
   const {
-    register,
+    control,
     handleSubmit,
     setValue,
+    setFocus,
     watch,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
   } = useForm<DepositFormData>({
-    defaultValues: { currency: '', address: '', amount: '' },
+    defaultValues: { currency: '', address: '', comment: '', amount: '' },
+    mode: 'onChange',
   })
+
   const selectedCurrency = watch('currency')
 
-  // ton-connect 相關
-  const [tonConnectUI] = useTonConnectUI()
-  const tonWallet = useTonWallet()
+  const { toast } = useToast()
 
+  // Prepare currencies
   const currencies = useMemo(
     () =>
       depositSettingData?.data?.settings
@@ -66,6 +76,10 @@ export default function Deposit() {
     return settings?.find(item => item.currency === selectedCurrency)
   }, [depositSettingData?.data, selectedCurrency])
 
+  const selectedCurrencyRule = useMemo(() => {
+    return isValidCrypto(selectedCurrency) ? cryptoRules[selectedCurrency] : null
+  }, [selectedCurrency])
+
   const handleCurrencySelect = useCallback(
     (currencyName: string) => {
       setValue('currency', currencyName)
@@ -73,9 +87,61 @@ export default function Deposit() {
     [setValue]
   )
 
-  const onSubmit = (data: DepositFormData) => {
+  const onSubmit = async (data: DepositFormData) => {
     console.log('Form Data:', data)
+    if (!isValid) return
+    if (!isValidCrypto(data.currency)) return
+
+    let transaction
+    if (data.currency === Crypto.TON) {
+      const body = beginCell().storeUint(0, 32).storeStringTail('').endCell()
+      transaction = {
+        validUntil: Math.floor(Date.now() / 1000) + 360, // 当前时间 + 6 分钟（单位：秒）
+        messages: [
+          {
+            address: data.address,
+            amount: toNano(data.amount).toString(), // nanoton
+            payload: body.toBoc().toString('base64'),
+          },
+        ],
+      }
+    } else if (data.currency === Crypto.USDT) {
+      console.log('USDT')
+    }
+    if (!transaction) return
+    console.log('交易信息:', transaction)
+
+    // 處理 TON 交易
+    try {
+      const result = await tonConnectUI.sendTransaction(transaction)
+      console.log('交易成功發送', result)
+      // TODO: 換 Notification 樣式
+      toast({
+        title: 'Deposited successfully',
+        variant: 'success',
+      })
+    } catch (error) {
+      toast({
+        title: 'Deposited unsuccessfully',
+        variant: 'error',
+      })
+      console.error('交易失敗:', error)
+    }
   }
+
+  useEffect(() => {
+    const handleStatusChange = (walletInfo: ConnectedWallet | null) => {
+      if (walletInfo?.account) {
+        setIsConnected(true)
+      } else {
+        setIsConnected(false)
+      }
+    }
+    const unsubscribe = tonConnectUI.onStatusChange(handleStatusChange)
+    return () => {
+      unsubscribe()
+    }
+  }, [tonConnectUI])
 
   useEffect(() => {
     if (currencies?.length && currencies[0]?.name) {
@@ -84,12 +150,11 @@ export default function Deposit() {
   }, [currencies, handleCurrencySelect, setValue])
 
   useEffect(() => {
-    setValue('address', tonWallet?.account?.address || '')
-  }, [tonWallet, setValue])
-
-  useEffect(() => {
-    console.log('form errors', errors)
-  }, [errors])
+    if (depositCreateData?.data) {
+      setValue('address', depositCreateData?.data?.depositAddress || '')
+      setValue('comment', depositCreateData?.data?.comment || '')
+    }
+  }, [depositCreateData?.data, setValue])
 
   return (
     <div className="bg-black p-4">
@@ -120,46 +185,62 @@ export default function Deposit() {
           {/* Deposit address */}
           <DepositAddress />
 
-          {/* Amount */}
-          <Input
-            type="number"
-            inputMode="decimal"
-            pattern="[0-9.]*"
-            autoComplete="off"
-            className="h-9"
-            id="amount"
-            label="Amount"
-            placeholder="Please enter"
-            suffix={selectedCurrency}
-            error={errors.amount?.message}
-            clearable
-            onClear={() => setValue('amount', '', { shouldValidate: true })}
-            {...register('amount', {
-              setValueAs: value => sanitizeAmountInputByCurrency(value, selectedCurrency), // 在输入时处理格式
-              onBlur: e => {
-                const finalValue = removeTrailingZerosByCurrency(e.target.value, selectedCurrency) // 失去焦点或提交时去除尾随0
-                setValue('amount', finalValue, { shouldValidate: true })
-              },
-              required: 'Amount is required',
-              // validate,
-            })}
+          {/* 金額輸入框 */}
+          <Controller
+            name="amount"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => {
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
+              const { ref, ...restField } = field
+              return (
+                <NumericFormat
+                  {...restField}
+                  getInputRef={ref}
+                  customInput={Input}
+                  allowNegative={false}
+                  decimalScale={selectedCurrencyRule?.maxDec || 0}
+                  type="text"
+                  inputMode="decimal"
+                  pattern="[0-9.]*"
+                  id="amount"
+                  label="Amount"
+                  placeholder="Please enter"
+                  onValueChange={values => {
+                    console.log('onValueChange', values)
+                    field.onChange(values.value)
+                  }}
+                  className="h-9"
+                  fieldSuffix={selectedCurrency}
+                  error={errors.amount?.message}
+                  clearable
+                  onClear={() => setValue('amount', '', { shouldValidate: true })}
+                />
+              )
+            }}
           />
+          {/* 快捷金额按钮 */}
           <div className="flex justify-between space-x-2">
             {(selectedCurrencySetting?.presentAmounts || []).map(amount => (
               <Button
                 key={amount}
+                type="button"
                 className="h-7 flex-1"
                 variant="outlineSoft"
-                onClick={() => setValue('amount', amount, { shouldValidate: true })}
+                onClick={() => {
+                  setValue('amount', amount, { shouldValidate: true })
+                  setFocus('amount')
+                }}
               >
                 {amount}
               </Button>
             ))}
           </div>
         </div>
+        {/* 提交按钮 */}
         <div className="mt-6 flex flex-col items-stretch space-y-3">
-          {tonConnectUI.connected ? (
-            <Button disabled={!isValid} type="submit">
+          {isConnected ? (
+            <Button type="submit" disabled={!isValid} loading={isSubmitting}>
               Deposit
             </Button>
           ) : (

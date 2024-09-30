@@ -36,7 +36,7 @@ export default function Ui() {
     mode: 'onChange',
     defaultValues: {
       email: '',
-      level: '',
+      level: 'all',
       date: new Date(),
       dateRange: { from: new Date(), to: new Date() },
       dateTime: new Date(),
@@ -54,7 +54,7 @@ export default function Ui() {
   }, [formValues])
 
   return (
-    <div className="container p-4 pb-safe">
+    <div className="pb-safe container p-4">
       {/* Button */}
       <h1 className="flex items-center space-x-2 text-xl font-bold">
         Button
@@ -97,7 +97,7 @@ export default function Ui() {
         <Input placeholder="Please enter" />
         <Input disabled placeholder="Please enter" />
         {/* id 給 label 與 input 連動使用 */}
-        <Input id="label" label="label" placeholder="Please enter" suffix="USDT" clearable />
+        <Input id="label" label="label" placeholder="Please enter" fieldSuffix="USDT" clearable />
         <Input
           id="password"
           label="password"
@@ -149,6 +149,7 @@ export default function Ui() {
       {/* 表單 */}
       <h1 className="mt-4 text-xl font-bold">Form</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col space-y-2">
+        <Button>Form test</Button>
         {/* email - Input */}
         <Input
           id="email"

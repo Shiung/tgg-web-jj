@@ -14,37 +14,39 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   label?: string // 輸入框的標籤
   id?: string // 用於與 label 關聯的 id
   hint?: string
-  suffix?: React.ReactNode
+  fieldSuffix?: React.ReactNode
   onClear?: () => void
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
-    { className, type, clearable = false, error, label, id, hint, suffix, onClear, ...props },
+    { className, type, clearable = false, error, label, id, hint, fieldSuffix, onClear, ...props },
     ref
   ) => {
     const [inputType, setInputType] = useState(type)
-    const suffixRef = useRef<HTMLDivElement>(null)
+    const fieldSuffixRef = useRef<HTMLDivElement>(null)
     const [suffixWidth, setSuffixWidth] = useState(0)
-
 
     const paddingRight = useMemo(() => {
       let padding = 12
       if (suffixWidth) {
         padding += suffixWidth + 8
       }
+      if (clearable) {
+        padding += 24
+      }
       return `${padding}px`
-    }, [suffixWidth])
+    }, [clearable, suffixWidth])
 
     const handleTogglePassword = () => {
       setInputType(inputType === 'password' ? 'text' : 'password')
     }
 
     useEffect(() => {
-      if (suffixRef.current) {
-        setSuffixWidth(suffixRef.current.offsetWidth)
+      if (fieldSuffixRef.current) {
+        setSuffixWidth(fieldSuffixRef.current.offsetWidth)
       }
-    }, [suffix])
+    }, [fieldSuffix])
 
     return (
       <div className="space-y-1">
@@ -63,14 +65,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             {...props}
           />
-          {/* suffix */}
-          <div className="absolute inset-y-0 right-3 flex items-center space-x-1" ref={suffixRef}>
-            {suffix && (
+          {/* suffix area */}
+          <div className="absolute inset-y-0 right-3 flex items-center space-x-1">
+            {fieldSuffix && (
               <div
-                ref={suffixRef}
+                ref={fieldSuffixRef}
                 className="flex items-center text-xs font-normal text-white/50 focus:outline-none"
               >
-                {suffix}
+                {fieldSuffix}
               </div>
             )}
             {clearable && (

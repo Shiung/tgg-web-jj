@@ -165,6 +165,53 @@ export interface GetEnergyResponse {
   amount: number;
 }
 
+export type GetGamesByFrontedRequest = object;
+
+export interface GetGamesByFrontedResponse {
+  /** 列表 */
+  list: {
+    /**
+     * 遊戲ID
+     * @min 1
+     * @max 50
+     */
+    gameCode: string;
+    /**
+     * 遊戲Logo
+     * @min 1
+     * @max 200
+     */
+    gameLogo: string;
+    /**
+     * 遊戲名稱
+     * @min 1
+     * @max 50
+     */
+    gameName: string;
+    /**
+     * 遊戲類型
+     * @format uint64
+     */
+    gameType: number;
+    /**
+     * SubGameID
+     * @format uint64
+     */
+    id: number;
+    /** 語言翻譯 */
+    translations: ({
+      /**
+       * 遊戲名稱
+       * @min 0
+       * @max 50
+       */
+      gameName?: string;
+      /** 語言代碼ex: 'en','ja','ko','ar','es','fr'. Allowed Enum */
+      language: "en" | "ja" | "ko" | "ar" | "es" | "fr";
+    } | null)[];
+  }[];
+}
+
 export interface GoldenEggClaimRequest {
   /** 領取ID */
   transactionId: string;
@@ -250,7 +297,7 @@ export interface ListGameTransactionRequest {
   /** @format date-time */
   EndTime: string;
   /** @format uint64 */
-  GameId: number;
+  GameId?: number;
   /**
    * 分頁頁數
    * @format int64
@@ -268,12 +315,27 @@ export interface ListGameTransactionRequest {
 }
 
 export interface ListGameTransactionResponse {
-  /**
-   * 分頁筆數
-   * @format int64
-   * @min 20
-   */
-  pageSize: number;
+  /** 分頁 */
+  pagination?: {
+    /**
+     * 分頁筆數
+     * @format int64
+     * @min 20
+     */
+    pageSize: number;
+    /**
+     * 總頁數
+     * @format int64
+     * @min 0
+     */
+    totalPage?: number | null;
+    /**
+     * 總筆數
+     * @format int64
+     * @min 0
+     */
+    totalRecord?: number | null;
+  };
   records?: ({
     /** 投注金額 */
     betGold: string;
@@ -296,18 +358,6 @@ export interface ListGameTransactionResponse {
     /** 輸贏金額(KOKON) */
     winGoldKokon: string;
   } | null)[];
-  /**
-   * 總頁數
-   * @format int64
-   * @min 0
-   */
-  totalPage?: number | null;
-  /**
-   * 總筆數
-   * @format int64
-   * @min 0
-   */
-  totalRecord?: number | null;
 }
 
 export interface LoginRequest {
