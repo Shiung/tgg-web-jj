@@ -12,29 +12,47 @@ import {
 } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
-import { Label } from '~/components/ui/label'
 
 import AddIcon from '~/icons/add.svg?react'
 import EditIcon from '~/icons/edit.svg?react'
-import WarningIcon from '~/icons/warning.svg?react'
-import { useState } from 'react'
-import { formatCountdown } from '~/lib/utils'
+import { useState, useRef, useMemo } from 'react'
+import useStore from '~/stores/useStore'
+import { useToast } from '~/hooks/use-toast'
+import VerifyButton, { ValidCode, type VerifyButtonExpose } from '~/components/verify-button'
+
+import { useFundActions } from './hooks'
 
 interface FundPasswordDialog {
-  password: string
+  infoRefetch: () => void
 }
 
-const formSchema = z.object({
-  password: z
-    .string()
-    .min(6, 'At least 6 characters required')
-    .regex(/^[\w!@#$%^&*()-_+=]+$/, 'Invalid password format'),
-  verificationCode: z.string().min(1, 'Verification code is required'),
-})
+const ToastConf = {
+  add: 'Fund Pin added',
+  update: 'Fund Pin updated',
+  error: 'Code is incorrect',
+} as const
+
+const formSchema = z
+  .object({
+    password: z
+      .string()
+      .min(6, 'At least 6 characters required')
+      .regex(/^[\w!@#$%^&*()-_+=]+$/, 'Invalid password format'),
+    confirmPassword: z.string(),
+    verificationCode: z.string().min(1, 'Verification code is required'),
+  })
+  .refine(data => data.password === data.confirmPassword, {
+    message: "password don't match",
+    path: ['confirmPassword'],
+  })
 
 type FormValues = z.infer<typeof formSchema>
 
-const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ password }) => {
+const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
+  const {
+    info: { pin: storePin },
+  } = useStore(state => state)
+  const { toast } = useToast()
   const {
     register,
     handleSubmit,
@@ -43,32 +61,42 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ password }) => {
     watch,
   } = useForm<FormValues>({ resolver: zodResolver(formSchema), mode: 'onChange' })
   const [open, setOpen] = useState(false)
-  const [countdown, setCountdown] = useState(0)
+  const { addBindPinHandler } = useFundActions(infoRefetch)
 
+  const vbRef = useRef<VerifyButtonExpose>(null)
   const watchPassword = watch('password')
+  const watchConfirmPassword = watch('confirmPassword')
 
-  const handleSendCode = () => {
-    setCountdown(60)
-    const timer = setInterval(() => {
-      setCountdown(prev => {
-        if (prev <= 1) {
-          clearInterval(timer)
-          setCountdown(60)
-        }
-        return prev - 1
-      })
-    }, 1000)
-  }
+  const isChangePin = useMemo(() => !!storePin, [storePin])
+  const isPassForVerifyEmail = useMemo(() => {
+    return !!watchPassword && !!watchConfirmPassword && !errors.password && !errors.confirmPassword
+  }, [watchPassword, watchConfirmPassword, errors.password, errors.confirmPassword])
 
   function resetDialog() {
     reset() // 重置表單
-    setCountdown(0) // 重置倒計時
+    vbRef.current?.resetTimer() // 重置倒計時
   }
 
   const onSubmit = (values: FormValues) => {
-    console.log(values)
-    setOpen(false)
-    resetDialog()
+    // console.log(values)
+    addBindPinHandler(
+      values.password,
+      values.verificationCode,
+      () => {
+        setOpen(false)
+        resetDialog()
+        toast({
+          title: !isChangePin ? ToastConf.add : ToastConf.update,
+          variant: 'success',
+        })
+      },
+      () => {
+        toast({
+          title: ToastConf.error,
+          variant: 'error',
+        })
+      }
+    )
   }
 
   function handleOpenChange(isOpen: boolean) {
@@ -81,7 +109,7 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ password }) => {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        {password ? (
+        {isChangePin ? (
           <Button variant="icon" size="icon" className="h-4 w-4 text-white">
             <EditIcon className="h-full w-full" />
           </Button>
@@ -93,10 +121,10 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ password }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{password ? 'Change Your Password' : 'Set Your Password'}</DialogTitle>
+          <DialogTitle>{isChangePin ? 'Change Fund Password' : 'Set Fund Password'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col px-3 pb-6 pt-4 text-sm text-white/70">
+          <div className="flex flex-col space-y-2 px-3 pb-6 pt-4 text-sm text-white/70">
             {/* Fund Password */}
             <Input
               id="password"
@@ -106,21 +134,23 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ password }) => {
               error={errors.password?.message}
               {...register('password')}
             />
+
+            <Input
+              id="confirm-password"
+              label="Confirm Password"
+              type="password"
+              placeholder="Please enter"
+              error={errors.confirmPassword?.message}
+              {...register('confirmPassword')}
+            />
             {/* Verification Button */}
-            <Button
-              className="mt-2 w-full"
-              variant="outline"
-              type="button"
-              onClick={handleSendCode}
-              disabled={!watchPassword || !!errors.password || countdown > 0}
-            >
-              Send Verification Code{' '}
-              {countdown > 0 && (
-                <span className="absolute inset-y-1 right-1 flex items-center rounded-full bg-app-red px-2 text-white">
-                  {formatCountdown(countdown)}
-                </span>
-              )}
-            </Button>
+            <VerifyButton
+              className="my-2"
+              disabled={!isPassForVerifyEmail}
+              kind={useMemo(() => {
+                return isChangePin ? ValidCode.updateFundPinBind : ValidCode.firstFundPinBind
+              }, [isChangePin])}
+            />
             {/* Verification Code */}
             <Input
               id="verificationCode"

@@ -10,29 +10,45 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '~/components/ui/dialog'
+import { Label } from '~/components/ui/label'
 import { Input } from '~/components/ui/input'
 import { Button } from '~/components/ui/button'
 
 import AddIcon from '~/icons/add.svg?react'
 import EditIcon from '~/icons/edit.svg?react'
-import { useEffect, useState } from 'react'
-import { formatCountdown } from '~/lib/utils'
+import { useState, useMemo, useCallback, useRef } from 'react'
+import { useToast } from '~/hooks/use-toast'
+import { useEmailActions, useEmailStatus } from './hooks'
+import { ValidCode, EmailBindStep } from './constants'
+import useStore from '~/stores/useStore'
+import VerifyButton, { type VerifyButtonExpose } from '~/components/verify-button'
 
 interface EmailDialogProps {
-  email: string
+  infoRefetch: () => void
 }
+
+const ToastConf = {
+  add: 'Email added',
+  update: 'Email updated',
+  error: 'Code is incorrect',
+} as const
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Please enter email address' }),
   verificationCode: z.string().min(1, 'Verification code is required'),
 })
 
-const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
+const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
+  const {
+    info: { email: storeEmail },
+  } = useStore(state => state)
   const {
     register,
     handleSubmit,
     formState: { errors, isValid },
     reset,
+    setValue,
+    getValues,
     watch,
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -43,24 +59,42 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
     },
   })
 
-  const [open, setOpen] = useState(false)
-  const [countdown, setCountdown] = useState(0)
-  const watchedEmail = watch('email')
+  const vbRef = useRef<VerifyButtonExpose>(null)
+  const { toast } = useToast()
+  const { addBindEmailHandler, verifyCodeEmailHandler } = useEmailActions(infoRefetch)
+  const { isEditEmail, stepStatus, isVerifiCurrentHandler } = useEmailStatus({
+    email: storeEmail ?? '',
+  })
 
-  function handleSendCode() {
-    setCountdown(60) // Start 60 seconds countdown
-    console.log('Simulate sending verification code to:', watchedEmail)
-  }
+  const [open, setOpen] = useState(false)
+  const watchedEmail = watch('email')
 
   function resetDialog() {
     reset() // 重置表單
-    setCountdown(0) // 重置倒計時
+    vbRef.current?.resetTimer() // 重置倒計時
+    isVerifiCurrentHandler(false)
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    setOpen(false)
-    resetDialog()
+    // console.log('onSubmit -->', values)
+    addBindEmailHandler(
+      values.email,
+      values.verificationCode,
+      () => {
+        setOpen(false)
+        resetDialog()
+        toast({
+          title: !isEditEmail ? ToastConf.add : ToastConf.update,
+          variant: 'success',
+        })
+      },
+      () => {
+        toast({
+          title: ToastConf.error,
+          variant: 'error',
+        })
+      }
+    )
   }
 
   function handleOpenChange(isOpen: boolean) {
@@ -70,26 +104,32 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
     setOpen(isOpen)
   }
 
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>
-    if (countdown > 0) {
-      timer = setTimeout(() => {
-        setCountdown(prevCountdown => prevCountdown - 1)
-      }, 1000)
-    }
-    return () => clearTimeout(timer)
-  }, [countdown])
+  const vaildCheckOldEmailCallBack = useCallback(() => {
+    // TODO add valid origin email api
+    const codeVal = getValues('verificationCode')
+    verifyCodeEmailHandler(
+      codeVal,
+      () => {
+        vbRef.current?.resetTimer()
+        isVerifiCurrentHandler(true)
+        reset()
+      },
+      () => {
+        toast({
+          title: ToastConf.error,
+          variant: 'error',
+        })
+      }
+    )
+  }, [reset, isVerifiCurrentHandler, verifyCodeEmailHandler, toast, getValues])
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        {email ? (
-          <div className="flex items-center space-x-2 text-white">
-            <span className="font-ultra">{email}</span>
-            <Button variant="icon" size="icon" className="h-4 w-4">
-              <EditIcon className="h-full w-full" />
-            </Button>
-          </div>
+        {isEditEmail ? (
+          <Button variant="icon" size="icon" className="h-4 w-4 text-white">
+            <EditIcon className="h-full w-full" />
+          </Button>
         ) : (
           <Button variant="icon" size="icon" className="h-4 w-4 text-white">
             <AddIcon className="h-full w-full" />
@@ -98,34 +138,57 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{email ? 'Change Your Email' : 'Add Your Email'}</DialogTitle>
+          <DialogTitle>{isEditEmail ? 'Edit Email' : 'Add Your Email'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col px-3 pb-6 pt-4 text-sm text-white/70">
             {/* Email */}
-            <Input
-              id="email"
-              label="Email"
-              placeholder="Please enter"
-              clearable
-              error={errors.email?.message}
-              {...register('email')}
-            />
+            {isEditEmail && (
+              <>
+                <div className="space-y-1">
+                  <Label>Current Email</Label>
+                  <div className="ml-3 font-ultra text-white">{storeEmail}</div>
+                </div>
+                <hr className="my-[24px] border-white/20" />
+              </>
+            )}
+            {[EmailBindStep.addEmail, EmailBindStep.updateNewEmail].some(
+              key => key === stepStatus
+            ) && (
+              <Input
+                id="email"
+                label={!isEditEmail ? 'Email' : 'Change Email'}
+                placeholder="Please enter"
+                clearable
+                error={errors.email?.message}
+                {...register('email')}
+              />
+            )}
             {/* Verification Button */}
-            <Button
-              className="mt-2 w-full"
-              variant="outline"
-              type="button"
-              onClick={handleSendCode}
-              disabled={!watchedEmail || !!errors.email || countdown > 0}
-            >
-              Send Verification Code{' '}
-              {countdown > 0 && (
-                <span className="absolute inset-y-1 right-1 flex items-center rounded-full bg-app-red px-2 text-white">
-                  {formatCountdown(countdown)}
-                </span>
+            <VerifyButton
+              className="my-2"
+              ref={vbRef}
+              kind={useMemo(() => {
+                if (stepStatus === EmailBindStep.addEmail) return ValidCode.firstEmailBind
+                if (stepStatus === EmailBindStep.validOldEmail) return ValidCode.valid
+                return ValidCode.updateEmailBind
+              }, [stepStatus])}
+              email={watchedEmail}
+              disabled={
+                stepStatus !== EmailBindStep.validOldEmail ? !watchedEmail || !!errors.email : false
+              }
+              successCallBack={useCallback(
+                () =>
+                  stepStatus === EmailBindStep.validOldEmail && setValue('email', storeEmail || ''),
+                [storeEmail, setValue, stepStatus]
               )}
-            </Button>
+              errorCallBack={useCallback(() => {
+                toast({
+                  title: ToastConf.error,
+                  variant: 'error',
+                })
+              }, [toast])}
+            />
             {/* Verification Code */}
             <Input
               id="verificationCode"
@@ -141,7 +204,15 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ email }) => {
                 Cancel
               </Button>
             </DialogClose>
-            <Button className="flex-1" catEars disabled={!isValid}>
+            <Button
+              className="flex-1"
+              catEars
+              disabled={!isValid}
+              {...(stepStatus === EmailBindStep.validOldEmail && {
+                type: 'button',
+                onClick: vaildCheckOldEmailCallBack,
+              })}
+            >
               Ok
             </Button>
           </DialogFooter>

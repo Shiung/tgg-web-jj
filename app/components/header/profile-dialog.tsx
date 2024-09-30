@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '~/components/ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
@@ -9,9 +10,11 @@ import CopyIcon from '~/icons/copy.svg?react'
 import { useToast } from '~/hooks/use-toast'
 import EmailDialog from './email-dialog'
 import LanguageDialog from './language-dialog'
+import { languages } from './constants'
 import FundPasswordDialog from './fund-password-dialog'
 import { apis } from '~/api/index'
 import useStore from '~/stores/useStore'
+import type { UserSlice } from '~/stores/userSlice'
 
 const links = {
   support: {
@@ -28,16 +31,24 @@ const links = {
   },
 }
 
+const empty: UserSlice['info'] = {}
+
 const ProfileDialog: React.FC = () => {
   const [state, copyToClipboard] = useCopyToClipboard()
   const { toast } = useToast()
-  const { token, telegramInitData } = useStore(state => state)
-  const { data } = useQuery({
+  const { i18n } = useTranslation()
+  const { token, telegramInitData, setInfo } = useStore(state => state)
+  const { data, refetch } = useQuery({
     queryKey: ['customerInfo'],
     queryFn: apis.customer.customerInfoList,
     enabled: !!token,
   })
-  const userData = data?.data ?? {}
+  const userData = data?.data ?? empty
+
+  useEffect(() => {
+    console.log('store update ***')
+    setInfo(userData)
+  }, [userData, setInfo])
 
   useEffect(() => {
     if (!state.value) return
@@ -84,17 +95,39 @@ const ProfileDialog: React.FC = () => {
           {/* Email */}
           <div className="flex items-center justify-between">
             <span>Email</span>
-            <EmailDialog email={userData.email || ''} />
+            <div className="flex items-center justify-end space-x-2">
+              {userData.email && (
+                <div className="w-5/6 truncate font-ultra text-white">{userData.email}</div>
+              )}
+              <EmailDialog infoRefetch={refetch} />
+            </div>
           </div>
           {/* Fund Password */}
           <div className="flex items-center justify-between">
             <span>Fund Password</span>
-            <FundPasswordDialog password="" />
+            <div className="flex items-center justify-end space-x-2">
+              {userData.pin && (
+                <div className="w-5/6 truncate font-ultra text-white">{userData.pin}</div>
+              )}
+              <FundPasswordDialog infoRefetch={refetch} />
+            </div>
           </div>
           {/* Language */}
           <div className="flex items-center justify-between">
             <span>Language</span>
-            <LanguageDialog />
+            <div className="flex items-center space-x-2">
+              {useMemo(() => {
+                const getLang = languages.find(({ value }) => value === i18n.language)
+                if (!getLang) return ''
+                return (
+                  <>
+                    <img src={getLang.icon} alt={`${getLang.name} icon`} className="h-6 w-6" />
+                    <span className="font-ultra text-white">{getLang?.name}</span>
+                  </>
+                )
+              }, [i18n.language])}
+              <LanguageDialog />
+            </div>
           </div>
 
           <hr className="border-white/20" />
