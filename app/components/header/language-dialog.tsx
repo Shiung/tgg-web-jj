@@ -10,16 +10,8 @@ import {
 } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
 import SettingIcon from '~/icons/setting.svg?react'
-import { useState } from 'react'
-
-const languages = [
-  { icon: '/images/header/language/en.svg', value: 'en', name: 'English' },
-  { icon: '/images/header/language/fr.svg', value: 'fr', name: 'Français' },
-  { icon: '/images/header/language/es.svg', value: 'es', name: 'Español' },
-  { icon: '/images/header/language/ar.svg', value: 'ar', name: 'عربي' },
-  { icon: '/images/header/language/ja.svg', value: 'ja', name: '日本語' },
-  { icon: '/images/header/language/ko.svg', value: 'ko', name: '한국어' },
-]
+import { useState, useCallback } from 'react'
+import { languages } from './constants'
 
 const LanguageDialog: React.FC = () => {
   const { i18n } = useTranslation()
@@ -35,8 +27,16 @@ const LanguageDialog: React.FC = () => {
     setOpen(false)
   }
 
+  const onOpenChangeHandler = useCallback(
+    (o: boolean) => {
+      if (!o && i18n.language !== selectedLanguage) setSelectedLanguage(i18n.language)
+      setOpen(o)
+    },
+    [i18n.language, selectedLanguage]
+  )
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={onOpenChangeHandler}>
       <DialogTrigger asChild>
         <Button variant="icon" size="icon" className="h-4 w-4 text-white">
           <SettingIcon className="h-full w-full" />
@@ -56,9 +56,7 @@ const LanguageDialog: React.FC = () => {
               onClick={() => handleLanguageSelect(language.value)}
             >
               <img src={language.icon} alt={`${language.name} icon`} className="h-6 w-6" />
-              <span>
-                {language.name} {i18n.language}
-              </span>
+              <span>{language.name}</span>
             </Button>
           ))}
         </div>
