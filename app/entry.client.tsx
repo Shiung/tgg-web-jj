@@ -46,6 +46,12 @@ async function main() {
       },
     })
 
+  console.info(
+    '%cAPP VERSION: %s',
+    'background: #FFF200; color: #000; font-size: 16px; font-weight: bold; padding: 8px;',
+    import.meta.env.VITE_APP_VERSION
+  )
+
   startTransition(() => {
     hydrateRoot(
       document,
