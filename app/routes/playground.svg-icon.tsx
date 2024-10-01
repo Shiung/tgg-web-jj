@@ -21,7 +21,7 @@ export default function SvgIcon() {
   }, [state, toast])
 
   return (
-    <div className="container px-2 py-4 pb-safe">
+    <div className="container px-2 py-4">
       <h1 className="text-xl font-bold">svg-icon</h1>
       <h2 className="mt-4 text-lg font-bold">複雜多色 Icon</h2>
       <div className="mt-2 grid grid-cols-3 gap-2">
@@ -36,12 +36,16 @@ export default function SvgIcon() {
       <div className="mt-2 grid grid-cols-2 gap-2">
         {Object.entries(Icons).map(([name, Icon]) => (
           <div key={name} className="flex flex-col items-start">
-            <Icon className="h-6 w-6" />
-            <div className="mt-2 flex items-center justify-center">
+            {name === 'LoadingIcon' ? (
+              <Icon className="h-6 w-6 animate-spin" />
+            ) : (
+              <Icon className="h-6 w-6" />
+            )}
+            <div className="mt-2 flex items-center justify-center text-primary">
               <Button
                 variant="icon"
                 size="icon"
-                className="h-4 w-4 text-white"
+                className="h-4 w-4"
                 onClick={() => copyToClipboard(`import { ${name} } from '~/icons/index'` || '')}
               >
                 <Icons.CopyIcon className="h-full w-full" />

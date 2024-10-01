@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
 import { TwitterIcon, GlobalIcon } from '~/components/color-icons'
 import CopyIcon from '~/icons/copy.svg?react'
+import LogoutIcon from '~/icons/logout.svg?react'
 import { useToast } from '~/hooks/use-toast'
 import EmailDialog from './email-dialog'
 import LanguageDialog from './language-dialog'
@@ -37,7 +38,7 @@ const ProfileDialog: React.FC = () => {
   const [state, copyToClipboard] = useCopyToClipboard()
   const { toast } = useToast()
   const { i18n } = useTranslation()
-  const { isLoggedIn, telegramUserData, setInfo } = useStore(state => state)
+  const { inTelegram, isLoggedIn, telegramUserData, setInfo, logout } = useStore(state => state)
   const { data, refetch } = useQuery({
     queryKey: ['customerInfo'],
     queryFn: apis.customer.customerInfoList,
@@ -150,6 +151,19 @@ const ProfileDialog: React.FC = () => {
               ))}
             </div>
           </div>
+
+          {/* Logout for web */}
+          {!inTelegram && (
+            <>
+              <hr className="border-white/20" />
+              <div className="flex items-center justify-between">
+                <span>Log out</span>
+                <Button variant="icon" size="icon" onClick={logout}>
+                  <LogoutIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            </>
+          )}
         </div>
       </DialogContent>
     </Dialog>

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 export default function I18next() {
   const { t } = useTranslation()
   return (
-    <div className="container px-0 pb-safe">
+    <div className="container px-0">
       <div className="flex flex-col gap-2">
         {/* 顯示簡單鍵值對示例 */}
         <h2 className="text-lg font-bold">簡單鍵值對</h2>

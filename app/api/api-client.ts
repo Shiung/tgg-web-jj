@@ -56,8 +56,8 @@ apiClient.instance.interceptors.response.use(
 )
 
 // TODO: 待 session 管理方案实现后移除
-export const setHeaderToken = (token: string) => {
-  apiClient.setSecurityData({ token })
+export const setHeaderToken = (token: string | null) => {
+  apiClient.setSecurityData(token ? { token } : null)
 }
 
 if (typeof localStorage !== 'undefined') {

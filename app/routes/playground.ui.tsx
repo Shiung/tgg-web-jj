@@ -54,7 +54,7 @@ export default function Ui() {
   }, [formValues])
 
   return (
-    <div className="pb-safe container p-4">
+    <div className="container p-4">
       {/* Button */}
       <h1 className="flex items-center space-x-2 text-xl font-bold">
         Button

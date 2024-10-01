@@ -37,6 +37,8 @@ import TreeIcon from '~/icons/tree.svg?react'
 import UnlinkIcon from '~/icons/unlink.svg?react'
 import WarningIcon from '~/icons/warning.svg?react'
 import XIcon from '~/icons/x.svg?react'
+import LogoutIcon from '~/icons/logout.svg?react'
+import LoadingIcon from '~/icons/loading.svg?react'
 
 const Icons = {
   AddIcon,
@@ -78,6 +80,8 @@ const Icons = {
   UnlinkIcon,
   WarningIcon,
   XIcon,
+  LogoutIcon,
+  LoadingIcon,
 }
 
 export default Icons

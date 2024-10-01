@@ -146,7 +146,7 @@ export default function TelegramSdk() {
   }, [isBackButtonVisible, backButton])
 
   return (
-    <div className="container relative flex min-h-screen flex-col items-start justify-between rounded-lg border-4 border-dashed border-[#FFF200] px-0 pb-safe text-primary">
+    <div className="container relative flex min-h-screen flex-col items-start justify-between rounded-lg border-4 border-dashed border-[#FFF200] px-0 text-primary">
       <h1 className="mb-4 text-2xl font-bold">Telegram SDK Full Demo</h1>
       <h4 className="mb-4 text-xl font-bold">In Telegram: {`${inTelegram}`}</h4>
       <h4 className="mb-4 text-xl font-bold">raw data</h4>
