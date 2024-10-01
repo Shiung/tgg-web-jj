@@ -2,7 +2,7 @@ import type { MetaFunction } from '@remix-run/node'
 import { Link } from '@remix-run/react'
 import { Boxes } from 'lucide-react'
 import Autoplay from 'embla-carousel-autoplay'
-import { Button } from '~/components/ui/button'
+// import { Button } from '~/components/ui/button'
 import {
   Carousel,
   CarouselContent,
@@ -70,16 +70,16 @@ export default function Index() {
         </Carousel>
       </div>
       {/* Game entrance */}
-      <div className="flex flex-col bg-black px-4 pt-4">
-        <div className="flex w-full space-x-2 bg-black">
+      <div className="flex flex-col space-y-6 bg-black px-4 pb-6 pt-4">
+        {/* <div className="flex w-full space-x-2 bg-black">
           <Button className="flex-1" catEars>
             CASUAL GAME
           </Button>
           <Button className="flex-1" catEars variant="danger">
             CRYPTO GAME
           </Button>
-        </div>
-        <div className="my-6 flex aspect-[343/344] w-full flex-row space-x-2">
+        </div> */}
+        <div className="flex aspect-[343/344] w-full flex-row space-x-2">
           <div className="flex flex-1 flex-col space-y-2 text-lg font-ultra">
             {[GameId.GoDown100Floors, GameId.Crash].map(id => {
               return (
@@ -122,9 +122,9 @@ export default function Index() {
                 className="absolute inset-x-0 bottom-2 z-10 h-auto"
               />
             </ProtectedLink>
-            <Button className="h-10" variant="outline">
+            {/* <Button className="h-10" variant="outline">
               MORE GAME
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>
