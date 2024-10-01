@@ -13,6 +13,7 @@ import Fetch from 'i18next-fetch-backend'
 import { I18nextProvider, initReactI18next } from 'react-i18next'
 import { getInitialNamespaces } from 'remix-i18next/client'
 import { defaultNS, fallbackLng, supportedLngs } from './consts/i18n'
+import { printAppVersion } from './lib/utils'
 
 async function main() {
   // eslint-disable-next-line import/no-named-as-default-member
@@ -46,11 +47,7 @@ async function main() {
       },
     })
 
-  console.info(
-    '%cAPP VERSION: %s',
-    'background: #FFF200; color: #000; font-size: 16px; font-weight: bold; padding: 8px;',
-    import.meta.env.VITE_APP_VERSION
-  )
+  printAppVersion()
 
   startTransition(() => {
     hydrateRoot(

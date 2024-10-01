@@ -1,10 +1,26 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import chalk from 'chalk'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { fallbackLng, supportedLngs } from '~/consts/i18n'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+
+export function printAppVersion() {
+  const kokonArt = `
+  ${chalk.hex('#FFD700').bold(`
+  K    K   OOO   K    K   OOO   N   N
+  K   K   O   O  K   K   O   O  NN  N
+  KKKK    O   O  KKKK    O   O  N N N
+  K   K   O   O  K   K   O   O  N  NN
+  K    K   OOO   K    K   OOO   N   N
+  `)}
+
+  ${chalk.hex('#FFD700').bold(`APP VERSION: v${import.meta.env.VITE_APP_VERSION}`)}
+  `
+  console.info(kokonArt)
 }
 
 export const formatCountdown = (seconds: number) => {
