@@ -1,5 +1,5 @@
-import { LottieComponentProps } from 'lottie-react'
-import { useCallback, useEffect, useState } from 'react'
+import { LottieComponentProps, LottieRef, LottieRefCurrentProps } from 'lottie-react'
+import { useCallback, useEffect, useState, useRef } from 'react'
 import { Button } from '~/components/ui/button'
 
 import animationPath1 from '~/routes/smash-egg/lottie/standbys.json'
@@ -25,7 +25,10 @@ export default function Lottie() {
   const [LottieComponent, setLottieComponent] =
     useState<React.ComponentType<LottieComponentProps> | null>(null)
   const [animationData, setAnimationData] = useState(animationFiles[0])
-  const [isAniLoop, setIsAniLoop] = useState(true)
+  const [isAniLoop, setIsAniLoop] = useState(false)
+  const [currentFrame, setCurrentFrame] = useState(0)
+  const [totalFrames, setTotalFrames] = useState(0)
+  const lottieRef = useRef<LottieRefCurrentProps>(null)
 
   useEffect(() => {
     import('lottie-react').then(module => {
@@ -35,7 +38,16 @@ export default function Lottie() {
 
   const buttonClick = useCallback((index: number) => {
     setAnimationData(animationFiles[index])
-    setIsAniLoop(index === 0)
+    // setIsAniLoop(index === 0)
+  }, [])
+
+  const handleConplete = () => {
+    console.log('@@ handleConplete')
+  }
+
+  const handleEnterFrame = useCallback((e: any) => {
+    setCurrentFrame(Math.floor(e.currentTime))
+    setTotalFrames(e.totalTime)
   }, [])
 
   if (!LottieComponent) {
@@ -49,19 +61,24 @@ export default function Lottie() {
         animationData={hammerAmi}
         loop={true}
         autoplay={true}
-        onComplete={() => {}}
+        onComplete={handleConplete}
       />
       <LottieComponent
+        lottieRef={lottieRef}
         className="m-auto h-[350px] w-[343px]"
         animationData={animationData}
         loop={isAniLoop}
         autoplay={true}
-        onComplete={() => {}}
+        onEnterFrame={handleEnterFrame}
+        onComplete={handleConplete}
       />
+      <div className="mb-2 text-center">
+        當前幀: {currentFrame + 1} / {totalFrames}
+      </div>
       <div className="flex flex-wrap justify-start space-x-1 space-y-1">
         {animationFiles.map((_, index) => (
           <Button key={index} catEars onClick={() => buttonClick(index)}>
-            動畫{index + 1}
+            動畫{index}
           </Button>
         ))}
       </div>

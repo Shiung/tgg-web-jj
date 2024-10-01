@@ -19,6 +19,7 @@ export const handle = {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 let PAG: any
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 let PAGInit: any
 const HAMMER_CANVAS_ID = 'hammer'
 const EGG_AREA_CANVAS_ID = 'egg_area'
