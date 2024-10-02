@@ -1,12 +1,12 @@
 import { StateCreator } from 'zustand'
 import Cookies from 'js-cookie'
 import { v4 as uuidv4 } from 'uuid'
-// import { setHeaderToken } from '~/api/api-client'
 
 export interface AuthSlice {
   deviceId?: string
   isLoggedIn: boolean
   needLoginDialogOpen: boolean
+  setIsLoggedIn: (loggedIn: boolean) => void
   checkIsLoggedIn: () => void
   logout: () => void
   openNeedLoginDialog: () => void
@@ -40,6 +40,7 @@ const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = set => ({
   deviceId: initialDeviceId,
   isLoggedIn: initialLoginStatus,
   needLoginDialogOpen: false,
+  setIsLoggedIn: (loggedIn: boolean) => set({ isLoggedIn: loggedIn }),
   checkIsLoggedIn: () => {
     const hasSessionCookie = !!getCookieValue('website_session')
     set({ isLoggedIn: hasSessionCookie })

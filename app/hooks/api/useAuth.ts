@@ -74,12 +74,12 @@ interface UseLoginOptions
   extends Partial<UseMutationOptions<AxiosResponse<LoginResponse>, Error, LoginRequest>> {}
 
 const useLogin = (options?: UseLoginOptions) => {
-  const checkIsLoggedIn = useStore(state => state.checkIsLoggedIn)
+  const setIsLoggedIn = useStore(state => state.setIsLoggedIn)
 
   return useMutation({
     mutationFn: apis.customer.customerLoginCreate as MutationFn,
     onSuccess: (data, variables, context) => {
-      checkIsLoggedIn()
+      setIsLoggedIn(true)
 
       if (options?.onSuccess) {
         options.onSuccess(data, variables, context)

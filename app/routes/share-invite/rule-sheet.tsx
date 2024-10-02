@@ -109,7 +109,7 @@ const RuleSheet: React.FC = () => {
     <Sheet>
       <SheetTrigger asChild>
         <div className="fixed bottom-24 left-0 z-50 cursor-pointer">
-          <SvgEnterByFloating imgurl="/images/share/rule.png" imgWidth={36} imgHeight={36} />
+          <SvgEnterByFloating imgUrl="/images/share/rule.png" imgWidth={36} imgHeight={36} />
         </div>
       </SheetTrigger>
       <SheetContent
