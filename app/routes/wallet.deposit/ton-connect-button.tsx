@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useTonConnectUI, useTonConnectModal, ConnectedWallet } from '@tonconnect/ui-react'
 import { Button } from '~/components/ui/button'
-import { useToast } from '~/hooks/use-toast'
+import { errorToast, successToast } from '~/lib/toast'
 
 interface TonConnectButtonProps {
   onWalletConnect?: (wallet: ConnectedWallet) => void
@@ -19,7 +19,6 @@ export default function TonConnectButton({
 }: TonConnectButtonProps) {
   const [tonConnectUI] = useTonConnectUI()
   const { open, state } = useTonConnectModal()
-  const { toast } = useToast()
 
   useEffect(() => {
     console.log('TonConnectButton state:', state)
@@ -28,22 +27,16 @@ export default function TonConnectButton({
   useEffect(() => {
     const unsubscribe = tonConnectUI.onStatusChange(wallet => {
       if (wallet) {
-        toast({
-          title: toastMessage.success,
-          variant: 'success',
-        })
+        successToast(toastMessage.success)
         onWalletConnect?.(wallet)
       } else {
-        toast({
-          title: toastMessage.fail,
-          variant: 'error',
-        })
+        errorToast(toastMessage.fail)
         onWalletDisconnect?.()
       }
     })
 
     return () => unsubscribe()
-  }, [onWalletConnect, onWalletDisconnect, toast, tonConnectUI])
+  }, [onWalletConnect, onWalletDisconnect, tonConnectUI])
 
   return (
     <Button type="button" onClick={open}>

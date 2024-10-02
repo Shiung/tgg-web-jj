@@ -4,16 +4,55 @@ import { beginCell, toNano } from '@ton/ton'
 import { useQuery } from '@tanstack/react-query'
 import { NumericFormat } from 'react-number-format'
 import { Controller, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { cryptoDetails, cryptoRules, isValidCrypto, Crypto } from '~/consts/crypto'
-import { useToast } from '~/hooks/use-toast'
 import { apis } from '~/api'
+import CloseIcon from '~/icons/x.svg?react'
+import { errorToast } from '~/lib/toast'
 
 import { CurrenciesSkeleton } from './skeleton'
 import DepositAddress from './deposit-address'
 import TonConnectButton from './ton-connect-button'
 import DepositViaAddressDialog from './deposit-via-address-sheet'
+
+// 充值提交成功通知
+export const successNotify = () =>
+  toast.custom(
+    t => (
+      <div
+        className={`${
+          t.visible ? 'animate-enter' : 'animate-leave'
+        } pointer-events-auto relative mx-3 flex w-full max-w-md rounded-lg bg-black shadow-lg ring-1 ring-app-green`}
+      >
+        <div className="flex flex-1 items-center justify-between space-x-2 p-3">
+          <img
+            className="h-12 w-12 flex-shrink-0 object-contain"
+            src="/images/wallet/deposit/confirm.png"
+            alt=""
+          />
+          <div className="flex-1">
+            <p className="text-base font-ultra text-white">Deposited successfully</p>
+            <p className="text-xs text-white/70">
+              It may takes a few minutes to effect on your account.
+            </p>
+          </div>
+        </div>
+        <Button
+          variant="icon"
+          size="icon"
+          onClick={() => toast.remove(t.id)}
+          className="absolute right-1 top-1"
+        >
+          <CloseIcon className="h-4 w-4 text-white/70" />
+        </Button>
+      </div>
+    ),
+    {
+      duration: 500000,
+    }
+  )
 
 interface DepositFormData {
   currency: string // 幣種
@@ -51,8 +90,6 @@ export default function Deposit() {
   })
 
   const selectedCurrency = watch('currency')
-
-  const { toast } = useToast()
 
   // Prepare currencies
   const currencies = useMemo(
@@ -115,16 +152,9 @@ export default function Deposit() {
     try {
       const result = await tonConnectUI.sendTransaction(transaction)
       console.log('交易成功發送', result)
-      // TODO: 換 Notification 樣式
-      toast({
-        title: 'Deposited successfully',
-        variant: 'success',
-      })
+      successNotify()
     } catch (error) {
-      toast({
-        title: 'Deposited unsuccessfully',
-        variant: 'error',
-      })
+      errorToast('Deposited unsuccessfully')
       console.error('交易失敗:', error)
     }
   }

@@ -1,7 +1,7 @@
 import { StateCreator } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { User } from '@telegram-apps/sdk-react'
-import { TelegramUser } from '~/components/telegram-login-button/types'
+import { TelegramOAuthUser } from '~/components/telegram-login-button/types'
 
 export interface TelegramSlice {
   inTelegram: boolean
@@ -10,7 +10,7 @@ export interface TelegramSlice {
   /** Telegram Mini App 啟動參數同步 user data */
   setTelegramInitDataByInitData: (user: User) => void
   /** 透過 Telegram Widget 登入同步 user data */
-  setTelegramInitDataByWidgetLogin: (user: TelegramUser) => void
+  setTelegramInitDataByWidgetLogin: (user: TelegramOAuthUser) => void
 }
 
 const createTelegramSlice: StateCreator<

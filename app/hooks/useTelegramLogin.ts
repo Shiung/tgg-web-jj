@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
 import { type AxiosResponse } from 'axios'
 import { prepareLoginRequest, useLogin } from '~/hooks/api/useAuth'
-import { LoginRequest, LoginResponse } from '~/api/codegen/data-contracts'
-import { detectOS } from '~/lib/utils'
-import { TelegramUser } from '~/components/telegram-login-button/types'
+import { LoginResponse } from '~/api/codegen/data-contracts'
+import { TelegramOAuthUser } from '~/components/telegram-login-button/types'
 import { InitDataParsed } from '@telegram-apps/sdk-react'
 import useStore from '~/stores/useStore'
 
 const BOT_ID = import.meta.env.VITE_BOT_ID
 
 interface UseTelegramLoginProps {
-  onSuccess?: (data: AxiosResponse<LoginResponse>, telegramUserData?: TelegramUser) => void // 新增的 callback 类型
+  onSuccess?: (data: AxiosResponse<LoginResponse>, telegramUserData?: TelegramOAuthUser) => void // 新增的 callback 类型
 }
 
 export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
@@ -33,21 +32,8 @@ export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
         async user => {
           if (user) {
             setTelegramInitDataByWidgetLogin(user)
-            console.log('login tg data', user)
-            const loginData: LoginRequest = {
-              avatar: user?.photo_url || '',
-              device: 'Web',
-              deviceId: 'device-id',
-              firstName: user?.first_name || '',
-              id: user?.id,
-              languageCode: '',
-              lastName: user?.last_name || '',
-              os: detectOS(),
-              productId: 1,
-              startapp: '',
-              userName: user?.username,
-              version: 'v0.0.0',
-            }
+            const loginData = prepareLoginRequest(user)
+            if (!loginData) return
             try {
               await doLogin(loginData)
             } catch (error) {
@@ -90,7 +76,7 @@ export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
   return { handleLogin, scriptLoaded }
 }
 
-export const useTelegramAutoLogin = (initData: InitDataParsed | undefined) => {
+export const useTelegramMiniAppAutoLogin = (initData: InitDataParsed | undefined) => {
   const token = useStore(state => state.token)
   const isLoggedIn = useStore(state => state.isLoggedIn)
 
@@ -102,7 +88,7 @@ export const useTelegramAutoLogin = (initData: InitDataParsed | undefined) => {
 
     // 有 telegram launch params 时，自動登入
     const handleLogin = async () => {
-      const loginData = prepareLoginRequest(initData)
+      const loginData = prepareLoginRequest(initData.user)
       if (!loginData) return
       try {
         await doLogin(loginData)

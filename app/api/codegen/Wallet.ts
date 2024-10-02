@@ -58,13 +58,86 @@ export class Wallet<SecurityDataType = unknown> {
           /** 快選金額 */
           presentAmounts: string[];
           /** 開關 */
-          switch: boolean;
+          switch?: boolean | null;
         }[];
       },
       any
     >({
       path: `/ajax/wallet/deposit/setting`,
       method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*WalletController)
+   * @name WalletHistoryListList
+   * @request GET:/ajax/wallet/history/list
+   */
+  walletHistoryListList = (
+    query?: {
+      /**
+       * 帳變時間(起日) (Required when TransactionTimeTo is present)
+       * @format date-time
+       */
+      transactionTimeFrom?: string;
+      /**
+       * 帳變時間(迄日) (Required when TransactionTimeFrom is present)
+       * @format date-time
+       */
+      transactionTimeTo?: string;
+      /** 幣種 TON USDT KOKON */
+      currency?: string;
+      /** 交易類型 */
+      type?: string;
+      /** 收支 Income Expense */
+      balance?: string;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<
+      {
+        /** 帳變記錄列表 */
+        list?: {
+          /** 帳變類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
+          Type: string;
+          /** 帳變金額 */
+          amount: string;
+          /** 幣種 */
+          currency: string;
+          /**
+           * 帳變時間
+           * @format date-time
+           */
+          transactionTime: string;
+        }[];
+        /** 分頁資訊 */
+        pagination?: {
+          /**
+           * 分頁筆數
+           * @format int64
+           * @min 20
+           */
+          pageSize: number;
+          /**
+           * 總頁數
+           * @format int64
+           * @min 0
+           */
+          totalPage?: number | null;
+          /**
+           * 總筆數
+           * @format int64
+           * @min 0
+           */
+          totalRecord?: number | null;
+        };
+      },
+      any
+    >({
+      path: `/ajax/wallet/history/list`,
+      method: "GET",
+      query: query,
       ...params,
     });
   /**
@@ -121,6 +194,38 @@ export class Wallet<SecurityDataType = unknown> {
   /**
    * @description Auto-generated API documentation
    *
+   * @tags (*TransferController)
+   * @name WalletTransferRateList
+   * @request GET:/ajax/wallet/transfer/rate
+   */
+  walletTransferRateList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /**
+         * 轉USDT匯率
+         * @format decimal
+         */
+        depositRate: string;
+        /**
+         * USDT轉KOKON匯率
+         * @format decimal
+         */
+        usdt2KokonRate: string;
+        /**
+         * USDT轉換匯率
+         * @format decimal
+         */
+        withdrawRate: string;
+      },
+      any
+    >({
+      path: `/ajax/wallet/transfer/rate`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
    * @tags (*WithdrawController)
    * @name WalletWithdrawCreate
    * @request POST:/ajax/wallet/withdraw
@@ -136,6 +241,8 @@ export class Wallet<SecurityDataType = unknown> {
       chainNet: string;
       /** 幣別 */
       currency: string;
+      /** 資金密碼 */
+      fundPassword: string;
       /**
        * 自定義備註(選填)
        * @maxLength 100
@@ -203,7 +310,7 @@ export class Wallet<SecurityDataType = unknown> {
           /** 快選金額 */
           presentAmounts: string[];
           /** 開關 */
-          switch: boolean;
+          switch?: boolean | null;
           /** 今日已申請金額 */
           usedAmount: string;
           /** 提現流水 */
@@ -213,6 +320,39 @@ export class Wallet<SecurityDataType = unknown> {
       any
     >({
       path: `/ajax/wallet/withdraw/setting`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*WithdrawController)
+   * @name WalletWithdrawingListList
+   * @request GET:/ajax/wallet/withdrawing/list
+   */
+  walletWithdrawingListList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /** 申請中提現列表 */
+        list: {
+          /** 申請提現的地址 */
+          address: string;
+          /** 申請金額 */
+          applyAmount: string;
+          /** 申請提現幣種. Allowed Enum */
+          currency: "TON" | "USDT";
+          /** 申請時填的備註 */
+          memo?: string;
+          /**
+           * 申請時間
+           * @format date-time
+           */
+          submissionTime: string;
+        }[];
+      },
+      any
+    >({
+      path: `/ajax/wallet/withdrawing/list`,
       method: "GET",
       ...params,
     });

@@ -5,12 +5,13 @@ import DatePickerSheet from '~/components/date-picker-sheet/index'
 import { DropdownSheet, DropdownOption } from '~/components/dropdown-sheet'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
-import { useToast } from '~/hooks/use-toast'
 import InfoTooltip from '~/components/info-tooltip'
 import { Switch } from '~/components/ui/switch'
 import { Label } from '~/components/ui/label'
 import SvgHistory from '~/icons/history.svg?react'
 import WarningIcon from '~/icons/warning.svg?react'
+import { errorToast, successToast } from '~/lib/toast'
+import { successNotify } from '~/routes/wallet.deposit/route'
 
 interface FormValues {
   email: string
@@ -22,7 +23,6 @@ interface FormValues {
 }
 
 export default function Ui() {
-  const { toast } = useToast()
   const [disabled, setDisabled] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -118,29 +118,14 @@ export default function Ui() {
       {/* Tooltip / Toast */}
       <h1 className="mt-4 text-xl font-bold">Info Tooltip / Toast</h1>
       <div className="mt-2 grid grid-cols-2 gap-2">
-        <Button
-          variant="outline"
-          className="ml-2"
-          onClick={() =>
-            toast({
-              title: 'info',
-              variant: 'success',
-            })
-          }
-        >
+        <Button variant="outline" className="ml-2" onClick={() => successNotify()}>
+          Show Success Deposit Toast
+        </Button>
+        <Button variant="outline" className="ml-2" onClick={() => successToast('info')}>
           Show Success Toast
         </Button>
-        <Button
-          variant="outline"
-          className="ml-2"
-          onClick={() =>
-            toast({
-              title: 'info',
-              variant: 'error',
-            })
-          }
-        >
-          Show success Toast
+        <Button variant="outline" className="ml-2" onClick={() => errorToast('info')}>
+          Show Error Toast
         </Button>
         {/* 漸層邊框 Tooltip */}
         <InfoTooltip content="這是點擊後顯示的 Tooltip 內容" />

@@ -8,7 +8,6 @@ import { Button } from '~/components/ui/button'
 import { TwitterIcon, GlobalIcon } from '~/components/color-icons'
 import CopyIcon from '~/icons/copy.svg?react'
 import LogoutIcon from '~/icons/logout.svg?react'
-import { useToast } from '~/hooks/use-toast'
 import EmailDialog from './email-dialog'
 import LanguageDialog from './language-dialog'
 import { languages } from './constants'
@@ -16,6 +15,7 @@ import FundPasswordDialog from './fund-password-dialog'
 import { apis } from '~/api/index'
 import useStore from '~/stores/useStore'
 import type { UserSlice } from '~/stores/userSlice'
+import { successToast } from '~/lib/toast'
 
 const links = {
   support: {
@@ -36,7 +36,6 @@ const empty: UserSlice['info'] = {}
 
 const ProfileDialog: React.FC = () => {
   const [state, copyToClipboard] = useCopyToClipboard()
-  const { toast } = useToast()
   const { i18n } = useTranslation()
   const { inTelegram, isLoggedIn, telegramUserData, setInfo, logout } = useStore(state => state)
   const { data, refetch } = useQuery({
@@ -52,11 +51,8 @@ const ProfileDialog: React.FC = () => {
 
   useEffect(() => {
     if (!state.value) return
-    toast({
-      title: 'Copied',
-      variant: 'success',
-    })
-  }, [state, toast])
+    successToast('Copied')
+  }, [state])
 
   return (
     <Dialog>
@@ -86,7 +82,7 @@ const ProfileDialog: React.FC = () => {
                 variant="icon"
                 size="icon"
                 className="h-4 w-4 text-white"
-                onClick={() => copyToClipboard(userData.customerId || '')}
+                onClick={() => copyToClipboard(`${userData.customerId || ''}`)}
               >
                 <CopyIcon className="h-full w-full" />
               </Button>

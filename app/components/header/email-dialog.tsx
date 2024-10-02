@@ -1,3 +1,4 @@
+import { useState, useMemo, useCallback, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -16,8 +17,7 @@ import { Button } from '~/components/ui/button'
 
 import AddIcon from '~/icons/add.svg?react'
 import EditIcon from '~/icons/edit.svg?react'
-import { useState, useMemo, useCallback, useRef } from 'react'
-import { useToast } from '~/hooks/use-toast'
+import { successToast, errorToast } from '~/lib/toast'
 import { useEmailActions, useEmailStatus } from './hooks'
 import { ValidCode, EmailBindStep } from './constants'
 import useStore from '~/stores/useStore'
@@ -60,7 +60,6 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
   })
 
   const vbRef = useRef<VerifyButtonExpose>(null)
-  const { toast } = useToast()
   const { addBindEmailHandler, verifyCodeEmailHandler } = useEmailActions(infoRefetch)
   const { isEditEmail, stepStatus, isVerifiCurrentHandler } = useEmailStatus({
     email: storeEmail ?? '',
@@ -83,16 +82,10 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
       () => {
         setOpen(false)
         resetDialog()
-        toast({
-          title: !isEditEmail ? ToastConf.add : ToastConf.update,
-          variant: 'success',
-        })
+        successToast(!isEditEmail ? ToastConf.add : ToastConf.update)
       },
       () => {
-        toast({
-          title: ToastConf.error,
-          variant: 'error',
-        })
+        errorToast(ToastConf.error)
       }
     )
   }
@@ -115,13 +108,10 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
         reset()
       },
       () => {
-        toast({
-          title: ToastConf.error,
-          variant: 'error',
-        })
+        errorToast(ToastConf.error)
       }
     )
-  }, [reset, isVerifiCurrentHandler, verifyCodeEmailHandler, toast, getValues])
+  }, [reset, isVerifiCurrentHandler, verifyCodeEmailHandler, getValues])
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -182,12 +172,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
                   stepStatus === EmailBindStep.validOldEmail && setValue('email', storeEmail || ''),
                 [storeEmail, setValue, stepStatus]
               )}
-              errorCallBack={useCallback(() => {
-                toast({
-                  title: ToastConf.error,
-                  variant: 'error',
-                })
-              }, [toast])}
+              errorCallBack={() => errorToast(ToastConf.error)}
             />
             {/* Verification Code */}
             <Input

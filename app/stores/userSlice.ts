@@ -8,7 +8,7 @@ export interface UserSlice {
 
 const createUserSlice: StateCreator<UserSlice, [], [], UserSlice> = set => ({
   info: {
-    customerId: '',
+    customerId: 0,
     email: '',
     pin: '',
     avatar: '',

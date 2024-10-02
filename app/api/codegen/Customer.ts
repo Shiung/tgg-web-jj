@@ -89,8 +89,11 @@ export class Customer<SecurityDataType = unknown> {
       {
         /** 頭像 */
         avatar?: string;
-        /** 玩家Id */
-        customerId?: string;
+        /**
+         * 玩家Id
+         * @format uint64
+         */
+        customerId?: number;
         /** 信箱 */
         email?: string;
         /** 語系 */
@@ -102,6 +105,8 @@ export class Customer<SecurityDataType = unknown> {
          * @format uint64
          */
         productId?: number;
+        /** 用戶分享推薦代碼 */
+        referralCode?: string;
       },
       any
     >({
@@ -175,8 +180,8 @@ export class Customer<SecurityDataType = unknown> {
        * @min 1
        */
       productId: number;
-      /** 推薦轉介碼 */
-      startapp?: string;
+      /** 用戶分享推薦代碼 */
+      referralCode?: string;
       /** username */
       userName?: string;
       /**
@@ -198,6 +203,143 @@ export class Customer<SecurityDataType = unknown> {
       method: "POST",
       body: body,
       type: ContentType.Json,
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*CustomerController)
+   * @name CustomerShareCreate
+   * @request POST:/ajax/customer/share
+   */
+  customerShareCreate = (params: RequestParams = {}) =>
+    this.http.request<any, any>({
+      path: `/ajax/customer/share`,
+      method: "POST",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*CustomerController)
+   * @name CustomerTeamInfoList
+   * @request GET:/ajax/customer/team/info
+   */
+  customerTeamInfoList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /**
+         * 團隊星等
+         * @format int64
+         */
+        class?: number;
+        /**
+         * 邀請人數
+         * @format int64
+         */
+        inviteSize?: number;
+        /**
+         * 團隊人數
+         * @format int64
+         */
+        teamSize?: number;
+        /** 今日反佣 */
+        todayCommission?: string;
+        /** 生涯總投注 */
+        totalBets?: string;
+        /** 生涯反佣 */
+        totalCommission?: string;
+        /** 生涯總入金 */
+        totalDeposit?: string;
+        /**
+         * 邀請有效人數
+         * @format int64
+         */
+        validSize?: number;
+      },
+      any
+    >({
+      path: `/ajax/customer/team/info`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*CustomerController)
+   * @name CustomerTeamPerformanceList
+   * @request GET:/ajax/customer/team/performance
+   */
+  customerTeamPerformanceList = (
+    query?: {
+      /**
+       * 玩家Id
+       * @format uint64
+       */
+      customerId?: number;
+      /** 排序欄位,可帶入lv,bet,deposit任一，未帶時預設lv+customer_id */
+      sortField?: string;
+      /** 排序方向,true為升冪 */
+      sortOrder?: boolean;
+      /** 團員名稱 */
+      name?: string;
+      /**
+       * 團員等級
+       * @format int64
+       */
+      lv?: number;
+      /**
+       * 頁接續起始定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位
+       * @format int64
+       */
+      anchorPoint?: number;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<
+      {
+        /**
+         * 回傳使用定位
+         * @format int64
+         */
+        anchorPoint?: number;
+        /** 資料 */
+        data?: {
+          /**
+           * 下頁定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位
+           * @format int64
+           */
+          anchorPoint?: number;
+          /**
+           * 團員等級
+           * @format int64
+           */
+          lv?: number;
+          /** 團員名稱 */
+          name?: string;
+          /** 有效投注 */
+          totalBets?: string;
+          /** 反佣 */
+          totalDeposits?: string;
+        }[];
+        /** 總計欄位 */
+        summary?: {
+          /**
+           * 團隊人數
+           * @format int64
+           */
+          teamSize?: number;
+          /** 生涯總投注 */
+          totalBets?: string;
+          /** 生涯總入金 */
+          totalDeposit?: string;
+        };
+      },
+      any
+    >({
+      path: `/ajax/customer/team/performance`,
+      method: "GET",
+      query: query,
       ...params,
     });
   /**

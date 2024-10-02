@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { Button } from '~/components/ui/button'
-import { useToast } from '~/hooks/use-toast'
+import { successToast } from '~/lib/toast'
 
 // ~/components/color-icons 複雜多色 Icon
 import * as ColorIcons from '~/components/color-icons'
@@ -10,15 +10,11 @@ import Icons from '~/icons/index'
 
 export default function SvgIcon() {
   const [state, copyToClipboard] = useCopyToClipboard()
-  const { toast } = useToast()
 
   useEffect(() => {
     if (!state.value) return
-    toast({
-      title: 'Copied',
-      variant: 'success',
-    })
-  }, [state, toast])
+    successToast('Copied')
+  }, [state])
 
   return (
     <div className="container px-2 py-4">

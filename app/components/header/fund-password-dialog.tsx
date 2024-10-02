@@ -17,7 +17,7 @@ import AddIcon from '~/icons/add.svg?react'
 import EditIcon from '~/icons/edit.svg?react'
 import { useState, useRef, useMemo } from 'react'
 import useStore from '~/stores/useStore'
-import { useToast } from '~/hooks/use-toast'
+import { successToast, errorToast } from '~/lib/toast'
 import VerifyButton, { ValidCode, type VerifyButtonExpose } from '~/components/verify-button'
 
 import { useFundActions } from './hooks'
@@ -52,7 +52,6 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
   const {
     info: { pin: storePin },
   } = useStore(state => state)
-  const { toast } = useToast()
   const {
     register,
     handleSubmit,
@@ -85,16 +84,11 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
       () => {
         setOpen(false)
         resetDialog()
-        toast({
-          title: !isChangePin ? ToastConf.add : ToastConf.update,
-          variant: 'success',
-        })
+
+        successToast(!isChangePin ? ToastConf.add : ToastConf.update)
       },
       () => {
-        toast({
-          title: ToastConf.error,
-          variant: 'error',
-        })
+        errorToast(ToastConf.error)
       }
     )
   }

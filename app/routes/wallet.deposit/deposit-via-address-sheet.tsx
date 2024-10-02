@@ -14,11 +14,11 @@ import {
 import { Button } from '~/components/ui/button'
 import { Label } from '~/components/ui/label'
 import { Input } from '~/components/ui/input'
-import { useToast } from '~/hooks/use-toast'
 import { Skeleton } from '~/components/ui/skeleton'
 import CopyIcon from '~/icons/copy.svg?react'
 import InfoIcon from '~/icons/info.svg?react'
 import { cryptoDetails, isValidCrypto } from '~/consts/crypto'
+import { successToast } from '~/lib/toast'
 
 interface DepositViaAddressDialogProps {
   currency: string
@@ -30,15 +30,11 @@ interface DepositViaAddressDialogProps {
 
 const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ currency, info }) => {
   const [state, copyToClipboard] = useCopyToClipboard()
-  const { toast } = useToast()
 
   useEffect(() => {
     if (!state.value) return
-    toast({
-      title: 'Copied',
-      variant: 'success',
-    })
-  }, [state, toast])
+    successToast('Copied')
+  }, [state])
 
   if (!info) return <Skeleton className="h-9 w-full rounded-full" />
   return (

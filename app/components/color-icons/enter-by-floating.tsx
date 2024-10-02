@@ -2,13 +2,13 @@ import type { SVGProps } from 'react'
 import React from 'react'
 
 interface SvgEnterByFloatingProps extends SVGProps<SVGSVGElement> {
-  imgurl: string
+  imgUrl: string
   imgWidth?: number
   imgHeight?: number
 }
 
 const SvgEnterByFloating: React.FC<SvgEnterByFloatingProps> = ({
-  imgurl,
+  imgUrl,
   imgWidth = 25.65,
   imgHeight = 29.25,
   ...props
@@ -35,7 +35,7 @@ const SvgEnterByFloating: React.FC<SvgEnterByFloatingProps> = ({
           mask="url(#mask)"
         />
         <image
-          href={imgurl}
+          href={imgUrl}
           x={(52 - imgWidth) / 2}
           y={(52 - imgHeight) / 2}
           width={imgWidth}

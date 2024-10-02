@@ -1,19 +1,19 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
 import type { LinksFunction } from '@remix-run/node'
-import { Toaster } from '~/components/ui/toaster'
+import { Toaster } from 'react-hot-toast'
 import MainNav from '~/components/main-nav'
 import Header from '~/components/header/index'
 import AppRoot from '~/components/app-root/index'
 import ParticleBackground from '~/components/particle-background'
 import AppLoading from '~/components/app-loading'
-import CurrentUrlPopover from '~/components/current-url-popover'
 import NeedLoginDialog from '~/components/need-login-dialog'
+import DevTool from '~/components/dev-tool/index'
 import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 import { useSafePaddingClass } from '~/hooks/useSafePaddingClass'
 import { cn } from '~/lib/utils'
 
-import useAuthGuard from './hooks/useAuthGuard'
-import { iconsLinks, prefetchAssetsLinks } from './consts/prefetch'
+import useAuthGuard from '~/hooks/useAuthGuard'
+import { iconsLinks, prefetchAssetsLinks } from '~/consts/prefetch'
 
 import './tailwind.css'
 
@@ -62,11 +62,16 @@ export default function App() {
         </main>
         <MainNav />
         <NeedLoginDialog />
+        {/* 開發使用工具欄 */}
+        <DevTool />
       </AppRoot>
       <ParticleBackground />
-      <Toaster />
-      {/* 開發使用 */}
-      <CurrentUrlPopover />
+      <Toaster
+        // 居中
+        containerStyle={{
+          top: '50%',
+        }}
+      />
     </>
   )
 }

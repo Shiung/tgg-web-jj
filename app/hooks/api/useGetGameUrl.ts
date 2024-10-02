@@ -3,7 +3,7 @@ import { apis } from '~/api/index'
 import { useNavigate } from '@remix-run/react'
 import { type GameCurrency } from '~/consts/game'
 import { useState, useCallback, useRef, useEffect } from 'react'
-import { useToast } from '~/hooks/use-toast'
+import { errorToast } from '~/lib/toast'
 import { AxiosError } from 'axios'
 
 interface MutationVariables {
@@ -14,7 +14,6 @@ interface MutationVariables {
 const useGetGameUrl = () => {
   const navigate = useNavigate()
   const [gameUrl, setGameUrl] = useState<string | null>(null)
-  const { toast } = useToast()
   const mutateRef = useRef<(variables: MutationVariables) => void>()
 
   const mutation = useMutation({
@@ -29,19 +28,13 @@ const useGetGameUrl = () => {
       if (url) {
         setGameUrl(url)
       } else {
-        toast({
-          title: '未找到遊戲 URL',
-          variant: 'error',
-        })
+        errorToast('Game URL not found')
         navigate('/')
         console.error('[ERROR] gameUrl URL 不存在')
       }
     },
     onError: (error: AxiosError<any>) => {
-      toast({
-        title: error.response?.data?.message || 'Unknown error',
-        variant: 'error',
-      })
+      errorToast(error.response?.data?.message || 'Unknown error')
       navigate('/')
       console.error('[ERROR] gamesEnterCreate 失敗 ', error)
       setGameUrl(null)

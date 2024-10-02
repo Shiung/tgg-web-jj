@@ -18,7 +18,7 @@ const buttonVariants = cva(
         outlineSoft: 'border border-primary text-primary hover:bg-[#FFF871]/30',
         menu: 'bg-[#1C1C1C] rounded-xl border border-transparent text-white hover:border-primary hover:text-primary hover:bg-[#FFF871]/30',
         select: 'bg-[#333] border-[0.5px] border-white/20 text-white',
-        icon: 'opacity-70 transition-opacity rounded-full hover:opacity-100',
+        icon: 'opacity-70 transition-opacity hover:opacity-100',
         link: '',
       },
       size: {

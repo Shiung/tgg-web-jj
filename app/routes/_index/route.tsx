@@ -1,6 +1,5 @@
 import type { MetaFunction } from '@remix-run/node'
 import { Link } from '@remix-run/react'
-import { Boxes } from 'lucide-react'
 import Autoplay from 'embla-carousel-autoplay'
 // import { Button } from '~/components/ui/button'
 import {
@@ -14,6 +13,7 @@ import {
 import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
 import ProtectedLink from '~/components/protected-link'
 import { gameList, GameId, getGameRoute } from '~/consts/game'
+import useStore from '~/stores/useStore'
 
 import Footer from './footer'
 
@@ -40,6 +40,8 @@ const bannerSlides = [
 
 /* Home */
 export default function Index() {
+  const maxWidth = useStore(state => state.maxWidth)
+
   return (
     <div className="container px-0">
       {/* banner carousel */}
@@ -47,7 +49,7 @@ export default function Index() {
         <div className="absolute inset-0 py-3">
           <div className="h-full w-full animate-background-wave bg-[url('/images/long-wave.png')] bg-cover bg-center bg-repeat-x" />
         </div>
-        <Carousel className="w-full px-4 py-3" plugins={[Autoplay({ delay: 3000 })]}>
+        <Carousel className="w-full py-3" plugins={[Autoplay({ delay: 3000 })]}>
           <CarouselContent className="ml-0">
             {bannerSlides.map(slide => (
               <CarouselItem
@@ -165,24 +167,16 @@ export default function Index() {
       </div>
       {/* footer */}
       <Footer />
-      {/* 開發使用 */}
-      {/* playground */}
-      <a
-        className="fixed left-0 top-[45%] z-50 rounded-r-2xl border border-l-0 border-gray-600 bg-black/50 p-2 py-2 pl-1 pr-3 shadow backdrop-blur"
-        href="/playground"
-        rel="noopener noreferrer"
-      >
-        <Boxes />
-      </a>
 
       {/* 紅包使用 */}
       <Link
         prefetch="viewport"
-        className="fixed bottom-24 left-0 z-50"
+        className="fixed bottom-24 z-50"
+        style={{ left: `calc((100vw - ${maxWidth}) / 2)` }}
         to="/lucky-money/list"
         rel="noopener noreferrer"
       >
-        <SvgEnterByFloating imgurl="/images/lucky-money/lucky-money.png" />
+        <SvgEnterByFloating imgUrl="/images/lucky-money/lucky-money.png" />
       </Link>
     </div>
   )

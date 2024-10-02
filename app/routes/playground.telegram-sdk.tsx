@@ -63,34 +63,34 @@ export default function TelegramSdk() {
 
   const [isBackButtonVisible, setBackButtonVisible] = useState(true)
 
-  const initDataRows = useMemo(() => {
-    if (!initData || !initDataRaw) {
-      return
-    }
+  // const initDataRows = useMemo(() => {
+  //   if (!initData || !initDataRaw) {
+  //     return
+  //   }
 
-    const {
-      hash,
-      queryId,
-      chatType,
-      chatInstance,
-      authDate,
-      startParam,
-      canSendAfter,
-      canSendAfterDate,
-    } = initData
-    return [
-      { title: 'raw', value: initDataRaw },
-      { title: 'auth_date', value: authDate.toLocaleString() },
-      { title: 'auth_date (raw)', value: authDate.getTime() / 1000 },
-      { title: 'hash', value: hash },
-      { title: 'can_send_after', value: canSendAfterDate?.toISOString() },
-      { title: 'can_send_after (raw)', value: canSendAfter },
-      { title: 'query_id', value: queryId },
-      { title: 'start_param', value: startParam },
-      { title: 'chat_type', value: chatType },
-      { title: 'chat_instance', value: chatInstance },
-    ]
-  }, [initData, initDataRaw])
+  //   const {
+  //     hash,
+  //     queryId,
+  //     chatType,
+  //     chatInstance,
+  //     authDate,
+  //     startParam,
+  //     canSendAfter,
+  //     canSendAfterDate,
+  //   } = initData
+  //   return [
+  //     { title: 'raw', value: initDataRaw },
+  //     { title: 'auth_date', value: authDate.toLocaleString() },
+  //     { title: 'auth_date (raw)', value: authDate.getTime() / 1000 },
+  //     { title: 'hash', value: hash },
+  //     { title: 'can_send_after', value: canSendAfterDate?.toISOString() },
+  //     { title: 'can_send_after (raw)', value: canSendAfter },
+  //     { title: 'query_id', value: queryId },
+  //     { title: 'start_param', value: startParam },
+  //     { title: 'chat_type', value: chatType },
+  //     { title: 'chat_instance', value: chatInstance },
+  //   ]
+  // }, [initData, initDataRaw])
 
   const userRows = useMemo(() => {
     return initData && initData.user ? getUserRows(initData.user) : undefined
@@ -188,7 +188,7 @@ export default function TelegramSdk() {
               // eslint-disable-next-line jsx-a11y/anchor-is-valid
               <a
                 key={idx}
-                href="javascript:void(0);"
+                href="#"
                 onClick={() => {
                   if (effect.type === 'impact') {
                     triggerImpact(style as ImpactHapticFeedbackStyle)

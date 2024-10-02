@@ -80,6 +80,56 @@
         "responses": {}
       }
     },
+    "/_sys/kafka/topic/{topic}/key/{key}/handle": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "sys"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: topic",
+            "name": "topic",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Path parameter: key",
+            "name": "key",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/_sys/kafka/topic/{topic}/key/{key}/publish": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "sys"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: topic",
+            "name": "topic",
+            "in": "path",
+            "required": true
+          },
+          {
+            "type": "string",
+            "description": "Path parameter: key",
+            "name": "key",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {}
+      }
+    },
     "/_sys/log": {
       "get": {
         "description": "Auto-generated API documentation",
@@ -384,7 +434,8 @@
                 },
                 "customerId": {
                   "description": "玩家Id",
-                  "type": "string"
+                  "type": "integer",
+                  "format": "uint64"
                 },
                 "email": {
                   "description": "信箱",
@@ -402,6 +453,10 @@
                   "description": "產品Id",
                   "type": "integer",
                   "format": "uint64"
+                },
+                "referralCode": {
+                  "description": "用戶分享推薦代碼",
+                  "type": "string"
                 }
               }
             }
@@ -507,8 +562,8 @@
                   "format": "uint64",
                   "minimum": 1
                 },
-                "startapp": {
-                  "description": "推薦轉介碼",
+                "referralCode": {
+                  "description": "用戶分享推薦代碼",
                   "type": "string"
                 },
                 "userName": {
@@ -533,6 +588,183 @@
                 "token": {
                   "description": "登入token",
                   "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/customer/share": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*CustomerController)"
+        ],
+        "responses": {}
+      }
+    },
+    "/ajax/customer/team/info": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*CustomerController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "class": {
+                  "description": "團隊星等",
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "inviteSize": {
+                  "description": "邀請人數",
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "teamSize": {
+                  "description": "團隊人數",
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "todayCommission": {
+                  "description": "今日反佣",
+                  "type": "string"
+                },
+                "totalBets": {
+                  "description": "生涯總投注",
+                  "type": "string"
+                },
+                "totalCommission": {
+                  "description": "生涯反佣",
+                  "type": "string"
+                },
+                "totalDeposit": {
+                  "description": "生涯總入金",
+                  "type": "string"
+                },
+                "validSize": {
+                  "description": "邀請有效人數",
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/customer/team/performance": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*CustomerController)"
+        ],
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "uint64",
+            "description": "玩家Id",
+            "name": "customerId",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "排序欄位,可帶入lv,bet,deposit任一，未帶時預設lv+customer_id",
+            "name": "sortField",
+            "in": "query"
+          },
+          {
+            "type": "boolean",
+            "description": "排序方向,true為升冪",
+            "name": "sortOrder",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "團員名稱",
+            "name": "name",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "團員等級",
+            "name": "lv",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "description": "頁接續起始定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位",
+            "name": "anchorPoint",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "anchorPoint": {
+                  "description": "回傳使用定位",
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "data": {
+                  "description": "資料",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "anchorPoint": {
+                        "description": "下頁定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位",
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "lv": {
+                        "description": "團員等級",
+                        "type": "integer",
+                        "format": "int64"
+                      },
+                      "name": {
+                        "description": "團員名稱",
+                        "type": "string"
+                      },
+                      "totalBets": {
+                        "description": "有效投注",
+                        "type": "string"
+                      },
+                      "totalDeposits": {
+                        "description": "反佣",
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "summary": {
+                  "description": "總計欄位",
+                  "type": "object",
+                  "properties": {
+                    "teamSize": {
+                      "description": "團隊人數",
+                      "type": "integer",
+                      "format": "int64"
+                    },
+                    "totalBets": {
+                      "description": "生涯總投注",
+                      "type": "string"
+                    },
+                    "totalDeposit": {
+                      "description": "生涯總入金",
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -840,7 +1072,105 @@
       "get": {
         "description": "Auto-generated API documentation",
         "tags": [
-          "(*VenueController)"
+          "(*SubGameController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "list"
+              ],
+              "properties": {
+                "list": {
+                  "description": "列表",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "nullable": true,
+                    "required": [
+                      "id",
+                      "gameLogo",
+                      "gameCode",
+                      "gameName",
+                      "gameType",
+                      "translations"
+                    ],
+                    "properties": {
+                      "gameCode": {
+                        "description": "遊戲ID",
+                        "type": "string",
+                        "maximum": 50,
+                        "minimum": 1
+                      },
+                      "gameLogo": {
+                        "description": "遊戲Logo",
+                        "type": "string",
+                        "maximum": 200,
+                        "minimum": 1
+                      },
+                      "gameName": {
+                        "description": "遊戲名稱",
+                        "type": "string",
+                        "maximum": 50,
+                        "minimum": 1
+                      },
+                      "gameType": {
+                        "description": "遊戲類型",
+                        "type": "integer",
+                        "format": "uint64"
+                      },
+                      "id": {
+                        "description": "SubGameID",
+                        "type": "integer",
+                        "format": "uint64"
+                      },
+                      "translations": {
+                        "description": "語言翻譯",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "nullable": true,
+                          "required": [
+                            "language"
+                          ],
+                          "properties": {
+                            "gameName": {
+                              "description": "遊戲名稱",
+                              "type": "string",
+                              "maximum": 50,
+                              "minimum": 0
+                            },
+                            "language": {
+                              "description": "語言代碼ex: 'en','ja','ko','ar','es','fr'. Allowed Enum",
+                              "type": "string",
+                              "enum": [
+                                "en",
+                                "ja",
+                                "ko",
+                                "ar",
+                                "es",
+                                "fr"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/games/active": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*SubGameController)"
         ],
         "responses": {
           "200": {
@@ -1061,6 +1391,24 @@
         }
       }
     },
+    "/ajax/task/open-link/id/{id}": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*TaskController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {}
+      }
+    },
     "/ajax/team/commission/list": {
       "get": {
         "description": "Auto-generated API documentation",
@@ -1101,7 +1449,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Required, Minimum: 1)",
+            "description": "分頁頁數 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -1110,7 +1458,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -1378,8 +1726,124 @@
                       },
                       "switch": {
                         "description": "開關",
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                       }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/wallet/history/list": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*WalletController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "format": "date-time",
+            "description": "帳變時間(起日) (Required when TransactionTimeTo is present)",
+            "name": "transactionTimeFrom",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "format": "date-time",
+            "description": "帳變時間(迄日) (Required when TransactionTimeFrom is present)",
+            "name": "transactionTimeTo",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "幣種 TON USDT KOKON",
+            "name": "currency",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "交易類型",
+            "name": "type",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "收支 Income Expense",
+            "name": "balance",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "list": {
+                  "description": "帳變記錄列表",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "transactionTime",
+                      "Type",
+                      "amount",
+                      "currency"
+                    ],
+                    "properties": {
+                      "Type": {
+                        "description": "帳變類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw",
+                        "type": "string"
+                      },
+                      "amount": {
+                        "description": "帳變金額",
+                        "type": "string"
+                      },
+                      "currency": {
+                        "description": "幣種",
+                        "type": "string"
+                      },
+                      "transactionTime": {
+                        "description": "帳變時間",
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                },
+                "pagination": {
+                  "description": "分頁資訊",
+                  "type": "object",
+                  "required": [
+                    "pageSize",
+                    "totalRecord",
+                    "totalPage"
+                  ],
+                  "properties": {
+                    "pageSize": {
+                      "description": "分頁筆數",
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 20
+                    },
+                    "totalPage": {
+                      "description": "總頁數",
+                      "type": "integer",
+                      "nullable": true,
+                      "format": "int64",
+                      "minimum": 0
+                    },
+                    "totalRecord": {
+                      "description": "總筆數",
+                      "type": "integer",
+                      "nullable": true,
+                      "format": "int64",
+                      "minimum": 0
                     }
                   }
                 }
@@ -1471,6 +1935,44 @@
         }
       }
     },
+    "/ajax/wallet/transfer/rate": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*TransferController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "usdt2KokonRate",
+                "depositRate",
+                "withdrawRate"
+              ],
+              "properties": {
+                "depositRate": {
+                  "description": "轉USDT匯率",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "usdt2KokonRate": {
+                  "description": "USDT轉KOKON匯率",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "withdrawRate": {
+                  "description": "USDT轉換匯率",
+                  "type": "string",
+                  "format": "decimal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ajax/wallet/withdraw": {
       "post": {
         "description": "Auto-generated API documentation",
@@ -1488,7 +1990,8 @@
                 "currency",
                 "chainNet",
                 "amount",
-                "recipientAddress"
+                "recipientAddress",
+                "fundPassword"
               ],
               "properties": {
                 "amount": {
@@ -1502,6 +2005,10 @@
                 },
                 "currency": {
                   "description": "幣別",
+                  "type": "string"
+                },
+                "fundPassword": {
+                  "description": "資金密碼",
                   "type": "string"
                 },
                 "memo": {
@@ -1622,7 +2129,8 @@
                       },
                       "switch": {
                         "description": "開關",
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                       },
                       "usedAmount": {
                         "description": "今日已申請金額",
@@ -1631,6 +2139,67 @@
                       "wagerRequirement": {
                         "description": "提現流水",
                         "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/wallet/withdrawing/list": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*WithdrawController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "list"
+              ],
+              "properties": {
+                "list": {
+                  "description": "申請中提現列表",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "currency",
+                      "applyAmount",
+                      "submissionTime",
+                      "address"
+                    ],
+                    "properties": {
+                      "address": {
+                        "description": "申請提現的地址",
+                        "type": "string"
+                      },
+                      "applyAmount": {
+                        "description": "申請金額",
+                        "type": "string"
+                      },
+                      "currency": {
+                        "description": "申請提現幣種. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "TON",
+                          "USDT"
+                        ]
+                      },
+                      "memo": {
+                        "description": "申請時填的備註",
+                        "type": "string"
+                      },
+                      "submissionTime": {
+                        "description": "申請時間",
+                        "type": "string",
+                        "format": "date-time"
                       }
                     }
                   }
@@ -1852,6 +2421,103 @@
         }
       }
     },
+    "CustomerWalletChangeGetRequest": {
+      "type": "object",
+      "properties": {
+        "Balance": {
+          "description": "收支 Income Expense",
+          "type": "string"
+        },
+        "Currency": {
+          "description": "幣種 TON USDT KOKON",
+          "type": "string"
+        },
+        "TransactionTimeFrom": {
+          "description": "帳變時間(起日)",
+          "type": "string",
+          "nullable": true,
+          "format": "date-time"
+        },
+        "TransactionTimeTo": {
+          "description": "帳變時間(迄日)",
+          "type": "string",
+          "nullable": true,
+          "format": "date-time"
+        },
+        "TxCategory": {
+          "description": "交易類型",
+          "type": "string"
+        }
+      }
+    },
+    "CustomerWalletChangeGetResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "description": "帳變記錄列表",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "transactionTime",
+              "Type",
+              "amount",
+              "currency"
+            ],
+            "properties": {
+              "Type": {
+                "description": "帳變類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw",
+                "type": "string"
+              },
+              "amount": {
+                "description": "帳變金額",
+                "type": "string"
+              },
+              "currency": {
+                "description": "幣種",
+                "type": "string"
+              },
+              "transactionTime": {
+                "description": "帳變時間",
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        },
+        "pagination": {
+          "description": "分頁資訊",
+          "type": "object",
+          "required": [
+            "pageSize",
+            "totalRecord",
+            "totalPage"
+          ],
+          "properties": {
+            "pageSize": {
+              "description": "分頁筆數",
+              "type": "integer",
+              "format": "int64",
+              "minimum": 20
+            },
+            "totalPage": {
+              "description": "總頁數",
+              "type": "integer",
+              "nullable": true,
+              "format": "int64",
+              "minimum": 0
+            },
+            "totalRecord": {
+              "description": "總筆數",
+              "type": "integer",
+              "nullable": true,
+              "format": "int64",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
     "DepositResponse": {
       "type": "object",
       "required": [
@@ -1904,7 +2570,8 @@
               },
               "switch": {
                 "description": "開關",
-                "type": "boolean"
+                "type": "boolean",
+                "nullable": true
               }
             }
           }
@@ -1937,22 +2604,10 @@
         }
       }
     },
-    "GetEnergyResponse": {
-      "type": "object",
-      "required": [
-        "amount"
-      ],
-      "properties": {
-        "amount": {
-          "type": "integer",
-          "format": "uint64"
-        }
-      }
-    },
-    "GetGamesByFrontedRequest": {
+    "GetActiveGamesRequest": {
       "type": "object"
     },
-    "GetGamesByFrontedResponse": {
+    "GetActiveGamesResponse": {
       "type": "object",
       "required": [
         "list"
@@ -2034,6 +2689,131 @@
               }
             }
           }
+        }
+      }
+    },
+    "GetAllGamesRequest": {
+      "type": "object"
+    },
+    "GetAllGamesResponse": {
+      "type": "object",
+      "required": [
+        "list"
+      ],
+      "properties": {
+        "list": {
+          "description": "列表",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "nullable": true,
+            "required": [
+              "id",
+              "gameLogo",
+              "gameCode",
+              "gameName",
+              "gameType",
+              "translations"
+            ],
+            "properties": {
+              "gameCode": {
+                "description": "遊戲ID",
+                "type": "string",
+                "maximum": 50,
+                "minimum": 1
+              },
+              "gameLogo": {
+                "description": "遊戲Logo",
+                "type": "string",
+                "maximum": 200,
+                "minimum": 1
+              },
+              "gameName": {
+                "description": "遊戲名稱",
+                "type": "string",
+                "maximum": 50,
+                "minimum": 1
+              },
+              "gameType": {
+                "description": "遊戲類型",
+                "type": "integer",
+                "format": "uint64"
+              },
+              "id": {
+                "description": "SubGameID",
+                "type": "integer",
+                "format": "uint64"
+              },
+              "translations": {
+                "description": "語言翻譯",
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "nullable": true,
+                  "required": [
+                    "language"
+                  ],
+                  "properties": {
+                    "gameName": {
+                      "description": "遊戲名稱",
+                      "type": "string",
+                      "maximum": 50,
+                      "minimum": 0
+                    },
+                    "language": {
+                      "description": "語言代碼ex: 'en','ja','ko','ar','es','fr'. Allowed Enum",
+                      "type": "string",
+                      "enum": [
+                        "en",
+                        "ja",
+                        "ko",
+                        "ar",
+                        "es",
+                        "fr"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "GetEnergyResponse": {
+      "type": "object",
+      "required": [
+        "amount"
+      ],
+      "properties": {
+        "amount": {
+          "type": "integer",
+          "format": "uint64"
+        }
+      }
+    },
+    "GetRateResponse": {
+      "type": "object",
+      "required": [
+        "usdt2KokonRate",
+        "depositRate",
+        "withdrawRate"
+      ],
+      "properties": {
+        "depositRate": {
+          "description": "轉USDT匯率",
+          "type": "string",
+          "format": "decimal"
+        },
+        "usdt2KokonRate": {
+          "description": "USDT轉KOKON匯率",
+          "type": "string",
+          "format": "decimal"
+        },
+        "withdrawRate": {
+          "description": "USDT轉換匯率",
+          "type": "string",
+          "format": "decimal"
         }
       }
     },
@@ -2164,7 +2944,8 @@
         },
         "customerId": {
           "description": "玩家Id",
-          "type": "string"
+          "type": "integer",
+          "format": "uint64"
         },
         "email": {
           "description": "信箱",
@@ -2182,6 +2963,10 @@
           "description": "產品Id",
           "type": "integer",
           "format": "uint64"
+        },
+        "referralCode": {
+          "description": "用戶分享推薦代碼",
+          "type": "string"
         }
       }
     },
@@ -2354,8 +3139,8 @@
           "format": "uint64",
           "minimum": 1
         },
-        "startapp": {
-          "description": "推薦轉介碼",
+        "referralCode": {
+          "description": "用戶分享推薦代碼",
           "type": "string"
         },
         "userName": {
@@ -2450,6 +3235,142 @@
                 "description": "四級佣金比例",
                 "type": "string"
               }
+            }
+          }
+        }
+      }
+    },
+    "TeamInfoRequest": {
+      "type": "object"
+    },
+    "TeamInfoResponse": {
+      "type": "object",
+      "properties": {
+        "class": {
+          "description": "團隊星等",
+          "type": "integer",
+          "format": "int64"
+        },
+        "inviteSize": {
+          "description": "邀請人數",
+          "type": "integer",
+          "format": "int64"
+        },
+        "teamSize": {
+          "description": "團隊人數",
+          "type": "integer",
+          "format": "int64"
+        },
+        "todayCommission": {
+          "description": "今日反佣",
+          "type": "string"
+        },
+        "totalBets": {
+          "description": "生涯總投注",
+          "type": "string"
+        },
+        "totalCommission": {
+          "description": "生涯反佣",
+          "type": "string"
+        },
+        "totalDeposit": {
+          "description": "生涯總入金",
+          "type": "string"
+        },
+        "validSize": {
+          "description": "邀請有效人數",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "TeamPerformanceRequest": {
+      "type": "object",
+      "properties": {
+        "AnchorPoint": {
+          "description": "頁接續起始定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位",
+          "type": "integer",
+          "format": "int64"
+        },
+        "CustomerId": {
+          "description": "玩家Id",
+          "type": "integer",
+          "format": "uint64"
+        },
+        "Lv": {
+          "description": "團員等級",
+          "type": "integer",
+          "format": "int64"
+        },
+        "Name": {
+          "description": "團員名稱",
+          "type": "string"
+        },
+        "SortField": {
+          "description": "排序欄位,可帶入lv,bet,deposit任一，未帶時預設lv+customer_id",
+          "type": "string"
+        },
+        "SortOrder": {
+          "description": "排序方向,true為升冪",
+          "type": "boolean"
+        }
+      }
+    },
+    "TeamPerformanceResponse": {
+      "type": "object",
+      "properties": {
+        "anchorPoint": {
+          "description": "回傳使用定位",
+          "type": "integer",
+          "format": "int64"
+        },
+        "data": {
+          "description": "資料",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "anchorPoint": {
+                "description": "下頁定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位",
+                "type": "integer",
+                "format": "int64"
+              },
+              "lv": {
+                "description": "團員等級",
+                "type": "integer",
+                "format": "int64"
+              },
+              "name": {
+                "description": "團員名稱",
+                "type": "string"
+              },
+              "totalBets": {
+                "description": "有效投注",
+                "type": "string"
+              },
+              "totalDeposits": {
+                "description": "反佣",
+                "type": "string"
+              }
+            }
+          }
+        },
+        "summary": {
+          "description": "總計欄位",
+          "type": "object",
+          "properties": {
+            "teamSize": {
+              "description": "團隊人數",
+              "type": "integer",
+              "format": "int64"
+            },
+            "totalBets": {
+              "description": "生涯總投注",
+              "type": "string"
+            },
+            "totalDeposit": {
+              "description": "生涯總入金",
+              "type": "string"
             }
           }
         }
@@ -2594,7 +3515,8 @@
         "currency",
         "chainNet",
         "amount",
-        "recipientAddress"
+        "recipientAddress",
+        "fundPassword"
       ],
       "properties": {
         "amount": {
@@ -2608,6 +3530,10 @@
         },
         "currency": {
           "description": "幣別",
+          "type": "string"
+        },
+        "fundPassword": {
+          "description": "資金密碼",
           "type": "string"
         },
         "memo": {
@@ -2710,7 +3636,8 @@
               },
               "switch": {
                 "description": "開關",
-                "type": "boolean"
+                "type": "boolean",
+                "nullable": true
               },
               "usedAmount": {
                 "description": "今日已申請金額",
@@ -2719,6 +3646,54 @@
               "wagerRequirement": {
                 "description": "提現流水",
                 "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "WithdrawingListResponse": {
+      "type": "object",
+      "required": [
+        "list"
+      ],
+      "properties": {
+        "list": {
+          "description": "申請中提現列表",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "currency",
+              "applyAmount",
+              "submissionTime",
+              "address"
+            ],
+            "properties": {
+              "address": {
+                "description": "申請提現的地址",
+                "type": "string"
+              },
+              "applyAmount": {
+                "description": "申請金額",
+                "type": "string"
+              },
+              "currency": {
+                "description": "申請提現幣種. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "TON",
+                  "USDT"
+                ]
+              },
+              "memo": {
+                "description": "申請時填的備註",
+                "type": "string"
+              },
+              "submissionTime": {
+                "description": "申請時間",
+                "type": "string",
+                "format": "date-time"
               }
             }
           }

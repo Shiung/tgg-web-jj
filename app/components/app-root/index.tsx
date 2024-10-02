@@ -1,5 +1,4 @@
 import { type PropsWithChildren, useEffect, useMemo } from 'react'
-import { useNavigate } from '@remix-run/react'
 import {
   SDKProvider,
   useLaunchParams,
@@ -13,7 +12,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import useStore from '~/stores/useStore'
 import { useTelegramMock } from '~/hooks/useTelegramMock'
 import useTelegramNavigate from '~/hooks/useTelegramNavigate'
-import { useTelegramAutoLogin } from '~/hooks/useTelegramLogin'
+import { useTelegramMiniAppAutoLogin } from '~/hooks/useTelegramLogin'
 import { cn, mapSystemLanguageCode } from '~/lib/utils'
 
 import classes from './index.module.scss'
@@ -30,14 +29,12 @@ const TelegramInit: React.FC = () => {
   useTelegramNavigate()
   const { i18n } = useTranslation()
   const setTelegramInitDataByInitData = useStore(state => state.setTelegramInitDataByInitData)
-  const navigate = useNavigate()
   const swipeBehavior = useSwipeBehavior()
   const launchParams = useLaunchParams(true)
-  const startParam = launchParams?.startParam
   const miniApp = useMiniApp()
 
   // 自動登入
-  useTelegramAutoLogin(launchParams?.initData)
+  useTelegramMiniAppAutoLogin(launchParams?.initData)
 
   // 避免下滑意外關閉 miniapp
   useEffect(() => {
@@ -60,18 +57,6 @@ const TelegramInit: React.FC = () => {
     initData?.user && setTelegramInitDataByInitData(initData.user)
     i18n.changeLanguage(systemLanguageCode)
   }, [i18n, launchParams, miniApp, setTelegramInitDataByInitData])
-
-  useEffect(() => {
-    if (startParam === 'debug') {
-      import('eruda').then(lib => lib.default.init())
-    } else if (startParam === 'wallet') {
-      navigate('/wallet')
-    } else if (startParam && /^r_/.test(startParam)) {
-      // 實作分享邀請碼功能，預期以某字符開頭 例如r_ 開頭 eg: r_xdgYdr6
-      const referralCode = startParam.replace(/^r_/, '') // 去掉前面的 r_
-      console.log('referralCode: ', referralCode)
-    }
-  }, [navigate, startParam])
 
   return null
 }

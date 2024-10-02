@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import type { DateRange } from 'react-day-picker'
 import InfiniteScroll from '~/components/ui/infinite-scroll'
 import { cn } from '~/lib/utils'
 import styles from './index.module.scss'
@@ -11,8 +12,7 @@ import DatePickerSheet from '~/components/date-picker-sheet/index'
 import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
 import { formatRFC3339 } from 'date-fns'
 import BetRecordItem from './bet-record-item'
-import { useToast } from '~/hooks/use-toast'
-import { DateRange } from 'react-day-picker'
+import { errorToast } from '~/lib/toast'
 
 interface FormValues {
   gameList: string
@@ -57,7 +57,7 @@ const queryString: GameTransactionRequest = {
 export default function BetRecord({ currentTab }: { currentTab: string }) {
   const [currency, setCurrency] = useState<Currency>(Currency.KOKON)
   const [records, setRecords] = useState<GameTransaction[]>([])
-  const { toast } = useToast()
+
   // 在组件内部
   const { control } = useForm<FormValues>({
     mode: 'onChange',
@@ -79,9 +79,9 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
     }
     return {
       pagination: {
-        pageSize: res.data.pageSize,
-        totalPage: res.data.totalPage,
-        totalRecord: res.data.totalRecord,
+        pageSize: res.data.pagination?.pageSize,
+        totalPage: res.data.pagination?.totalPage,
+        totalRecord: res.data.pagination?.totalRecord,
       },
       records: res.data.records,
     } as GameTransactionResponse
@@ -121,12 +121,9 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
 
   useEffect(() => {
     if (error) {
-      toast({
-        title: error.message,
-        variant: 'error',
-      })
+      errorToast(error.message)
     }
-  }, [error, toast])
+  }, [error])
 
   useEffect(() => {
     if (data && Array.isArray(data.pages)) {

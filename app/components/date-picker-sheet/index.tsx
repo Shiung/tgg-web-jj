@@ -77,7 +77,7 @@ export default function DatePickerSheet({
   }
 
   const displayDate = useMemo(() => {
-    console.log('displayDate', internalDate, internalTimeFrom)
+    // console.log('displayDate', internalDate, internalTimeFrom)
 
     if (internalDate instanceof Date) {
       return format(internalDate, 'MM-dd-yyyy') + (showTimePicker ? ` ${internalTimeFrom}` : '')
@@ -85,7 +85,7 @@ export default function DatePickerSheet({
   }, [internalDate, internalTimeFrom, showTimePicker])
 
   const displayRangeDate = useMemo(() => {
-    console.log('displayRangeDate', internalDate, internalTimeFrom, internalTimeTo)
+    // console.log('displayRangeDate', internalDate, internalTimeFrom, internalTimeTo)
 
     if (range && isDateRange(internalDate)) {
       const { from, to } = internalDate
