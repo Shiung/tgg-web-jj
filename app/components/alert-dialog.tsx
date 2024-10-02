@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import {
   Dialog,
   DialogClose,
@@ -7,7 +8,6 @@ import {
   DialogTitle,
 } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
-import { useMemo } from 'react'
 
 interface AlertDialogProps {
   isOpen: boolean

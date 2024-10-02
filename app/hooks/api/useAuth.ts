@@ -1,7 +1,6 @@
 import { useMutation, UseMutationOptions } from '@tanstack/react-query'
 import { User as TelegramUser } from '@telegram-apps/sdk-react'
 import { type AxiosResponse } from 'axios'
-import { setHeaderToken } from '~/api/api-client'
 import { apis } from '~/api/index'
 import { LoginRequest, LoginResponse } from '~/api/codegen/data-contracts'
 import { TelegramOAuthUser } from '~/components/telegram-login-button/types'
@@ -75,17 +74,12 @@ interface UseLoginOptions
   extends Partial<UseMutationOptions<AxiosResponse<LoginResponse>, Error, LoginRequest>> {}
 
 const useLogin = (options?: UseLoginOptions) => {
-  const { setToken } = useStore(state => state)
+  const checkIsLoggedIn = useStore(state => state.checkIsLoggedIn)
 
   return useMutation({
     mutationFn: apis.customer.customerLoginCreate as MutationFn,
     onSuccess: (data, variables, context) => {
-      const token = data?.data.token
-      if (token) {
-        // TODO: 待 session 管理方案实现后移除
-        setToken(token)
-        setHeaderToken(token)
-      }
+      checkIsLoggedIn()
 
       if (options?.onSuccess) {
         options.onSuccess(data, variables, context)

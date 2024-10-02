@@ -3,9 +3,14 @@ import { useNavigate, useParams } from '@remix-run/react'
 import useStore from '~/stores/useStore'
 import { useGetGameUrl } from '~/hooks/api/useGetGameUrl'
 import { gameList, GameId } from '~/consts/game'
-
 import AppLoading from '~/components/app-loading'
+
 import BuyEnergyDialog from './buy-energy-dialog'
+
+// 配合 useMatches 聲明需要登录才能访问
+export const handle = {
+  requiresAuth: true,
+}
 
 const CasualGame: React.FC = () => {
   const params = useParams()

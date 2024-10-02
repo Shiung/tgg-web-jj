@@ -33,12 +33,12 @@ const DevTool = () => {
       <Button
         onClick={toggleExpand}
         className={cn(
-          'absolute right-0 top-1/2 h-10 w-5 -translate-y-1/2 transform rounded-l-xl rounded-r-none',
+          'absolute right-0 top-1/2 h-10 w-5 -translate-y-1/2 transform rounded-l-xl rounded-r-none opacity-70 transition-opacity hover:opacity-100',
           isExpanded
             ? 'right-0'
             : '-right-6 rounded-l-none rounded-r-xl border-gray-600 bg-black/50 shadow backdrop-blur'
         )}
-        variant="icon"
+        variant="link"
         size="icon"
       >
         {isExpanded ? <ChevronsLeft size={20} /> : <ChevronsRight size={20} />}

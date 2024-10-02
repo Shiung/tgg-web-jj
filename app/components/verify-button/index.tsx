@@ -6,6 +6,7 @@ import useStore from '~/stores/useStore'
 import CountDown, { type Ref } from './count-down'
 import { ValidCode } from './constants'
 import { useActions } from './hooks'
+import { errorToast } from '~/lib/toast'
 
 type Props = {
   kind: ValidCode
@@ -43,10 +44,13 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
     const { validEmailHandler } = useActions()
 
     const handleSendCode = useCallback(() => {
-      countRef.current?.handler(60)
-      // send Verify reqest
+      // send Verify request
       const sendEmail = email || storeEmail
-      if (!sendEmail) return
+      if (!sendEmail) {
+        errorToast('Email not set !')
+        return
+      }
+      countRef.current?.handler(60)
       validEmailHandler(sendEmail, kind, successCallBack, errorCallBack)
     }, [kind, email, storeEmail, validEmailHandler, successCallBack, errorCallBack])
 

@@ -7,7 +7,7 @@ interface ProtectedLinkProps extends LinkProps {
 }
 
 export default function ProtectedLink({ to, className, children, ...rest }: ProtectedLinkProps) {
-  const token = useStore(state => state.token)
+  const isLoggedIn = useStore(state => state.isLoggedIn)
   const openNeedLoginDialog = useStore(state => state.openNeedLoginDialog)
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
@@ -15,7 +15,7 @@ export default function ProtectedLink({ to, className, children, ...rest }: Prot
     openNeedLoginDialog() // 打开登录对话框
   }
 
-  return token ? (
+  return isLoggedIn ? (
     <Link to={to} className={className} {...rest}>
       {children}
     </Link>

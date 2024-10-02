@@ -1,15 +1,13 @@
 import { StateCreator } from 'zustand'
 import Cookies from 'js-cookie'
 import { v4 as uuidv4 } from 'uuid'
-import { setHeaderToken } from '~/api/api-client'
+// import { setHeaderToken } from '~/api/api-client'
 
 export interface AuthSlice {
-  token?: string
   deviceId?: string
   isLoggedIn: boolean
   needLoginDialogOpen: boolean
-  setToken: (token: string) => void
-  clearToken: () => void
+  checkIsLoggedIn: () => void
   logout: () => void
   openNeedLoginDialog: () => void
   closeNeedLoginDialog: () => void
@@ -27,12 +25,10 @@ const getStoredValue = (key: string): string | undefined => {
   return undefined
 }
 
-// TODO: 待 session 管理方案实现后移除
-const initialLoginStatus = !!getCookieValue('website_session') || !!getStoredValue('token')
-const initialToken: string | undefined = getStoredValue('token')
+const initialLoginStatus = !!getCookieValue('website_session')
 let initialDeviceId: string | undefined = getStoredValue('deviceId')
 
-// 處使 deviceId
+// 初始化 deviceId
 if (!initialDeviceId) {
   initialDeviceId = uuidv4()
   if (typeof window !== 'undefined') {
@@ -41,27 +37,16 @@ if (!initialDeviceId) {
 }
 
 const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = set => ({
-  token: initialToken,
   deviceId: initialDeviceId,
   isLoggedIn: initialLoginStatus,
   needLoginDialogOpen: false,
-  // TODO: 待 session 管理方案实现后移除
-  setToken: (token: string) => {
-    set({ token, isLoggedIn: true })
-    setHeaderToken(token)
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('token', token)
-    }
-  },
-  clearToken: () => {
-    set({ token: undefined, isLoggedIn: false })
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('token')
-    }
+  checkIsLoggedIn: () => {
+    const hasSessionCookie = !!getCookieValue('website_session')
+    set({ isLoggedIn: hasSessionCookie })
   },
   logout: () => {
-    set({ token: undefined, isLoggedIn: false })
-    setHeaderToken(null)
+    set({ isLoggedIn: false })
+    // TODO: 待 session 管理方案实现后移除
     if (typeof window !== 'undefined') {
       localStorage.removeItem('token')
     }

@@ -6,9 +6,9 @@ import TreasurePopOver from './treasure-popover'
 import WalletPopOver from './wallet-popover'
 
 const UserActions: React.FC = () => {
-  const { inTelegram, token } = useStore(state => state)
+  const { inTelegram, isLoggedIn } = useStore(state => state)
 
-  if (!inTelegram && !token) return <TelegramLoginButton />
+  if (!inTelegram && !isLoggedIn) return <TelegramLoginButton />
   return (
     <div className="flex items-center">
       {/* Wallet */}

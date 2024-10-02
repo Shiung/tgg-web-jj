@@ -12,7 +12,7 @@ import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 import { useSafePaddingClass } from '~/hooks/useSafePaddingClass'
 import { cn } from '~/lib/utils'
 
-import useAuthGuard from '~/hooks/useAuthGuard'
+import useRouteGuard from '~/hooks/useRouteGuard'
 import { iconsLinks, prefetchAssetsLinks } from '~/consts/prefetch'
 
 import './tailwind.css'
@@ -43,7 +43,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  useAuthGuard()
+  useRouteGuard()
   const maxWidth = useAppMaxWidth()
   const safePaddingClass = useSafePaddingClass()
 

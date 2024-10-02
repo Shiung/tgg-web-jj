@@ -77,14 +77,10 @@ export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
 }
 
 export const useTelegramMiniAppAutoLogin = (initData: InitDataParsed | undefined) => {
-  const token = useStore(state => state.token)
-  const isLoggedIn = useStore(state => state.isLoggedIn)
-
   const { mutate: doLogin } = useLogin()
 
   useEffect(() => {
-    // TODO: 待 session 管理方案实现后移除
-    if (!initData /* || isLoggedIn */) return
+    if (!initData) return
 
     // 有 telegram launch params 时，自動登入
     const handleLogin = async () => {
@@ -98,5 +94,5 @@ export const useTelegramMiniAppAutoLogin = (initData: InitDataParsed | undefined
     }
 
     handleLogin()
-  }, [doLogin, token, initData, isLoggedIn])
+  }, [doLogin, initData])
 }
