@@ -623,7 +623,7 @@ export default function SmashEgg() {
           )}
         </div>
       </CardTemplate>
-      <AlertDialog open={open} comfirm={resetTheGame} cancel={() => setOpen(false)} />
+      <AlertDialog open={open} confirm={resetTheGame} cancel={() => setOpen(false)} />
     </div>
   )
 }

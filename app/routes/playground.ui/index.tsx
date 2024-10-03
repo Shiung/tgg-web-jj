@@ -13,6 +13,8 @@ import WarningIcon from '~/icons/warning.svg?react'
 import { errorToast, successToast } from '~/lib/toast'
 import { successNotify } from '~/routes/wallet.deposit/route'
 
+import AlertDialogDemo from './alert-dialog-demo'
+
 interface FormValues {
   email: string
   level: string
@@ -114,7 +116,6 @@ export default function Ui() {
           clearable
         />
       </div>
-
       {/* Tooltip / Toast */}
       <h1 className="mt-4 text-xl font-bold">Info Tooltip / Toast</h1>
       <div className="mt-2 grid grid-cols-2 gap-2">
@@ -130,6 +131,8 @@ export default function Ui() {
         {/* 漸層邊框 Tooltip */}
         <InfoTooltip content="這是點擊後顯示的 Tooltip 內容" />
       </div>
+      {/* AlertDialog */}
+      <AlertDialogDemo />
 
       {/* 表單 */}
       <h1 className="mt-4 text-xl font-bold">Form</h1>
@@ -253,7 +256,6 @@ export default function Ui() {
           />
         </div>
       </form>
-
       {/* Amount */}
       <h1 className="mt-4 text-xl font-bold">Amount</h1>
       <div className="flex flex-col space-y-1">

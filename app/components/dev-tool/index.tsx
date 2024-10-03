@@ -15,7 +15,7 @@ const Playground = () => (
 
 const DevTool = () => {
   const maxWidth = useStore(state => state.maxWidth)
-  const [isExpanded, setIsExpanded] = useState(true)
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const toggleExpand = () => {
     setIsExpanded(prev => !prev)
@@ -36,7 +36,7 @@ const DevTool = () => {
           'absolute right-0 top-1/2 h-10 w-5 -translate-y-1/2 transform rounded-l-xl rounded-r-none opacity-70 transition-opacity hover:opacity-100',
           isExpanded
             ? 'right-0'
-            : '-right-6 rounded-l-none rounded-r-xl border-gray-600 bg-black/50 shadow backdrop-blur'
+            : '-right-5 rounded-l-none rounded-r-xl border-gray-600 bg-black/50 shadow backdrop-blur'
         )}
         variant="link"
         size="icon"

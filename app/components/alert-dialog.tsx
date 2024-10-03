@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogFooter,
   DialogHeader,
@@ -13,9 +12,12 @@ interface AlertDialogProps {
   isOpen: boolean
   onClose: () => void
   title?: string
-  message: string
+  message: string | React.ReactNode
   variant?: 'notice' | 'success'
-  onConfirm?: () => void
+  onRightButtonClick?: () => void
+  onLeftButtonClick?: () => void
+  leftButtonText?: string
+  rightButtonText?: string
 }
 
 const AlertDialog: React.FC<AlertDialogProps> = ({
@@ -24,15 +26,26 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   title = 'Notice',
   message,
   variant = 'notice',
-  onConfirm,
+  onRightButtonClick,
+  onLeftButtonClick,
+  leftButtonText = 'Cancel',
+  rightButtonText = 'OK',
 }) => {
   const imageSrc = useMemo(
     () => (variant === 'notice' ? '/images/system-notice.png' : '/images/system-success.png'),
     [variant]
   )
-  const handleOk = () => {
-    if (onConfirm) {
-      onConfirm()
+
+  const handleRightButtonClick = () => {
+    if (onRightButtonClick) {
+      onRightButtonClick()
+    }
+    onClose()
+  }
+
+  const handleLeftButtonClick = () => {
+    if (onLeftButtonClick) {
+      onLeftButtonClick()
     }
     onClose()
   }
@@ -43,20 +56,32 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div className="flex aspect-[319/128] flex-col items-center justify-center space-y-3">
-          <img src={imageSrc} alt="Notice" className="h-auto w-[100px] object-contain" />
-          <p className="px-3 text-center text-white/70">{message}</p>
+        <div className="flex flex-col items-stretch justify-center px-3 py-4">
+          <img
+            src={imageSrc}
+            alt="Notice"
+            className="h-auto w-[100px] self-center object-contain"
+          />
+          <div className="mt-3 text-center text-xs text-white/70">{message}</div>
+          <DialogFooter className="mt-6 flex flex-row space-x-2">
+            {onLeftButtonClick && (
+              <Button
+                className="flex-1"
+                variant="gray"
+                catEars
+                type="button"
+                onClick={handleLeftButtonClick}
+              >
+                {leftButtonText}
+              </Button>
+            )}
+            {onRightButtonClick && (
+              <Button className="flex-1" catEars type="button" onClick={handleRightButtonClick}>
+                {rightButtonText}
+              </Button>
+            )}
+          </DialogFooter>
         </div>
-        <DialogFooter className="flex flex-row space-x-2 px-3 pb-4">
-          <DialogClose asChild>
-            <Button className="flex-1" variant="gray" catEars>
-              Cancel
-            </Button>
-          </DialogClose>
-          <Button className="flex-1" catEars type="button" onClick={handleOk}>
-            Ok
-          </Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

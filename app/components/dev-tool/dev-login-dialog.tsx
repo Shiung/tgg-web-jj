@@ -10,6 +10,7 @@ import {
 } from '~/components/ui/dialog'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { LogIn } from 'lucide-react'
+import useStore from '~/stores/useStore'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import { prepareLoginRequest, useLogin } from '~/hooks/api/useAuth'
@@ -30,6 +31,7 @@ const DevLoginDialog: React.FC = () => {
     formState: { errors, isSubmitting, isValid },
   } = useForm<DevLoginForm>({ mode: 'onChange' })
   const { mutate: doLogin } = useLogin()
+  const isLoggedIn = useStore(state => state.isLoggedIn)
 
   const onSubmit: SubmitHandler<DevLoginForm> = async data => {
     if (data.id === undefined) return
@@ -50,7 +52,7 @@ const DevLoginDialog: React.FC = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="icon" className="w-9 p-1">
+        <Button variant="icon" className="w-9 p-1" disabled={isLoggedIn}>
           <LogIn size={24} />
         </Button>
       </DialogTrigger>

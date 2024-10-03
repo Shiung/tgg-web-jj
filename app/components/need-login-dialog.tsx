@@ -31,7 +31,8 @@ const NeedLoginDialog: React.FC = () => {
       onClose={handleClose}
       title="Notice"
       message="Please log in your telegram account first."
-      onConfirm={handleOk}
+      onRightButtonClick={handleOk}
+      onLeftButtonClick={closeDialog}
     />
   )
 }

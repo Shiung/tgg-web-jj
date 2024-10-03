@@ -51,7 +51,8 @@ const DepositAddress: React.FC = () => {
         onClose={closeDialog}
         title="Notice"
         message="Are you sure you want to disconnect this address?"
-        onConfirm={handleOk}
+        onRightButtonClick={handleOk}
+        onLeftButtonClick={closeDialog}
       />
     </>
   )

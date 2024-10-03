@@ -1,29 +1,16 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '~/components/ui/dialog'
-import { Input } from '~/components/ui/input'
-import { Label } from '~/components/ui/label'
+import { Dialog, DialogContent, DialogFooter } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
-
-import AddIcon from '~/icons/add.svg?react'
-import EditIcon from '~/icons/edit.svg?react'
 
 interface AlertDialogProps {
   open?: boolean | undefined
-  comfirm: () => void
+  confirm: () => void
   cancel: () => void
 }
 
-const AlertDialog: React.FC<AlertDialogProps> = ({ open, comfirm, cancel }) => {
+const AlertDialog: React.FC<AlertDialogProps> = ({ open, confirm, cancel }) => {
   return (
     <Dialog open={open}>
-      <DialogTrigger asChild></DialogTrigger>
-      <DialogContent className="px-4 py-4">
+      <DialogContent className="px-4 py-4" defaultClose={false}>
         <div className="text-center">
           <p className="mb-6 text-base text-white/70">
             If you give up smashing the egg, the hammer you have consumed will not be returned.
@@ -36,7 +23,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({ open, comfirm, cancel }) => {
           <Button className="flex-1" variant="gray" catEars onClick={cancel}>
             Cancel
           </Button>
-          <Button className="flex-1" catEars onClick={comfirm}>
+          <Button className="flex-1" catEars onClick={confirm}>
             Ok
           </Button>
         </DialogFooter>
