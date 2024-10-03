@@ -68,6 +68,41 @@ export class Game<SecurityDataType = unknown> {
    * @description Auto-generated API documentation
    *
    * @tags (*GameController)
+   * @name GameSettingList
+   * @request GET:/ajax/game/setting
+   */
+  gameSettingList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /**
+         * 次數用盡後每次花費
+         * @format uint64
+         * @min 0
+         */
+        costPerGame: number;
+        /**
+         * 免費能量次數
+         * @format uint64
+         * @min 0
+         */
+        freeEnergyAmount: number;
+        /**
+         * 獎勵提現流水 (0或正整數)
+         * @format uint64
+         * @min 0
+         */
+        withdrawWaterRate: number;
+      },
+      any
+    >({
+      path: `/ajax/game/setting`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*GameController)
    * @name GameTransactionsList
    * @request GET:/ajax/game/transactions
    */

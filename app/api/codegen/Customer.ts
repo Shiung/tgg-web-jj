@@ -272,12 +272,6 @@ export class Customer<SecurityDataType = unknown> {
    */
   customerTeamPerformanceList = (
     query?: {
-      /**
-       * 玩家Id
-       * @format uint64
-       */
-      customerId?: number;
-      /** 排序欄位,可帶入lv,bet,deposit任一，未帶時預設lv+customer_id */
       sortField?: string;
       /** 排序方向,true為升冪 */
       sortOrder?: boolean;
@@ -287,7 +281,7 @@ export class Customer<SecurityDataType = unknown> {
        * 團員等級
        * @format int64
        */
-      lv?: number;
+      level?: number;
       /**
        * 頁接續起始定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位
        * @format int64
@@ -325,13 +319,13 @@ export class Customer<SecurityDataType = unknown> {
         /** 總計欄位 */
         summary?: {
           /**
-           * 團隊人數
+           * 篩選後會員數
            * @format int64
            */
           teamSize?: number;
-          /** 生涯總投注 */
+          /** 總投注加總 */
           totalBets?: string;
-          /** 生涯總入金 */
+          /** 總入金加總 */
           totalDeposit?: string;
         };
       },

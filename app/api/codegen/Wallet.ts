@@ -75,7 +75,7 @@ export class Wallet<SecurityDataType = unknown> {
    * @request GET:/ajax/wallet/history/list
    */
   walletHistoryListList = (
-    query?: {
+    query: {
       /**
        * 帳變時間(起日) (Required when TransactionTimeTo is present)
        * @format date-time
@@ -92,6 +92,18 @@ export class Wallet<SecurityDataType = unknown> {
       type?: string;
       /** 收支 Income Expense */
       balance?: string;
+      /**
+       * 頁碼 (Required, Minimum: 1)
+       * @format int64
+       * @min 1
+       */
+      page: number;
+      /**
+       * 分頁筆數 (Required, Minimum: 20)
+       * @format int64
+       * @min 20
+       */
+      pageSize: number;
     },
     params: RequestParams = {},
   ) =>
@@ -189,6 +201,34 @@ export class Wallet<SecurityDataType = unknown> {
     >({
       path: `/ajax/wallet/list`,
       method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*TransferController)
+   * @name WalletTransferCreate
+   * @request POST:/ajax/wallet/transfer
+   */
+  walletTransferCreate = (
+    body: {
+      /**
+       * 轉帳金額
+       * @format decimal
+       */
+      amount: string;
+      /** 轉帳幣別. Allowed Enum */
+      currency: "TON" | "USDT" | "KOKON";
+      /** 轉帳類型:IN:買入 OUT:賣出. Allowed Enum */
+      type: "IN" | "OUT";
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<any, any>({
+      path: `/ajax/wallet/transfer`,
+      method: "POST",
+      body: body,
+      type: ContentType.Json,
       ...params,
     });
   /**

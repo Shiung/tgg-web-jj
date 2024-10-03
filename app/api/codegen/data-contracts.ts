@@ -44,6 +44,14 @@ export interface BuyEnergyResponse {
   currency: string;
 }
 
+export interface ClaimTaskRewardResponse {
+  /**
+   * 獎勵金額/數量
+   * @format decimal
+   */
+  rewardAmount: string;
+}
+
 export interface CommissionListRequest {
   /** 玩家名稱 */
   DisplayName?: string;
@@ -135,6 +143,18 @@ export interface CustomerWalletChangeGetRequest {
   Balance?: string;
   /** 幣種 TON USDT KOKON */
   Currency?: string;
+  /**
+   * 頁碼
+   * @format int64
+   * @min 1
+   */
+  Page: number;
+  /**
+   * 分頁筆數
+   * @format int64
+   * @min 20
+   */
+  PageSize: number;
   /**
    * 帳變時間(起日)
    * @format date-time
@@ -314,6 +334,52 @@ export interface GetAllGamesResponse {
 export interface GetEnergyResponse {
   /** @format uint64 */
   amount: number;
+}
+
+export type GetGameSettingRequest = object;
+
+export interface GetGameSettingResponse {
+  /**
+   * 次數用盡後每次花費
+   * @format uint64
+   * @min 0
+   */
+  costPerGame: number;
+  /**
+   * 免費能量次數
+   * @format uint64
+   * @min 0
+   */
+  freeEnergyAmount: number;
+  /**
+   * 獎勵提現流水 (0或正整數)
+   * @format uint64
+   * @min 0
+   */
+  withdrawWaterRate: number;
+}
+
+export interface GetMaintenanceRequest {
+  /**
+   * 產品ID
+   * @format uint64
+   */
+  ProductId?: number;
+}
+
+export interface GetMaintenanceResponse {
+  /**
+   * 預約維護開始時間
+   * @format date-time
+   */
+  endTime?: string | null;
+  /** 是否正在維護中 */
+  maintenance?: boolean;
+  /**
+   * 預約維護開始時間
+   * @format date-time
+   */
+  startTime?: string | null;
 }
 
 export interface GetRateResponse {
@@ -613,18 +679,12 @@ export interface TeamPerformanceRequest {
    */
   AnchorPoint?: number;
   /**
-   * 玩家Id
-   * @format uint64
-   */
-  CustomerId?: number;
-  /**
    * 團員等級
    * @format int64
    */
-  Lv?: number;
+  Level?: number;
   /** 團員名稱 */
   Name?: string;
-  /** 排序欄位,可帶入lv,bet,deposit任一，未帶時預設lv+customer_id */
   SortField?: string;
   /** 排序方向,true為升冪 */
   SortOrder?: boolean;
@@ -658,15 +718,27 @@ export interface TeamPerformanceResponse {
   /** 總計欄位 */
   summary?: {
     /**
-     * 團隊人數
+     * 篩選後會員數
      * @format int64
      */
     teamSize?: number;
-    /** 生涯總投注 */
+    /** 總投注加總 */
     totalBets?: string;
-    /** 生涯總入金 */
+    /** 總入金加總 */
     totalDeposit?: string;
   };
+}
+
+export interface TransferBalanceRequest {
+  /**
+   * 轉帳金額
+   * @format decimal
+   */
+  amount: string;
+  /** 轉帳幣別. Allowed Enum */
+  currency: "TON" | "USDT" | "KOKON";
+  /** 轉帳類型:IN:買入 OUT:賣出. Allowed Enum */
+  type: "IN" | "OUT";
 }
 
 export interface UpdateLocaleRequest {

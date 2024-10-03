@@ -11,7 +11,7 @@
 
 import { HttpClient, RequestParams } from "./http-client";
 
-export class Task<SecurityDataType = unknown> {
+export class System<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
 
   constructor(http: HttpClient<SecurityDataType>) {
@@ -21,36 +21,30 @@ export class Task<SecurityDataType = unknown> {
   /**
    * @description Auto-generated API documentation
    *
-   * @tags (*TaskController)
-   * @name TaskClaimRewardIdCreate
-   * @request POST:/ajax/task/claim-reward/id/{id}
+   * @tags (*MaintenanceController)
+   * @name SystemMaintenanceList
+   * @request GET:/ajax/system/maintenance
    */
-  taskClaimRewardIdCreate = (id: string, params: RequestParams = {}) =>
+  systemMaintenanceList = (params: RequestParams = {}) =>
     this.http.request<
       {
         /**
-         * 獎勵金額/數量
-         * @format decimal
+         * 預約維護開始時間
+         * @format date-time
          */
-        rewardAmount: string;
+        endTime?: string | null;
+        /** 是否正在維護中 */
+        maintenance?: boolean;
+        /**
+         * 預約維護開始時間
+         * @format date-time
+         */
+        startTime?: string | null;
       },
       any
     >({
-      path: `/ajax/task/claim-reward/id/${id}`,
-      method: "POST",
-      ...params,
-    });
-  /**
-   * @description Auto-generated API documentation
-   *
-   * @tags (*TaskController)
-   * @name TaskOpenLinkIdCreate
-   * @request POST:/ajax/task/open-link/id/{id}
-   */
-  taskOpenLinkIdCreate = (id: string, params: RequestParams = {}) =>
-    this.http.request<any, any>({
-      path: `/ajax/task/open-link/id/${id}`,
-      method: "POST",
+      path: `/ajax/system/maintenance`,
+      method: "GET",
       ...params,
     });
 }

@@ -666,15 +666,7 @@
         ],
         "parameters": [
           {
-            "type": "integer",
-            "format": "uint64",
-            "description": "玩家Id",
-            "name": "customerId",
-            "in": "query"
-          },
-          {
             "type": "string",
-            "description": "排序欄位,可帶入lv,bet,deposit任一，未帶時預設lv+customer_id",
             "name": "sortField",
             "in": "query"
           },
@@ -694,7 +686,7 @@
             "type": "integer",
             "format": "int64",
             "description": "團員等級",
-            "name": "lv",
+            "name": "level",
             "in": "query"
           },
           {
@@ -752,16 +744,16 @@
                   "type": "object",
                   "properties": {
                     "teamSize": {
-                      "description": "團隊人數",
+                      "description": "篩選後會員數",
                       "type": "integer",
                       "format": "int64"
                     },
                     "totalBets": {
-                      "description": "生涯總投注",
+                      "description": "總投注加總",
                       "type": "string"
                     },
                     "totalDeposit": {
-                      "description": "生涯總入金",
+                      "description": "總入金加總",
                       "type": "string"
                     }
                   }
@@ -922,6 +914,47 @@
                 },
                 "currency": {
                   "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/game/setting": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*GameController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "freeEnergyAmount",
+                "costPerGame",
+                "withdrawWaterRate"
+              ],
+              "properties": {
+                "costPerGame": {
+                  "description": "次數用盡後每次花費",
+                  "type": "integer",
+                  "format": "uint64",
+                  "minimum": 0
+                },
+                "freeEnergyAmount": {
+                  "description": "免費能量次數",
+                  "type": "integer",
+                  "format": "uint64",
+                  "minimum": 0
+                },
+                "withdrawWaterRate": {
+                  "description": "獎勵提現流水 (0或正整數)",
+                  "type": "integer",
+                  "format": "uint64",
+                  "minimum": 0
                 }
               }
             }
@@ -1391,6 +1424,75 @@
         }
       }
     },
+    "/ajax/system/maintenance": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*MaintenanceController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "endTime": {
+                  "description": "預約維護開始時間",
+                  "type": "string",
+                  "nullable": true,
+                  "format": "date-time"
+                },
+                "maintenance": {
+                  "description": "是否正在維護中",
+                  "type": "boolean"
+                },
+                "startTime": {
+                  "description": "預約維護開始時間",
+                  "type": "string",
+                  "nullable": true,
+                  "format": "date-time"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/task/claim-reward/id/{id}": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*TaskController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "rewardAmount"
+              ],
+              "properties": {
+                "rewardAmount": {
+                  "description": "獎勵金額/數量",
+                  "type": "string",
+                  "format": "decimal"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ajax/task/open-link/id/{id}": {
       "post": {
         "description": "Auto-generated API documentation",
@@ -1449,7 +1551,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Minimum: 1, Required)",
+            "description": "分頁頁數 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -1776,6 +1878,24 @@
             "description": "收支 Income Expense",
             "name": "balance",
             "in": "query"
+          },
+          {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64",
+            "description": "頁碼 (Required, Minimum: 1)",
+            "name": "page",
+            "in": "query",
+            "required": true
+          },
+          {
+            "minimum": 20,
+            "type": "integer",
+            "format": "int64",
+            "description": "分頁筆數 (Required, Minimum: 20)",
+            "name": "pageSize",
+            "in": "query",
+            "required": true
           }
         ],
         "responses": {
@@ -1933,6 +2053,54 @@
             }
           }
         }
+      }
+    },
+    "/ajax/wallet/transfer": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*TransferController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "amount",
+                "currency",
+                "type"
+              ],
+              "properties": {
+                "amount": {
+                  "description": "轉帳金額",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "currency": {
+                  "description": "轉帳幣別. Allowed Enum",
+                  "type": "string",
+                  "enum": [
+                    "TON",
+                    "USDT",
+                    "KOKON"
+                  ]
+                },
+                "type": {
+                  "description": "轉帳類型:IN:買入 OUT:賣出. Allowed Enum",
+                  "type": "string",
+                  "enum": [
+                    "IN",
+                    "OUT"
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
       }
     },
     "/ajax/wallet/transfer/rate": {
@@ -2290,6 +2458,19 @@
         }
       }
     },
+    "ClaimTaskRewardResponse": {
+      "type": "object",
+      "required": [
+        "rewardAmount"
+      ],
+      "properties": {
+        "rewardAmount": {
+          "description": "獎勵金額/數量",
+          "type": "string",
+          "format": "decimal"
+        }
+      }
+    },
     "CommissionListRequest": {
       "type": "object",
       "required": [
@@ -2423,6 +2604,10 @@
     },
     "CustomerWalletChangeGetRequest": {
       "type": "object",
+      "required": [
+        "Page",
+        "PageSize"
+      ],
       "properties": {
         "Balance": {
           "description": "收支 Income Expense",
@@ -2431,6 +2616,18 @@
         "Currency": {
           "description": "幣種 TON USDT KOKON",
           "type": "string"
+        },
+        "Page": {
+          "description": "頁碼",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        },
+        "PageSize": {
+          "description": "分頁筆數",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 20
         },
         "TransactionTimeFrom": {
           "description": "帳變時間(起日)",
@@ -2789,6 +2986,68 @@
         "amount": {
           "type": "integer",
           "format": "uint64"
+        }
+      }
+    },
+    "GetGameSettingRequest": {
+      "type": "object"
+    },
+    "GetGameSettingResponse": {
+      "type": "object",
+      "required": [
+        "freeEnergyAmount",
+        "costPerGame",
+        "withdrawWaterRate"
+      ],
+      "properties": {
+        "costPerGame": {
+          "description": "次數用盡後每次花費",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "freeEnergyAmount": {
+          "description": "免費能量次數",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        },
+        "withdrawWaterRate": {
+          "description": "獎勵提現流水 (0或正整數)",
+          "type": "integer",
+          "format": "uint64",
+          "minimum": 0
+        }
+      }
+    },
+    "GetMaintenanceRequest": {
+      "type": "object",
+      "properties": {
+        "ProductId": {
+          "description": "產品ID",
+          "type": "integer",
+          "format": "uint64"
+        }
+      }
+    },
+    "GetMaintenanceResponse": {
+      "type": "object",
+      "properties": {
+        "endTime": {
+          "description": "預約維護開始時間",
+          "type": "string",
+          "nullable": true,
+          "format": "date-time"
+        },
+        "maintenance": {
+          "description": "是否正在維護中",
+          "type": "boolean"
+        },
+        "startTime": {
+          "description": "預約維護開始時間",
+          "type": "string",
+          "nullable": true,
+          "format": "date-time"
         }
       }
     },
@@ -3292,12 +3551,7 @@
           "type": "integer",
           "format": "int64"
         },
-        "CustomerId": {
-          "description": "玩家Id",
-          "type": "integer",
-          "format": "uint64"
-        },
-        "Lv": {
+        "Level": {
           "description": "團員等級",
           "type": "integer",
           "format": "int64"
@@ -3307,7 +3561,6 @@
           "type": "string"
         },
         "SortField": {
-          "description": "排序欄位,可帶入lv,bet,deposit任一，未帶時預設lv+customer_id",
           "type": "string"
         },
         "SortOrder": {
@@ -3360,19 +3613,51 @@
           "type": "object",
           "properties": {
             "teamSize": {
-              "description": "團隊人數",
+              "description": "篩選後會員數",
               "type": "integer",
               "format": "int64"
             },
             "totalBets": {
-              "description": "生涯總投注",
+              "description": "總投注加總",
               "type": "string"
             },
             "totalDeposit": {
-              "description": "生涯總入金",
+              "description": "總入金加總",
               "type": "string"
             }
           }
+        }
+      }
+    },
+    "TransferBalanceRequest": {
+      "type": "object",
+      "required": [
+        "amount",
+        "currency",
+        "type"
+      ],
+      "properties": {
+        "amount": {
+          "description": "轉帳金額",
+          "type": "string",
+          "format": "decimal"
+        },
+        "currency": {
+          "description": "轉帳幣別. Allowed Enum",
+          "type": "string",
+          "enum": [
+            "TON",
+            "USDT",
+            "KOKON"
+          ]
+        },
+        "type": {
+          "description": "轉帳類型:IN:買入 OUT:賣出. Allowed Enum",
+          "type": "string",
+          "enum": [
+            "IN",
+            "OUT"
+          ]
         }
       }
     },
