@@ -12,10 +12,11 @@ import { apis } from '~/api'
 import CloseIcon from '~/icons/x.svg?react'
 import { errorToast } from '~/lib/toast'
 
-import { CurrenciesSkeleton } from './skeleton'
+import { DepositSkeleton } from './skeleton'
 import DepositAddress from './deposit-address'
 import TonConnectButton from './ton-connect-button'
 import DepositViaAddressDialog from './deposit-via-address-sheet'
+import SystemMaintenance from './system-maintenance'
 
 // 充值提交成功通知
 export const successNotify = () =>
@@ -67,7 +68,7 @@ export default function Deposit() {
   const [isConnected, setIsConnected] = useState(tonConnectUI.connected)
 
   /* 獲取充值設定 */
-  const { data: depositSettingData, isLoading: settingLoading } = useQuery({
+  const { data: depositSettingRaw, isLoading: settingLoading } = useQuery({
     queryKey: ['getDepositSetting'],
     queryFn: apis.wallet.walletDepositSettingList,
   })
@@ -92,27 +93,31 @@ export default function Deposit() {
 
   const selectedCurrency = watch('currency')
 
-  // Prepare currencies
-  const currencies = useMemo(
-    () =>
-      depositSettingData?.data?.settings
-        ?.map(e => {
-          if (isValidCrypto(e.currency)) {
-            return {
-              name: e.currency as string,
-              icon: cryptoDetails[e.currency]?.icon,
-            }
+  const { currencies, availableCurrencySettings } = useMemo(() => {
+    if (!depositSettingRaw?.data?.settings) return { currencies: [], availableCurrencySetting: [] }
+
+    const availableCurrencySettings = depositSettingRaw.data.settings.filter(
+      setting => setting.switch
+    )
+
+    const currencies = availableCurrencySettings
+      .map(e => {
+        if (isValidCrypto(e.currency)) {
+          return {
+            name: e.currency as string,
+            icon: cryptoDetails[e.currency]?.icon,
           }
-          return null
-        })
-        .filter((currency): currency is NonNullable<typeof currency> => Boolean(currency)),
-    [depositSettingData?.data?.settings]
-  )
+        }
+        return null
+      })
+      .filter((currency): currency is NonNullable<typeof currency> => Boolean(currency))
+
+    return { currencies, availableCurrencySettings }
+  }, [depositSettingRaw?.data?.settings])
 
   const selectedCurrencySetting = useMemo(() => {
-    const settings = depositSettingData?.data?.settings
-    return settings?.find(item => item.currency === selectedCurrency)
-  }, [depositSettingData?.data, selectedCurrency])
+    return availableCurrencySettings?.find(item => item.currency === selectedCurrency)
+  }, [availableCurrencySettings, selectedCurrency])
 
   const selectedCurrencyRule = useMemo(() => {
     return isValidCrypto(selectedCurrency) ? cryptoRules[selectedCurrency] : null
@@ -200,32 +205,31 @@ export default function Deposit() {
     setValue('amount', newAmount)
   }, [getValues, selectedCurrency, selectedCurrencyRule, setValue])
 
+  if (settingLoading) return <DepositSkeleton />
+  if (!currencies?.length) return <SystemMaintenance />
   return (
     <div className="bg-black p-4">
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Choose currency */}
         <div className="flex flex-col justify-between space-y-2 rounded-xl bg-[#1C1C1C] p-3">
           <p className="pl-3 text-xs text-white/70">Choose currency</p>
-          {settingLoading || !currencies?.length ? (
-            <CurrenciesSkeleton />
-          ) : (
-            <div className="flex justify-between space-x-2">
-              {currencies.map((currency, index) => (
-                <Button
-                  key={`${currency.name}_${index}`}
-                  type="button"
-                  className="h-7 flex-1"
-                  variant="outlineSoft"
-                  isSelected={selectedCurrency === currency.name}
-                  onClick={() => handleCurrencySelect(currency.name)}
-                >
-                  <currency.icon className="h-[18px] w-[18px]" />
-                  <span className="pl-1">{currency.name}</span>
-                </Button>
-              ))}
-            </div>
-          )}
+          <div className="flex justify-between space-x-2">
+            {currencies.map((currency, index) => (
+              <Button
+                key={`${currency.name}_${index}`}
+                type="button"
+                className="h-7 flex-1"
+                variant="outlineSoft"
+                isSelected={selectedCurrency === currency.name}
+                onClick={() => handleCurrencySelect(currency.name)}
+              >
+                <currency.icon className="h-[18px] w-[18px]" />
+                <span className="pl-1">{currency.name}</span>
+              </Button>
+            ))}
+          </div>
         </div>
+
         <div className="mt-3 flex flex-col space-y-2 rounded-xl bg-[#1C1C1C] p-3">
           {/* Deposit address */}
           <DepositAddress />

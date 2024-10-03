@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link, Outlet, useLocation, useNavigate } from '@remix-run/react'
 import { usePrevious } from 'react-use'
 import { cn } from '~/lib/utils'
@@ -11,6 +11,7 @@ import HistoryIcon from '~/icons/history.svg?react'
 import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import { cryptoDetails, CryptoUnion } from '~/consts/crypto'
 
+import { WalletsSkeleton } from './skeleton'
 import classes from './index.module.scss'
 
 // 配合 useMatches 聲明需要登录才能访问
@@ -33,10 +34,14 @@ export default function Wallet() {
   const [isExpanded, setIsExpanded] = useState(true)
   const [hasUserToggled, setHasUserToggled] = useState(false)
 
-  const wallets = (data?.data.wallets || []).map<UserWalletItem>(wallet => ({
-    ...wallet,
-    icon: cryptoDetails[wallet.currency as CryptoUnion].icon,
-  }))
+  const wallets = useMemo(
+    () =>
+      (data?.data.wallets || []).map<UserWalletItem>(wallet => ({
+        ...wallet,
+        icon: cryptoDetails[wallet.currency as CryptoUnion].icon,
+      })),
+    [data?.data.wallets]
+  )
 
   const handleToggleExpand = () => {
     setIsExpanded(val => !val)
@@ -99,7 +104,7 @@ export default function Wallet() {
           </Button>
         </div>
 
-        {/* Coin List */}
+        {/* Wallets List */}
         <div
           className={cn(
             'relative transition-[max-height] duration-300 ease-in-out',
@@ -118,7 +123,7 @@ export default function Wallet() {
               <div className="cursor primary-gradient-border-rounded flex items-center justify-between rounded-lg bg-black px-3 py-2">
                 <span className="text-sm font-normal text-white/70">
                   <span className="font-ultra text-white">
-                    {data?.data.withdrawingCount} withdrawal
+                    {data?.data.withdrawingCount || 0} withdrawal
                   </span>{' '}
                   is under processing.
                 </span>
@@ -129,24 +134,28 @@ export default function Wallet() {
                   Check
                 </Button>
               </div>
-              {wallets.map((wallet, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between rounded-lg bg-[#1C1C1C] px-3 py-2 font-ultra"
-                >
-                  <div className="flex items-center space-x-1">
-                    <wallet.icon className="h-6 w-6" />
-                    <div className="flex flex-col space-y-[2px]">
-                      <p className="text-xs">{wallet.currency}</p>
-                      <Amount
-                        className="text-[10px] font-normal leading-3 text-white/70"
-                        value={parseAmount(wallet.balanceUsdt)}
-                      />
+              {isLoading ? (
+                <WalletsSkeleton />
+              ) : (
+                wallets.map((wallet, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between rounded-lg bg-[#1C1C1C] px-3 py-2 font-ultra"
+                  >
+                    <div className="flex items-center space-x-1">
+                      <wallet.icon className="h-6 w-6" />
+                      <div className="flex flex-col space-y-[2px]">
+                        <p className="text-xs">{wallet.currency}</p>
+                        <Amount
+                          className="text-[10px] font-normal leading-3 text-white/70"
+                          value={parseAmount(wallet.balanceUsdt)}
+                        />
+                      </div>
                     </div>
+                    <Amount className="text-right text-sm" value={parseAmount(wallet.balance)} />
                   </div>
-                  <Amount className="text-right text-sm" value={parseAmount(wallet.balance)} />
-                </div>
-              ))}
+                ))
+              )}
             </div>
           </div>
         </div>
