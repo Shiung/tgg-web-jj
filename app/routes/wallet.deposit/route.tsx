@@ -81,6 +81,7 @@ export default function Deposit() {
     control,
     handleSubmit,
     setValue,
+    getValues,
     setFocus,
     watch,
     formState: { errors, isValid, isSubmitting },
@@ -186,6 +187,19 @@ export default function Deposit() {
     }
   }, [depositCreateData?.data, setValue])
 
+  // 切換幣種時，格式限制位數，避免超過限制造成輸入框卡住ＦＦ
+  useEffect(() => {
+    const amount = getValues('amount')
+    if (!amount) return
+
+    const { maxInt = 0, maxDec = 0 } = selectedCurrencyRule || {}
+    const [integerPart = '', decimalPart = ''] = amount.split('.')
+    const limitedInteger = integerPart.slice(0, maxInt)
+    const limitedDecimal = decimalPart.slice(0, maxDec)
+    const newAmount = limitedDecimal ? `${limitedInteger}.${limitedDecimal}` : limitedInteger
+    setValue('amount', newAmount)
+  }, [getValues, selectedCurrency, selectedCurrencyRule, setValue])
+
   return (
     <div className="bg-black p-4">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -199,6 +213,7 @@ export default function Deposit() {
               {currencies.map((currency, index) => (
                 <Button
                   key={`${currency.name}_${index}`}
+                  type="button"
                   className="h-7 flex-1"
                   variant="outlineSoft"
                   isSelected={selectedCurrency === currency.name}
@@ -230,6 +245,14 @@ export default function Deposit() {
                   customInput={Input}
                   allowNegative={false}
                   decimalScale={selectedCurrencyRule?.maxDec || 0}
+                  isAllowed={({ floatValue }) => {
+                    if (floatValue === undefined || floatValue === null) return true
+                    // 整數部分位數限制
+                    const maxIntegerLength = selectedCurrencyRule?.maxInt || 6
+                    const integerPart = String(floatValue).split('.')[0]
+                    return integerPart.length <= maxIntegerLength
+                  }}
+                  thousandSeparator
                   type="text"
                   inputMode="decimal"
                   pattern="[0-9.]*"
@@ -237,7 +260,6 @@ export default function Deposit() {
                   label="Amount"
                   placeholder="Please enter"
                   onValueChange={values => {
-                    console.log('onValueChange', values)
                     field.onChange(values.value)
                   }}
                   className="h-9"
