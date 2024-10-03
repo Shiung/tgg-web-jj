@@ -1,5 +1,6 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
 import type { LinksFunction } from '@remix-run/node'
+import { ClientOnly } from 'remix-utils/client-only'
 import { Toaster } from 'react-hot-toast'
 import MainNav from '~/components/main-nav'
 import Header from '~/components/header/index'
@@ -66,12 +67,16 @@ export default function App() {
         <DevTool />
       </AppRoot>
       <ParticleBackground />
-      <Toaster
-        // 居中
-        containerStyle={{
-          top: '50%',
-        }}
-      />
+      <ClientOnly>
+        {() => (
+          <Toaster
+            // 居中
+            containerStyle={{
+              top: '50%',
+            }}
+          />
+        )}
+      </ClientOnly>
     </>
   )
 }
