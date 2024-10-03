@@ -45,7 +45,8 @@ export const cryptoRules: Record<
   [Crypto.KOKON]: { maxInt: 15, maxDec: 0 },
 }
 
-export const isValidCrypto = (currency: string): currency is Crypto => {
+export const isValidCrypto = (currency?: string): currency is Crypto => {
+  if (!currency) return false
   return Object.values(Crypto).includes(currency as Crypto)
 }
 

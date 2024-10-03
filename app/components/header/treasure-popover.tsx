@@ -3,7 +3,6 @@ import { Button } from '~/components/ui/button'
 import kokonIcon from '~/components/color-icons/kokon'
 import UsdtIcon from '~/components/color-icons/usdt'
 import Amount from '~/components/amount'
-// import TonIcon from '~/components/color-icons/ton'
 import { cn } from '~/lib/utils'
 
 const treasures = [
@@ -14,6 +13,7 @@ const treasures = [
     totalAmount: 10082000, // 寶箱中的總金額
     unlockAmount: 10082000, // 等待解鎖的金額
     readyToClaimAmount: 10082000, // 可以領取的金額
+    crypto: 'KOKON', // 幣種
     coinIcon: kokonIcon, // 幣種圖示
   },
   {
@@ -26,6 +26,7 @@ const treasures = [
     totalAmount: 1000,
     unlockAmount: 1000,
     readyToClaimAmount: 0,
+    crypto: 'USDT', // 幣種
     coinIcon: UsdtIcon,
   },
 ]
@@ -58,18 +59,20 @@ const TreasureSheet: React.FC<{ className: string }> = ({ className }) => {
                   </div>
                   <div className="flex-1 text-center">
                     <Amount
-                      useKMBT
-                      className="text-xl font-ultra text-primary"
+                      crypto={treasure.crypto}
                       value={treasure.unlockAmount}
+                      useKM
+                      className="text-xl font-ultra text-primary"
                     />
                     <p className="text-xs text-white/70">Waiting for unlock</p>
                   </div>
                 </div>
                 <div className="flex flex-[0_0_33%] flex-col items-center justify-center border-l border-dashed border-white/20 px-2 py-1">
                   <Amount
-                    useKMBT
-                    className="text-base font-ultra text-[#3AE45A]"
+                    crypto={treasure.crypto}
                     value={treasure.readyToClaimAmount}
+                    useKM
+                    className="text-base font-ultra text-[#3AE45A]"
                   />
                   <p className="text-xs text-white/70">Ready for claim</p>
                 </div>

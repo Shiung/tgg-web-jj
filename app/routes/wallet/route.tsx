@@ -80,7 +80,8 @@ export default function Wallet() {
             <div className="mt-3 flex items-center space-x-1">
               <Amount
                 className="text-xl font-ultra leading-6 text-primary"
-                value={parseAmount(data?.data.totalBalanceInUsdt)}
+                value={data?.data.totalBalanceInUsdt}
+                crypto="USDT"
               />
               <Button
                 className={`h-4 w-4 transform bg-white/50 opacity-100 transition-transform ${
@@ -149,10 +150,15 @@ export default function Wallet() {
                         <Amount
                           className="text-[10px] font-normal leading-3 text-white/70"
                           value={parseAmount(wallet.balanceUsdt)}
+                          crypto="USDT"
                         />
                       </div>
                     </div>
-                    <Amount className="text-right text-sm" value={parseAmount(wallet.balance)} />
+                    <Amount
+                      className="text-right text-sm"
+                      value={parseAmount(wallet.balance)}
+                      crypto={wallet.currency}
+                    />
                   </div>
                 ))
               )}

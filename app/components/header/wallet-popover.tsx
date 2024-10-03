@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
 import { Button } from '~/components/ui/button'
 import Amount from '~/components/amount'
@@ -22,6 +22,10 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
     ...wallet,
     icon: cryptoDetails[wallet.currency as CryptoUnion].icon,
   }))
+
+  const kokonBalance = useMemo(() => {
+    return wallets.find(wallet => wallet.currency === 'KOKON')?.balance
+  }, [wallets])
 
   const handleRefresh = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     event.stopPropagation()
@@ -51,7 +55,7 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
             )}
           >
             <KokonIcon className="h-4 w-4" />
-            <Amount className="text-sm font-ultra" value={Number(data?.data.totalBalanceInUsdt)} />
+            <Amount className="text-sm font-ultra" value={kokonBalance} crypto="KOKON" />
             <RefreshIcon
               className={cn(
                 'h-4 w-4 text-primary transition-transform duration-500',
@@ -70,7 +74,8 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
           </div>
           <Amount
             className="text-xl font-ultra text-primary"
-            value={parseAmount(data?.data.totalBalanceInUsdt)}
+            value={data?.data.totalBalanceInUsdt}
+            crypto="USDT"
           />
         </div>
         <div className="mt-3 space-y-2">
@@ -86,10 +91,15 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
                   <Amount
                     className="text-[10px] font-normal leading-3 text-white/70"
                     value={parseAmount(wallet.balanceUsdt)}
+                    crypto="USDT"
                   />
                 </div>
               </div>
-              <Amount className="text-right text-sm" value={parseAmount(wallet.balance)} />
+              <Amount
+                className="text-right text-sm"
+                value={parseAmount(wallet.balance)}
+                crypto={wallet.currency}
+              />
             </div>
           ))}
         </div>

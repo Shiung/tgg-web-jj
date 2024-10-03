@@ -1,24 +1,37 @@
-export const parseAmount = (amount: string | undefined, defaultValue: number = 0): number => {
-  return parseFloat(amount || '') || defaultValue
+export const parseAmount = (
+  amount: string | number | undefined,
+  defaultValue: number = 0
+): number => {
+  if (typeof amount === 'number') {
+    return amount
+  }
+  if (typeof amount === 'string') {
+    const parsed = parseFloat(amount)
+    return isNaN(parsed) ? defaultValue : parsed
+  }
+  return defaultValue
 }
 
-export function formatKM(num: number, precision: number = 2, removeTrailingZeros: boolean = true) {
+export function thousandSeparator(numStr: string): string {
+  return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+}
+
+export function formatKM(num: number) {
   const map = [
-    // { suffix: 'T', threshold: 1e12 },
-    // { suffix: 'B', threshold: 1e9 },
-    { suffix: 'M', threshold: 1e6 },
-    { suffix: 'K', threshold: 1e3 },
-    { suffix: '', threshold: 1 },
+    { suffix: 'M', threshold: 1e6, precision: 2 },
+    { suffix: 'K', threshold: 1e3, precision: 2 },
+    { suffix: '', threshold: 1, precision: 0 },
   ]
 
   const found = map.find(x => Math.abs(num) >= x.threshold)
   if (found) {
-    let formatted = (num / found.threshold).toFixed(precision)
-    if (removeTrailingZeros) {
+    let formatted = (num / found.threshold).toFixed(found.precision)
+    if (found.precision > 0) {
       formatted = parseFloat(formatted).toString()
     }
-    return formatted + found.suffix
+    formatted = thousandSeparator(formatted)
+    return `${formatted}${found.suffix}`
   }
 
-  return `${num}`
+  return thousandSeparator(`${num}`)
 }

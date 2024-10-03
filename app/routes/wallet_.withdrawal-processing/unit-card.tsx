@@ -70,8 +70,8 @@ const UnitCard: React.FC<WPunitCard> & { Skeleton: React.FunctionComponent } = p
           <props.icon className="h-4 w-4" />
           <Amount
             value={parseAmount(props.amount)}
-            useKMBT={false}
-            precision={9}
+            crypto={props.currency}
+            customMaxDec={9}
             thousandSeparator
           />
         </>
