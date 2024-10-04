@@ -23,4 +23,9 @@ export enum ValidCode {
    * 更新綁定fund pin
    */
   updateFundPinBind = 4,
+
+  /**
+   * 提款流程驗證
+   */
+  withdrawFundPin = 5,
 }

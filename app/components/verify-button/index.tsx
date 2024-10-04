@@ -1,4 +1,4 @@
-import React, { memo, useState, useCallback, useRef, useImperativeHandle } from 'react'
+import React, { memo, useState, useCallback, useRef, useImperativeHandle, useEffect } from 'react'
 import { Button } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
 import useStore from '~/stores/useStore'
@@ -37,6 +37,8 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
   ) => {
     const {
       info: { email: storeEmail },
+      verificationTs,
+      setVerificationTs,
     } = useStore(state => state)
     const [isCount, setIsCount] = useState<boolean>(false)
     const countRef = useRef<Ref>(null)
@@ -50,15 +52,34 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
         errorToast('Email not set !')
         return
       }
+      setVerificationTs(Date.now() + 60 * 1000)
       countRef.current?.handler(60)
       validEmailHandler(sendEmail, kind, successCallBack, errorCallBack)
-    }, [kind, email, storeEmail, validEmailHandler, successCallBack, errorCallBack])
+    }, [
+      kind,
+      email,
+      storeEmail,
+      validEmailHandler,
+      successCallBack,
+      errorCallBack,
+      setVerificationTs,
+    ])
 
     useImperativeHandle(ref, () => ({
       resetTimer: () => {
         countRef.current?.handler(0)
       },
     }))
+
+    useEffect(() => {
+      if (verificationTs === 0) return
+      const remainingTime = Math.max(0, Math.floor((verificationTs - Date.now()) / 1000))
+      if (remainingTime > 0) {
+        countRef.current?.handler(remainingTime)
+      } else {
+        setVerificationTs(0)
+      }
+    }, [verificationTs, setVerificationTs])
 
     return (
       <Button
