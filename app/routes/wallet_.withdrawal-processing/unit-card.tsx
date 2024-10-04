@@ -2,7 +2,7 @@ import React from 'react'
 import type { WPunitCard } from './types'
 import Amount from '~/components/amount'
 import { Skeleton } from '~/components/ui/skeleton'
-import { parseAmount } from '~/lib/amount'
+import { format } from 'date-fns'
 
 const Layout: React.FC<{
   header: React.ReactNode
@@ -40,26 +40,7 @@ const Layout: React.FC<{
 }
 
 const UnitSkeleton: React.FC = () => {
-  return (
-    <Layout
-      header={<Skeleton className="h-[20px] w-[150px] bg-white/90" />}
-      contentSubmissionTime={
-        <div className="flex flex-1 justify-end">
-          <Skeleton className="h-[15px] w-[100px]" />
-        </div>
-      }
-      contentAddress={
-        <div className="flex flex-1 justify-end">
-          <Skeleton className="h-[15px] w-[100px]" />
-        </div>
-      }
-      contentMemo={
-        <div className="flex flex-1 justify-end">
-          <Skeleton className="h-[15px] w-[100px]" />
-        </div>
-      }
-    />
-  )
+  return Array.from({ length: 4 }, (_, idx) => <Skeleton key={idx} className="w-full flex-1" />)
 }
 
 const UnitCard: React.FC<WPunitCard> & { Skeleton: React.FunctionComponent } = props => {
@@ -68,15 +49,10 @@ const UnitCard: React.FC<WPunitCard> & { Skeleton: React.FunctionComponent } = p
       header={
         <>
           <props.icon className="h-4 w-4" />
-          <Amount
-            value={parseAmount(props.amount)}
-            crypto={props.currency}
-            customMaxDec={9}
-            thousandSeparator
-          />
+          <Amount value={props.applyAmount} crypto={props.currency} thousandSeparator />
         </>
       }
-      contentSubmissionTime={props.submissionTime}
+      contentSubmissionTime={format(props.submissionTime, 'MM-dd HH:mm')}
       contentAddress={props.address}
       contentMemo={props.memo || 'none'}
     />
