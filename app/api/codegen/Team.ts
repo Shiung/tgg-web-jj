@@ -51,7 +51,7 @@ export class Team<SecurityDataType = unknown> {
        */
       page: number;
       /**
-       * 分頁筆數 (Minimum: 20, Required)
+       * 分頁筆數 (Required, Minimum: 20)
        * @format int64
        * @min 20
        */
@@ -67,6 +67,11 @@ export class Team<SecurityDataType = unknown> {
           betAmount?: string;
           /** 反佣金額 */
           commissionAmount?: string;
+          /**
+           * 創立時間
+           * @format date-time
+           */
+          createTime?: string;
           /** 玩家名稱 */
           displayName?: string;
           /**

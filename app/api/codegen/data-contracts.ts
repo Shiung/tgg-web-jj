@@ -85,6 +85,11 @@ export interface CommissionListResponse {
     betAmount?: string;
     /** 反佣金額 */
     commissionAmount?: string;
+    /**
+     * 創立時間
+     * @format date-time
+     */
+    createTime?: string;
     /** 玩家名稱 */
     displayName?: string;
     /**
@@ -165,15 +170,13 @@ export interface CustomerWalletChangeGetRequest {
    * @format date-time
    */
   TransactionTimeTo?: string | null;
-  /** 交易類型 */
+  /** 交易類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
   TxCategory?: string;
 }
 
 export interface CustomerWalletChangeGetResponse {
   /** 帳變記錄列表 */
   list?: {
-    /** 帳變類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
-    Type: string;
     /** 帳變金額 */
     amount: string;
     /** 幣種 */
@@ -183,6 +186,8 @@ export interface CustomerWalletChangeGetResponse {
      * @format date-time
      */
     transactionTime: string;
+    /** 交易類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
+    type: string;
   }[];
   /** 分頁資訊 */
   pagination?: {
@@ -359,6 +364,13 @@ export interface GetGameSettingResponse {
   withdrawWaterRate: number;
 }
 
+export type GetLogoRequest = object;
+
+export interface GetLogoResponse {
+  /** 圖片路徑 */
+  image?: string;
+}
+
 export interface GetMaintenanceRequest {
   /**
    * 產品ID
@@ -384,20 +396,44 @@ export interface GetMaintenanceResponse {
 
 export interface GetRateResponse {
   /**
+   * 最大買入KOKON數量
+   * @format uint64
+   */
+  depositKokonMaximum: number;
+  /**
+   * 最小買入KOKON數量
+   * @format uint64
+   */
+  depositKokonMinimum: number;
+  /**
    * 轉USDT匯率
    * @format decimal
    */
   depositRate: string;
+  /** 買入快捷設定 */
+  depositSpeedAmount: number[];
   /**
    * USDT轉KOKON匯率
    * @format decimal
    */
   usdt2KokonRate: string;
   /**
+   * 最大賣出KOKON數量
+   * @format uint64
+   */
+  withdrawKokonMaximum: number;
+  /**
+   * 最小賣出KOKON數量
+   * @format uint64
+   */
+  withdrawKokonMinimum: number;
+  /**
    * USDT轉換匯率
    * @format decimal
    */
   withdrawRate: string;
+  /** 賣出快捷設定 */
+  withdrawSpeedAmount: number[];
 }
 
 export interface GoldenEggClaimRequest {
@@ -458,6 +494,47 @@ export interface HeaderWalletResponse {
      * @format uint64
      */
     id: number;
+  }[];
+}
+
+export type HomeCarouselListRequest = object;
+
+export interface HomeCarouselListResponse {
+  /** 資料 */
+  list?: {
+    /**
+     * 創建時間
+     * @format date-time
+     */
+    createdAt: string;
+    /** 操作人 */
+    editor?: string;
+    enabled?: boolean;
+    /**
+     * 顯示結束時間
+     * @format date-time
+     */
+    endTime?: string;
+    /** @format uint64 */
+    id?: number;
+    /** 圖片網址 */
+    image?: string;
+    /** 廣告暱稱 */
+    name?: string;
+    /** 跳轉參數 */
+    redirectConfig?: string;
+    /** 跳轉類型 */
+    redirectType?: string | null;
+    /**
+     * 顯示起始時間
+     * @format date-time
+     */
+    startTime?: string;
+    /**
+     * 最後操作時間
+     * @format date-time
+     */
+    updatedAt: string;
   }[];
 }
 
@@ -637,6 +714,11 @@ export interface SettingResponse {
     /** 四級佣金比例 */
     level4: string;
   }[];
+}
+
+export interface ShareLinkRequest {
+  /** 用戶分享時使用的推薦代碼 */
+  referralCode?: string;
 }
 
 export type TeamInfoRequest = object;

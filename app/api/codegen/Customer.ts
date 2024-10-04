@@ -212,10 +212,18 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerShareCreate
    * @request POST:/ajax/customer/share
    */
-  customerShareCreate = (params: RequestParams = {}) =>
+  customerShareCreate = (
+    body: {
+      /** 用戶分享時使用的推薦代碼 */
+      referralCode?: string;
+    },
+    params: RequestParams = {},
+  ) =>
     this.http.request<any, any>({
       path: `/ajax/customer/share`,
       method: "POST",
+      body: body,
+      type: ContentType.Json,
       ...params,
     });
   /**

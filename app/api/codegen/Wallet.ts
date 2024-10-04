@@ -88,12 +88,12 @@ export class Wallet<SecurityDataType = unknown> {
       transactionTimeTo?: string;
       /** 幣種 TON USDT KOKON */
       currency?: string;
-      /** 交易類型 */
+      /** 交易類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
       type?: string;
       /** 收支 Income Expense */
       balance?: string;
       /**
-       * 頁碼 (Required, Minimum: 1)
+       * 頁碼 (Minimum: 1, Required)
        * @format int64
        * @min 1
        */
@@ -111,8 +111,6 @@ export class Wallet<SecurityDataType = unknown> {
       {
         /** 帳變記錄列表 */
         list?: {
-          /** 帳變類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
-          Type: string;
           /** 帳變金額 */
           amount: string;
           /** 幣種 */
@@ -122,6 +120,8 @@ export class Wallet<SecurityDataType = unknown> {
            * @format date-time
            */
           transactionTime: string;
+          /** 交易類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
+          type: string;
         }[];
         /** 分頁資訊 */
         pagination?: {
@@ -242,20 +242,44 @@ export class Wallet<SecurityDataType = unknown> {
     this.http.request<
       {
         /**
+         * 最大買入KOKON數量
+         * @format uint64
+         */
+        depositKokonMaximum: number;
+        /**
+         * 最小買入KOKON數量
+         * @format uint64
+         */
+        depositKokonMinimum: number;
+        /**
          * 轉USDT匯率
          * @format decimal
          */
         depositRate: string;
+        /** 買入快捷設定 */
+        depositSpeedAmount: number[];
         /**
          * USDT轉KOKON匯率
          * @format decimal
          */
         usdt2KokonRate: string;
         /**
+         * 最大賣出KOKON數量
+         * @format uint64
+         */
+        withdrawKokonMaximum: number;
+        /**
+         * 最小賣出KOKON數量
+         * @format uint64
+         */
+        withdrawKokonMinimum: number;
+        /**
          * USDT轉換匯率
          * @format decimal
          */
         withdrawRate: string;
+        /** 賣出快捷設定 */
+        withdrawSpeedAmount: number[];
       },
       any
     >({
