@@ -119,22 +119,24 @@ export default function Wallet() {
               isExpanded ? 'opacity-100' : 'opacity-0 delay-150'
             )}
           >
-            <div className="space-y-2">
+            <div className="relative z-10 space-y-2">
               {/* withdrawal is under processing */}
-              <div className="cursor primary-gradient-border-rounded flex items-center justify-between rounded-lg bg-black px-3 py-2">
-                <span className="text-sm font-normal text-white/70">
-                  <span className="font-ultra text-white">
-                    {data?.data.withdrawingCount || 0} withdrawal
-                  </span>{' '}
-                  is under processing.
-                </span>
-                <Button
-                  className="flex h-6 items-center justify-center px-3"
-                  onClick={() => navigate('withdrawal-processing')}
-                >
-                  Check
-                </Button>
-              </div>
+              {!!data?.data.withdrawingCount && (
+                <div className="cursor primary-gradient-border-rounded flex items-center justify-between rounded-lg bg-black px-3 py-2">
+                  <span className="text-sm font-normal text-white/70">
+                    <span className="font-ultra text-white">
+                      {data?.data.withdrawingCount || 0} withdrawal
+                    </span>{' '}
+                    is under processing.
+                  </span>
+                  <Button
+                    className="flex h-6 items-center justify-center px-3"
+                    onClick={() => navigate('withdrawal-processing')}
+                  >
+                    Check
+                  </Button>
+                </div>
+              )}
               {isLoading ? (
                 <WalletsSkeleton />
               ) : (

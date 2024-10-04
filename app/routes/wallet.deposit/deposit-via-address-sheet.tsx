@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Close as SheetPrimitiveClose } from '@radix-ui/react-dialog'
 import { useCopyToClipboard } from 'react-use'
 import { QRCode } from 'react-qrcode-logo'
@@ -30,6 +30,14 @@ interface DepositViaAddressDialogProps {
 
 const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ currency, info }) => {
   const [state, copyToClipboard] = useCopyToClipboard()
+
+  const displayAddress = useMemo(() => {
+    const address = info?.depositAddress || ''
+    const maxLength = 30
+    return address.length > maxLength
+      ? `${address.slice(0, maxLength - 4)}...${address.slice(-4)}`
+      : address
+  }, [info?.depositAddress])
 
   useEffect(() => {
     if (!state.value) return
@@ -73,7 +81,7 @@ const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ curre
               readOnly
               className="h-9"
               id="address"
-              value={info?.depositAddress}
+              value={displayAddress}
               fieldSuffix={
                 <Button
                   variant="icon"
