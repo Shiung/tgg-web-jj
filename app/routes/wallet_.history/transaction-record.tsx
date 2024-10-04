@@ -1,48 +1,51 @@
-import { useCallback, useEffect, useState } from 'react'
-import InfiniteScroll from '~/components/ui/infinite-scroll'
-import { cn } from '~/lib/utils'
-import styles from './index.module.scss'
-import NoDataView from './no-data-view'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import DatePickerSheet from '~/components/date-picker-sheet/index'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { format, formatRFC3339 } from 'date-fns'
-import { KokonIcon, UsdtIcon } from '~/components/color-icons'
+import { formatRFC3339 } from 'date-fns'
+import InfiniteScroll from '~/components/ui/infinite-scroll'
+import DatePickerSheet from '~/components/date-picker-sheet/index'
 import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
-import Amount from '~/components/amount'
+import { Skeleton } from '~/components/ui/skeleton'
+import { apis } from '~/api'
+import LoadingIcon from '~/icons/loading.svg?react'
+import { cn } from '~/lib/utils'
+import { errorToast } from '~/lib/toast'
+
+import TransactionSkeleton from './transaction-skeleton'
+import TransactionEntryItem from './transaction-entry-item'
+import NoDataView from './no-data-view'
+import styles from './index.module.scss'
 
 interface TransactionRecordRequest {
   page: number
   pageSize: number
-  startTime: string
-  endTime: string
-  currencyId: string
-  type: string
-  balance: string
+  transactionTimeFrom?: string
+  transactionTimeTo?: string
+  currency?: string
+  type?: string
+  balance?: string
 }
 
 interface Pagination {
   pageSize: number
-  totalPage: number
-  totalRecord: number
+  totalPage?: number | null
+  totalRecord?: number | null
 }
 
-interface TransactionEntry {
-  id: number
-  date: string
+export interface TransactionEntry {
   type: string
   amount: string
-  transactionId: string
-  currencyId: number
+  currency: string
+  transactionTime: string
 }
 
 interface TransactionRecordResponse {
-  records: TransactionEntry[]
-  pagination: Pagination
+  list?: TransactionEntry[]
+  pagination?: Pagination
 }
 
 interface FormValues {
-  currencyId: string
+  currency: string
   type: string
   balance: string
   dateTimeRange: { from: Date; to: Date }
@@ -50,71 +53,52 @@ interface FormValues {
 
 const typeOptions = [
   { value: '0', label: 'All' },
-  { value: '1', label: 'Deposit' },
-  { value: '2', label: 'Withdraw' },
-  { value: '3', label: 'Swap(Sell)、Swap(Buy)' },
-  { value: '4', label: 'Commission' },
-  { value: '5', label: 'Game' },
-  { value: '6', label: 'Task' },
-  { value: '7', label: 'Treasure' },
-  { value: '8', label: 'Rank' },
-  { value: '9', label: 'Lucky money' },
-  { value: '10', label: 'Smash egg' },
-  { value: '11', label: 'Adjustment' },
+  { value: 'Deposit', label: 'Deposit' },
+  { value: 'Withdraw', label: 'Withdraw' },
+  { value: 'Swap(Sell)、Swap(Buy)', label: 'Swap(Sell)、Swap(Buy)' },
+  { value: 'Commission', label: 'Commission' },
+  { value: 'Game', label: 'Game' },
+  { value: 'Task', label: 'Task' },
+  { value: 'Treasure', label: 'Treasure' },
+  { value: 'Rank', label: 'Rank' },
+  { value: 'Lucky money', label: 'Lucky money' },
+  { value: 'Smash egg', label: 'Smash egg' },
+  { value: 'Adjustment', label: 'Adjustment' },
 ]
 
 const balanceOptions = [
   { value: '0', label: 'All' },
-  { value: '1', label: 'Income' },
-  { value: '2', label: 'Expense' },
+  { value: 'Income', label: 'Income' },
+  { value: 'Expense', label: 'Expense' },
 ]
 
 const currencyOptions = [
   { value: '0', label: 'All' },
-  { value: '1', label: 'USDT' },
-  { value: '2', label: 'TON' },
+  { value: 'USDT', label: 'USDT' },
+  { value: 'TON', label: 'TON' },
+  { value: 'KOKON', label: 'KOKON' },
 ]
 
-const TransactionEntryItem = ({ record }: { record: TransactionEntry }) => {
-  return (
-    <div className="flex items-center space-x-2 pb-2.5 text-xs font-normal text-white">
-      <p className="w-9">{format(new Date(record.date), 'MM-dd')}</p>
-      <p className="w-9">{format(new Date(record.date), 'HH:mm')}</p>
-      <p className="flex-1 font-ultra">{record.type}</p>
-      <p
-        className={`flex-1 text-right font-ultra ${parseFloat(record.amount) < 0 ? 'text-[#FF4D48]' : 'text-white'}`}
-      >
-        <Amount value={parseFloat(record.amount)} thousandSeparator />
-      </p>
-      {record.currencyId === 1 ? (
-        <UsdtIcon className="my-auto h-3 w-3" />
-      ) : (
-        <KokonIcon className="my-auto h-3 w-3" />
-      )}
-    </div>
-  )
-}
-
-const fakeData = async (params: TransactionRecordRequest): Promise<TransactionRecordResponse> => {
+const fakeData = async (params: TransactionRecordRequest): Promise<any> => {
   return new Promise(resolve => {
     setTimeout(() => {
       const staticData: TransactionEntry[] = Array.from({ length: 20 }, (_, index) => ({
-        id: params.page * 20 + index + 1,
-        date: formatRFC3339(new Date('2024-08-31T11:31:00')),
+        transactionTime: formatRFC3339(new Date('2024-08-31T11:31:00')),
         type: 'Deposit',
-        transactionId: Math.random().toString(36).substring(2, 20).toUpperCase(),
-        currencyId: Math.floor(Math.random() * 2) + 1,
+        currency: ['USDT', 'TON', 'KOKON'][Math.floor(Math.random() * 3)],
         amount:
           (Math.random() < 0.5 ? '-' : '') +
           (Math.floor(Math.random() * 9999999) + Math.random()).toFixed(8),
       }))
 
-      const res: TransactionRecordResponse = {
-        records: staticData,
-        pagination: {
-          pageSize: 20,
-          totalPage: 3,
-          totalRecord: 60,
+      const res = {
+        data: {
+          list: staticData,
+          pagination: {
+            pageSize: 20,
+            totalPage: 3,
+            totalRecord: 60,
+          },
         },
       }
       resolve(res)
@@ -122,106 +106,84 @@ const fakeData = async (params: TransactionRecordRequest): Promise<TransactionRe
   })
 }
 
-const queryString: TransactionRecordRequest = {
-  page: 1,
-  pageSize: 20,
-  startTime: formatRFC3339(new Date('2024-09-26')),
-  endTime: formatRFC3339(new Date('2024-09-27')),
-  currencyId: '',
-  type: '',
-  balance: '',
-}
-
 export default function TransactionRecord({ currentTab }: { currentTab: string }) {
-  const [records, setRecords] = useState<TransactionEntry[]>([])
-
-  const { control } = useForm<FormValues>({
+  const { control, watch } = useForm<FormValues>({
     mode: 'onChange',
     defaultValues: {
-      currencyId: '0',
+      currency: '0',
       type: '0',
       balance: '0',
       dateTimeRange: { from: new Date(), to: new Date() },
     },
   })
+  const [isFirstLoading, setIsFirstLoading] = useState(true)
 
-  const fetchPosts = async (params: TransactionRecordRequest) => {
-    queryString.page = params.page
-    const res = await fakeData(params)
-    return res
-  }
+  const formValues = watch()
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } = useInfiniteQuery<
-    TransactionRecordResponse,
-    Error
-  >({
-    queryKey: ['TransactionRecordRequest'],
-    queryFn: ({ pageParam = 1 }) =>
-      fetchPosts({
-        ...queryString,
-        page: pageParam as number,
-      }),
-    initialPageParam: 1,
-    getNextPageParam: () => {
-      return queryString.page < 5 ? queryString.page + 1 : undefined
-    },
-    enabled: currentTab === 'transaction',
-  })
-
-  useEffect(() => {
-    if (data && Array.isArray(data.pages)) {
-      const page = data.pages[0]
-      if (queryString.page < page.pagination.totalPage) {
-        setRecords(prev => [...prev, ...page.records])
+  const fetchPosts = useCallback(
+    async ({ pageParam = 1 }) => {
+      const queryString: TransactionRecordRequest = {
+        page: pageParam,
+        pageSize: 20,
+        transactionTimeFrom: formatRFC3339(formValues.dateTimeRange.from),
+        transactionTimeTo: formatRFC3339(formValues.dateTimeRange.to),
+        currency: formValues.currency === '0' ? '' : formValues.currency,
+        type: formValues.type === '0' ? '' : formValues.type,
+        balance: formValues.balance === '0' ? '' : formValues.balance,
       }
-    }
-  }, [data])
-
-  const datePickerOnChange = useCallback(
-    (dateRange: any, field: any) => {
-      field.onChange(dateRange)
-      queryString.startTime = formatRFC3339(dateRange.from)
-      queryString.endTime = formatRFC3339(dateRange.to)
-      queryString.page = 1
-      setRecords([])
-      refetch()
+      const res = await apis.wallet.walletHistoryListList(queryString)
+      // const res = await fakeData(queryString)
+      return {
+        pagination: {
+          pageSize: res.data.pagination?.pageSize ?? 0,
+          totalPage: res.data.pagination?.totalPage ?? 0,
+          totalRecord: res.data.pagination?.totalRecord ?? 0,
+        },
+        list: res.data.list || [],
+      }
     },
-    [refetch]
+    [formValues]
   )
 
-  const currencyDropdownOnChange = useCallback(
-    (value: string, field: any) => {
-      field.onChange(value)
-      refetch()
-    },
-    [refetch]
-  )
-
-  const typeDropdownOnChange = useCallback(
-    (value: string, field: any) => {
-      field.onChange(value)
-      refetch()
-    },
-    [refetch]
-  )
-
-  const balanceDropdownOnChange = useCallback(
-    (value: string, field: any) => {
-      field.onChange(value)
-      refetch()
-    },
-    [refetch]
-  )
+  const { data, fetchNextPage, isFetching, hasNextPage, isFetchingNextPage, error, status } =
+    useInfiniteQuery<TransactionRecordResponse, Error>({
+      queryKey: ['TransactionRecordRequest', watch()],
+      queryFn: ({ pageParam = 1 }) => fetchPosts({ pageParam: pageParam as number }),
+      initialPageParam: 1,
+      getNextPageParam: (lastPage, allPages) => {
+        if (lastPage.pagination && lastPage.pagination.totalPage) {
+          return lastPage.pagination.totalPage > allPages.length ? allPages.length + 1 : undefined
+        }
+        return undefined
+      },
+      enabled: currentTab === 'transaction',
+    })
 
   useEffect(() => {
-    if (currentTab !== 'transaction') return
-    refetch()
-  }, [currentTab, refetch])
+    if (status === 'success') {
+      setIsFirstLoading(false)
+    }
+  }, [status])
+
+  useEffect(() => {
+    if (error) {
+      errorToast(error.message)
+    }
+  }, [error])
+
+  const records = useMemo(() => data?.pages.flatMap(page => page.list) ?? [], [data])
+  const isFetchData = useMemo(() => {
+    return isFetching && !isFetchingNextPage && !data
+  }, [isFetching, isFetchingNextPage, data])
+
+  if (isFirstLoading) {
+    return <TransactionSkeleton />
+  }
 
   return (
     <div className="flex flex-1 flex-col p-4">
       {/* Filter */}
-      <div className="flex flex-col space-y-1">
+      <form className="flex flex-col space-y-1">
         <div className="py2 flex h-9 w-full items-center rounded-[100px] border-white/20 bg-[#333] text-xs font-ultra">
           <Controller
             name="dateTimeRange"
@@ -232,7 +194,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                   id="datetime-range-picker"
                   title="Select Date"
                   value={field.value}
-                  onChange={val => datePickerOnChange(val, field)}
+                  onChange={field.onChange}
                   range
                   showTimePicker
                 />
@@ -243,7 +205,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
         <div className="flex justify-between space-x-1 text-xs font-ultra text-white/50">
           <div className="py2 flex h-9 min-w-0 flex-1 items-center overflow-hidden rounded-[100px] border-white/20 bg-[#333] text-xs font-ultra">
             <Controller
-              name="currencyId"
+              name="currency"
               control={control}
               render={({ field }) => (
                 <div className="flex h-full w-full min-w-0 flex-col">
@@ -252,9 +214,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                     title="Currency"
                     placeholder="Currency"
                     value={field.value}
-                    onConfirm={(selectedValue: string) =>
-                      currencyDropdownOnChange(selectedValue, field)
-                    }
+                    onConfirm={field.onChange}
                   >
                     {currencyOptions.map(option => (
                       <DropdownOption
@@ -280,9 +240,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                     title="Type"
                     placeholder="Type"
                     value={field.value}
-                    onConfirm={(selectedValue: string) =>
-                      typeDropdownOnChange(selectedValue, field)
-                    }
+                    onConfirm={field.onChange}
                   >
                     {typeOptions.map(option => (
                       <DropdownOption
@@ -308,9 +266,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                     title="Balance"
                     placeholder="Balance"
                     value={field.value}
-                    onConfirm={(selectedValue: string) =>
-                      balanceDropdownOnChange(selectedValue, field)
-                    }
+                    onConfirm={field.onChange}
                   >
                     {balanceOptions.map(option => (
                       <DropdownOption
@@ -326,48 +282,52 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
             />
           </div>
         </div>
-      </div>
+      </form>
 
       {/* Content */}
-      <div className="relative mt-3 flex-1 rounded-xl bg-[#1C1C1C] p-3">
-        {/* table header */}
-        <div
-          className={cn(
-            'relative flex items-center space-x-2 pb-2.5 text-xs font-normal text-white/70',
-            styles['list-header']
-          )}
-        >
-          <p className="w-9">Date</p>
-          <p className="w-9">Time</p>
-          <p className="flex-1">Type</p>
-          <p className="flex-1 text-right">Amount</p>
-        </div>
-        {/* table row */}
-        <div className="absolute bottom-3 left-3 right-3 top-9 overflow-y-auto pt-3">
-          <div>
-            {records.length > 0 ? (
-              <>
-                {records.map((record: TransactionEntry, index: number) => (
-                  <TransactionEntryItem
-                    key={`${record.id}-${record.transactionId}-${index}`}
-                    record={record}
-                  />
-                ))}
-                <InfiniteScroll
-                  hasMore={!!hasNextPage}
-                  isLoading={!!isFetchingNextPage}
-                  next={fetchNextPage}
-                  threshold={1}
-                >
-                  {hasNextPage && <p className="text-center text-xs text-white/70">加載中...</p>}
-                </InfiniteScroll>
-              </>
-            ) : (
-              <NoDataView />
+      {isFetchData ? (
+        <Skeleton className="relative mt-3 flex flex-1 flex-col rounded-xl bg-[#1C1C1C] p-3" />
+      ) : (
+        <div className="relative mt-3 flex flex-1 flex-col rounded-xl bg-[#1C1C1C] p-3">
+          {/* table header */}
+          <div
+            className={cn(
+              'relative flex items-center space-x-2 pb-2.5 text-xs font-normal text-white/70',
+              styles['list-header']
             )}
+          >
+            <p className="w-9">Date</p>
+            <p className="w-9">Time</p>
+            <p className="flex-1">Type</p>
+            <p className="flex-1 text-right">Amount</p>
+          </div>
+          <div className="absolute bottom-3 left-3 right-3 top-9 mt-2 overflow-y-auto">
+            <div>
+              {records && records.length > 0 ? (
+                <>
+                  {records.map((record, index) => (
+                    <TransactionEntryItem key={`${index}`} record={record!} />
+                  ))}
+                  <InfiniteScroll
+                    hasMore={!!hasNextPage}
+                    isLoading={!!isFetchingNextPage}
+                    next={fetchNextPage}
+                    threshold={1}
+                  >
+                    {hasNextPage && (
+                      <div>
+                        <LoadingIcon className="m-auto h-6 w-6 animate-spin" />
+                      </div>
+                    )}
+                  </InfiniteScroll>
+                </>
+              ) : (
+                <NoDataView />
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
