@@ -25,7 +25,7 @@ export const successNotify = () =>
       <div
         className={`${
           t.visible ? 'animate-enter' : 'animate-leave'
-        } pointer-events-auto relative mx-3 flex w-full max-w-md rounded-lg bg-black shadow-lg ring-1 ring-app-green`}
+        } pointer-events-auto relative mx-3 mt-[calc(100%_-_120px)] flex w-full max-w-md rounded-lg bg-black shadow-lg ring-1 ring-app-green`}
       >
         <div className="flex flex-1 items-center justify-between space-x-2 p-3">
           <img
@@ -51,7 +51,7 @@ export const successNotify = () =>
       </div>
     ),
     {
-      duration: 500000,
+      duration: 5000,
     }
   )
 
@@ -137,7 +137,7 @@ export default function Deposit() {
 
     let transaction
     if (data.currency === Crypto.TON) {
-      const body = beginCell().storeUint(0, 32).storeStringTail('').endCell()
+      const body = beginCell().storeUint(0, 32).storeStringTail(data.comment).endCell()
       transaction = {
         validUntil: Math.floor(Date.now() / 1000) + 360, // 当前时间 + 6 分钟（单位：秒）
         messages: [

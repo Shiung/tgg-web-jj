@@ -8,10 +8,16 @@ import WarningIcon from '~/icons/warning.svg?react'
  * @returns
  */
 const successToast = (message: string) =>
-  toast(message, {
-    icon: <CheckIcon className="h-4 w-4 text-white/70" />,
-    className: 'bg-app-green text-white font-ultra p-2',
-  })
+  toast.custom(t => (
+    <div
+      className={`${
+        t.visible ? 'animate-enter' : 'animate-leave'
+      } pointer-events-auto flex items-center space-x-2 rounded-lg bg-app-green p-2`}
+    >
+      <CheckIcon className="h-4 w-4 text-white/70" />
+      <span className="text-sm font-ultra text-white">{message}</span>
+    </div>
+  ))
 
 /**
  * 失敗樣式的 Toast
@@ -19,9 +25,15 @@ const successToast = (message: string) =>
  * @returns
  */
 const errorToast = (message: string) =>
-  toast(message, {
-    icon: <WarningIcon className="h-4 w-4 text-white/70" />,
-    className: 'bg-app-red text-white font-ultra p-2',
-  })
+  toast.custom(t => (
+    <div
+      className={`${
+        t.visible ? 'animate-enter' : 'animate-leave'
+      } pointer-events-auto flex items-center space-x-2 rounded-lg bg-app-red p-2`}
+    >
+      <WarningIcon className="h-4 w-4 text-white/70" />
+      <span className="text-sm font-ultra text-white">{message}</span>
+    </div>
+  ))
 
 export { successToast, errorToast }

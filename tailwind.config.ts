@@ -108,6 +108,18 @@ const config = {
           '0%': { opacity: '0', transform: 'translateY(-16px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        enter: {
+          '0%': { transform: 'scale(0.9)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+        leave: {
+          '0%': { transform: 'scale(1)', opacity: '1' },
+          '100%': { transform: 'scale(0.9)', opacity: '0' },
+        },
+        'slide-in': {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
@@ -115,6 +127,9 @@ const config = {
         'background-wave': 'background-wave 4s linear infinite',
         'spin-with-pause': 'spin-with-pause 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite',
         'fall-down': 'fall-down 0.3s ease-out forwards',
+        'slide-in': 'slide-in 1.2s cubic-bezier(.41,.73,.51,1.02)',
+        enter: 'enter 200ms ease-out',
+        leave: 'leave 150ms ease-in forwards',
       },
       backgroundImage: {
         'colorLinear-red': 'linear-gradient(180deg, #FF8C8C 0%, #FF0E03 100%)',

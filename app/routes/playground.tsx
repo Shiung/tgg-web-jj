@@ -19,7 +19,7 @@ export default function Playground() {
   }, [location.pathname, currentTab, navigate])
 
   return (
-    <div className="container rounded-t-xl bg-black px-0 py-3">
+    <div className="container flex-1 rounded-t-xl bg-black px-0 py-3">
       <h1 className="pl-4 text-2xl font-bold">Playground</h1>
       <Tabs value={currentTab} className="mt-4 w-full">
         <TabsList variant="cardTab" className="w-full overflow-x-auto">
