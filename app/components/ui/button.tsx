@@ -20,6 +20,7 @@ const buttonVariants = cva(
         select: 'bg-[#333] border-[0.5px] border-white/20 text-white',
         icon: 'opacity-70 transition-opacity hover:opacity-100',
         link: '',
+        green: 'bg-app-green text-black',
       },
       size: {
         default: 'h-9 py-1 px-4', // 36px
@@ -56,6 +57,7 @@ const earColorVariants = cva(
         select: '',
         icon: '',
         link: '',
+        green: 'text-app-green',
       },
     },
   }

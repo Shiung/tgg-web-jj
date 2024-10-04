@@ -1,0 +1,47 @@
+.header {
+  background: linear-gradient(180deg, #a95fff 0%, #5200b0 100%);
+  aspect-ratio: 375/100;
+  width: 100%;
+  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  padding-left: 1rem;
+  padding-top: 1rem;
+  font-weight: 1000;
+}
+
+.header--skeleton {
+  background: #1c1c1c;
+  aspect-ratio: 375/100;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  padding-left: 1rem;
+  padding-top: 1rem;
+}
+
+.header::before {
+  content: '';
+  position: absolute;
+  background: url('/images/long-wave.png') no-repeat;
+  background-size: cover;
+  aspect-ratio: 375/126;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  background: url('/images/task/treasure-key-visual.png') no-repeat;
+  background-size: cover;
+  aspect-ratio: 160/100;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 42%;
+}
