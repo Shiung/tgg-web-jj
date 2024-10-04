@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useCallback } from 'react'
+import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -153,6 +153,7 @@ export default function Withdraw() {
   const {
     control,
     register,
+    getValues,
     setValue,
     setFocus,
     handleSubmit,
@@ -195,6 +196,7 @@ export default function Withdraw() {
   )
 
   const watchAmount = watch('amount')
+
   const fee = useMemo(
     () => calculateFee(watchAmount, currentSetting),
     [watchAmount, currentSetting, calculateFee]
@@ -262,6 +264,19 @@ export default function Withdraw() {
     })
   }
 
+  // 切換幣種時，格式限制位數，避免超過限制造成輸入框卡住
+  useEffect(() => {
+    const amount = getValues('amount')
+    if (!amount) return
+
+    const { maxInt = 0, maxDec = 0 } = selectedCurrencyRule || {}
+    const [integerPart = '', decimalPart = ''] = amount.split('.')
+    const limitedInteger = integerPart.slice(0, maxInt)
+    const limitedDecimal = decimalPart.slice(0, maxDec)
+    const newAmount = limitedDecimal ? `${limitedInteger}.${limitedDecimal}` : limitedInteger
+    setValue('amount', newAmount)
+  }, [getValues, selectedCurrency, selectedCurrencyRule, setValue])
+
   if (isLoading) return <WithdrewSkeleton />
   if (!coins?.length) return <SystemMaintenance />
   return (
@@ -313,12 +328,12 @@ export default function Withdraw() {
           <div className="flex space-x-2 rounded-lg bg-[#333] p-2 text-xs text-white/70">
             <InfoIcon className="h-4 w-4 flex-shrink-0" />
             <p className="">
-              Most trading platforms require you to fill in plain text MEMO/digital ID/comment for
-              TON deposit before it can be credited. Failure to fill in or incorrect filling will
-              result in asset loss.
+              Most trading platforms require you to fill in plain text MEMO or digital or comment
+              for TON deposit before it can be credited. Failure to fill in or incorrect filling
+              will result in asset loss.
             </p>
           </div>
-          {/* Amount */}
+          {/* Amount 金額輸入框 */}
           <div className="space-y-1">
             <Controller
               name="amount"
@@ -334,6 +349,14 @@ export default function Withdraw() {
                     customInput={Input}
                     allowNegative={false}
                     decimalScale={selectedCurrencyRule?.maxDec || 0}
+                    isAllowed={({ floatValue }) => {
+                      if (floatValue === undefined || floatValue === null) return true
+                      // 整數部分位數限制
+                      const maxIntegerLength = selectedCurrencyRule?.maxInt || 6
+                      const integerPart = String(floatValue).split('.')[0]
+                      return integerPart.length <= maxIntegerLength
+                    }}
+                    thousandSeparator
                     type="text"
                     inputMode="decimal"
                     pattern="[0-9.]*"
@@ -483,7 +506,7 @@ export default function Withdraw() {
           <div className="flex items-center justify-between text-white/70">
             <p className="text-xs text-white/70">Receive amount: </p>
             <p className="text-base font-extrabold text-white">
-              <Amount className="pr-1" value={parseAmount(receiveAmount)} />
+              <Amount className="pr-1" value={receiveAmount} crypto={currentSetting?.currency} />
               {currentSetting?.currency}
             </p>
           </div>

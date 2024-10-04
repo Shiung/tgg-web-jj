@@ -192,7 +192,7 @@ export default function Deposit() {
     }
   }, [depositCreateData?.data, setValue])
 
-  // 切換幣種時，格式限制位數，避免超過限制造成輸入框卡住ＦＦ
+  // 切換幣種時，格式限制位數，避免超過限制造成輸入框卡住
   useEffect(() => {
     const amount = getValues('amount')
     if (!amount) return
@@ -234,7 +234,7 @@ export default function Deposit() {
           {/* Deposit address */}
           <DepositAddress />
 
-          {/* 金額輸入框 */}
+          {/* Amount 金額輸入框 */}
           <Controller
             name="amount"
             control={control}
