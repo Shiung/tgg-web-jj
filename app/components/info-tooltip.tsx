@@ -16,7 +16,7 @@ const Arrow = (props: SVGProps<SVGSVGElement>) => (
 )
 
 interface InfoTooltipProps {
-  content: string
+  content: string | React.ReactNode
 }
 
 const InfoTooltip: React.FC<InfoTooltipProps> = ({ content }) => (
