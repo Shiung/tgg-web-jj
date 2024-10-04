@@ -1,15 +1,6 @@
-import { CryptoUnion, Crypto } from '~/consts/crypto'
+import type { WithdrawingListResponse } from '~/api/codegen/data-contracts'
 
-export { Crypto }
-
-export type UnitCard = {
-  amount: string
-  currency: CryptoUnion
-  memo: string
-  address: string
-  submissionTime: string
-}
-
+export type UnitCard = WithdrawingListResponse['list'][0]
 export type WPunitCard = UnitCard & {
   icon: React.FC<React.SVGProps<SVGSVGElement>>
 }
