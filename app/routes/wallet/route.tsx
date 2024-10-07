@@ -14,6 +14,8 @@ import { cryptoDetails, CryptoUnion } from '~/consts/crypto'
 import { WalletsSkeleton } from './skeleton'
 import classes from './index.module.scss'
 
+import { useWalletProvider, emptyWallets } from './provider'
+
 // 配合 useMatches 聲明需要登录才能访问
 export const handle = {
   requiresAuth: true,
@@ -26,7 +28,7 @@ type UserWalletItem = UserWallet & {
 }
 
 export default function Wallet() {
-  const { data, isLoading } = useGetWalletList()
+  const { data, isLoading, refetch } = useGetWalletList()
   const location = useLocation()
   const navigate = useNavigate()
   const [currentTab, setCurrentTab] = useState(DEFAULT_TAB)
@@ -65,6 +67,8 @@ export default function Wallet() {
       setIsExpanded(false)
     }
   }, [currentTab, hasUserToggled, previousTab])
+
+  const { contextVal } = useWalletProvider(data?.data.wallets || emptyWallets, refetch)
 
   return (
     <div className="container mx-auto flex-1 rounded-t-xl bg-black p-0">
@@ -190,7 +194,7 @@ export default function Wallet() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value={currentTab} className="mt-0">
-            <Outlet />
+            <Outlet context={contextVal} />
           </TabsContent>
         </Tabs>
       </div>
