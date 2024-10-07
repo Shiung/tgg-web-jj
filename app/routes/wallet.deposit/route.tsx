@@ -24,8 +24,8 @@ export const successNotify = () =>
     t => (
       <div
         className={`${
-          t.visible ? 'animate-enter' : 'animate-leave'
-        } pointer-events-auto relative mx-3 mt-[calc(100%_-_120px)] flex w-full max-w-md rounded-lg bg-black shadow-lg ring-1 ring-app-green`}
+          t.visible ? 'animate-toast-enter' : 'animate-toast-leave'
+        } pointer-events-auto relative mx-3 mt-[calc(100vh_/_2_-_172px)] flex w-full max-w-md rounded-lg bg-black shadow-lg ring-1 ring-app-green`}
       >
         <div className="flex flex-1 items-center justify-between space-x-2 p-3">
           <img

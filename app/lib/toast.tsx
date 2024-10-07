@@ -11,7 +11,7 @@ const successToast = (message: string) =>
   toast.custom(t => (
     <div
       className={`${
-        t.visible ? 'animate-enter' : 'animate-leave'
+        t.visible ? 'animate-toast-enter' : 'animate-toast-leave'
       } pointer-events-auto flex items-center space-x-2 rounded-lg bg-app-green p-2`}
     >
       <CheckIcon className="h-4 w-4 text-white/70" />
@@ -28,7 +28,7 @@ const errorToast = (message: string) =>
   toast.custom(t => (
     <div
       className={`${
-        t.visible ? 'animate-enter' : 'animate-leave'
+        t.visible ? 'animate-toast-enter' : 'animate-toast-leave'
       } pointer-events-auto flex items-center space-x-2 rounded-lg bg-app-red p-2`}
     >
       <WarningIcon className="h-4 w-4 text-white/70" />
