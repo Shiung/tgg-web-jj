@@ -24,9 +24,9 @@ const Footer: React.FC = () => {
         <img src="/images/home/footer/gcb.png" alt="logo" className="h-6 w-auto object-contain" />
       </div>
       <p className="text-xs font-normal text-white/70">
-        Kokon is the play-to-earn games platform and offers multiple cryptocurrencies wallet
+        KOKON is the play-to-earn games platform and offers multiple cryptocurrencies wallet
         connection service. Designed for a global player, we ensure every game is transparent and
-        fair. Every bet is verified in all the games at Kokon. Dive into a massive selection of
+        fair. Every bet is verified in all the games at KOKON. Dive into a massive selection of
         games where the fun keeps rolling.
       </p>
     </footer>

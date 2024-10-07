@@ -7,7 +7,7 @@ const SystemMaintenance = () => {
       <div className="flex flex-col space-y-1 px-3 text-center">
         <div className="text-base font-ultra">System Maintenance</div>
         <div className="text-xs text-[#FFFFFFB2]">
-          Kokon is temporarily unavailable due to system maintenance. We will be restoring regular
+          KOKON is temporarily unavailable due to system maintenance. We will be restoring regular
           service as soon as possible. We apologize for any inconvenience
         </div>
       </div>

@@ -155,7 +155,7 @@ const RuleSheet: React.FC = () => {
             <div className="text-base font-ultra text-white">Referral Team</div>
             <img src="/images/share/referralDiagram.png" alt="progress-1" className="w-full" />
             <div>
-              Only when your friends registered and owned over 100 Kokon in their wallet are counted
+              Only when your friends registered and owned over 100 KOKON in their wallet are counted
               valid member. Your team members can create a lv 1 to lv 4 Referral Team for you. The
               more members they bring in your team, the greater your income will be.
             </div>

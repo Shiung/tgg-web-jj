@@ -38,7 +38,7 @@ export default function LuckyMoneyList() {
             <div className="flex h-full flex-col items-center justify-center text-xs font-semibold text-[#FFFFFFB2]">
               <img src="/images/list-empty.png" className="mb-2 h-32 w-32" alt="list-empty" />
               <div>Empty. </div>
-              <div>Share New Bags to invite friends to join Kokon!</div>
+              <div>Share New Bags to invite friends to join KOKON!</div>
             </div>
           )}
         </div>

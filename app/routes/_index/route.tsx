@@ -18,21 +18,21 @@ import useStore from '~/stores/useStore'
 import Footer from './footer'
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Kokon' }, { name: 'description', content: 'Welcome to Kokon!' }]
+  return [{ title: 'KOKON' }, { name: 'description', content: 'Welcome to KOKON!' }]
 }
 
 const bannerSlides = [
   {
     id: 1,
     title: 'WELCOME TO KOKON',
-    content: 'Play with neko, earn kokon!',
+    content: 'Play with neko, earn KOKON!',
     imgSrc: '/images/home/carousel/banner-cat.png',
     imgAlt: 'banner-cat',
   },
   {
     id: 2,
     title: 'SMASH EGG',
-    content: 'Play with neko, earn kokon!',
+    content: 'Play with neko, earn KOKON!',
     imgSrc: '/images/home/carousel/banner-egg.png',
     imgAlt: 'banner-egg',
   },

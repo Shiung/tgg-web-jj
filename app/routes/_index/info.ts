@@ -142,9 +142,9 @@ const privacyPolicyInfo = {
       ],
     },
     {
-      title: 'Kokon Games',
+      title: 'KOKON Games',
       content: [
-        'When you play casino games developed by Kokon, Kokon’s Privacy Policy also applies. This policy can be found here.',
+        'When you play casino games developed by KOKON, KOKON’s Privacy Policy also applies. This policy can be found here.',
       ],
     },
   ],

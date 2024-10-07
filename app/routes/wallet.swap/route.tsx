@@ -61,7 +61,7 @@ export default function Swap() {
                 <InfoIcon className="h-3 w-3" />
                 <p>Range: 1M ~ 1,000M</p>
               </div>
-              <p className="pl-4">Ratio: 1 USDT=1,000,000 Kokon</p>
+              <p className="pl-4">Ratio: 1 USDT=1,000,000 KOKON</p>
             </div>
           </div>
           {/* 快捷按钮 */}

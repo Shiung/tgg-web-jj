@@ -11,7 +11,7 @@ const SystemMaintenance: React.FC = () => {
       <div className="space-y-1 text-center">
         <p className="text-base font-ultra text-white">System Maintenance</p>
         <p className="text-xs font-normal text-white/70">
-          Kokon is temporarily unavailable due to system maintenance. We will be restoring regular
+          KOKON is temporarily unavailable due to system maintenance. We will be restoring regular
           service as soon as possible. We apologize for any inconvenience.
         </p>
       </div>
