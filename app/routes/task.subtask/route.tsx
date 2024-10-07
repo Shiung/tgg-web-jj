@@ -5,11 +5,12 @@ import { cn } from '~/lib/utils'
 import TaskContent from './task-content'
 import styles from './index.module.scss'
 import TaskSubtaskSkeleton from './task-subtask-seleton'
+import { useRef, useCallback } from 'react'
 
 enum TaskType {
   Daily = 'Daily',
-  Common = 'Common',
   Special = 'Special',
+  Single = 'Single',
 }
 
 const taskTypes = Object.values(TaskType)
@@ -36,6 +37,7 @@ interface Reward {
 const TaskList = [
   {
     title: 'Daily Task',
+    type: TaskType.Daily,
     updateTime: '13:00(UTC-8)',
     list: [
       {
@@ -125,7 +127,51 @@ const TaskList = [
     ],
   },
   {
-    title: 'Common Task',
+    title: 'Special Task',
+    type: TaskType.Special,
+    updateTime: '',
+    list: [
+      {
+        title: 'Share with your friends',
+        status: StatusType.Claimed,
+        desc: '',
+        reward: {
+          type: RewardType.KOKON,
+          amount: 300,
+        } as Reward,
+        isLimitTask: false,
+        limitTime: '',
+        limitQuantity: 0,
+      },
+      {
+        title: 'Daily reward for 2 star group',
+        status: StatusType.Unclaimed,
+        desc: '',
+        reward: {
+          type: RewardType.KOKON,
+          amount: 200,
+        } as Reward,
+        isLimitTask: false,
+        limitTime: '',
+        limitQuantity: 0,
+      },
+      {
+        title: 'Share Kokon with your friends',
+        status: StatusType.InProgress,
+        desc: '',
+        reward: {
+          type: RewardType.KOKON,
+          amount: 100,
+        } as Reward,
+        isLimitTask: false,
+        limitTime: '',
+        limitQuantity: 0,
+      },
+    ],
+  },
+  {
+    title: 'Single Task',
+    type: TaskType.Single,
     updateTime: '',
     list: [
       {
@@ -173,6 +219,13 @@ const TaskSubtask: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [isFetch, setIsFetching] = useState(false)
 
+  // Create refs for each TaskContent
+  const taskRefs = useRef<Record<TaskType, React.RefObject<HTMLDivElement>>>({
+    [TaskType.Daily]: useRef<HTMLDivElement>(null),
+    [TaskType.Special]: useRef<HTMLDivElement>(null),
+    [TaskType.Single]: useRef<HTMLDivElement>(null),
+  })
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false)
@@ -180,6 +233,21 @@ const TaskSubtask: React.FC = () => {
     }, 1000)
 
     return () => clearTimeout(timer)
+  }, [])
+
+  const handleTaskTypeClick = useCallback((type: TaskType) => {
+    setTaskType(type)
+    const targetElement = taskRefs.current[type].current
+    if (targetElement) {
+      const headerOffset = 60 // Adjust this value based on your header height
+      const elementPosition = targetElement.getBoundingClientRect().top
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      })
+    }
   }, [])
 
   return (
@@ -201,7 +269,7 @@ const TaskSubtask: React.FC = () => {
                   variant="outlineSoft"
                   isSelected={taskType === type}
                   key={type}
-                  onClick={() => setTaskType(type)}
+                  onClick={() => handleTaskTypeClick(type)}
                 >
                   {type}
                 </Button>
@@ -212,12 +280,9 @@ const TaskSubtask: React.FC = () => {
                 <Skeleton className="w-full flex-1 bg-[#1C1C1C]" />
               ) : (
                 TaskList.map((task, index) => (
-                  <TaskContent
-                    key={index}
-                    title={task.title}
-                    updateTime={task.updateTime}
-                    list={task.list}
-                  />
+                  <div key={index} ref={taskRefs.current[task.type as TaskType]}>
+                    <TaskContent title={task.title} updateTime={task.updateTime} list={task.list} />
+                  </div>
                 ))
               )}
             </div>
