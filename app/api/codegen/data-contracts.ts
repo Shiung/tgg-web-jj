@@ -52,6 +52,10 @@ export interface ClaimTaskRewardResponse {
   rewardAmount: string;
 }
 
+export type ClaimTreasureRequest = object;
+
+export type ClaimTreasureResponse = object;
+
 export interface CommissionListRequest {
   /** 玩家名稱 */
   DisplayName?: string;
@@ -436,9 +440,141 @@ export interface GetRateResponse {
   withdrawSpeedAmount: number[];
 }
 
+export type GetTreasuresRequest = object;
+
+export interface GetTreasuresResponse {
+  /** 列表 */
+  list: ({
+    /**
+     * 會員投注BC遊戲比例
+     * @format decimal
+     */
+    betRequirement: string;
+    /**
+     * 創建時間(領取時間)
+     * @format date-time
+     */
+    createdAt: string;
+    /**
+     * 直屬下線投注BC遊戲比例
+     * @format decimal
+     */
+    directSubBetRequirement: string;
+    /**
+     * TreasureID
+     * @format uint64
+     */
+    id: number;
+    /**
+     * 剩餘領取金額
+     * @format decimal
+     */
+    remainingClaimAmount: string;
+    /**
+     * 剩餘解鎖金額
+     * @format decimal
+     */
+    remainingUnlockAmount: string;
+    /**
+     * 獎勵金額
+     * @format decimal
+     */
+    rewardAmount: string;
+    /** 獎勵類型. Allowed Enum */
+    rewardType: "USDT" | "TON" | "KOKON";
+    /** 狀態: 待解鎖、解鎖中、已解鎖. Allowed Enum */
+    status: "STANDBY" | "UNLOCKING" | "UNLOCKED";
+  } | null)[];
+}
+
+export interface GoldenActivityInfoResponse {
+  /** 獎池 */
+  prizePool: {
+    /**
+     * 顯示獎池(Usdt) max
+     * @format decimal
+     */
+    displayUsdtPrizeMax: string;
+    /**
+     * 顯示獎池(Usdt) min
+     * @format decimal
+     */
+    displayUsdtPrizeMin: string;
+    /** 金蛋等級:GOLD,SILVER,NORMAL */
+    eggLevel: string;
+    /**
+     * 錘子數量
+     * @format int64
+     */
+    hammerSpent: number;
+  }[];
+}
+
 export interface GoldenEggClaimRequest {
   /** 領取ID */
   transactionId: string;
+}
+
+export interface GoldenEggInfoResponse {
+  /**
+   * 鐵錘數量
+   * @format uint64
+   */
+  hammerRemaining?: number;
+  /** 金蛋資訊 */
+  record?: {
+    /** 是否已領取 */
+    claimed?: boolean;
+    /** 金蛋等級 */
+    eggLevel?: string;
+    /** 玩法狀態:SUCCESS,PLAYING,FAILED */
+    playStatus?: string;
+    /**
+     * 商品ID
+     * @format uint64
+     */
+    productId?: number;
+    /**
+     * 破蛋進度
+     * @format decimal
+     */
+    progress?: string;
+    /**
+     * 獎金金額
+     * @format decimal
+     */
+    reward?: string;
+    /**
+     * 總共破蛋次數
+     * @format uint64
+     */
+    totalCount?: number;
+    /** 領取ID */
+    transactionId?: string;
+  } | null;
+}
+
+export interface GoldenEggMarqueeRequest {
+  /**
+   * 筆數
+   * @format int64
+   */
+  Size: number;
+}
+
+export interface GoldenEggMarqueeResponse {
+  /** 金蛋跑馬燈 */
+  result: {
+    /** 會員名稱 */
+    customerName: string;
+    /** 金蛋等級:GOLD,SILVER,NORMAL */
+    eggLevel: string;
+    /**
+     * 獎金
+     * @format decimal
+     */
+    reward: string;
+  }[];
 }
 
 export interface GoldenEggSmashRequest {
@@ -449,6 +585,11 @@ export interface GoldenEggSmashRequest {
 export interface GoldenEggSmashResponse {
   /** 金蛋等級:GOLD,SILVER,NORMAL */
   eggLevel: string;
+  /**
+   * 鐵錘數量
+   * @format uint64
+   */
+  hammerRemaining?: number;
   /**
    * 進度
    * @format decimal
@@ -678,6 +819,10 @@ export interface LoginResponse {
   token?: string;
 }
 
+export interface PingResponse {
+  succeed?: boolean;
+}
+
 export interface SettingResponse {
   /** 升等設定 */
   classSetting?: {
@@ -719,6 +864,129 @@ export interface SettingResponse {
 export interface ShareLinkRequest {
   /** 用戶分享時使用的推薦代碼 */
   referralCode?: string;
+}
+
+export interface TaskQueryResponse {
+  /** 每日任務列表 */
+  dailyList?: {
+    /**
+     * 創建時間
+     * @format date-time
+     */
+    createdAt: string;
+    /**
+     * 結束時間, null代表無時間限制
+     * @format date-time
+     */
+    endTime?: string | null;
+    /** 任務ID */
+    id: string;
+    /**
+     * 獎勵金額/數量
+     * @format decimal
+     */
+    rewardAmount: string;
+    /** 獎勵類型 */
+    rewardType: string;
+    /**
+     * 開始時間
+     * @format date-time
+     */
+    startTime: string;
+    /** 達成條件[類型] */
+    taskConditionType: string;
+    /** 達成條件[值] */
+    taskConditionValue: string;
+    /** 任務名稱 */
+    taskName: string;
+    /** 任務類型 */
+    taskType: string;
+    /**
+     * 最後操作時間
+     * @format date-time
+     */
+    updatedAt: string;
+  }[];
+  /** 一次性任務列表 */
+  oneTimeList?: {
+    /**
+     * 創建時間
+     * @format date-time
+     */
+    createdAt: string;
+    /**
+     * 結束時間, null代表無時間限制
+     * @format date-time
+     */
+    endTime?: string | null;
+    /** 任務ID */
+    id: string;
+    /**
+     * 獎勵金額/數量
+     * @format decimal
+     */
+    rewardAmount: string;
+    /** 獎勵類型 */
+    rewardType: string;
+    /**
+     * 開始時間
+     * @format date-time
+     */
+    startTime: string;
+    /** 達成條件[類型] */
+    taskConditionType: string;
+    /** 達成條件[值] */
+    taskConditionValue: string;
+    /** 任務名稱 */
+    taskName: string;
+    /** 任務類型 */
+    taskType: string;
+    /**
+     * 最後操作時間
+     * @format date-time
+     */
+    updatedAt: string;
+  }[];
+  /** 特殊任務列表 */
+  specialList?: {
+    /**
+     * 創建時間
+     * @format date-time
+     */
+    createdAt: string;
+    /**
+     * 結束時間, null代表無時間限制
+     * @format date-time
+     */
+    endTime?: string | null;
+    /** 任務ID */
+    id: string;
+    /**
+     * 獎勵金額/數量
+     * @format decimal
+     */
+    rewardAmount: string;
+    /** 獎勵類型 */
+    rewardType: string;
+    /**
+     * 開始時間
+     * @format date-time
+     */
+    startTime: string;
+    /** 達成條件[類型] */
+    taskConditionType: string;
+    /** 達成條件[值] */
+    taskConditionValue: string;
+    /** 任務名稱 */
+    taskName: string;
+    /** 任務類型 */
+    taskType: string;
+    /**
+     * 最後操作時間
+     * @format date-time
+     */
+    updatedAt: string;
+  }[];
 }
 
 export type TeamInfoRequest = object;
@@ -832,6 +1100,16 @@ export interface UpdateLocaleResponse {
   succeed?: boolean;
 }
 
+export interface UpgradeAnimationResponse {
+  /**
+   * 目標等級
+   * @format int64
+   */
+  finalClass?: number;
+  /** 是否需跑升等動畫 */
+  shouldPlayUpgradeAnimation?: boolean;
+}
+
 export interface ValidCodeRequest {
   /**
    * 收信信箱
@@ -902,10 +1180,10 @@ export interface WithdrawRequest {
    * @format decimal
    */
   amount: string;
-  /** 區塊鏈網路，目前只有TON */
-  chainNet: string;
-  /** 幣別 */
-  currency: string;
+  /** 區塊鏈網路，目前只有TON. Allowed Enum */
+  chainNet: "TON";
+  /** 幣別. Allowed Enum */
+  currency: "TON" | "USDT";
   /** 資金密碼 */
   fundPassword: string;
   /**

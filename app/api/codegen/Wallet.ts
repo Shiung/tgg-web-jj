@@ -301,10 +301,10 @@ export class Wallet<SecurityDataType = unknown> {
        * @format decimal
        */
       amount: string;
-      /** 區塊鏈網路，目前只有TON */
-      chainNet: string;
-      /** 幣別 */
-      currency: string;
+      /** 區塊鏈網路，目前只有TON. Allowed Enum */
+      chainNet: "TON";
+      /** 幣別. Allowed Enum */
+      currency: "TON" | "USDT";
       /** 資金密碼 */
       fundPassword: string;
       /**

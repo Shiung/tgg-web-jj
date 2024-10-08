@@ -209,6 +209,24 @@ export class Customer<SecurityDataType = unknown> {
    * @description Auto-generated API documentation
    *
    * @tags (*CustomerController)
+   * @name CustomerPingList
+   * @request GET:/ajax/customer/ping
+   */
+  customerPingList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        succeed?: boolean;
+      },
+      any
+    >({
+      path: `/ajax/customer/ping`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*CustomerController)
    * @name CustomerShareCreate
    * @request POST:/ajax/customer/share
    */
@@ -342,6 +360,43 @@ export class Customer<SecurityDataType = unknown> {
       path: `/ajax/customer/team/performance`,
       method: "GET",
       query: query,
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*CustomerController)
+   * @name CustomerUpgradeAnimationList
+   * @request GET:/ajax/customer/upgrade-animation
+   */
+  customerUpgradeAnimationList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /**
+         * 目標等級
+         * @format int64
+         */
+        finalClass?: number;
+        /** 是否需跑升等動畫 */
+        shouldPlayUpgradeAnimation?: boolean;
+      },
+      any
+    >({
+      path: `/ajax/customer/upgrade-animation`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*CustomerController)
+   * @name CustomerUpgradeAnimationDelete
+   * @request DELETE:/ajax/customer/upgrade-animation
+   */
+  customerUpgradeAnimationDelete = (params: RequestParams = {}) =>
+    this.http.request<any, any>({
+      path: `/ajax/customer/upgrade-animation`,
+      method: "DELETE",
       ...params,
     });
   /**
