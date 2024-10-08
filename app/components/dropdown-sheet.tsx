@@ -20,8 +20,8 @@ import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import { cn } from '~/lib/utils'
 
 interface DropdownBottomSheetContextType {
-  innerSelectedOption: { value: string; label: string | ReactNode } | undefined
-  setInnerSelectedOption: (option: { value: string; label: string | ReactNode }) => void
+  innerSelectedOption: { value: string | object; label: string | ReactNode } | undefined
+  setInnerSelectedOption: (option: { value: string | object; label: string | ReactNode }) => void
 }
 
 const DropdownBottomSheetContext = createContext<DropdownBottomSheetContextType | null>(null)
@@ -29,9 +29,14 @@ const DropdownBottomSheetContext = createContext<DropdownBottomSheetContextType 
 interface DropdownBottomSheetProps {
   id?: string
   title: string
-  value: string
+  value: string | object
   placeholder?: string
-  onConfirm?: (value: string) => void
+  customTrigger?: (props: {
+    selectedLabel: string | ReactNode | undefined
+    placeholder: string | undefined
+    isOpen: boolean
+  }) => ReactNode
+  onConfirm?: (value: string | object) => void
   children: ReactNode
 }
 
@@ -40,27 +45,32 @@ const DropdownSheet = ({
   title,
   value,
   placeholder,
+  customTrigger,
   onConfirm,
   children,
 }: DropdownBottomSheetProps) => {
   const [open, setOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<
-    { value: string; label: string | ReactNode } | undefined
+    { value: string | object; label: string | ReactNode } | undefined
   >()
   const [innerSelectedOption, setInnerSelectedOption] = useState<
-    { value: string; label: string | ReactNode } | undefined
+    { value: string | object; label: string | ReactNode } | undefined
   >()
 
   useEffect(() => {
     if (value && children) {
-      // Find the label corresponding to the initial value
       let foundLabel: string | ReactNode | undefined
       Children.forEach(children, child => {
-        if (isValidElement(child) && child.props.value === value) {
+        if (
+          isValidElement(child) &&
+          (child.props.value === value ||
+            (typeof child.props.value === 'object' &&
+              JSON.stringify(child.props.value) === JSON.stringify(value)))
+        ) {
           foundLabel = child.props.label
         }
       })
-      setSelectedOption({ value, label: foundLabel || value })
+      setSelectedOption({ value, label: foundLabel || JSON.stringify(value) })
     } else {
       setSelectedOption(undefined)
     }
@@ -80,15 +90,23 @@ const DropdownSheet = ({
     setOpen(false)
   }
 
+  const triggerContent = customTrigger ? (
+    customTrigger({
+      selectedLabel: selectedOption?.label,
+      placeholder,
+      isOpen: open,
+    })
+  ) : (
+    <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
+      <span>{selectedOption?.label || placeholder}</span>
+      <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
+    </Button>
+  )
+
   return (
     <DropdownBottomSheetContext.Provider value={{ innerSelectedOption, setInnerSelectedOption }}>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
-          <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
-            <span>{selectedOption?.label || placeholder}</span>
-            <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
-          </Button>
-        </SheetTrigger>
+        <SheetTrigger asChild>{triggerContent}</SheetTrigger>
         <SheetContent side="bottom">
           <SheetHeader>
             <SheetTitle>{title}</SheetTitle>
@@ -107,7 +125,7 @@ const DropdownSheet = ({
 DropdownSheet.displayName = 'DropdownSheet'
 
 interface DropdownOptionProps {
-  value: string
+  value: string | object
   label: string | ReactNode
   suffix?: ReactNode
   className?: string
@@ -122,10 +140,16 @@ const DropdownOption: React.FC<DropdownOptionProps> = ({ value, label, suffix, c
 
   const { innerSelectedOption, setInnerSelectedOption } = context
 
+  const isSelected =
+    typeof value === 'string'
+      ? innerSelectedOption?.value === value
+      : typeof innerSelectedOption?.value === 'object' &&
+        JSON.stringify(innerSelectedOption.value) === JSON.stringify(value)
+
   return (
     <Button
       variant="menu"
-      isSelected={innerSelectedOption?.value === value}
+      isSelected={isSelected}
       onClick={() => setInnerSelectedOption({ value, label })}
       className={cn('flex w-full items-center justify-between space-x-2', className)}
     >

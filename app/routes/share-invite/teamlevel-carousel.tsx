@@ -110,7 +110,7 @@ const TeamLevelCarousel: React.FC<TeamLevelCarouselProps> = ({
               className={cn(
                 'relative z-10 h-3 w-3 rounded-full transition-colors',
                 selectedIndex === index
-                  ? 'ring-2 ring-yellow-200 ring-offset-1 ring-offset-transparent'
+                  ? 'ring-2 ring-yellow-200 ring-offset-2 ring-offset-[#007E36]'
                   : '',
                 index + 1 < teamLevel ? 'bg-[#FFF20080]' : 'bg-black',
                 index + 1 === teamLevel ? 'bg-primary' : ''

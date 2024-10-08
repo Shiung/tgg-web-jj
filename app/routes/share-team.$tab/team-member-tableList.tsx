@@ -1,28 +1,20 @@
 import React from 'react'
 import { UsdtIcon } from '~/components/color-icons'
+import Amount from '~/components/amount'
 
-const mockTableData = [
-  {
-    name: 'marry1245',
-    lv: 2,
-    betAmount: '1,234,567.123456',
-    commission: '1,000.75 M',
-  },
-  {
-    name: 'marry1245',
-    lv: 2,
-    betAmount: '1,234,567.123456',
-    commission: '1,000.75 M',
-  },
-  {
-    name: 'marry1245',
-    lv: 2,
-    betAmount: '1,234,567.123456',
-    commission: '1,000.75 M',
-  },
-]
+interface TeamMember {
+  anchorPoint: number
+  lv: number
+  name: string
+  totalBets: string
+  totalDeposits: string
+}
 
-const TeamMemberTableList: React.FC = () => {
+interface TeamMemberTableListProps {
+  data: TeamMember[]
+}
+
+const TeamMemberTableList: React.FC<TeamMemberTableListProps> = ({ data }) => {
   const truncateName = (name: string, maxLength: number = 9) => {
     return name.length > maxLength ? name.slice(0, maxLength) + '...' : name
   }
@@ -56,14 +48,18 @@ const TeamMemberTableList: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {mockTableData.map((row, rowIndex) => (
+              {data.map((row, rowIndex) => (
                 <tr key={rowIndex} className="">
                   <td className="w-[65px] max-w-[65px] truncate">
                     <span title={row.name}>{truncateName(row.name)}</span>
                   </td>
                   <td className="text-right">{row.lv}</td>
-                  <td className="text-right">{row.betAmount}</td>
-                  <td className="text-right">{row.commission}</td>
+                  <td className="text-right">
+                    <Amount value={row.totalBets} crypto="USDT" />
+                  </td>
+                  <td className="text-right">
+                    <Amount value={row.totalDeposits} crypto="USDT" />
+                  </td>
                 </tr>
               ))}
             </tbody>
