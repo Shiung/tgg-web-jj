@@ -1,27 +1,27 @@
 import React, { useState, useMemo, useEffect, useCallback } from 'react'
 import { Link } from '@remix-run/react'
-import { apis } from '~/api'
 import { useQuery } from '@tanstack/react-query'
-import { parseAmount } from '~/lib/amount'
 import { useCopyToClipboard } from 'react-use'
-import { useTelegramUtils } from '~/hooks/useShare'
-
-import { Button } from '~/components/ui/button'
+import { apis } from '~/api'
+import { useShare } from '~/hooks/useShare'
 import SvgCopy from '~/icons/copy.svg?react'
 import SvgHistory from '~/icons/history.svg?react'
 import SvgCommission from '~/icons/commission.svg?react'
 import SvgInvite from '~/icons/invite.svg?react'
+import { Button } from '~/components/ui/button'
 import { KokonIcon, StarIcon } from '~/components/color-icons'
 import CatEarsCard from '~/components/cat-ears-card'
 import InfoTooltip from '~/components/info-tooltip'
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
-import ProgressBar from './progress-bar'
-import TeamLevelCarousel from './teamlevel-carousel'
-import RuleSheet from './rule-sheet'
 import Amount from '~/components/amount'
-import ShareInviteSkeleton from './share-invite-skeleton'
-import { successToast } from '~/lib/toast'
 import { Input } from '~/components/ui/input'
+import { parseAmount } from '~/lib/amount'
+import { successToast } from '~/lib/toast'
+
+import ShareInviteSkeleton from './share-invite-skeleton'
+import ProgressBar from './progress-bar'
+import RuleSheet from './rule-sheet'
+import TeamLevelCarousel from './teamlevel-carousel'
 
 const teamLevelCarouselImages = [
   '/images/share/teamStar-1.png',
@@ -46,14 +46,16 @@ const ShareInvite: React.FC = () => {
   }, [customerInfo])
 
   // 剪貼簿 與分享功能
-  const { shareUrl } = useTelegramUtils()
+  const { shareUrl } = useShare()
   const [state, copyToClipboard] = useCopyToClipboard()
+
   useEffect(() => {
     if (!state.value) return
     successToast('Copied')
   }, [state])
+
   const handleShareURL = useCallback(() => {
-    shareUrl(shareUrlLink, 'Join my team to play the game and earn Kokon coin.')
+    shareUrl(shareUrlLink, 'Join my team to play the game and earn KOKON coin.')
   }, [shareUrl, shareUrlLink])
 
   // 當前選擇的 teamLevel
@@ -305,7 +307,7 @@ const ShareInvite: React.FC = () => {
               {/* Team's Commission Ratio Section */}
               <CatEarsCard className="relative mt-8 w-full rounded-[12px] bg-[#1C1C1C] text-center text-[#FFFFFFB2]">
                 <div className="flex items-center justify-between rounded-t-[12px] bg-[#333333] px-6 py-2">
-                  <div className="font-ultra text-primary">Team's Commission Ratio</div>
+                  <div className="font-ultra text-primary">Team&#39;s Commission Ratio</div>
                 </div>
                 <div className="flex items-center justify-between space-x-2 p-3 text-xs">
                   {currentCommissionSetting &&
@@ -327,8 +329,12 @@ const ShareInvite: React.FC = () => {
                   </div>
                   <div className="flex w-full flex-col items-center space-y-3 p-3 text-xs">
                     {taskProgress.map(el => (
-                      <div key={`level-${el}`} className="flex w-full flex-col">
-                        <ProgressBar progress={el.progress} total={el.total} label={el.name} />
+                      <div key={`level-${el.name}`} className="flex w-full flex-col">
+                        <ProgressBar
+                          progress={el.progress}
+                          total={Number(el.total)}
+                          label={el.name}
+                        />
                       </div>
                     ))}
                   </div>

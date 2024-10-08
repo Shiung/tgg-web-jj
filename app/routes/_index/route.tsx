@@ -110,7 +110,7 @@ export default function Index() {
               <div className="absolute inset-3 flex flex-col text-start text-lg font-ultra">
                 <span>SMASH EGG</span>
                 <span className="text-sm font-normal">
-                  Up to <span className="font-ultra text-primary">1000</span> kokon
+                  Up to <span className="font-ultra text-primary">1000</span> KOKON
                 </span>
               </div>
               <img

@@ -7,13 +7,13 @@ import X from '~/icons/x.svg?react'
 import SvgCopy from '~/icons/copy.svg?react'
 import { Button } from '~/components/ui/button'
 import { Link, useSearchParams, useNavigate } from '@remix-run/react'
-import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
+import { Avatar, AvatarFallback } from '~/components/ui/avatar'
 import { KokonIcon } from '~/components/color-icons'
 import StopSharingDialog from './stop-sharing-dialog'
 
 const LuckyMoneyDetail = () => {
   const navigate = useNavigate()
-  const [shareLink, setShareLink] = useState('http://kokon.com/test')
+  const [shareLink, setShareLink] = useState(window.location.origin)
   const handleCopyShareLink = () => {
     const tempInput = document.createElement('input')
     tempInput.value = shareLink

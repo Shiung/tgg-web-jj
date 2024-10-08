@@ -29,7 +29,7 @@ const Header: React.FC = () => {
     <header className="fixed inset-x-0 top-0 z-40 h-header bg-background pb-3">
       <div className="mx-auto flex w-full items-center justify-between bg-black px-4 py-2">
         <Link to="/">
-          <img src="/logo.svg" alt="Kokon Logo" width={90} height={24} />
+          <img src="/logo.svg" alt="KOKON Logo" width={90} height={24} />
         </Link>
         <UserActions />
       </div>

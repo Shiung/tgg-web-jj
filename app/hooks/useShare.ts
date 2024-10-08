@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { useUtils } from '@telegram-apps/sdk-react'
 import useStore from '~/stores/useStore'
 
-export function useTelegramUtils() {
+export function useShare() {
   const inTelegram = useStore(state => state.inTelegram)
   const utils = useUtils()
 

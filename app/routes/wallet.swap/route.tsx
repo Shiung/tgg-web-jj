@@ -144,9 +144,9 @@ export default function Swap() {
     if (currentTab === 'buy') {
       /** buy */
       return selectCurrency === Crypto.USDT
-        ? /** kokon to usdt */
+        ? /** KOKON to USDT */
           BigNumber(inputAmount).div(BigNumber(settingRule.origin.usdt2KokonRate)).toNumber()
-        : /** kokon to usdt to ton */
+        : /** KOKON to USDT to TON */
           BigNumber(inputAmount)
             .div(BigNumber(settingRule.origin.depositRate))
             .div(BigNumber(settingRule.origin.usdt2KokonRate))
@@ -154,9 +154,9 @@ export default function Swap() {
     } else {
       /** sell */
       return selectCurrency === Crypto.USDT
-        ? /** kokon to usdt */
+        ? /** KOKON to USDT */
           BigNumber(inputAmount).div(BigNumber(settingRule.origin.usdt2KokonRate)).toNumber()
-        : /** kokon to usdt to ton */
+        : /** KOKON to USDT to TON */
           BigNumber(inputAmount)
             .div(BigNumber(settingRule.origin.withdrawRate))
             .div(BigNumber(settingRule.origin.usdt2KokonRate))
@@ -274,7 +274,7 @@ export default function Swap() {
                     Range: {formatKM(settingRule.min)} ~ {formatKM(settingRule.max)}
                   </p>
                 </div>
-                {/* <p className="pl-4">Ratio: 1 USDT=1,000,000 Kokon</p> */}
+                {/* <p className="pl-4">Ratio: 1 USDT=1,000,000 KOKON</p> */}
                 <p className="pl-4">
                   Ratio: 1 USDT=&nbsp;
                   <Amount value={settingRule?.origin.usdt2KokonRate} crypto={Crypto.KOKON} />

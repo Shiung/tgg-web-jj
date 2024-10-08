@@ -279,7 +279,7 @@ const TeamMember: React.FC = () => {
       <div className="flex flex-1 flex-col">
         <div className="mt-6 flex items-center space-x-1 font-ultra text-white">
           <div>All Members</div>
-          <InfoTooltip content="Only when your friends registered and owned over 100 Kokon in their wallet are counted valid member." />
+          <InfoTooltip content="Only when your friends registered and owned over 100 KOKON in their wallet are counted valid member." />
         </div>
         {/* Search Section */}
         <div className="flex w-full flex-wrap text-xs font-ultra">

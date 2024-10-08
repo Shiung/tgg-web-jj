@@ -20,7 +20,7 @@ import { successToast } from '~/lib/toast'
 const links = {
   support: {
     title: 'Support',
-    value: 'www.kokon.io',
+    value: 'www.kokon.io', // TODO: replace with real link
     text: 'kokon.io',
   },
   officialLinks: {

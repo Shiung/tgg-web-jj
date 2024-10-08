@@ -5,7 +5,7 @@ import { Button } from '~/components/ui/button'
 import SvgCopy from '~/icons/copy.svg?react'
 
 const ShareSheet: React.FC = () => {
-  const [shareUrl, setShareUrl] = useState('http://kokon.com/=3782038u219')
+  const [shareUrl, setShareUrl] = useState(window.location.origin)
 
   const handleInputFocus = (e: React.FocusEvent<HTMLInputElement>) => {
     e.target.blur()
