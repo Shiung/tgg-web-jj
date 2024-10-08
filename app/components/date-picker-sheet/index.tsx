@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, ReactNode } from 'react'
 import { type DateRange } from 'react-day-picker'
 import { format, setHours, setMinutes } from 'date-fns'
 import {
@@ -20,6 +20,7 @@ interface DatePickerSheetProps {
   id?: string
   title: string
   value: Date | DateRange | undefined
+  customTrigger?: (props: { displayTriggerDate: string | ReactNode | undefined }) => ReactNode
   onChange?: (date: Date | DateRange | undefined) => void
   range?: boolean // 是否选择日期范围
   showTimePicker?: boolean // 控制是否显示时间选择器
@@ -45,6 +46,7 @@ export default function DatePickerSheet({
   id,
   title,
   value,
+  customTrigger,
   onChange,
   range = false, // 默认为单个日期
   showTimePicker = false, // 默认为不显示时间选择器
@@ -129,14 +131,20 @@ export default function DatePickerSheet({
     }
   }, [open, range, value])
 
+  const triggerContent = customTrigger ? (
+    customTrigger({
+      displayTriggerDate,
+    })
+  ) : (
+    <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
+      <span>{displayTriggerDate}</span>
+      <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
+    </Button>
+  )
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
-          <span>{displayTriggerDate}</span>
-          <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
-        </Button>
-      </SheetTrigger>
+      <SheetTrigger asChild>{triggerContent}</SheetTrigger>
       <SheetContent
         side="bottom"
         className="max-h-[calc(100vh_-_48px)]"

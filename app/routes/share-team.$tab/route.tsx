@@ -1,21 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import useStore from '~/stores/useStore'
+import { useParams, Link } from '@remix-run/react'
 
-import { Link } from '@remix-run/react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import Commission from './commission'
 import TeamMember from './team-member'
 
 const ShareTeam: React.FC = () => {
-  const setNavVisibility = useStore(state => state.setNavVisibility)
-  useEffect(() => {
-    setNavVisibility(false)
-    return () => {
-      setNavVisibility(true)
-    }
-  }, [setNavVisibility])
-
+  const params = useParams()
   const [actvieTab, setActvieTab] = useState('Commission')
+  useEffect(() => {
+    if (params?.tab) {
+      setActvieTab(params.tab)
+    }
+  }, [params])
 
   return (
     <div className="container flex flex-1 flex-col p-0">
@@ -28,7 +25,7 @@ const ShareTeam: React.FC = () => {
             </Link>
           </TabsTrigger>
           <TabsTrigger value="My Team" className="flex-1" asChild>
-            <Link prefetch="viewport" to="/share-team">
+            <Link prefetch="viewport" to="/share-team/Commission">
               My Team
             </Link>
           </TabsTrigger>
@@ -40,33 +37,19 @@ const ShareTeam: React.FC = () => {
         <Tabs defaultValue="Commission" value={actvieTab} className="flex w-full flex-1 flex-col">
           <TabsList variant="cardTab" className="w-full overflow-x-auto">
             <TabsTrigger variant="cardTab" value="Commission" className="flex-1" asChild>
-              <div
-                onClick={() => {
-                  setActvieTab('Commission')
-                }}
-                role="button"
-                tabIndex={0}
-                onKeyDown={() => {}}
-              >
-                Commission
-              </div>
+              <Link prefetch="viewport" to="/share-team/Commission">
+                Team Commission
+              </Link>
             </TabsTrigger>
-            <TabsTrigger variant="cardTab" value="Team Member" className="flex-1" asChild>
-              <div
-                onClick={() => {
-                  setActvieTab('Team Member')
-                }}
-                role="button"
-                tabIndex={0}
-                onKeyDown={() => {}}
-              >
+            <TabsTrigger variant="cardTab" value="TeamMember" className="flex-1" asChild>
+              <Link prefetch="viewport" to="/share-team/TeamMember">
                 Team Member
-              </div>
+              </Link>
             </TabsTrigger>
           </TabsList>
           <TabsContent value={actvieTab} className="mt-0 flex flex-1 bg-black">
             {actvieTab === 'Commission' && <Commission />}
-            {actvieTab === 'Team Member' && <TeamMember />}
+            {actvieTab === 'TeamMember' && <TeamMember />}
           </TabsContent>
         </Tabs>
       </div>

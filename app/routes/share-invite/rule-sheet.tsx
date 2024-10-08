@@ -1,3 +1,6 @@
+import { type SettingResponse } from '~/api/codegen/data-contracts'
+import useStore from '~/stores/useStore'
+
 import {
   Sheet,
   SheetContent,
@@ -15,49 +18,21 @@ import {
   TableHeader,
   TableRow,
 } from '~/components/ui/table'
-
-const mockTableData = {
-  headers: ['1 star', '2 star', '3 star', '4 star', '5 star', '6 star'],
-  rows: [
-    { label: 'Lv 1', values: ['0.7%', '0.8%', '0.85%', '0.9%', '0.95%', '0.95%'] },
-    { label: 'Lv 2', values: ['0.25%', '0.28%', '0.32%', '0.36%', '0.4%', '0.95%'] },
-    { label: 'Lv 3', values: ['0.08%', '0.11%', '0.13%', '0.15%', '0.18%', '0.95%'] },
-    { label: 'Lv 4', values: ['0.03%', '0.04%', '0.05%', '0.06%', '0.08%', '0.95%'] },
-  ],
-}
-
-const mockTableData2 = {
-  headers: ['1 → 2', '2 → 3', '3 → 4', '4 → 5'],
-  rows: [
-    {
-      label: 'Team Member Numbers',
-      values: ['5', '10', '', '7'],
-    },
-    {
-      label: 'Team Member Betting amount',
-      values: ['10,000 USDT', '50,000 USDT', '100,000 USDT', '100,000 USDT'],
-    },
-    {
-      label: 'Team Member Deposit amount',
-      values: ['1,000 USDT', '5,000 USDT', '10,000 USDT', '5,000 USDT'],
-    },
-  ],
-}
+import Amount from '~/components/amount'
 
 interface TableData {
   headers: string[]
   rows: {
     label?: string
-    values: string[]
+    values: (string | React.ReactElement)[]
   }[]
 }
-
 interface TableDemoProps {
-  tableData: TableData
+  tableData: TableData | null
   isAlternateHorizontal?: boolean
 }
-
 const TableDemo: React.FC<TableDemoProps> = ({ tableData, isAlternateHorizontal = true }) => {
+  if (!tableData) return null
   return (
     <div className="overflow-x-auto rounded-xl">
       <Table className="relative border-collapse rounded-xl">
@@ -104,11 +79,82 @@ const TableDemo: React.FC<TableDemoProps> = ({ tableData, isAlternateHorizontal 
   )
 }
 
-const RuleSheet: React.FC = () => {
+const formatCommissionSetting = (commissionSetting: SettingResponse['commissionSetting']) => {
+  if (!commissionSetting || commissionSetting.length === 0) return null
+  return commissionSetting.reduce((acc, el, index) => {
+    if (index === 0) {
+      // 初始化
+      acc.headers = []
+      acc.rows = Object.keys(el)
+        .filter(key => key.startsWith('level'))
+        .sort()
+        .map((key, i) => ({ label: `Lv ${i + 1}`, values: [] }))
+    }
+
+    // 添加 header
+    acc.headers.push(`${el.class} star`)
+
+    // 保留未來新增新等級的空間
+    acc.rows.forEach((row, i) => {
+      const levelKey = `level${i + 1}` as keyof typeof el
+      row.values.push(String(el[levelKey]) + '%' || '')
+    })
+
+    return acc
+  }, {} as TableData)
+}
+
+const formatClassSetting = (classSetting: SettingResponse['classSetting']) => {
+  if (!classSetting || classSetting.length === 0) return null
+
+  return classSetting.reduce((acc, el, index) => {
+    if (index === 0) {
+      // 初始化
+      acc = {
+        headers: [],
+        rows: [
+          { label: 'Team Member Numbers', values: [] },
+          { label: 'Team Member Betting amount', values: [] },
+          { label: 'Team Member Deposit amount', values: [] },
+        ],
+      }
+    }
+
+    // 添加 header
+    acc.headers.push(`${el.class} → ${el.class + 1}`)
+
+    // 後端的值名稱跟表格的名稱不一樣 所以先寫死
+    acc.rows[0].values.push(el.activeMember.toString() || '')
+    acc.rows[1].values.push(
+      <div className="flex items-center space-x-1">
+        <Amount value={el.totalBet} crypto="USDT" />
+        <span> USDT</span>
+      </div>
+    )
+    acc.rows[2].values.push(
+      <div className="flex items-center space-x-1">
+        <Amount value={el.totalDeposit} crypto="USDT" />
+        <span> USDT</span>
+      </div>
+    )
+    return acc
+  }, {} as TableData)
+}
+
+interface RuleSheetProps {
+  teamSettingList: SettingResponse
+}
+const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
+  const classSettingTable = formatClassSetting(teamSettingList.classSetting)
+  const commissionSettingTable = formatCommissionSetting(teamSettingList.commissionSetting)
+  const maxWidth = useStore(state => state.maxWidth)
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <div className="fixed bottom-24 left-0 z-50 cursor-pointer">
+        <div
+          className="fixed bottom-24 z-50 cursor-pointer"
+          style={{ left: `calc((100vw - ${maxWidth}) / 2)` }}
+        >
           <SvgEnterByFloating imgUrl="/images/share/rule.png" imgWidth={36} imgHeight={36} />
         </div>
       </SheetTrigger>
@@ -169,9 +215,9 @@ const RuleSheet: React.FC = () => {
               higher rating your team is, the more rewards your team get.
             </div>
             <div className="text-base font-ultra text-white">Commission Ratio</div>
-            <TableDemo tableData={mockTableData} />
+            <TableDemo tableData={commissionSettingTable} />
             <div className="text-base font-ultra text-white">Upgrade Requirement</div>
-            <TableDemo tableData={mockTableData2} isAlternateHorizontal={false} />
+            <TableDemo tableData={classSettingTable} isAlternateHorizontal={false} />
           </div>
         </div>
       </SheetContent>
