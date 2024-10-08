@@ -85,8 +85,8 @@ export function detectOS() {
     return 'MacOS'
   }
 
-  // 未知操作系统
-  return 'Unknown'
+  // Unknown 未知操作系统
+  return '-'
 }
 
 export function debounce(func: (...args: any[]) => void, delay: number) {
