@@ -48,7 +48,7 @@ const gameList: Record<
     currency: 'usd',
     imgSrc: '/images/home/carousel/go-down-100-floors.png',
     imgAlt: 'go-down-100-floors',
-    venueType: VenueType.Crypto,
+    venueType: VenueType.Casual,
   },
 }
 
