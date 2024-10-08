@@ -52,6 +52,8 @@ function prepareLoginRequest(
   const user = extractUserInfo(data)
   if (!user) return null
 
+  const effectiveReferralCode = referralCode || localStorage.getItem('referralCode') || ''
+
   return {
     avatar: user.photoUrl || '',
     device: getState().inTelegram ? 'Mini App' : 'Web',
@@ -62,7 +64,7 @@ function prepareLoginRequest(
     lastName: user.lastName,
     os: detectOS(),
     productId: 1,
-    referralCode,
+    referralCode: effectiveReferralCode,
     userName: user.username,
     version: import.meta.env.VITE_APP_VERSION || '',
   }
@@ -81,12 +83,17 @@ const useLogin = (options?: UseLoginOptions) => {
     onSuccess: (data, variables, context) => {
       setIsLoggedIn(true)
 
+      // 清除邀請碼
+      localStorage.removeItem('referralCode')
+
       if (options?.onSuccess) {
         options.onSuccess(data, variables, context)
       }
     },
     onError: (error, variables, context) => {
       console.error('Login failed, onError:', error)
+      // 清除邀請碼
+      localStorage.removeItem('referralCode')
       // 處理錯誤
       if (options?.onError) {
         options.onError(error, variables, context)

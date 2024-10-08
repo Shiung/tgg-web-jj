@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect, useCallback } from 'react'
 import { Link } from '@remix-run/react'
 import { apis } from '~/api'
 import { useQuery } from '@tanstack/react-query'
@@ -32,6 +32,19 @@ const teamLevelCarouselImages = [
 ]
 
 const ShareInvite: React.FC = () => {
+  // 取得用戶分享連結
+  const { data: customerInfo, isLoading: customerInfoLoading } = useQuery({
+    queryKey: ['customerInfo'],
+    queryFn: apis.customer.customerInfoList,
+  })
+
+  const shareUrlLink = useMemo(() => {
+    if (!customerInfo?.data?.referralCode) {
+      return ''
+    }
+    return `${window.location.origin}/?startapp=${customerInfo.data.referralCode}`
+  }, [customerInfo])
+
   // 剪貼簿 與分享功能
   const { shareUrl } = useTelegramUtils()
   const [state, copyToClipboard] = useCopyToClipboard()
@@ -39,9 +52,9 @@ const ShareInvite: React.FC = () => {
     if (!state.value) return
     successToast('Copied')
   }, [state])
-  const handleShareURL = () => {
-    shareUrl('http://kokon.com/=3782038u219', 'Join my team to play the game and earn Kokon coin.')
-  }
+  const handleShareURL = useCallback(() => {
+    shareUrl(shareUrlLink, 'Join my team to play the game and earn Kokon coin.')
+  }, [shareUrl, shareUrlLink])
 
   // 當前選擇的 teamLevel
   const [teamLevel, setTeamLevel] = useState(0)
@@ -135,7 +148,7 @@ const ShareInvite: React.FC = () => {
           </TabsTrigger>
         </TabsList>
       </Tabs>
-      {customerTeamInfoLoading || teamSettingListLoading ? (
+      {customerTeamInfoLoading || teamSettingListLoading || customerInfoLoading ? (
         <ShareInviteSkeleton />
       ) : (
         <>
@@ -176,13 +189,13 @@ const ShareInvite: React.FC = () => {
                     readOnly
                     className="h-9 w-full"
                     id="address"
-                    value={'http://kokon.com/=3782038u219'}
+                    value={shareUrlLink}
                     fieldSuffix={
                       <Button
                         variant="icon"
                         size="icon"
                         className="h-6 w-6 text-white"
-                        onClick={() => copyToClipboard('http://kokon.com/=3782038u219')}
+                        onClick={() => copyToClipboard(shareUrlLink)}
                       >
                         <SvgCopy className="h-4 w-4" />
                       </Button>
