@@ -19,7 +19,7 @@ export const links = [
   { href: '/task', i18n: 'task', SvgComponent: NavTask, needLogin: false, comp: Link },
   { href: '/share-invite', i18n: 'share', SvgComponent: NavShare, needLogin: false, comp: Link },
   {
-    href: '/wallet/deposit',
+    href: '/wallet',
     i18n: 'wallet',
     SvgComponent: NavWallet,
     needLogin: true,
