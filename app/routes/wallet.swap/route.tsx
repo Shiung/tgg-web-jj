@@ -182,7 +182,7 @@ export default function Swap() {
     const isBuy = currentTab === 'buy'
     postTransfer(
       {
-        amount: values.amount,
+        amount: values.amount.replace(/,/g, ''),
         currency: selectCurrency as Crypto,
         type: isBuy ? 'IN' : 'OUT',
       },
