@@ -6,6 +6,7 @@ import X from '~/icons/x.svg?react'
 
 export default function LuckyMoney() {
   const setNavVisibility = useStore(state => state.setNavVisibility)
+
   useEffect(() => {
     setNavVisibility(false)
     return () => {

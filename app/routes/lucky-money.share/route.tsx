@@ -15,7 +15,7 @@ export default function LuckyMoneyShare() {
   const [luckBagType, setLuckBagType] = useState(0)
 
   return (
-    <div className="mt-[-7px] flex w-full flex-1 flex-col items-center justify-between rounded-[12px] bg-black p-4">
+    <div className="mt-[-7px] flex w-full flex-1 flex-col items-center justify-between rounded-lg bg-black p-4">
       <div className="flex w-full flex-1 flex-col">
         {/* 上方兩顆按鈕 */}
         <div className="mb-6 flex w-full space-x-2">
@@ -58,7 +58,8 @@ export default function LuckyMoneyShare() {
               />
             </div>
             <div className="p-3 text-xs">
-              The amount in each bag and total bag quantity is fixed.
+              The amount in each bag and total bag quantity is{' '}
+              <span className="font-ultra">fixed</span>.
             </div>
           </div>
           <div
@@ -83,7 +84,8 @@ export default function LuckyMoneyShare() {
               />
             </div>
             <div className="p-3 text-xs">
-              The amount in each bag and total bag quantity is Radom.
+              The amount in each bag and total bag quantity is{' '}
+              <span className="font-ultra">Radom</span>.
             </div>
           </div>
         </div>
