@@ -1,11 +1,14 @@
 import { StateCreator } from 'zustand'
 import Cookies from 'js-cookie'
 import { v4 as uuidv4 } from 'uuid'
+import { setHeaderToken } from '~/api/api-client'
 
 export interface AuthSlice {
+  token?: string
   deviceId?: string
   isLoggedIn: boolean
   needLoginDialogOpen: boolean
+  setToken: (token: string) => void
   setIsLoggedIn: (loggedIn: boolean) => void
   checkIsLoggedIn: () => void
   logout: () => void
@@ -25,7 +28,7 @@ const getStoredValue = (key: string): string | undefined => {
   return undefined
 }
 
-const initialLoginStatus = !!getCookieValue('website_session')
+const initialLoginStatus = !!getStoredValue('token')
 let initialDeviceId: string | undefined = getStoredValue('deviceId')
 
 // 初始化 deviceId
@@ -41,19 +44,22 @@ const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = set => ({
   isLoggedIn: initialLoginStatus,
   needLoginDialogOpen: false,
   setIsLoggedIn: (loggedIn: boolean) => set({ isLoggedIn: loggedIn }),
+  setToken: (token: string) => {
+    set({ token, isLoggedIn: true })
+    setHeaderToken(token)
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('token', token)
+    }
+  },
   checkIsLoggedIn: () => {
     const hasSessionCookie = !!getCookieValue('website_session')
     set({ isLoggedIn: hasSessionCookie })
   },
   logout: () => {
-    set({ isLoggedIn: false })
-    // TODO: 待 session 管理方案实现后移除
+    set({ token: undefined, isLoggedIn: false })
+    setHeaderToken(null)
     if (typeof window !== 'undefined') {
       localStorage.removeItem('token')
-    }
-    if (typeof document !== 'undefined') {
-      // TODO: logout api
-      Cookies.remove('website_session', { path: '/' })
     }
   },
   openNeedLoginDialog: () => set({ needLoginDialogOpen: true }),

@@ -15,15 +15,15 @@ export const apiClient = new HttpClient<SecurityDataType>({
   },
   secure: true,
   withCredentials: true,
-  // securityWorker: securityData => {
-  //   if (securityData && securityData.token) {
-  //     return {
-  //       headers: {
-  //         Authorization: `Bearer ${securityData.token}`,
-  //       },
-  //     }
-  //   }
-  // },
+  securityWorker: securityData => {
+    if (securityData && securityData.token) {
+      return {
+        headers: {
+          Authorization: `Bearer ${securityData.token}`,
+        },
+      }
+    }
+  },
 })
 
 // 全局错误处理
@@ -50,3 +50,15 @@ apiClient.instance.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+export const setHeaderToken = (token: string | null) => {
+  apiClient.setSecurityData(token ? { token } : null)
+}
+
+if (typeof localStorage !== 'undefined') {
+  const cacheToken = localStorage.getItem('token')
+
+  if (cacheToken) {
+    setHeaderToken(cacheToken)
+  }
+}

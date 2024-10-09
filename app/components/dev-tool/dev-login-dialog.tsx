@@ -19,6 +19,7 @@ import { TelegramOAuthUser } from '../telegram-login-button/types'
 
 type DevLoginForm = {
   id: number | undefined
+  firstName: string | undefined
   referralCode?: string
 }
 
@@ -39,6 +40,7 @@ const DevLoginDialog: React.FC = () => {
       const loginData = prepareLoginRequest({ first_name: '' } as TelegramOAuthUser)
       if (!loginData) throw new Error('Failed to prepare login data')
       loginData.id = data.id
+      loginData.firstName = data.firstName
       data.referralCode && (loginData.referralCode = data.referralCode)
       console.log('Logging in with data:', loginData)
 
@@ -75,6 +77,16 @@ const DevLoginDialog: React.FC = () => {
               required: 'ID is required',
               valueAsNumber: true,
             })}
+          />
+          <Input
+            id="firstName"
+            type="text"
+            label="First Name"
+            placeholder="Enter first name"
+            clearable
+            onClear={() => setValue('firstName', '', { shouldValidate: true })}
+            error={errors?.firstName?.message}
+            {...register('firstName', { required: 'first name is required' })}
           />
           <Input
             id="referralCode"

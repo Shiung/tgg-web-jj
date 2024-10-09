@@ -6,6 +6,7 @@ import { LoginRequest, LoginResponse } from '~/api/codegen/data-contracts'
 import { TelegramOAuthUser } from '~/components/telegram-login-button/types'
 import { detectOS, mapSystemLanguageCode } from '~/lib/utils'
 import useStore, { getState } from '~/stores/useStore'
+import { setHeaderToken } from '~/api/api-client'
 
 // Type Guards
 function isTelegramUser(data: TelegramUser | TelegramOAuthUser): data is TelegramUser {
@@ -76,12 +77,16 @@ interface UseLoginOptions
   extends Partial<UseMutationOptions<AxiosResponse<LoginResponse>, Error, LoginRequest>> {}
 
 const useLogin = (options?: UseLoginOptions) => {
-  const setIsLoggedIn = useStore(state => state.setIsLoggedIn)
+  const setToken = useStore(state => state.setToken)
 
   return useMutation({
     mutationFn: apis.customer.customerLoginCreate as MutationFn,
     onSuccess: (data, variables, context) => {
-      setIsLoggedIn(true)
+      const token = data?.data.token
+      if (token) {
+        setToken(token)
+        setHeaderToken(token)
+      }
 
       // 清除邀請碼
       localStorage.removeItem('referralCode')
