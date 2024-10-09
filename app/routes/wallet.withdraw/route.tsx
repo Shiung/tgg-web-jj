@@ -397,7 +397,7 @@ export default function Withdraw() {
                     setFocus('amount')
                   }}
                 >
-                  {presentAmount}
+                  <Amount value={presentAmount} crypto={selectedCurrency} />
                 </Button>
               ))}
               <Button

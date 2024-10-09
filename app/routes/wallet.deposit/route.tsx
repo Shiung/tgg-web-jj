@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
+import Amount from '~/components/amount'
 import { cryptoDetails, cryptoRules, isValidCrypto, Crypto } from '~/consts/crypto'
 import { apis } from '~/api'
 import CloseIcon from '~/icons/x.svg?react'
@@ -288,7 +289,7 @@ export default function Deposit() {
                   setFocus('amount')
                 }}
               >
-                {amount}
+                <Amount value={amount} crypto={selectedCurrency} />
               </Button>
             ))}
           </div>
