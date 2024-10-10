@@ -12,9 +12,12 @@ import {
 } from '~/components/ui/carousel'
 import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
 import ProtectedLink from '~/components/protected-link'
-import { gameList, GameId, getGameRoute } from '~/consts/game'
+import { GameCode, getGameRoute } from '~/consts/game'
 import useStore from '~/stores/useStore'
+import { buildResourceImageUrl } from '~/lib/utils'
 
+import GameImg from './game-img'
+import { GameEntranceSkeleton, NewReleaseCarouselContentSkeleton } from './skeleton'
 import Footer from './footer'
 
 export const meta: MetaFunction = () => {
@@ -41,6 +44,8 @@ const bannerSlides = [
 /* Home */
 export default function Index() {
   const maxWidth = useStore(state => state.maxWidth)
+  const activeGameList = useStore(state => state.activeGameList)
+  const isActiveGameListFetching = useStore(state => state.isActiveGameListFetching)
 
   return (
     <div className="container px-0">
@@ -73,6 +78,7 @@ export default function Index() {
       </div>
       {/* Game entrance */}
       <div className="flex flex-col space-y-6 bg-black px-4 pb-6 pt-4">
+        {/* TODO: 暫時隱藏 */}
         {/* <div className="flex w-full space-x-2 bg-black">
           <Button className="flex-1" catEars>
             CASUAL GAME
@@ -83,18 +89,26 @@ export default function Index() {
         </div> */}
         <div className="flex aspect-[343/344] w-full flex-row space-x-2">
           <div className="flex flex-1 flex-col space-y-2 text-lg font-ultra">
-            {[GameId.GoDown100Floors, GameId.Crash].map(id => {
+            {[GameCode.GoDown100Floors, GameCode.Crash].map(code => {
+              if (isActiveGameListFetching) return <GameEntranceSkeleton key={`game-${code}`} />
+
+              const currentGameInfo = activeGameList.find(game => game.gameCode === code)
+              if (!currentGameInfo) return null
+
               return (
                 <ProtectedLink
-                  key={`game-${id}`}
+                  key={`game-${code}`}
                   prefetch="viewport"
-                  to={getGameRoute(id, gameList[id].venueType)}
+                  to={getGameRoute(code, currentGameInfo.gameType)}
                   className="relative flex-1 overflow-hidden rounded-2xl"
                 >
-                  <p className="absolute inset-x-3 top-[14px]">{gameList[id].name.toUpperCase()}</p>
-                  <img
-                    src={gameList[id].imgSrc}
-                    alt={gameList[id].imgAlt}
+                  <p className="absolute inset-x-3 top-[14px]">{currentGameInfo.gameName}</p>
+                  <GameImg
+                    srcList={[
+                      buildResourceImageUrl(currentGameInfo.gameLogo),
+                      currentGameInfo.fallbackImgSrc || '',
+                    ]}
+                    alt={currentGameInfo.gameName}
                     className="h-full w-full object-cover"
                   />
                 </ProtectedLink>
@@ -124,51 +138,58 @@ export default function Index() {
                 className="absolute inset-x-0 bottom-2 z-10 h-auto"
               />
             </ProtectedLink>
+            {/* TODO: 暫時隱藏 */}
             {/* <Button className="h-10" variant="outline">
               MORE GAME
             </Button> */}
           </div>
         </div>
       </div>
-      {/* new release carousel */}
+      {/* New release carousel */}
       <div className="bg-black px-4 pb-6">
         <Carousel className="aspect-[346/144] w-full">
           <div className="mb-3 flex items-center justify-between">
             <h1 className="text-base font-ultra">NEW RELEASE</h1>
-            <div className="relative flex items-center space-x-[2px]">
-              <CarouselPrevious />
-              <CarouselNext />
-            </div>
+            {activeGameList.length > 3 && (
+              <div className="relative flex items-center space-x-[2px]">
+                <CarouselPrevious />
+                <CarouselNext />
+              </div>
+            )}
           </div>
-          <CarouselContent className="-ml-0">
-            {Object.entries(gameList).map(([id, game]) => (
-              <CarouselItem
-                key={`carousel-game-${id}`}
-                className="relative flex basis-1/3 overflow-hidden pl-0 text-center"
-              >
-                <ProtectedLink
-                  className="relative pr-2"
-                  prefetch="viewport"
-                  to={getGameRoute(id as unknown as GameId, game.venueType)}
+          {isActiveGameListFetching ? (
+            <NewReleaseCarouselContentSkeleton />
+          ) : (
+            <CarouselContent className="-ml-0">
+              {activeGameList.map(game => (
+                <CarouselItem
+                  key={`carousel-game-${game.gameCode}`}
+                  className="relative flex basis-1/3 overflow-hidden pl-0 text-center"
                 >
-                  <span className="absolute inset-x-0 top-2 mx-auto min-h-8 pl-2 pr-4 text-center text-sm font-ultra">
-                    {game.name.toUpperCase()}
-                  </span>
-                  <img
-                    src={game.imgSrc}
-                    alt={game.imgAlt}
-                    className="h-full w-full rounded-lg object-contain"
-                  />
-                </ProtectedLink>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
+                  <ProtectedLink
+                    className="relative pr-2"
+                    prefetch="viewport"
+                    to={getGameRoute(game.gameCode, game.gameType)}
+                  >
+                    <span className="absolute inset-x-0 top-2 z-10 mx-auto min-h-8 pl-2 pr-4 text-center text-sm font-ultra">
+                      {game.gameName}
+                    </span>
+                    <GameImg
+                      srcList={[buildResourceImageUrl(game.gameLogo), game.fallbackImgSrc || '']}
+                      alt={game.gameName}
+                      className="h-full w-full rounded-lg object-contain"
+                    />
+                  </ProtectedLink>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          )}
         </Carousel>
       </div>
       {/* footer */}
       <Footer />
 
-      {/* 紅包使用 */}
+      {/* 紅包 */}
       <Link
         prefetch="viewport"
         className="fixed bottom-24 z-50"

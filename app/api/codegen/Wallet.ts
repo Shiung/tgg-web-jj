@@ -93,7 +93,7 @@ export class Wallet<SecurityDataType = unknown> {
       /** 收支 Income Expense */
       balance?: string;
       /**
-       * 頁碼 (Minimum: 1, Required)
+       * 頁碼 (Required, Minimum: 1)
        * @format int64
        * @min 1
        */

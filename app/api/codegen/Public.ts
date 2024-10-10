@@ -11,7 +11,7 @@
 
 import { HttpClient, RequestParams } from "./http-client";
 
-export class Tasks<SecurityDataType = unknown> {
+export class Public<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
 
   constructor(http: HttpClient<SecurityDataType>) {
@@ -21,11 +21,74 @@ export class Tasks<SecurityDataType = unknown> {
   /**
    * @description Auto-generated API documentation
    *
-   * @tags (*TaskController)
-   * @name TasksList
-   * @request GET:/ajax/tasks
+   * @tags (*HomeCarouselController)
+   * @name PublicBannerHomeCarouselList
+   * @request GET:/ajax/public/banner/home-carousel
    */
-  tasksList = (params: RequestParams = {}) =>
+  publicBannerHomeCarouselList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /** 資料 */
+        list?: ({
+          /** @format uint64 */
+          id?: number;
+          /** 圖片網址 */
+          image?: string;
+          language?: {
+            /** language code. Allowed Enum */
+            code: "ar-SA" | "en-US" | "es-ES" | "fr-FR" | "ja-JP" | "ko-KR" | "";
+            /**
+             * @minLength 1
+             * @maxLength 66
+             */
+            subTitle: string;
+            /**
+             * @minLength 1
+             * @maxLength 33
+             */
+            title: string;
+          }[];
+          /** 廣告暱稱 */
+          name?: string;
+          /** 跳轉參數 */
+          redirectConfig?: string;
+          /** 跳轉類型 */
+          redirectType?: string;
+        } | null)[];
+      },
+      any
+    >({
+      path: `/ajax/public/banner/home-carousel`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*LogoController)
+   * @name PublicBannerLogoList
+   * @request GET:/ajax/public/banner/logo
+   */
+  publicBannerLogoList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /** 圖片路徑 */
+        image?: string;
+      },
+      any
+    >({
+      path: `/ajax/public/banner/logo`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*TaskController)
+   * @name PublicTasksList
+   * @request GET:/ajax/public/tasks
+   */
+  publicTasksList = (params: RequestParams = {}) =>
     this.http.request<
       {
         /** 每日任務列表 */
@@ -532,7 +595,7 @@ export class Tasks<SecurityDataType = unknown> {
       },
       any
     >({
-      path: `/ajax/tasks`,
+      path: `/ajax/public/tasks`,
       method: "GET",
       ...params,
     });

@@ -29,41 +29,32 @@ export class Banner<SecurityDataType = unknown> {
     this.http.request<
       {
         /** 資料 */
-        list?: {
-          /**
-           * 創建時間
-           * @format date-time
-           */
-          createdAt: string;
-          /** 操作人 */
-          editor?: string;
-          enabled?: boolean;
-          /**
-           * 顯示結束時間
-           * @format date-time
-           */
-          endTime?: string;
+        list?: ({
           /** @format uint64 */
           id?: number;
           /** 圖片網址 */
           image?: string;
+          language?: {
+            /** language code. Allowed Enum */
+            code: "ar-SA" | "en-US" | "es-ES" | "fr-FR" | "ja-JP" | "ko-KR" | "";
+            /**
+             * @minLength 1
+             * @maxLength 66
+             */
+            subTitle: string;
+            /**
+             * @minLength 1
+             * @maxLength 33
+             */
+            title: string;
+          }[];
           /** 廣告暱稱 */
           name?: string;
           /** 跳轉參數 */
           redirectConfig?: string;
           /** 跳轉類型 */
-          redirectType?: string | null;
-          /**
-           * 顯示起始時間
-           * @format date-time
-           */
-          startTime?: string;
-          /**
-           * 最後操作時間
-           * @format date-time
-           */
-          updatedAt: string;
-        }[];
+          redirectType?: string;
+        } | null)[];
       },
       any
     >({

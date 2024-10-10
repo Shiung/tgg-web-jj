@@ -13,6 +13,7 @@ import useStore from '~/stores/useStore'
 import { useTelegramMock } from '~/hooks/useTelegramMock'
 import useTelegramNavigate from '~/hooks/useTelegramNavigate'
 import { useTelegramMiniAppAutoLogin } from '~/hooks/useTelegramLogin'
+import { useGetActiveGameListToStore } from '~/hooks/api/useGame'
 import { cn, mapSystemLanguageCode } from '~/lib/utils'
 
 import classes from './index.module.scss'
@@ -61,17 +62,26 @@ const TelegramInit: React.FC = () => {
   return null
 }
 
+const DataInit = () => {
+  // init data
+  useGetActiveGameListToStore()
+  return null
+}
+
 export default function AppRoot({ children }: PropsWithChildren) {
+  // init telegram related hooks
   useTelegramMock()
   const inTelegram = useStore(state => state.inTelegram)
+
+  // prepare layout params
   const isHeaderVisible = useStore(state => state.isHeaderVisible)
   const maxWidth = useStore(state => state.maxWidth)
-
   const minHClass = useMemo(() => {
     if (inTelegram) return 'h-dvh'
     return 'min-h-dvh'
   }, [inTelegram])
 
+  // prepare manifestUrl
   const manifestUrl = useMemo(() => {
     if (process.env.NODE_ENV === 'development')
       return 'https://tgg-web.ljbdev.site/tonconnect-manifest.json'
@@ -91,6 +101,8 @@ export default function AppRoot({ children }: PropsWithChildren) {
           />
           {/* app框容器 */}
           <div className={cn('flex flex-col', minHClass)}>{children}</div>
+          {/* 初始數據獲取 */}
+          <DataInit />
           {/* Telegram 相關初始化 */}
           {inTelegram && <TelegramInit />}
           <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />

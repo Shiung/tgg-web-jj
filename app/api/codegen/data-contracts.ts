@@ -147,6 +147,36 @@ export interface CommissionListResponse {
   };
 }
 
+export interface CreateRequest {
+  /** 紅包種類. Allowed Enum */
+  distributeKind?: "FIXED" | "RANDOM";
+  /**
+   * 發放總金額
+   * @format decimal
+   */
+  distributedAmount?: string;
+  /**
+   * 隨機金額上限
+   * @format decimal
+   */
+  maxValue?: string;
+  /**
+   * 隨機金額下限
+   * @format decimal
+   */
+  minValue?: string;
+  /**
+   * 隨機奬勵預算
+   * @format decimal
+   */
+  quota?: string;
+}
+
+export interface CreateResponse {
+  /** 紅包推介碼 */
+  referralCode?: string;
+}
+
 export interface CustomerWalletChangeGetRequest {
   /** 收支 Income Expense */
   Balance?: string;
@@ -214,6 +244,15 @@ export interface CustomerWalletChangeGetResponse {
      */
     totalRecord?: number | null;
   };
+}
+
+export interface DeleteUpgradeAnimationRequest {
+  /**
+   * 清除目標等級
+   * @format int64
+   * @min 2
+   */
+  finalClass?: number;
 }
 
 export interface DepositResponse {
@@ -642,41 +681,32 @@ export type HomeCarouselListRequest = object;
 
 export interface HomeCarouselListResponse {
   /** 資料 */
-  list?: {
-    /**
-     * 創建時間
-     * @format date-time
-     */
-    createdAt: string;
-    /** 操作人 */
-    editor?: string;
-    enabled?: boolean;
-    /**
-     * 顯示結束時間
-     * @format date-time
-     */
-    endTime?: string;
+  list?: ({
     /** @format uint64 */
     id?: number;
     /** 圖片網址 */
     image?: string;
+    language?: {
+      /** language code. Allowed Enum */
+      code: "ar-SA" | "en-US" | "es-ES" | "fr-FR" | "ja-JP" | "ko-KR" | "";
+      /**
+       * @minLength 1
+       * @maxLength 66
+       */
+      subTitle: string;
+      /**
+       * @minLength 1
+       * @maxLength 33
+       */
+      title: string;
+    }[];
     /** 廣告暱稱 */
     name?: string;
     /** 跳轉參數 */
     redirectConfig?: string;
     /** 跳轉類型 */
-    redirectType?: string | null;
-    /**
-     * 顯示起始時間
-     * @format date-time
-     */
-    startTime?: string;
-    /**
-     * 最後操作時間
-     * @format date-time
-     */
-    updatedAt: string;
-  }[];
+    redirectType?: string;
+  } | null)[];
 }
 
 export type InfoRequest = object;
@@ -782,12 +812,12 @@ export interface LoginRequest {
    */
   deviceId: string;
   /** first_name */
-  firstName?: string;
+  firstName: string;
   /**
    * Telegram id
    * @format int64
    */
-  id?: number;
+  id: number;
   /** language_code */
   languageCode?: string;
   /** last_name */
@@ -817,6 +847,172 @@ export interface LoginRequest {
 export interface LoginResponse {
   /** 登入token */
   token?: string;
+}
+
+export interface PacketRequest {
+  /**
+   * 頁碼
+   * @format int64
+   * @min 1
+   */
+  Page: number;
+  /**
+   * 分頁筆數
+   * @format int64
+   * @min 20
+   */
+  PageSize: number;
+}
+
+export interface PacketResponse {
+  /**
+   * 開始發放時間
+   * @format date-time
+   */
+  createdAt?: string;
+  /** 紅包種類. Allowed Enum */
+  distributeKind?: "FIXED" | "RANDOM";
+  /**
+   * 發放總金額
+   * @format decimal
+   */
+  distributedAmount?: string;
+  /**
+   * 已發放個數
+   * @format int64
+   */
+  distributedQuantity?: number;
+  /**
+   * 固定金額
+   * @format decimal
+   */
+  eachBagAmount?: string;
+  /**
+   * 隨機金額上限
+   * @format decimal
+   */
+  maxBagAmount?: string;
+  /**
+   * 隨機金額下限
+   * @format decimal
+   */
+  minBagAmount?: string;
+  /** 分頁資訊 */
+  pagination?: {
+    /**
+     * 分頁筆數
+     * @format int64
+     * @min 20
+     */
+    pageSize: number;
+    /**
+     * 總頁數
+     * @format int64
+     * @min 0
+     */
+    totalPage?: number | null;
+    /**
+     * 總筆數
+     * @format int64
+     * @min 0
+     */
+    totalRecord?: number | null;
+  };
+  /** 領取人名單 */
+  receiver?: {
+    /** @format decimal */
+    Amount?: string;
+    avatar?: string;
+    name?: string;
+  }[];
+  /** 紅包推介碼 */
+  referralCode?: string;
+  /**
+   * 目前餘額
+   * @format decimal
+   */
+  remainingAmount?: string;
+  /**
+   * 未發放個數
+   * @format int64
+   */
+  remainingQuantity?: number;
+}
+
+export type PacketSettingRequest = object;
+
+export interface PacketSettingResponse {
+  /**
+   * 金額下限
+   * @format decimal
+   */
+  minValue?: string;
+  /** 快捷金額 */
+  shortcuts?: string[];
+}
+
+export interface PacketsRequest {
+  /**
+   * 頁碼
+   * @format int64
+   * @min 1
+   */
+  Page: number;
+  /**
+   * 分頁筆數
+   * @format int64
+   * @min 20
+   */
+  PageSize: number;
+}
+
+export interface PacketsResponse {
+  /** 紅包列表 */
+  list?: {
+    /**
+     * 開始發放時間
+     * @format date-time
+     */
+    createdAt?: string;
+    /** 紅包種類. Allowed Enum */
+    distributeKind?: "FIXED" | "RANDOM";
+    /**
+     * 發放總金額
+     * @format decimal
+     */
+    distributedAmount?: string;
+    /**
+     * 目前餘額
+     * @format decimal
+     */
+    remainingAmount?: string;
+    /**
+     * 狀態 1:待開始 2:進行中 3:已終止,餘款待確退(by用戶) 4:已完成,餘款待確退(發放完畢) 5:已終止且餘款已退還 6:已完成餘款已退還
+     * @format int64
+     */
+    state?: number;
+  }[];
+  /** 分頁資訊 */
+  pagination?: {
+    /**
+     * 分頁筆數
+     * @format int64
+     * @min 20
+     */
+    pageSize: number;
+    /**
+     * 總頁數
+     * @format int64
+     * @min 0
+     */
+    totalPage?: number | null;
+    /**
+     * 總筆數
+     * @format int64
+     * @min 0
+     */
+    totalRecord?: number | null;
+  };
 }
 
 export interface PingResponse {
@@ -870,10 +1066,19 @@ export interface TaskQueryResponse {
   /** 每日任務列表 */
   dailyList?: {
     /**
-     * 創建時間
-     * @format date-time
+     * 累計值
+     * @format decimal
      */
-    createdAt: string;
+    accumulatedValue?: string;
+    /** 行為條件. Allowed Enum */
+    actionType:
+      | "LOGIN"
+      | "RECHARGE"
+      | "INVITE_FRIENDS"
+      | "TEAM_CLASS_ACHIEVEMENT"
+      | "PLAY_GAMES"
+      | "OPEN_LINK"
+      | "TEAM_RECHARGE";
     /**
      * 結束時間, null代表無時間限制
      * @format date-time
@@ -881,39 +1086,166 @@ export interface TaskQueryResponse {
     endTime?: string | null;
     /** 任務ID */
     id: string;
+    /** 邀請好友行為條件. Required if: ActionType INVITE_FRIENDS */
+    inviteFriendsCondition?: {
+      /**
+       * 邀請數量
+       * @format int64
+       * @min 1
+       */
+      inviteCount: number;
+      /** 普通邀请 or 红包邀请. Allowed Enum */
+      parameterType: "NORMAL_SEND" | "RED_PACKET_SEND";
+      /** 发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum */
+      parameterValue: "ONLY_INVITE" | "INVITE_AND_REGISTER" | "INVITE_VALID_USER";
+    } | null;
+    /** 打開連結行為條件. Required if: ActionType OPEN_LINK */
+    openLinkCondition?: {
+      /** url link */
+      parameterValue: string;
+    } | null;
+    /** 遊戲行為條件. Required if: ActionType PLAY_GAMES */
+    playGameCondition?: {
+      /** 休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum */
+      gameCategory?: "BC_GAME" | "CASUAL_GAME" | null;
+      /**
+       * 遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT
+       * @minLength 1
+       */
+      gameCode?: string | null;
+      /** 指定类型 or 指定游戏. Allowed Enum */
+      parameterType: "GAME_TYPE_COUNT" | "SPECIFIC_GAME_COUNT";
+      /**
+       * 遊戲次數
+       * @format int64
+       * @min 1
+       */
+      playCount: number;
+    };
+    /** 充值行為條件. Required if: ActionType RECHARGE */
+    rechargeCondition?: {
+      /** 充值有效金额 or 充值次数. Allowed Enum */
+      parameterType: "RECHARGE_AMOUNT" | "RECHARGE_COUNT";
+      /**
+       * 次數 or 金额. Greater than 0
+       * @format decimal
+       */
+      parameterValue: string;
+    } | null;
     /**
      * 獎勵金額/數量
      * @format decimal
      */
     rewardAmount: string;
-    /** 獎勵類型 */
-    rewardType: string;
+    /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
+    rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
+    /** 獎勵類型. Allowed Enum */
+    rewardType: "USDT" | "TON" | "KOKON" | "HAMMER" | "TREASURE";
     /**
      * 開始時間
      * @format date-time
      */
     startTime: string;
-    /** 達成條件[類型] */
-    taskConditionType: string;
-    /** 達成條件[值] */
-    taskConditionValue: string;
     /** 任務名稱 */
     taskName: string;
-    /** 任務類型 */
-    taskType: string;
-    /**
-     * 最後操作時間
-     * @format date-time
-     */
-    updatedAt: string;
+    /** 任務類型. Allowed Enum */
+    taskType: "DAILY" | "ONE_TIME" | "SPECIAL";
+    /** 團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT */
+    teamClassCondition?: {
+      /**
+       * 团队等级. Allowed Enum
+       * @min 1
+       * @max 5
+       */
+      teamClass?: "CLASS_1" | "CLASS_2" | "CLASS_3" | "CLASS_4" | "CLASS_5";
+    } | null;
+    /** 團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT */
+    teamClassRewardSetting?: {
+      /**
+       * class1
+       * @format decimal
+       */
+      class1Amount?: string | null;
+      /**
+       * class2
+       * @format decimal
+       */
+      class2Amount?: string | null;
+      /**
+       * class3
+       * @format decimal
+       */
+      class3Amount?: string | null;
+      /**
+       * class4
+       * @format decimal
+       */
+      class4Amount?: string | null;
+      /**
+       * class5
+       * @format decimal
+       */
+      class5Amount?: string | null;
+    };
+    /** 團隊充值行為條件. Required if: ActionType TEAM_RECHARGE */
+    teamRechargeCondition?: {
+      /**
+       * 總充值金額. Greater than 0
+       * @format decimal
+       */
+      depositAmount: string;
+      /** 团队总充值 or 直属下级总充值. Allowed Enum */
+      parameterType: "TEAM_RECHARGE_AMOUNT" | "DIRECT_SUBORDINATE_RECHARGE_AMOUNT";
+    } | null;
+    /** 寶箱設定. Required if: RewardType TREASURE */
+    treasureSetting?: {
+      /**
+       * 会员投注BC游戏
+       * @format decimal
+       */
+      betRequirement?: string | null;
+      /**
+       * 直属下级投注BC游戏
+       * @format decimal
+       */
+      directSubBetRequirement?: string | null;
+      /** 發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum */
+      distributionMethod: "RANDOM" | "FIXED";
+      /**
+       * 固定金额
+       * @format decimal
+       */
+      fixedAmount?: string | null;
+      /**
+       * 最大金额
+       * @format decimal
+       */
+      maxAmount?: string | null;
+      /**
+       * 最小金额
+       * @format decimal
+       */
+      minAmount?: string | null;
+      /** 獎勵類型. Allowed Enum */
+      rewardType: "USDT" | "TON" | "KOKON";
+    };
   }[];
   /** 一次性任務列表 */
   oneTimeList?: {
     /**
-     * 創建時間
-     * @format date-time
+     * 累計值
+     * @format decimal
      */
-    createdAt: string;
+    accumulatedValue?: string;
+    /** 行為條件. Allowed Enum */
+    actionType:
+      | "LOGIN"
+      | "RECHARGE"
+      | "INVITE_FRIENDS"
+      | "TEAM_CLASS_ACHIEVEMENT"
+      | "PLAY_GAMES"
+      | "OPEN_LINK"
+      | "TEAM_RECHARGE";
     /**
      * 結束時間, null代表無時間限制
      * @format date-time
@@ -921,39 +1253,166 @@ export interface TaskQueryResponse {
     endTime?: string | null;
     /** 任務ID */
     id: string;
+    /** 邀請好友行為條件. Required if: ActionType INVITE_FRIENDS */
+    inviteFriendsCondition?: {
+      /**
+       * 邀請數量
+       * @format int64
+       * @min 1
+       */
+      inviteCount: number;
+      /** 普通邀请 or 红包邀请. Allowed Enum */
+      parameterType: "NORMAL_SEND" | "RED_PACKET_SEND";
+      /** 发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum */
+      parameterValue: "ONLY_INVITE" | "INVITE_AND_REGISTER" | "INVITE_VALID_USER";
+    } | null;
+    /** 打開連結行為條件. Required if: ActionType OPEN_LINK */
+    openLinkCondition?: {
+      /** url link */
+      parameterValue: string;
+    } | null;
+    /** 遊戲行為條件. Required if: ActionType PLAY_GAMES */
+    playGameCondition?: {
+      /** 休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum */
+      gameCategory?: "BC_GAME" | "CASUAL_GAME" | null;
+      /**
+       * 遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT
+       * @minLength 1
+       */
+      gameCode?: string | null;
+      /** 指定类型 or 指定游戏. Allowed Enum */
+      parameterType: "GAME_TYPE_COUNT" | "SPECIFIC_GAME_COUNT";
+      /**
+       * 遊戲次數
+       * @format int64
+       * @min 1
+       */
+      playCount: number;
+    };
+    /** 充值行為條件. Required if: ActionType RECHARGE */
+    rechargeCondition?: {
+      /** 充值有效金额 or 充值次数. Allowed Enum */
+      parameterType: "RECHARGE_AMOUNT" | "RECHARGE_COUNT";
+      /**
+       * 次數 or 金额. Greater than 0
+       * @format decimal
+       */
+      parameterValue: string;
+    } | null;
     /**
      * 獎勵金額/數量
      * @format decimal
      */
     rewardAmount: string;
-    /** 獎勵類型 */
-    rewardType: string;
+    /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
+    rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
+    /** 獎勵類型. Allowed Enum */
+    rewardType: "USDT" | "TON" | "KOKON" | "HAMMER" | "TREASURE";
     /**
      * 開始時間
      * @format date-time
      */
     startTime: string;
-    /** 達成條件[類型] */
-    taskConditionType: string;
-    /** 達成條件[值] */
-    taskConditionValue: string;
     /** 任務名稱 */
     taskName: string;
-    /** 任務類型 */
-    taskType: string;
-    /**
-     * 最後操作時間
-     * @format date-time
-     */
-    updatedAt: string;
+    /** 任務類型. Allowed Enum */
+    taskType: "DAILY" | "ONE_TIME" | "SPECIAL";
+    /** 團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT */
+    teamClassCondition?: {
+      /**
+       * 团队等级. Allowed Enum
+       * @min 1
+       * @max 5
+       */
+      teamClass?: "CLASS_1" | "CLASS_2" | "CLASS_3" | "CLASS_4" | "CLASS_5";
+    } | null;
+    /** 團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT */
+    teamClassRewardSetting?: {
+      /**
+       * class1
+       * @format decimal
+       */
+      class1Amount?: string | null;
+      /**
+       * class2
+       * @format decimal
+       */
+      class2Amount?: string | null;
+      /**
+       * class3
+       * @format decimal
+       */
+      class3Amount?: string | null;
+      /**
+       * class4
+       * @format decimal
+       */
+      class4Amount?: string | null;
+      /**
+       * class5
+       * @format decimal
+       */
+      class5Amount?: string | null;
+    };
+    /** 團隊充值行為條件. Required if: ActionType TEAM_RECHARGE */
+    teamRechargeCondition?: {
+      /**
+       * 總充值金額. Greater than 0
+       * @format decimal
+       */
+      depositAmount: string;
+      /** 团队总充值 or 直属下级总充值. Allowed Enum */
+      parameterType: "TEAM_RECHARGE_AMOUNT" | "DIRECT_SUBORDINATE_RECHARGE_AMOUNT";
+    } | null;
+    /** 寶箱設定. Required if: RewardType TREASURE */
+    treasureSetting?: {
+      /**
+       * 会员投注BC游戏
+       * @format decimal
+       */
+      betRequirement?: string | null;
+      /**
+       * 直属下级投注BC游戏
+       * @format decimal
+       */
+      directSubBetRequirement?: string | null;
+      /** 發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum */
+      distributionMethod: "RANDOM" | "FIXED";
+      /**
+       * 固定金额
+       * @format decimal
+       */
+      fixedAmount?: string | null;
+      /**
+       * 最大金额
+       * @format decimal
+       */
+      maxAmount?: string | null;
+      /**
+       * 最小金额
+       * @format decimal
+       */
+      minAmount?: string | null;
+      /** 獎勵類型. Allowed Enum */
+      rewardType: "USDT" | "TON" | "KOKON";
+    };
   }[];
   /** 特殊任務列表 */
   specialList?: {
     /**
-     * 創建時間
-     * @format date-time
+     * 累計值
+     * @format decimal
      */
-    createdAt: string;
+    accumulatedValue?: string;
+    /** 行為條件. Allowed Enum */
+    actionType:
+      | "LOGIN"
+      | "RECHARGE"
+      | "INVITE_FRIENDS"
+      | "TEAM_CLASS_ACHIEVEMENT"
+      | "PLAY_GAMES"
+      | "OPEN_LINK"
+      | "TEAM_RECHARGE";
     /**
      * 結束時間, null代表無時間限制
      * @format date-time
@@ -961,31 +1420,149 @@ export interface TaskQueryResponse {
     endTime?: string | null;
     /** 任務ID */
     id: string;
+    /** 邀請好友行為條件. Required if: ActionType INVITE_FRIENDS */
+    inviteFriendsCondition?: {
+      /**
+       * 邀請數量
+       * @format int64
+       * @min 1
+       */
+      inviteCount: number;
+      /** 普通邀请 or 红包邀请. Allowed Enum */
+      parameterType: "NORMAL_SEND" | "RED_PACKET_SEND";
+      /** 发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum */
+      parameterValue: "ONLY_INVITE" | "INVITE_AND_REGISTER" | "INVITE_VALID_USER";
+    } | null;
+    /** 打開連結行為條件. Required if: ActionType OPEN_LINK */
+    openLinkCondition?: {
+      /** url link */
+      parameterValue: string;
+    } | null;
+    /** 遊戲行為條件. Required if: ActionType PLAY_GAMES */
+    playGameCondition?: {
+      /** 休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum */
+      gameCategory?: "BC_GAME" | "CASUAL_GAME" | null;
+      /**
+       * 遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT
+       * @minLength 1
+       */
+      gameCode?: string | null;
+      /** 指定类型 or 指定游戏. Allowed Enum */
+      parameterType: "GAME_TYPE_COUNT" | "SPECIFIC_GAME_COUNT";
+      /**
+       * 遊戲次數
+       * @format int64
+       * @min 1
+       */
+      playCount: number;
+    };
+    /** 充值行為條件. Required if: ActionType RECHARGE */
+    rechargeCondition?: {
+      /** 充值有效金额 or 充值次数. Allowed Enum */
+      parameterType: "RECHARGE_AMOUNT" | "RECHARGE_COUNT";
+      /**
+       * 次數 or 金额. Greater than 0
+       * @format decimal
+       */
+      parameterValue: string;
+    } | null;
     /**
      * 獎勵金額/數量
      * @format decimal
      */
     rewardAmount: string;
-    /** 獎勵類型 */
-    rewardType: string;
+    /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
+    rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
+    /** 獎勵類型. Allowed Enum */
+    rewardType: "USDT" | "TON" | "KOKON" | "HAMMER" | "TREASURE";
     /**
      * 開始時間
      * @format date-time
      */
     startTime: string;
-    /** 達成條件[類型] */
-    taskConditionType: string;
-    /** 達成條件[值] */
-    taskConditionValue: string;
     /** 任務名稱 */
     taskName: string;
-    /** 任務類型 */
-    taskType: string;
-    /**
-     * 最後操作時間
-     * @format date-time
-     */
-    updatedAt: string;
+    /** 任務類型. Allowed Enum */
+    taskType: "DAILY" | "ONE_TIME" | "SPECIAL";
+    /** 團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT */
+    teamClassCondition?: {
+      /**
+       * 团队等级. Allowed Enum
+       * @min 1
+       * @max 5
+       */
+      teamClass?: "CLASS_1" | "CLASS_2" | "CLASS_3" | "CLASS_4" | "CLASS_5";
+    } | null;
+    /** 團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT */
+    teamClassRewardSetting?: {
+      /**
+       * class1
+       * @format decimal
+       */
+      class1Amount?: string | null;
+      /**
+       * class2
+       * @format decimal
+       */
+      class2Amount?: string | null;
+      /**
+       * class3
+       * @format decimal
+       */
+      class3Amount?: string | null;
+      /**
+       * class4
+       * @format decimal
+       */
+      class4Amount?: string | null;
+      /**
+       * class5
+       * @format decimal
+       */
+      class5Amount?: string | null;
+    };
+    /** 團隊充值行為條件. Required if: ActionType TEAM_RECHARGE */
+    teamRechargeCondition?: {
+      /**
+       * 總充值金額. Greater than 0
+       * @format decimal
+       */
+      depositAmount: string;
+      /** 团队总充值 or 直属下级总充值. Allowed Enum */
+      parameterType: "TEAM_RECHARGE_AMOUNT" | "DIRECT_SUBORDINATE_RECHARGE_AMOUNT";
+    } | null;
+    /** 寶箱設定. Required if: RewardType TREASURE */
+    treasureSetting?: {
+      /**
+       * 会员投注BC游戏
+       * @format decimal
+       */
+      betRequirement?: string | null;
+      /**
+       * 直属下级投注BC游戏
+       * @format decimal
+       */
+      directSubBetRequirement?: string | null;
+      /** 發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum */
+      distributionMethod: "RANDOM" | "FIXED";
+      /**
+       * 固定金额
+       * @format decimal
+       */
+      fixedAmount?: string | null;
+      /**
+       * 最大金额
+       * @format decimal
+       */
+      maxAmount?: string | null;
+      /**
+       * 最小金额
+       * @format decimal
+       */
+      minAmount?: string | null;
+      /** 獎勵類型. Allowed Enum */
+      rewardType: "USDT" | "TON" | "KOKON";
+    };
   }[];
 }
 
@@ -1104,9 +1681,10 @@ export interface UpgradeAnimationResponse {
   /**
    * 目標等級
    * @format int64
+   * @min 2
    */
   finalClass?: number;
-  /** 是否需跑升等動畫 */
+  /** 是否需跑升等動畫(因時間差的可能,delete時又收到ShouldPlayUpgradeAnimation:true,可重複呼叫upgrade-animation功能) */
   shouldPlayUpgradeAnimation?: boolean;
 }
 
@@ -1117,9 +1695,9 @@ export interface ValidCodeRequest {
    */
   email: string;
   /**
-   * 驗證類型
+   * 驗證類型 0:純驗證無功能 1:綁定信箱 2:重置綁定信箱 3:綁定取款密碼 4:更新取款密碼 5:提款驗證
    * @format int64
-   * @min 0
+   * @max 5
    */
   kind?: number;
 }

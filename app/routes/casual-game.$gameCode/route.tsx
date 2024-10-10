@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useNavigate, useParams } from '@remix-run/react'
 import useStore from '~/stores/useStore'
-import { useGetGameUrl } from '~/hooks/api/useGetGameUrl'
-import { gameList, GameId } from '~/consts/game'
+import { useGetGameUrl } from '~/hooks/api/useGame'
 import AppLoading from '~/components/app-loading'
 
 import BuyEnergyDialog from './buy-energy-dialog'
@@ -15,6 +14,7 @@ export const handle = {
 const CasualGame: React.FC = () => {
   const params = useParams()
   const navigate = useNavigate()
+  const activeGameList = useStore(state => state.activeGameList)
 
   // 只請求一次的flag
   const hasRequestedRef = useRef(false)
@@ -22,6 +22,20 @@ const CasualGame: React.FC = () => {
   // 隱藏 導航欄 ＆ Header
   const setNavVisibility = useStore(state => state.setNavVisibility)
   const setHeaderVisibility = useStore(state => state.setHeaderVisibility)
+
+  // 進入頁面去要遊戲連結
+  const gameCode: string = params.gameCode || ''
+  const { gameUrl, getUrl, isPending } = useGetGameUrl()
+
+  const fetchGameUrl = useCallback(() => {
+    if (!gameCode || hasRequestedRef.current) return
+    const gameInfo = activeGameList.find(game => game.gameCode === gameCode)
+    if (!gameInfo || !gameInfo.currency) return
+
+    getUrl(`${gameInfo.id}`, gameInfo.currency)
+    hasRequestedRef.current = true
+  }, [activeGameList, gameCode, getUrl])
+
   useEffect(() => {
     setNavVisibility(false)
     setHeaderVisibility(false)
@@ -30,17 +44,6 @@ const CasualGame: React.FC = () => {
       setHeaderVisibility(true)
     }
   }, [setNavVisibility, setHeaderVisibility])
-
-  // 進入頁面去要遊戲連結
-  const gameId: string = params.gameId || ''
-  const { gameUrl, getUrl, isPending } = useGetGameUrl()
-
-  const fetchGameUrl = useCallback(() => {
-    if (gameId && gameList[gameId as unknown as GameId] && !hasRequestedRef.current) {
-      getUrl(gameId, gameList[gameId as unknown as GameId].currency)
-      hasRequestedRef.current = true
-    }
-  }, [gameId, getUrl])
 
   useEffect(() => {
     fetchGameUrl()

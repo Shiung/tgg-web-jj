@@ -3,14 +3,16 @@ import createLayoutSlice, { LayoutSlice } from './layoutSlice'
 import createTelegramSlice, { TelegramSlice } from './telegramSlice'
 import createUserSlice, { UserSlice } from './userSlice'
 import createAuthSlice, { AuthSlice } from './authSlice'
+import createGameSlice, { GameSlice } from './gameSlice'
 
-type Store = LayoutSlice & TelegramSlice & UserSlice & AuthSlice
+type Store = LayoutSlice & TelegramSlice & UserSlice & AuthSlice & GameSlice
 
 const useStore = create<Store>((...a) => ({
   ...createLayoutSlice(...a),
   ...createTelegramSlice(...a),
   ...createAuthSlice(...a),
   ...createUserSlice(...a),
+  ...createGameSlice(...a),
 }))
 
 /**

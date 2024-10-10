@@ -200,28 +200,7 @@
                   "items": {
                     "type": "object",
                     "nullable": true,
-                    "required": [
-                      "createdAt",
-                      "updatedAt"
-                    ],
                     "properties": {
-                      "createdAt": {
-                        "description": "創建時間",
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "editor": {
-                        "description": "操作人",
-                        "type": "string"
-                      },
-                      "enabled": {
-                        "type": "boolean"
-                      },
-                      "endTime": {
-                        "description": "顯示結束時間",
-                        "type": "string",
-                        "format": "date-time"
-                      },
                       "id": {
                         "type": "integer",
                         "format": "uint64"
@@ -229,6 +208,42 @@
                       "image": {
                         "description": "圖片網址",
                         "type": "string"
+                      },
+                      "language": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "code",
+                            "title",
+                            "subTitle"
+                          ],
+                          "properties": {
+                            "code": {
+                              "description": "language code. Allowed Enum",
+                              "type": "string",
+                              "enum": [
+                                "ar-SA",
+                                "en-US",
+                                "es-ES",
+                                "fr-FR",
+                                "ja-JP",
+                                "ko-KR",
+                                ""
+                              ]
+                            },
+                            "subTitle": {
+                              "type": "string",
+                              "maxLength": 66,
+                              "minLength": 1
+                            },
+                            "title": {
+                              "type": "string",
+                              "maxLength": 33,
+                              "minLength": 1
+                            }
+                          }
+                        }
                       },
                       "name": {
                         "description": "廣告暱稱",
@@ -240,18 +255,7 @@
                       },
                       "redirectType": {
                         "description": "跳轉類型",
-                        "type": "string",
-                        "nullable": true
-                      },
-                      "startTime": {
-                        "description": "顯示起始時間",
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "updatedAt": {
-                        "description": "最後操作時間",
-                        "type": "string",
-                        "format": "date-time"
+                        "type": "string"
                       }
                     }
                   }
@@ -904,6 +908,8 @@
             "schema": {
               "type": "object",
               "required": [
+                "id",
+                "firstName",
                 "productId",
                 "version",
                 "os",
@@ -1205,10 +1211,11 @@
                 "finalClass": {
                   "description": "目標等級",
                   "type": "integer",
-                  "format": "int64"
+                  "format": "int64",
+                  "minimum": 2
                 },
                 "shouldPlayUpgradeAnimation": {
-                  "description": "是否需跑升等動畫",
+                  "description": "是否需跑升等動畫(因時間差的可能,delete時又收到ShouldPlayUpgradeAnimation:true,可重複呼叫upgrade-animation功能)",
                   "type": "boolean"
                 }
               }
@@ -1221,7 +1228,44 @@
         "tags": [
           "(*CustomerController)"
         ],
-        "responses": {}
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "finalClass": {
+                  "description": "清除目標等級",
+                  "type": "integer",
+                  "format": "int64",
+                  "minimum": 2
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "finalClass": {
+                  "description": "目標等級",
+                  "type": "integer",
+                  "format": "int64",
+                  "minimum": 2
+                },
+                "shouldPlayUpgradeAnimation": {
+                  "description": "是否需跑升等動畫(因時間差的可能,delete時又收到ShouldPlayUpgradeAnimation:true,可重複呼叫upgrade-animation功能)",
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/ajax/customer/validcode": {
@@ -1247,10 +1291,10 @@
                   "format": "email"
                 },
                 "kind": {
-                  "description": "驗證類型",
+                  "description": "驗證類型 0:純驗證無功能 1:綁定信箱 2:重置綁定信箱 3:綁定取款密碼 4:更新取款密碼 5:提款驗證",
                   "type": "integer",
                   "format": "int64",
-                  "minimum": 0
+                  "maximum": 5
                 }
               }
             }
@@ -1884,6 +1928,1647 @@
         }
       }
     },
+    "/ajax/packet": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*PacketController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "distributeKind": {
+                  "description": "紅包種類. Allowed Enum",
+                  "type": "string",
+                  "enum": [
+                    "FIXED",
+                    "RANDOM"
+                  ]
+                },
+                "distributedAmount": {
+                  "description": "發放總金額",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "maxValue": {
+                  "description": "隨機金額上限",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "minValue": {
+                  "description": "隨機金額下限",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "quota": {
+                  "description": "隨機奬勵預算",
+                  "type": "string",
+                  "format": "decimal"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "referralCode": {
+                  "description": "紅包推介碼",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/packet-setting": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*PacketController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "minValue": {
+                  "description": "金額下限",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "shortcuts": {
+                  "description": "快捷金額",
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "format": "decimal"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/packet/{packet_id}": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*PacketController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: packet_id",
+            "name": "packet_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64",
+            "description": "頁碼 (Required, Minimum: 1)",
+            "name": "page",
+            "in": "query",
+            "required": true
+          },
+          {
+            "minimum": 20,
+            "type": "integer",
+            "format": "int64",
+            "description": "分頁筆數 (Required, Minimum: 20)",
+            "name": "pageSize",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "createdAt": {
+                  "description": "開始發放時間",
+                  "type": "string",
+                  "format": "date-time"
+                },
+                "distributeKind": {
+                  "description": "紅包種類. Allowed Enum",
+                  "type": "string",
+                  "enum": [
+                    "FIXED",
+                    "RANDOM"
+                  ]
+                },
+                "distributedAmount": {
+                  "description": "發放總金額",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "distributedQuantity": {
+                  "description": "已發放個數",
+                  "type": "integer",
+                  "format": "int64"
+                },
+                "eachBagAmount": {
+                  "description": "固定金額",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "maxBagAmount": {
+                  "description": "隨機金額上限",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "minBagAmount": {
+                  "description": "隨機金額下限",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "pagination": {
+                  "description": "分頁資訊",
+                  "type": "object",
+                  "required": [
+                    "pageSize",
+                    "totalRecord",
+                    "totalPage"
+                  ],
+                  "properties": {
+                    "pageSize": {
+                      "description": "分頁筆數",
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 20
+                    },
+                    "totalPage": {
+                      "description": "總頁數",
+                      "type": "integer",
+                      "nullable": true,
+                      "format": "int64",
+                      "minimum": 0
+                    },
+                    "totalRecord": {
+                      "description": "總筆數",
+                      "type": "integer",
+                      "nullable": true,
+                      "format": "int64",
+                      "minimum": 0
+                    }
+                  }
+                },
+                "receiver": {
+                  "description": "領取人名單",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "Amount": {
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "avatar": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "referralCode": {
+                  "description": "紅包推介碼",
+                  "type": "string"
+                },
+                "remainingAmount": {
+                  "description": "目前餘額",
+                  "type": "string",
+                  "format": "decimal"
+                },
+                "remainingQuantity": {
+                  "description": "未發放個數",
+                  "type": "integer",
+                  "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/packets": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*PacketController)"
+        ],
+        "parameters": [
+          {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64",
+            "description": "頁碼 (Required, Minimum: 1)",
+            "name": "page",
+            "in": "query",
+            "required": true
+          },
+          {
+            "minimum": 20,
+            "type": "integer",
+            "format": "int64",
+            "description": "分頁筆數 (Minimum: 20, Required)",
+            "name": "pageSize",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "list": {
+                  "description": "紅包列表",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "createdAt": {
+                        "description": "開始發放時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "distributeKind": {
+                        "description": "紅包種類. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "FIXED",
+                          "RANDOM"
+                        ]
+                      },
+                      "distributedAmount": {
+                        "description": "發放總金額",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "remainingAmount": {
+                        "description": "目前餘額",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "state": {
+                        "description": "狀態 1:待開始 2:進行中 3:已終止,餘款待確退(by用戶) 4:已完成,餘款待確退(發放完畢) 5:已終止且餘款已退還 6:已完成餘款已退還",
+                        "type": "integer",
+                        "format": "int64"
+                      }
+                    }
+                  }
+                },
+                "pagination": {
+                  "description": "分頁資訊",
+                  "type": "object",
+                  "required": [
+                    "pageSize",
+                    "totalRecord",
+                    "totalPage"
+                  ],
+                  "properties": {
+                    "pageSize": {
+                      "description": "分頁筆數",
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 20
+                    },
+                    "totalPage": {
+                      "description": "總頁數",
+                      "type": "integer",
+                      "nullable": true,
+                      "format": "int64",
+                      "minimum": 0
+                    },
+                    "totalRecord": {
+                      "description": "總筆數",
+                      "type": "integer",
+                      "nullable": true,
+                      "format": "int64",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/packets/archived": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*PacketController)"
+        ],
+        "parameters": [
+          {
+            "minimum": 1,
+            "type": "integer",
+            "format": "int64",
+            "description": "頁碼 (Required, Minimum: 1)",
+            "name": "page",
+            "in": "query",
+            "required": true
+          },
+          {
+            "minimum": 20,
+            "type": "integer",
+            "format": "int64",
+            "description": "分頁筆數 (Required, Minimum: 20)",
+            "name": "pageSize",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "list": {
+                  "description": "紅包列表",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "createdAt": {
+                        "description": "開始發放時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "distributeKind": {
+                        "description": "紅包種類. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "FIXED",
+                          "RANDOM"
+                        ]
+                      },
+                      "distributedAmount": {
+                        "description": "發放總金額",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "remainingAmount": {
+                        "description": "目前餘額",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "state": {
+                        "description": "狀態 1:待開始 2:進行中 3:已終止,餘款待確退(by用戶) 4:已完成,餘款待確退(發放完畢) 5:已終止且餘款已退還 6:已完成餘款已退還",
+                        "type": "integer",
+                        "format": "int64"
+                      }
+                    }
+                  }
+                },
+                "pagination": {
+                  "description": "分頁資訊",
+                  "type": "object",
+                  "required": [
+                    "pageSize",
+                    "totalRecord",
+                    "totalPage"
+                  ],
+                  "properties": {
+                    "pageSize": {
+                      "description": "分頁筆數",
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 20
+                    },
+                    "totalPage": {
+                      "description": "總頁數",
+                      "type": "integer",
+                      "nullable": true,
+                      "format": "int64",
+                      "minimum": 0
+                    },
+                    "totalRecord": {
+                      "description": "總筆數",
+                      "type": "integer",
+                      "nullable": true,
+                      "format": "int64",
+                      "minimum": 0
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/public/banner/home-carousel": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*HomeCarouselController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "list": {
+                  "description": "資料",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "nullable": true,
+                    "properties": {
+                      "id": {
+                        "type": "integer",
+                        "format": "uint64"
+                      },
+                      "image": {
+                        "description": "圖片網址",
+                        "type": "string"
+                      },
+                      "language": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "code",
+                            "title",
+                            "subTitle"
+                          ],
+                          "properties": {
+                            "code": {
+                              "description": "language code. Allowed Enum",
+                              "type": "string",
+                              "enum": [
+                                "ar-SA",
+                                "en-US",
+                                "es-ES",
+                                "fr-FR",
+                                "ja-JP",
+                                "ko-KR",
+                                ""
+                              ]
+                            },
+                            "subTitle": {
+                              "type": "string",
+                              "maxLength": 66,
+                              "minLength": 1
+                            },
+                            "title": {
+                              "type": "string",
+                              "maxLength": 33,
+                              "minLength": 1
+                            }
+                          }
+                        }
+                      },
+                      "name": {
+                        "description": "廣告暱稱",
+                        "type": "string"
+                      },
+                      "redirectConfig": {
+                        "description": "跳轉參數",
+                        "type": "string"
+                      },
+                      "redirectType": {
+                        "description": "跳轉類型",
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/public/banner/logo": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*LogoController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "image": {
+                  "description": "圖片路徑",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/public/tasks": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*TaskController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "dailyList": {
+                  "description": "每日任務列表",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "taskName",
+                      "taskType",
+                      "startTime",
+                      "actionType",
+                      "rewardType",
+                      "rewardAmount",
+                      "rewardClaimStatus",
+                      "rechargeCondition",
+                      "inviteFriendsCondition",
+                      "playGameCondition",
+                      "openLinkCondition",
+                      "teamRechargeCondition",
+                      "teamClassCondition",
+                      "teamClassRewardSetting",
+                      "treasureSetting"
+                    ],
+                    "properties": {
+                      "accumulatedValue": {
+                        "description": "累計值",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "actionType": {
+                        "description": "行為條件. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "LOGIN",
+                          "RECHARGE",
+                          "INVITE_FRIENDS",
+                          "TEAM_CLASS_ACHIEVEMENT",
+                          "PLAY_GAMES",
+                          "OPEN_LINK",
+                          "TEAM_RECHARGE"
+                        ]
+                      },
+                      "endTime": {
+                        "description": "結束時間, null代表無時間限制",
+                        "type": "string",
+                        "nullable": true,
+                        "format": "date-time"
+                      },
+                      "id": {
+                        "description": "任務ID",
+                        "type": "string"
+                      },
+                      "inviteFriendsCondition": {
+                        "description": "邀請好友行為條件. Required if: ActionType INVITE_FRIENDS",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue",
+                          "inviteCount"
+                        ],
+                        "properties": {
+                          "inviteCount": {
+                            "description": "邀請數量",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          },
+                          "parameterType": {
+                            "description": "普通邀请 or 红包邀请. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "NORMAL_SEND",
+                              "RED_PACKET_SEND"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "ONLY_INVITE",
+                              "INVITE_AND_REGISTER",
+                              "INVITE_VALID_USER"
+                            ]
+                          }
+                        }
+                      },
+                      "openLinkCondition": {
+                        "description": "打開連結行為條件. Required if: ActionType OPEN_LINK",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterValue": {
+                            "description": "url link",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "playGameCondition": {
+                        "description": "遊戲行為條件. Required if: ActionType PLAY_GAMES",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "gameCategory",
+                          "gameCode",
+                          "playCount"
+                        ],
+                        "properties": {
+                          "gameCategory": {
+                            "description": "休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum",
+                            "type": "string",
+                            "nullable": true,
+                            "enum": [
+                              "BC_GAME",
+                              "CASUAL_GAME"
+                            ]
+                          },
+                          "gameCode": {
+                            "description": "遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT",
+                            "type": "string",
+                            "nullable": true,
+                            "minLength": 1
+                          },
+                          "parameterType": {
+                            "description": "指定类型 or 指定游戏. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "GAME_TYPE_COUNT",
+                              "SPECIFIC_GAME_COUNT"
+                            ]
+                          },
+                          "playCount": {
+                            "description": "遊戲次數",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          }
+                        }
+                      },
+                      "rechargeCondition": {
+                        "description": "充值行為條件. Required if: ActionType RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterType": {
+                            "description": "充值有效金额 or 充值次数. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RECHARGE_AMOUNT",
+                              "RECHARGE_COUNT"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "次數 or 金额. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          }
+                        }
+                      },
+                      "rewardAmount": {
+                        "description": "獎勵金額/數量",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "rewardClaimStatus": {
+                        "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "INELIGIBLE",
+                          "WAITING_CLAIM",
+                          "CLAIMED"
+                        ]
+                      },
+                      "rewardType": {
+                        "description": "獎勵類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "USDT",
+                          "TON",
+                          "KOKON",
+                          "HAMMER",
+                          "TREASURE"
+                        ]
+                      },
+                      "startTime": {
+                        "description": "開始時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "taskName": {
+                        "description": "任務名稱",
+                        "type": "string"
+                      },
+                      "taskType": {
+                        "description": "任務類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "DAILY",
+                          "ONE_TIME",
+                          "SPECIAL"
+                        ]
+                      },
+                      "teamClassCondition": {
+                        "description": "團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "teamClass": {
+                            "description": "团队等级. Allowed Enum",
+                            "type": "array",
+                            "maximum": 5,
+                            "minimum": 1,
+                            "enum": [
+                              "CLASS_1",
+                              "CLASS_2",
+                              "CLASS_3",
+                              "CLASS_4",
+                              "CLASS_5"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "teamClassRewardSetting": {
+                        "description": "團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "class1Amount": {
+                            "description": "class1",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class2Amount": {
+                            "description": "class2",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class3Amount": {
+                            "description": "class3",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class4Amount": {
+                            "description": "class4",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class5Amount": {
+                            "description": "class5",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          }
+                        }
+                      },
+                      "teamRechargeCondition": {
+                        "description": "團隊充值行為條件. Required if: ActionType TEAM_RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "depositAmount"
+                        ],
+                        "properties": {
+                          "depositAmount": {
+                            "description": "總充值金額. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          },
+                          "parameterType": {
+                            "description": "团队总充值 or 直属下级总充值. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "TEAM_RECHARGE_AMOUNT",
+                              "DIRECT_SUBORDINATE_RECHARGE_AMOUNT"
+                            ]
+                          }
+                        }
+                      },
+                      "treasureSetting": {
+                        "description": "寶箱設定. Required if: RewardType TREASURE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "rewardType",
+                          "distributionMethod"
+                        ],
+                        "properties": {
+                          "betRequirement": {
+                            "description": "会员投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "directSubBetRequirement": {
+                            "description": "直属下级投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "distributionMethod": {
+                            "description": "發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RANDOM",
+                              "FIXED"
+                            ]
+                          },
+                          "fixedAmount": {
+                            "description": "固定金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "maxAmount": {
+                            "description": "最大金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "minAmount": {
+                            "description": "最小金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "rewardType": {
+                            "description": "獎勵類型. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "USDT",
+                              "TON",
+                              "KOKON"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "oneTimeList": {
+                  "description": "一次性任務列表",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "taskName",
+                      "taskType",
+                      "startTime",
+                      "actionType",
+                      "rewardType",
+                      "rewardAmount",
+                      "rewardClaimStatus",
+                      "rechargeCondition",
+                      "inviteFriendsCondition",
+                      "playGameCondition",
+                      "openLinkCondition",
+                      "teamRechargeCondition",
+                      "teamClassCondition",
+                      "teamClassRewardSetting",
+                      "treasureSetting"
+                    ],
+                    "properties": {
+                      "accumulatedValue": {
+                        "description": "累計值",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "actionType": {
+                        "description": "行為條件. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "LOGIN",
+                          "RECHARGE",
+                          "INVITE_FRIENDS",
+                          "TEAM_CLASS_ACHIEVEMENT",
+                          "PLAY_GAMES",
+                          "OPEN_LINK",
+                          "TEAM_RECHARGE"
+                        ]
+                      },
+                      "endTime": {
+                        "description": "結束時間, null代表無時間限制",
+                        "type": "string",
+                        "nullable": true,
+                        "format": "date-time"
+                      },
+                      "id": {
+                        "description": "任務ID",
+                        "type": "string"
+                      },
+                      "inviteFriendsCondition": {
+                        "description": "邀請好友行為條件. Required if: ActionType INVITE_FRIENDS",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue",
+                          "inviteCount"
+                        ],
+                        "properties": {
+                          "inviteCount": {
+                            "description": "邀請數量",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          },
+                          "parameterType": {
+                            "description": "普通邀请 or 红包邀请. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "NORMAL_SEND",
+                              "RED_PACKET_SEND"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "ONLY_INVITE",
+                              "INVITE_AND_REGISTER",
+                              "INVITE_VALID_USER"
+                            ]
+                          }
+                        }
+                      },
+                      "openLinkCondition": {
+                        "description": "打開連結行為條件. Required if: ActionType OPEN_LINK",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterValue": {
+                            "description": "url link",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "playGameCondition": {
+                        "description": "遊戲行為條件. Required if: ActionType PLAY_GAMES",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "gameCategory",
+                          "gameCode",
+                          "playCount"
+                        ],
+                        "properties": {
+                          "gameCategory": {
+                            "description": "休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum",
+                            "type": "string",
+                            "nullable": true,
+                            "enum": [
+                              "BC_GAME",
+                              "CASUAL_GAME"
+                            ]
+                          },
+                          "gameCode": {
+                            "description": "遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT",
+                            "type": "string",
+                            "nullable": true,
+                            "minLength": 1
+                          },
+                          "parameterType": {
+                            "description": "指定类型 or 指定游戏. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "GAME_TYPE_COUNT",
+                              "SPECIFIC_GAME_COUNT"
+                            ]
+                          },
+                          "playCount": {
+                            "description": "遊戲次數",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          }
+                        }
+                      },
+                      "rechargeCondition": {
+                        "description": "充值行為條件. Required if: ActionType RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterType": {
+                            "description": "充值有效金额 or 充值次数. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RECHARGE_AMOUNT",
+                              "RECHARGE_COUNT"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "次數 or 金额. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          }
+                        }
+                      },
+                      "rewardAmount": {
+                        "description": "獎勵金額/數量",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "rewardClaimStatus": {
+                        "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "INELIGIBLE",
+                          "WAITING_CLAIM",
+                          "CLAIMED"
+                        ]
+                      },
+                      "rewardType": {
+                        "description": "獎勵類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "USDT",
+                          "TON",
+                          "KOKON",
+                          "HAMMER",
+                          "TREASURE"
+                        ]
+                      },
+                      "startTime": {
+                        "description": "開始時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "taskName": {
+                        "description": "任務名稱",
+                        "type": "string"
+                      },
+                      "taskType": {
+                        "description": "任務類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "DAILY",
+                          "ONE_TIME",
+                          "SPECIAL"
+                        ]
+                      },
+                      "teamClassCondition": {
+                        "description": "團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "teamClass": {
+                            "description": "团队等级. Allowed Enum",
+                            "type": "array",
+                            "maximum": 5,
+                            "minimum": 1,
+                            "enum": [
+                              "CLASS_1",
+                              "CLASS_2",
+                              "CLASS_3",
+                              "CLASS_4",
+                              "CLASS_5"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "teamClassRewardSetting": {
+                        "description": "團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "class1Amount": {
+                            "description": "class1",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class2Amount": {
+                            "description": "class2",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class3Amount": {
+                            "description": "class3",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class4Amount": {
+                            "description": "class4",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class5Amount": {
+                            "description": "class5",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          }
+                        }
+                      },
+                      "teamRechargeCondition": {
+                        "description": "團隊充值行為條件. Required if: ActionType TEAM_RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "depositAmount"
+                        ],
+                        "properties": {
+                          "depositAmount": {
+                            "description": "總充值金額. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          },
+                          "parameterType": {
+                            "description": "团队总充值 or 直属下级总充值. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "TEAM_RECHARGE_AMOUNT",
+                              "DIRECT_SUBORDINATE_RECHARGE_AMOUNT"
+                            ]
+                          }
+                        }
+                      },
+                      "treasureSetting": {
+                        "description": "寶箱設定. Required if: RewardType TREASURE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "rewardType",
+                          "distributionMethod"
+                        ],
+                        "properties": {
+                          "betRequirement": {
+                            "description": "会员投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "directSubBetRequirement": {
+                            "description": "直属下级投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "distributionMethod": {
+                            "description": "發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RANDOM",
+                              "FIXED"
+                            ]
+                          },
+                          "fixedAmount": {
+                            "description": "固定金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "maxAmount": {
+                            "description": "最大金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "minAmount": {
+                            "description": "最小金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "rewardType": {
+                            "description": "獎勵類型. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "USDT",
+                              "TON",
+                              "KOKON"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "specialList": {
+                  "description": "特殊任務列表",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "id",
+                      "taskName",
+                      "taskType",
+                      "startTime",
+                      "actionType",
+                      "rewardType",
+                      "rewardAmount",
+                      "rewardClaimStatus",
+                      "rechargeCondition",
+                      "inviteFriendsCondition",
+                      "playGameCondition",
+                      "openLinkCondition",
+                      "teamRechargeCondition",
+                      "teamClassCondition",
+                      "teamClassRewardSetting",
+                      "treasureSetting"
+                    ],
+                    "properties": {
+                      "accumulatedValue": {
+                        "description": "累計值",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "actionType": {
+                        "description": "行為條件. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "LOGIN",
+                          "RECHARGE",
+                          "INVITE_FRIENDS",
+                          "TEAM_CLASS_ACHIEVEMENT",
+                          "PLAY_GAMES",
+                          "OPEN_LINK",
+                          "TEAM_RECHARGE"
+                        ]
+                      },
+                      "endTime": {
+                        "description": "結束時間, null代表無時間限制",
+                        "type": "string",
+                        "nullable": true,
+                        "format": "date-time"
+                      },
+                      "id": {
+                        "description": "任務ID",
+                        "type": "string"
+                      },
+                      "inviteFriendsCondition": {
+                        "description": "邀請好友行為條件. Required if: ActionType INVITE_FRIENDS",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue",
+                          "inviteCount"
+                        ],
+                        "properties": {
+                          "inviteCount": {
+                            "description": "邀請數量",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          },
+                          "parameterType": {
+                            "description": "普通邀请 or 红包邀请. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "NORMAL_SEND",
+                              "RED_PACKET_SEND"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "ONLY_INVITE",
+                              "INVITE_AND_REGISTER",
+                              "INVITE_VALID_USER"
+                            ]
+                          }
+                        }
+                      },
+                      "openLinkCondition": {
+                        "description": "打開連結行為條件. Required if: ActionType OPEN_LINK",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterValue": {
+                            "description": "url link",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "playGameCondition": {
+                        "description": "遊戲行為條件. Required if: ActionType PLAY_GAMES",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "gameCategory",
+                          "gameCode",
+                          "playCount"
+                        ],
+                        "properties": {
+                          "gameCategory": {
+                            "description": "休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum",
+                            "type": "string",
+                            "nullable": true,
+                            "enum": [
+                              "BC_GAME",
+                              "CASUAL_GAME"
+                            ]
+                          },
+                          "gameCode": {
+                            "description": "遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT",
+                            "type": "string",
+                            "nullable": true,
+                            "minLength": 1
+                          },
+                          "parameterType": {
+                            "description": "指定类型 or 指定游戏. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "GAME_TYPE_COUNT",
+                              "SPECIFIC_GAME_COUNT"
+                            ]
+                          },
+                          "playCount": {
+                            "description": "遊戲次數",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          }
+                        }
+                      },
+                      "rechargeCondition": {
+                        "description": "充值行為條件. Required if: ActionType RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterType": {
+                            "description": "充值有效金额 or 充值次数. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RECHARGE_AMOUNT",
+                              "RECHARGE_COUNT"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "次數 or 金额. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          }
+                        }
+                      },
+                      "rewardAmount": {
+                        "description": "獎勵金額/數量",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "rewardClaimStatus": {
+                        "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "INELIGIBLE",
+                          "WAITING_CLAIM",
+                          "CLAIMED"
+                        ]
+                      },
+                      "rewardType": {
+                        "description": "獎勵類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "USDT",
+                          "TON",
+                          "KOKON",
+                          "HAMMER",
+                          "TREASURE"
+                        ]
+                      },
+                      "startTime": {
+                        "description": "開始時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "taskName": {
+                        "description": "任務名稱",
+                        "type": "string"
+                      },
+                      "taskType": {
+                        "description": "任務類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "DAILY",
+                          "ONE_TIME",
+                          "SPECIAL"
+                        ]
+                      },
+                      "teamClassCondition": {
+                        "description": "團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "teamClass": {
+                            "description": "团队等级. Allowed Enum",
+                            "type": "array",
+                            "maximum": 5,
+                            "minimum": 1,
+                            "enum": [
+                              "CLASS_1",
+                              "CLASS_2",
+                              "CLASS_3",
+                              "CLASS_4",
+                              "CLASS_5"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "teamClassRewardSetting": {
+                        "description": "團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "class1Amount": {
+                            "description": "class1",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class2Amount": {
+                            "description": "class2",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class3Amount": {
+                            "description": "class3",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class4Amount": {
+                            "description": "class4",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class5Amount": {
+                            "description": "class5",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          }
+                        }
+                      },
+                      "teamRechargeCondition": {
+                        "description": "團隊充值行為條件. Required if: ActionType TEAM_RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "depositAmount"
+                        ],
+                        "properties": {
+                          "depositAmount": {
+                            "description": "總充值金額. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          },
+                          "parameterType": {
+                            "description": "团队总充值 or 直属下级总充值. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "TEAM_RECHARGE_AMOUNT",
+                              "DIRECT_SUBORDINATE_RECHARGE_AMOUNT"
+                            ]
+                          }
+                        }
+                      },
+                      "treasureSetting": {
+                        "description": "寶箱設定. Required if: RewardType TREASURE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "rewardType",
+                          "distributionMethod"
+                        ],
+                        "properties": {
+                          "betRequirement": {
+                            "description": "会员投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "directSubBetRequirement": {
+                            "description": "直属下级投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "distributionMethod": {
+                            "description": "發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RANDOM",
+                              "FIXED"
+                            ]
+                          },
+                          "fixedAmount": {
+                            "description": "固定金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "maxAmount": {
+                            "description": "最大金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "minAmount": {
+                            "description": "最小金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "rewardType": {
+                            "description": "獎勵類型. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "USDT",
+                              "TON",
+                              "KOKON"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ajax/system/maintenance": {
       "get": {
         "description": "Auto-generated API documentation",
@@ -1993,18 +3678,37 @@
                       "taskName",
                       "taskType",
                       "startTime",
-                      "taskConditionType",
-                      "taskConditionValue",
+                      "actionType",
                       "rewardType",
                       "rewardAmount",
-                      "createdAt",
-                      "updatedAt"
+                      "rewardClaimStatus",
+                      "rechargeCondition",
+                      "inviteFriendsCondition",
+                      "playGameCondition",
+                      "openLinkCondition",
+                      "teamRechargeCondition",
+                      "teamClassCondition",
+                      "teamClassRewardSetting",
+                      "treasureSetting"
                     ],
                     "properties": {
-                      "createdAt": {
-                        "description": "創建時間",
+                      "accumulatedValue": {
+                        "description": "累計值",
                         "type": "string",
-                        "format": "date-time"
+                        "format": "decimal"
+                      },
+                      "actionType": {
+                        "description": "行為條件. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "LOGIN",
+                          "RECHARGE",
+                          "INVITE_FRIENDS",
+                          "TEAM_CLASS_ACHIEVEMENT",
+                          "PLAY_GAMES",
+                          "OPEN_LINK",
+                          "TEAM_RECHARGE"
+                        ]
                       },
                       "endTime": {
                         "description": "結束時間, null代表無時間限制",
@@ -2016,40 +3720,305 @@
                         "description": "任務ID",
                         "type": "string"
                       },
+                      "inviteFriendsCondition": {
+                        "description": "邀請好友行為條件. Required if: ActionType INVITE_FRIENDS",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue",
+                          "inviteCount"
+                        ],
+                        "properties": {
+                          "inviteCount": {
+                            "description": "邀請數量",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          },
+                          "parameterType": {
+                            "description": "普通邀请 or 红包邀请. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "NORMAL_SEND",
+                              "RED_PACKET_SEND"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "ONLY_INVITE",
+                              "INVITE_AND_REGISTER",
+                              "INVITE_VALID_USER"
+                            ]
+                          }
+                        }
+                      },
+                      "openLinkCondition": {
+                        "description": "打開連結行為條件. Required if: ActionType OPEN_LINK",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterValue": {
+                            "description": "url link",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "playGameCondition": {
+                        "description": "遊戲行為條件. Required if: ActionType PLAY_GAMES",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "gameCategory",
+                          "gameCode",
+                          "playCount"
+                        ],
+                        "properties": {
+                          "gameCategory": {
+                            "description": "休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum",
+                            "type": "string",
+                            "nullable": true,
+                            "enum": [
+                              "BC_GAME",
+                              "CASUAL_GAME"
+                            ]
+                          },
+                          "gameCode": {
+                            "description": "遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT",
+                            "type": "string",
+                            "nullable": true,
+                            "minLength": 1
+                          },
+                          "parameterType": {
+                            "description": "指定类型 or 指定游戏. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "GAME_TYPE_COUNT",
+                              "SPECIFIC_GAME_COUNT"
+                            ]
+                          },
+                          "playCount": {
+                            "description": "遊戲次數",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          }
+                        }
+                      },
+                      "rechargeCondition": {
+                        "description": "充值行為條件. Required if: ActionType RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterType": {
+                            "description": "充值有效金额 or 充值次数. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RECHARGE_AMOUNT",
+                              "RECHARGE_COUNT"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "次數 or 金额. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          }
+                        }
+                      },
                       "rewardAmount": {
                         "description": "獎勵金額/數量",
                         "type": "string",
                         "format": "decimal"
                       },
+                      "rewardClaimStatus": {
+                        "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "INELIGIBLE",
+                          "WAITING_CLAIM",
+                          "CLAIMED"
+                        ]
+                      },
                       "rewardType": {
-                        "description": "獎勵類型",
-                        "type": "string"
+                        "description": "獎勵類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "USDT",
+                          "TON",
+                          "KOKON",
+                          "HAMMER",
+                          "TREASURE"
+                        ]
                       },
                       "startTime": {
                         "description": "開始時間",
                         "type": "string",
                         "format": "date-time"
                       },
-                      "taskConditionType": {
-                        "description": "達成條件[類型]",
-                        "type": "string"
-                      },
-                      "taskConditionValue": {
-                        "description": "達成條件[值]",
-                        "type": "string"
-                      },
                       "taskName": {
                         "description": "任務名稱",
                         "type": "string"
                       },
                       "taskType": {
-                        "description": "任務類型",
-                        "type": "string"
-                      },
-                      "updatedAt": {
-                        "description": "最後操作時間",
+                        "description": "任務類型. Allowed Enum",
                         "type": "string",
-                        "format": "date-time"
+                        "enum": [
+                          "DAILY",
+                          "ONE_TIME",
+                          "SPECIAL"
+                        ]
+                      },
+                      "teamClassCondition": {
+                        "description": "團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "teamClass": {
+                            "description": "团队等级. Allowed Enum",
+                            "type": "array",
+                            "maximum": 5,
+                            "minimum": 1,
+                            "enum": [
+                              "CLASS_1",
+                              "CLASS_2",
+                              "CLASS_3",
+                              "CLASS_4",
+                              "CLASS_5"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "teamClassRewardSetting": {
+                        "description": "團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "class1Amount": {
+                            "description": "class1",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class2Amount": {
+                            "description": "class2",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class3Amount": {
+                            "description": "class3",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class4Amount": {
+                            "description": "class4",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class5Amount": {
+                            "description": "class5",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          }
+                        }
+                      },
+                      "teamRechargeCondition": {
+                        "description": "團隊充值行為條件. Required if: ActionType TEAM_RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "depositAmount"
+                        ],
+                        "properties": {
+                          "depositAmount": {
+                            "description": "總充值金額. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          },
+                          "parameterType": {
+                            "description": "团队总充值 or 直属下级总充值. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "TEAM_RECHARGE_AMOUNT",
+                              "DIRECT_SUBORDINATE_RECHARGE_AMOUNT"
+                            ]
+                          }
+                        }
+                      },
+                      "treasureSetting": {
+                        "description": "寶箱設定. Required if: RewardType TREASURE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "rewardType",
+                          "distributionMethod"
+                        ],
+                        "properties": {
+                          "betRequirement": {
+                            "description": "会员投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "directSubBetRequirement": {
+                            "description": "直属下级投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "distributionMethod": {
+                            "description": "發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RANDOM",
+                              "FIXED"
+                            ]
+                          },
+                          "fixedAmount": {
+                            "description": "固定金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "maxAmount": {
+                            "description": "最大金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "minAmount": {
+                            "description": "最小金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "rewardType": {
+                            "description": "獎勵類型. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "USDT",
+                              "TON",
+                              "KOKON"
+                            ]
+                          }
+                        }
                       }
                     }
                   }
@@ -2064,18 +4033,37 @@
                       "taskName",
                       "taskType",
                       "startTime",
-                      "taskConditionType",
-                      "taskConditionValue",
+                      "actionType",
                       "rewardType",
                       "rewardAmount",
-                      "createdAt",
-                      "updatedAt"
+                      "rewardClaimStatus",
+                      "rechargeCondition",
+                      "inviteFriendsCondition",
+                      "playGameCondition",
+                      "openLinkCondition",
+                      "teamRechargeCondition",
+                      "teamClassCondition",
+                      "teamClassRewardSetting",
+                      "treasureSetting"
                     ],
                     "properties": {
-                      "createdAt": {
-                        "description": "創建時間",
+                      "accumulatedValue": {
+                        "description": "累計值",
                         "type": "string",
-                        "format": "date-time"
+                        "format": "decimal"
+                      },
+                      "actionType": {
+                        "description": "行為條件. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "LOGIN",
+                          "RECHARGE",
+                          "INVITE_FRIENDS",
+                          "TEAM_CLASS_ACHIEVEMENT",
+                          "PLAY_GAMES",
+                          "OPEN_LINK",
+                          "TEAM_RECHARGE"
+                        ]
                       },
                       "endTime": {
                         "description": "結束時間, null代表無時間限制",
@@ -2087,40 +4075,305 @@
                         "description": "任務ID",
                         "type": "string"
                       },
+                      "inviteFriendsCondition": {
+                        "description": "邀請好友行為條件. Required if: ActionType INVITE_FRIENDS",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue",
+                          "inviteCount"
+                        ],
+                        "properties": {
+                          "inviteCount": {
+                            "description": "邀請數量",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          },
+                          "parameterType": {
+                            "description": "普通邀请 or 红包邀请. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "NORMAL_SEND",
+                              "RED_PACKET_SEND"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "ONLY_INVITE",
+                              "INVITE_AND_REGISTER",
+                              "INVITE_VALID_USER"
+                            ]
+                          }
+                        }
+                      },
+                      "openLinkCondition": {
+                        "description": "打開連結行為條件. Required if: ActionType OPEN_LINK",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterValue": {
+                            "description": "url link",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "playGameCondition": {
+                        "description": "遊戲行為條件. Required if: ActionType PLAY_GAMES",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "gameCategory",
+                          "gameCode",
+                          "playCount"
+                        ],
+                        "properties": {
+                          "gameCategory": {
+                            "description": "休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum",
+                            "type": "string",
+                            "nullable": true,
+                            "enum": [
+                              "BC_GAME",
+                              "CASUAL_GAME"
+                            ]
+                          },
+                          "gameCode": {
+                            "description": "遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT",
+                            "type": "string",
+                            "nullable": true,
+                            "minLength": 1
+                          },
+                          "parameterType": {
+                            "description": "指定类型 or 指定游戏. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "GAME_TYPE_COUNT",
+                              "SPECIFIC_GAME_COUNT"
+                            ]
+                          },
+                          "playCount": {
+                            "description": "遊戲次數",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          }
+                        }
+                      },
+                      "rechargeCondition": {
+                        "description": "充值行為條件. Required if: ActionType RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterType": {
+                            "description": "充值有效金额 or 充值次数. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RECHARGE_AMOUNT",
+                              "RECHARGE_COUNT"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "次數 or 金额. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          }
+                        }
+                      },
                       "rewardAmount": {
                         "description": "獎勵金額/數量",
                         "type": "string",
                         "format": "decimal"
                       },
+                      "rewardClaimStatus": {
+                        "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "INELIGIBLE",
+                          "WAITING_CLAIM",
+                          "CLAIMED"
+                        ]
+                      },
                       "rewardType": {
-                        "description": "獎勵類型",
-                        "type": "string"
+                        "description": "獎勵類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "USDT",
+                          "TON",
+                          "KOKON",
+                          "HAMMER",
+                          "TREASURE"
+                        ]
                       },
                       "startTime": {
                         "description": "開始時間",
                         "type": "string",
                         "format": "date-time"
                       },
-                      "taskConditionType": {
-                        "description": "達成條件[類型]",
-                        "type": "string"
-                      },
-                      "taskConditionValue": {
-                        "description": "達成條件[值]",
-                        "type": "string"
-                      },
                       "taskName": {
                         "description": "任務名稱",
                         "type": "string"
                       },
                       "taskType": {
-                        "description": "任務類型",
-                        "type": "string"
-                      },
-                      "updatedAt": {
-                        "description": "最後操作時間",
+                        "description": "任務類型. Allowed Enum",
                         "type": "string",
-                        "format": "date-time"
+                        "enum": [
+                          "DAILY",
+                          "ONE_TIME",
+                          "SPECIAL"
+                        ]
+                      },
+                      "teamClassCondition": {
+                        "description": "團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "teamClass": {
+                            "description": "团队等级. Allowed Enum",
+                            "type": "array",
+                            "maximum": 5,
+                            "minimum": 1,
+                            "enum": [
+                              "CLASS_1",
+                              "CLASS_2",
+                              "CLASS_3",
+                              "CLASS_4",
+                              "CLASS_5"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "teamClassRewardSetting": {
+                        "description": "團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "class1Amount": {
+                            "description": "class1",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class2Amount": {
+                            "description": "class2",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class3Amount": {
+                            "description": "class3",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class4Amount": {
+                            "description": "class4",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class5Amount": {
+                            "description": "class5",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          }
+                        }
+                      },
+                      "teamRechargeCondition": {
+                        "description": "團隊充值行為條件. Required if: ActionType TEAM_RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "depositAmount"
+                        ],
+                        "properties": {
+                          "depositAmount": {
+                            "description": "總充值金額. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          },
+                          "parameterType": {
+                            "description": "团队总充值 or 直属下级总充值. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "TEAM_RECHARGE_AMOUNT",
+                              "DIRECT_SUBORDINATE_RECHARGE_AMOUNT"
+                            ]
+                          }
+                        }
+                      },
+                      "treasureSetting": {
+                        "description": "寶箱設定. Required if: RewardType TREASURE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "rewardType",
+                          "distributionMethod"
+                        ],
+                        "properties": {
+                          "betRequirement": {
+                            "description": "会员投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "directSubBetRequirement": {
+                            "description": "直属下级投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "distributionMethod": {
+                            "description": "發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RANDOM",
+                              "FIXED"
+                            ]
+                          },
+                          "fixedAmount": {
+                            "description": "固定金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "maxAmount": {
+                            "description": "最大金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "minAmount": {
+                            "description": "最小金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "rewardType": {
+                            "description": "獎勵類型. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "USDT",
+                              "TON",
+                              "KOKON"
+                            ]
+                          }
+                        }
                       }
                     }
                   }
@@ -2135,18 +4388,37 @@
                       "taskName",
                       "taskType",
                       "startTime",
-                      "taskConditionType",
-                      "taskConditionValue",
+                      "actionType",
                       "rewardType",
                       "rewardAmount",
-                      "createdAt",
-                      "updatedAt"
+                      "rewardClaimStatus",
+                      "rechargeCondition",
+                      "inviteFriendsCondition",
+                      "playGameCondition",
+                      "openLinkCondition",
+                      "teamRechargeCondition",
+                      "teamClassCondition",
+                      "teamClassRewardSetting",
+                      "treasureSetting"
                     ],
                     "properties": {
-                      "createdAt": {
-                        "description": "創建時間",
+                      "accumulatedValue": {
+                        "description": "累計值",
                         "type": "string",
-                        "format": "date-time"
+                        "format": "decimal"
+                      },
+                      "actionType": {
+                        "description": "行為條件. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "LOGIN",
+                          "RECHARGE",
+                          "INVITE_FRIENDS",
+                          "TEAM_CLASS_ACHIEVEMENT",
+                          "PLAY_GAMES",
+                          "OPEN_LINK",
+                          "TEAM_RECHARGE"
+                        ]
                       },
                       "endTime": {
                         "description": "結束時間, null代表無時間限制",
@@ -2158,40 +4430,305 @@
                         "description": "任務ID",
                         "type": "string"
                       },
+                      "inviteFriendsCondition": {
+                        "description": "邀請好友行為條件. Required if: ActionType INVITE_FRIENDS",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue",
+                          "inviteCount"
+                        ],
+                        "properties": {
+                          "inviteCount": {
+                            "description": "邀請數量",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          },
+                          "parameterType": {
+                            "description": "普通邀请 or 红包邀请. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "NORMAL_SEND",
+                              "RED_PACKET_SEND"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "ONLY_INVITE",
+                              "INVITE_AND_REGISTER",
+                              "INVITE_VALID_USER"
+                            ]
+                          }
+                        }
+                      },
+                      "openLinkCondition": {
+                        "description": "打開連結行為條件. Required if: ActionType OPEN_LINK",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterValue": {
+                            "description": "url link",
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "playGameCondition": {
+                        "description": "遊戲行為條件. Required if: ActionType PLAY_GAMES",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "gameCategory",
+                          "gameCode",
+                          "playCount"
+                        ],
+                        "properties": {
+                          "gameCategory": {
+                            "description": "休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum",
+                            "type": "string",
+                            "nullable": true,
+                            "enum": [
+                              "BC_GAME",
+                              "CASUAL_GAME"
+                            ]
+                          },
+                          "gameCode": {
+                            "description": "遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT",
+                            "type": "string",
+                            "nullable": true,
+                            "minLength": 1
+                          },
+                          "parameterType": {
+                            "description": "指定类型 or 指定游戏. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "GAME_TYPE_COUNT",
+                              "SPECIFIC_GAME_COUNT"
+                            ]
+                          },
+                          "playCount": {
+                            "description": "遊戲次數",
+                            "type": "integer",
+                            "format": "int64",
+                            "minimum": 1
+                          }
+                        }
+                      },
+                      "rechargeCondition": {
+                        "description": "充值行為條件. Required if: ActionType RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "parameterValue"
+                        ],
+                        "properties": {
+                          "parameterType": {
+                            "description": "充值有效金额 or 充值次数. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RECHARGE_AMOUNT",
+                              "RECHARGE_COUNT"
+                            ]
+                          },
+                          "parameterValue": {
+                            "description": "次數 or 金额. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          }
+                        }
+                      },
                       "rewardAmount": {
                         "description": "獎勵金額/數量",
                         "type": "string",
                         "format": "decimal"
                       },
+                      "rewardClaimStatus": {
+                        "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "INELIGIBLE",
+                          "WAITING_CLAIM",
+                          "CLAIMED"
+                        ]
+                      },
                       "rewardType": {
-                        "description": "獎勵類型",
-                        "type": "string"
+                        "description": "獎勵類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "USDT",
+                          "TON",
+                          "KOKON",
+                          "HAMMER",
+                          "TREASURE"
+                        ]
                       },
                       "startTime": {
                         "description": "開始時間",
                         "type": "string",
                         "format": "date-time"
                       },
-                      "taskConditionType": {
-                        "description": "達成條件[類型]",
-                        "type": "string"
-                      },
-                      "taskConditionValue": {
-                        "description": "達成條件[值]",
-                        "type": "string"
-                      },
                       "taskName": {
                         "description": "任務名稱",
                         "type": "string"
                       },
                       "taskType": {
-                        "description": "任務類型",
-                        "type": "string"
-                      },
-                      "updatedAt": {
-                        "description": "最後操作時間",
+                        "description": "任務類型. Allowed Enum",
                         "type": "string",
-                        "format": "date-time"
+                        "enum": [
+                          "DAILY",
+                          "ONE_TIME",
+                          "SPECIAL"
+                        ]
+                      },
+                      "teamClassCondition": {
+                        "description": "團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "teamClass": {
+                            "description": "团队等级. Allowed Enum",
+                            "type": "array",
+                            "maximum": 5,
+                            "minimum": 1,
+                            "enum": [
+                              "CLASS_1",
+                              "CLASS_2",
+                              "CLASS_3",
+                              "CLASS_4",
+                              "CLASS_5"
+                            ],
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      },
+                      "teamClassRewardSetting": {
+                        "description": "團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                        "type": "object",
+                        "nullable": true,
+                        "properties": {
+                          "class1Amount": {
+                            "description": "class1",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class2Amount": {
+                            "description": "class2",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class3Amount": {
+                            "description": "class3",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class4Amount": {
+                            "description": "class4",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "class5Amount": {
+                            "description": "class5",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          }
+                        }
+                      },
+                      "teamRechargeCondition": {
+                        "description": "團隊充值行為條件. Required if: ActionType TEAM_RECHARGE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "parameterType",
+                          "depositAmount"
+                        ],
+                        "properties": {
+                          "depositAmount": {
+                            "description": "總充值金額. Greater than 0",
+                            "type": "string",
+                            "format": "decimal"
+                          },
+                          "parameterType": {
+                            "description": "团队总充值 or 直属下级总充值. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "TEAM_RECHARGE_AMOUNT",
+                              "DIRECT_SUBORDINATE_RECHARGE_AMOUNT"
+                            ]
+                          }
+                        }
+                      },
+                      "treasureSetting": {
+                        "description": "寶箱設定. Required if: RewardType TREASURE",
+                        "type": "object",
+                        "nullable": true,
+                        "required": [
+                          "rewardType",
+                          "distributionMethod"
+                        ],
+                        "properties": {
+                          "betRequirement": {
+                            "description": "会员投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "directSubBetRequirement": {
+                            "description": "直属下级投注BC游戏",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "distributionMethod": {
+                            "description": "發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "RANDOM",
+                              "FIXED"
+                            ]
+                          },
+                          "fixedAmount": {
+                            "description": "固定金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "maxAmount": {
+                            "description": "最大金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "minAmount": {
+                            "description": "最小金额",
+                            "type": "string",
+                            "nullable": true,
+                            "format": "decimal"
+                          },
+                          "rewardType": {
+                            "description": "獎勵類型. Allowed Enum",
+                            "type": "string",
+                            "enum": [
+                              "USDT",
+                              "TON",
+                              "KOKON"
+                            ]
+                          }
+                        }
                       }
                     }
                   }
@@ -2579,7 +5116,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Minimum: 1, Required)",
+            "description": "頁碼 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -3358,6 +5895,48 @@
         }
       }
     },
+    "CreateRequest": {
+      "type": "object",
+      "properties": {
+        "distributeKind": {
+          "description": "紅包種類. Allowed Enum",
+          "type": "string",
+          "enum": [
+            "FIXED",
+            "RANDOM"
+          ]
+        },
+        "distributedAmount": {
+          "description": "發放總金額",
+          "type": "string",
+          "format": "decimal"
+        },
+        "maxValue": {
+          "description": "隨機金額上限",
+          "type": "string",
+          "format": "decimal"
+        },
+        "minValue": {
+          "description": "隨機金額下限",
+          "type": "string",
+          "format": "decimal"
+        },
+        "quota": {
+          "description": "隨機奬勵預算",
+          "type": "string",
+          "format": "decimal"
+        }
+      }
+    },
+    "CreateResponse": {
+      "type": "object",
+      "properties": {
+        "referralCode": {
+          "description": "紅包推介碼",
+          "type": "string"
+        }
+      }
+    },
     "CustomerWalletChangeGetRequest": {
       "type": "object",
       "required": [
@@ -3468,6 +6047,17 @@
               "minimum": 0
             }
           }
+        }
+      }
+    },
+    "DeleteUpgradeAnimationRequest": {
+      "type": "object",
+      "properties": {
+        "finalClass": {
+          "description": "清除目標等級",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 2
         }
       }
     },
@@ -4246,28 +6836,7 @@
           "items": {
             "type": "object",
             "nullable": true,
-            "required": [
-              "createdAt",
-              "updatedAt"
-            ],
             "properties": {
-              "createdAt": {
-                "description": "創建時間",
-                "type": "string",
-                "format": "date-time"
-              },
-              "editor": {
-                "description": "操作人",
-                "type": "string"
-              },
-              "enabled": {
-                "type": "boolean"
-              },
-              "endTime": {
-                "description": "顯示結束時間",
-                "type": "string",
-                "format": "date-time"
-              },
               "id": {
                 "type": "integer",
                 "format": "uint64"
@@ -4275,6 +6844,42 @@
               "image": {
                 "description": "圖片網址",
                 "type": "string"
+              },
+              "language": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "code",
+                    "title",
+                    "subTitle"
+                  ],
+                  "properties": {
+                    "code": {
+                      "description": "language code. Allowed Enum",
+                      "type": "string",
+                      "enum": [
+                        "ar-SA",
+                        "en-US",
+                        "es-ES",
+                        "fr-FR",
+                        "ja-JP",
+                        "ko-KR",
+                        ""
+                      ]
+                    },
+                    "subTitle": {
+                      "type": "string",
+                      "maxLength": 66,
+                      "minLength": 1
+                    },
+                    "title": {
+                      "type": "string",
+                      "maxLength": 33,
+                      "minLength": 1
+                    }
+                  }
+                }
               },
               "name": {
                 "description": "廣告暱稱",
@@ -4286,18 +6891,7 @@
               },
               "redirectType": {
                 "description": "跳轉類型",
-                "type": "string",
-                "nullable": true
-              },
-              "startTime": {
-                "description": "顯示起始時間",
-                "type": "string",
-                "format": "date-time"
-              },
-              "updatedAt": {
-                "description": "最後操作時間",
-                "type": "string",
-                "format": "date-time"
+                "type": "string"
               }
             }
           }
@@ -4464,6 +7058,8 @@
     "LoginRequest": {
       "type": "object",
       "required": [
+        "id",
+        "firstName",
         "productId",
         "version",
         "os",
@@ -4532,6 +7128,249 @@
         "token": {
           "description": "登入token",
           "type": "string"
+        }
+      }
+    },
+    "PacketRequest": {
+      "type": "object",
+      "required": [
+        "Page",
+        "PageSize"
+      ],
+      "properties": {
+        "Page": {
+          "description": "頁碼",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        },
+        "PageSize": {
+          "description": "分頁筆數",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 20
+        }
+      }
+    },
+    "PacketResponse": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "description": "開始發放時間",
+          "type": "string",
+          "format": "date-time"
+        },
+        "distributeKind": {
+          "description": "紅包種類. Allowed Enum",
+          "type": "string",
+          "enum": [
+            "FIXED",
+            "RANDOM"
+          ]
+        },
+        "distributedAmount": {
+          "description": "發放總金額",
+          "type": "string",
+          "format": "decimal"
+        },
+        "distributedQuantity": {
+          "description": "已發放個數",
+          "type": "integer",
+          "format": "int64"
+        },
+        "eachBagAmount": {
+          "description": "固定金額",
+          "type": "string",
+          "format": "decimal"
+        },
+        "maxBagAmount": {
+          "description": "隨機金額上限",
+          "type": "string",
+          "format": "decimal"
+        },
+        "minBagAmount": {
+          "description": "隨機金額下限",
+          "type": "string",
+          "format": "decimal"
+        },
+        "pagination": {
+          "description": "分頁資訊",
+          "type": "object",
+          "required": [
+            "pageSize",
+            "totalRecord",
+            "totalPage"
+          ],
+          "properties": {
+            "pageSize": {
+              "description": "分頁筆數",
+              "type": "integer",
+              "format": "int64",
+              "minimum": 20
+            },
+            "totalPage": {
+              "description": "總頁數",
+              "type": "integer",
+              "nullable": true,
+              "format": "int64",
+              "minimum": 0
+            },
+            "totalRecord": {
+              "description": "總筆數",
+              "type": "integer",
+              "nullable": true,
+              "format": "int64",
+              "minimum": 0
+            }
+          }
+        },
+        "receiver": {
+          "description": "領取人名單",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Amount": {
+                "type": "string",
+                "format": "decimal"
+              },
+              "avatar": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "referralCode": {
+          "description": "紅包推介碼",
+          "type": "string"
+        },
+        "remainingAmount": {
+          "description": "目前餘額",
+          "type": "string",
+          "format": "decimal"
+        },
+        "remainingQuantity": {
+          "description": "未發放個數",
+          "type": "integer",
+          "format": "int64"
+        }
+      }
+    },
+    "PacketSettingRequest": {
+      "type": "object"
+    },
+    "PacketSettingResponse": {
+      "type": "object",
+      "properties": {
+        "minValue": {
+          "description": "金額下限",
+          "type": "string",
+          "format": "decimal"
+        },
+        "shortcuts": {
+          "description": "快捷金額",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "decimal"
+          }
+        }
+      }
+    },
+    "PacketsRequest": {
+      "type": "object",
+      "required": [
+        "Page",
+        "PageSize"
+      ],
+      "properties": {
+        "Page": {
+          "description": "頁碼",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        },
+        "PageSize": {
+          "description": "分頁筆數",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 20
+        }
+      }
+    },
+    "PacketsResponse": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "description": "紅包列表",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "createdAt": {
+                "description": "開始發放時間",
+                "type": "string",
+                "format": "date-time"
+              },
+              "distributeKind": {
+                "description": "紅包種類. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "FIXED",
+                  "RANDOM"
+                ]
+              },
+              "distributedAmount": {
+                "description": "發放總金額",
+                "type": "string",
+                "format": "decimal"
+              },
+              "remainingAmount": {
+                "description": "目前餘額",
+                "type": "string",
+                "format": "decimal"
+              },
+              "state": {
+                "description": "狀態 1:待開始 2:進行中 3:已終止,餘款待確退(by用戶) 4:已完成,餘款待確退(發放完畢) 5:已終止且餘款已退還 6:已完成餘款已退還",
+                "type": "integer",
+                "format": "int64"
+              }
+            }
+          }
+        },
+        "pagination": {
+          "description": "分頁資訊",
+          "type": "object",
+          "required": [
+            "pageSize",
+            "totalRecord",
+            "totalPage"
+          ],
+          "properties": {
+            "pageSize": {
+              "description": "分頁筆數",
+              "type": "integer",
+              "format": "int64",
+              "minimum": 20
+            },
+            "totalPage": {
+              "description": "總頁數",
+              "type": "integer",
+              "nullable": true,
+              "format": "int64",
+              "minimum": 0
+            },
+            "totalRecord": {
+              "description": "總筆數",
+              "type": "integer",
+              "nullable": true,
+              "format": "int64",
+              "minimum": 0
+            }
+          }
         }
       }
     },
@@ -4642,18 +7481,37 @@
               "taskName",
               "taskType",
               "startTime",
-              "taskConditionType",
-              "taskConditionValue",
+              "actionType",
               "rewardType",
               "rewardAmount",
-              "createdAt",
-              "updatedAt"
+              "rewardClaimStatus",
+              "rechargeCondition",
+              "inviteFriendsCondition",
+              "playGameCondition",
+              "openLinkCondition",
+              "teamRechargeCondition",
+              "teamClassCondition",
+              "teamClassRewardSetting",
+              "treasureSetting"
             ],
             "properties": {
-              "createdAt": {
-                "description": "創建時間",
+              "accumulatedValue": {
+                "description": "累計值",
                 "type": "string",
-                "format": "date-time"
+                "format": "decimal"
+              },
+              "actionType": {
+                "description": "行為條件. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "LOGIN",
+                  "RECHARGE",
+                  "INVITE_FRIENDS",
+                  "TEAM_CLASS_ACHIEVEMENT",
+                  "PLAY_GAMES",
+                  "OPEN_LINK",
+                  "TEAM_RECHARGE"
+                ]
               },
               "endTime": {
                 "description": "結束時間, null代表無時間限制",
@@ -4665,40 +7523,305 @@
                 "description": "任務ID",
                 "type": "string"
               },
+              "inviteFriendsCondition": {
+                "description": "邀請好友行為條件. Required if: ActionType INVITE_FRIENDS",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "parameterValue",
+                  "inviteCount"
+                ],
+                "properties": {
+                  "inviteCount": {
+                    "description": "邀請數量",
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 1
+                  },
+                  "parameterType": {
+                    "description": "普通邀请 or 红包邀请. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "NORMAL_SEND",
+                      "RED_PACKET_SEND"
+                    ]
+                  },
+                  "parameterValue": {
+                    "description": "发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "ONLY_INVITE",
+                      "INVITE_AND_REGISTER",
+                      "INVITE_VALID_USER"
+                    ]
+                  }
+                }
+              },
+              "openLinkCondition": {
+                "description": "打開連結行為條件. Required if: ActionType OPEN_LINK",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterValue"
+                ],
+                "properties": {
+                  "parameterValue": {
+                    "description": "url link",
+                    "type": "string"
+                  }
+                }
+              },
+              "playGameCondition": {
+                "description": "遊戲行為條件. Required if: ActionType PLAY_GAMES",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "gameCategory",
+                  "gameCode",
+                  "playCount"
+                ],
+                "properties": {
+                  "gameCategory": {
+                    "description": "休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum",
+                    "type": "string",
+                    "nullable": true,
+                    "enum": [
+                      "BC_GAME",
+                      "CASUAL_GAME"
+                    ]
+                  },
+                  "gameCode": {
+                    "description": "遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT",
+                    "type": "string",
+                    "nullable": true,
+                    "minLength": 1
+                  },
+                  "parameterType": {
+                    "description": "指定类型 or 指定游戏. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "GAME_TYPE_COUNT",
+                      "SPECIFIC_GAME_COUNT"
+                    ]
+                  },
+                  "playCount": {
+                    "description": "遊戲次數",
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 1
+                  }
+                }
+              },
+              "rechargeCondition": {
+                "description": "充值行為條件. Required if: ActionType RECHARGE",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "parameterValue"
+                ],
+                "properties": {
+                  "parameterType": {
+                    "description": "充值有效金额 or 充值次数. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "RECHARGE_AMOUNT",
+                      "RECHARGE_COUNT"
+                    ]
+                  },
+                  "parameterValue": {
+                    "description": "次數 or 金额. Greater than 0",
+                    "type": "string",
+                    "format": "decimal"
+                  }
+                }
+              },
               "rewardAmount": {
                 "description": "獎勵金額/數量",
                 "type": "string",
                 "format": "decimal"
               },
+              "rewardClaimStatus": {
+                "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "INELIGIBLE",
+                  "WAITING_CLAIM",
+                  "CLAIMED"
+                ]
+              },
               "rewardType": {
-                "description": "獎勵類型",
-                "type": "string"
+                "description": "獎勵類型. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "USDT",
+                  "TON",
+                  "KOKON",
+                  "HAMMER",
+                  "TREASURE"
+                ]
               },
               "startTime": {
                 "description": "開始時間",
                 "type": "string",
                 "format": "date-time"
               },
-              "taskConditionType": {
-                "description": "達成條件[類型]",
-                "type": "string"
-              },
-              "taskConditionValue": {
-                "description": "達成條件[值]",
-                "type": "string"
-              },
               "taskName": {
                 "description": "任務名稱",
                 "type": "string"
               },
               "taskType": {
-                "description": "任務類型",
-                "type": "string"
-              },
-              "updatedAt": {
-                "description": "最後操作時間",
+                "description": "任務類型. Allowed Enum",
                 "type": "string",
-                "format": "date-time"
+                "enum": [
+                  "DAILY",
+                  "ONE_TIME",
+                  "SPECIAL"
+                ]
+              },
+              "teamClassCondition": {
+                "description": "團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                "type": "object",
+                "nullable": true,
+                "properties": {
+                  "teamClass": {
+                    "description": "团队等级. Allowed Enum",
+                    "type": "array",
+                    "maximum": 5,
+                    "minimum": 1,
+                    "enum": [
+                      "CLASS_1",
+                      "CLASS_2",
+                      "CLASS_3",
+                      "CLASS_4",
+                      "CLASS_5"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "teamClassRewardSetting": {
+                "description": "團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                "type": "object",
+                "nullable": true,
+                "properties": {
+                  "class1Amount": {
+                    "description": "class1",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class2Amount": {
+                    "description": "class2",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class3Amount": {
+                    "description": "class3",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class4Amount": {
+                    "description": "class4",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class5Amount": {
+                    "description": "class5",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  }
+                }
+              },
+              "teamRechargeCondition": {
+                "description": "團隊充值行為條件. Required if: ActionType TEAM_RECHARGE",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "depositAmount"
+                ],
+                "properties": {
+                  "depositAmount": {
+                    "description": "總充值金額. Greater than 0",
+                    "type": "string",
+                    "format": "decimal"
+                  },
+                  "parameterType": {
+                    "description": "团队总充值 or 直属下级总充值. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "TEAM_RECHARGE_AMOUNT",
+                      "DIRECT_SUBORDINATE_RECHARGE_AMOUNT"
+                    ]
+                  }
+                }
+              },
+              "treasureSetting": {
+                "description": "寶箱設定. Required if: RewardType TREASURE",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "rewardType",
+                  "distributionMethod"
+                ],
+                "properties": {
+                  "betRequirement": {
+                    "description": "会员投注BC游戏",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "directSubBetRequirement": {
+                    "description": "直属下级投注BC游戏",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "distributionMethod": {
+                    "description": "發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "RANDOM",
+                      "FIXED"
+                    ]
+                  },
+                  "fixedAmount": {
+                    "description": "固定金额",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "maxAmount": {
+                    "description": "最大金额",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "minAmount": {
+                    "description": "最小金额",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "rewardType": {
+                    "description": "獎勵類型. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "USDT",
+                      "TON",
+                      "KOKON"
+                    ]
+                  }
+                }
               }
             }
           }
@@ -4713,18 +7836,37 @@
               "taskName",
               "taskType",
               "startTime",
-              "taskConditionType",
-              "taskConditionValue",
+              "actionType",
               "rewardType",
               "rewardAmount",
-              "createdAt",
-              "updatedAt"
+              "rewardClaimStatus",
+              "rechargeCondition",
+              "inviteFriendsCondition",
+              "playGameCondition",
+              "openLinkCondition",
+              "teamRechargeCondition",
+              "teamClassCondition",
+              "teamClassRewardSetting",
+              "treasureSetting"
             ],
             "properties": {
-              "createdAt": {
-                "description": "創建時間",
+              "accumulatedValue": {
+                "description": "累計值",
                 "type": "string",
-                "format": "date-time"
+                "format": "decimal"
+              },
+              "actionType": {
+                "description": "行為條件. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "LOGIN",
+                  "RECHARGE",
+                  "INVITE_FRIENDS",
+                  "TEAM_CLASS_ACHIEVEMENT",
+                  "PLAY_GAMES",
+                  "OPEN_LINK",
+                  "TEAM_RECHARGE"
+                ]
               },
               "endTime": {
                 "description": "結束時間, null代表無時間限制",
@@ -4736,40 +7878,305 @@
                 "description": "任務ID",
                 "type": "string"
               },
+              "inviteFriendsCondition": {
+                "description": "邀請好友行為條件. Required if: ActionType INVITE_FRIENDS",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "parameterValue",
+                  "inviteCount"
+                ],
+                "properties": {
+                  "inviteCount": {
+                    "description": "邀請數量",
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 1
+                  },
+                  "parameterType": {
+                    "description": "普通邀请 or 红包邀请. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "NORMAL_SEND",
+                      "RED_PACKET_SEND"
+                    ]
+                  },
+                  "parameterValue": {
+                    "description": "发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "ONLY_INVITE",
+                      "INVITE_AND_REGISTER",
+                      "INVITE_VALID_USER"
+                    ]
+                  }
+                }
+              },
+              "openLinkCondition": {
+                "description": "打開連結行為條件. Required if: ActionType OPEN_LINK",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterValue"
+                ],
+                "properties": {
+                  "parameterValue": {
+                    "description": "url link",
+                    "type": "string"
+                  }
+                }
+              },
+              "playGameCondition": {
+                "description": "遊戲行為條件. Required if: ActionType PLAY_GAMES",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "gameCategory",
+                  "gameCode",
+                  "playCount"
+                ],
+                "properties": {
+                  "gameCategory": {
+                    "description": "休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum",
+                    "type": "string",
+                    "nullable": true,
+                    "enum": [
+                      "BC_GAME",
+                      "CASUAL_GAME"
+                    ]
+                  },
+                  "gameCode": {
+                    "description": "遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT",
+                    "type": "string",
+                    "nullable": true,
+                    "minLength": 1
+                  },
+                  "parameterType": {
+                    "description": "指定类型 or 指定游戏. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "GAME_TYPE_COUNT",
+                      "SPECIFIC_GAME_COUNT"
+                    ]
+                  },
+                  "playCount": {
+                    "description": "遊戲次數",
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 1
+                  }
+                }
+              },
+              "rechargeCondition": {
+                "description": "充值行為條件. Required if: ActionType RECHARGE",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "parameterValue"
+                ],
+                "properties": {
+                  "parameterType": {
+                    "description": "充值有效金额 or 充值次数. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "RECHARGE_AMOUNT",
+                      "RECHARGE_COUNT"
+                    ]
+                  },
+                  "parameterValue": {
+                    "description": "次數 or 金额. Greater than 0",
+                    "type": "string",
+                    "format": "decimal"
+                  }
+                }
+              },
               "rewardAmount": {
                 "description": "獎勵金額/數量",
                 "type": "string",
                 "format": "decimal"
               },
+              "rewardClaimStatus": {
+                "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "INELIGIBLE",
+                  "WAITING_CLAIM",
+                  "CLAIMED"
+                ]
+              },
               "rewardType": {
-                "description": "獎勵類型",
-                "type": "string"
+                "description": "獎勵類型. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "USDT",
+                  "TON",
+                  "KOKON",
+                  "HAMMER",
+                  "TREASURE"
+                ]
               },
               "startTime": {
                 "description": "開始時間",
                 "type": "string",
                 "format": "date-time"
               },
-              "taskConditionType": {
-                "description": "達成條件[類型]",
-                "type": "string"
-              },
-              "taskConditionValue": {
-                "description": "達成條件[值]",
-                "type": "string"
-              },
               "taskName": {
                 "description": "任務名稱",
                 "type": "string"
               },
               "taskType": {
-                "description": "任務類型",
-                "type": "string"
-              },
-              "updatedAt": {
-                "description": "最後操作時間",
+                "description": "任務類型. Allowed Enum",
                 "type": "string",
-                "format": "date-time"
+                "enum": [
+                  "DAILY",
+                  "ONE_TIME",
+                  "SPECIAL"
+                ]
+              },
+              "teamClassCondition": {
+                "description": "團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                "type": "object",
+                "nullable": true,
+                "properties": {
+                  "teamClass": {
+                    "description": "团队等级. Allowed Enum",
+                    "type": "array",
+                    "maximum": 5,
+                    "minimum": 1,
+                    "enum": [
+                      "CLASS_1",
+                      "CLASS_2",
+                      "CLASS_3",
+                      "CLASS_4",
+                      "CLASS_5"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "teamClassRewardSetting": {
+                "description": "團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                "type": "object",
+                "nullable": true,
+                "properties": {
+                  "class1Amount": {
+                    "description": "class1",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class2Amount": {
+                    "description": "class2",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class3Amount": {
+                    "description": "class3",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class4Amount": {
+                    "description": "class4",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class5Amount": {
+                    "description": "class5",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  }
+                }
+              },
+              "teamRechargeCondition": {
+                "description": "團隊充值行為條件. Required if: ActionType TEAM_RECHARGE",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "depositAmount"
+                ],
+                "properties": {
+                  "depositAmount": {
+                    "description": "總充值金額. Greater than 0",
+                    "type": "string",
+                    "format": "decimal"
+                  },
+                  "parameterType": {
+                    "description": "团队总充值 or 直属下级总充值. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "TEAM_RECHARGE_AMOUNT",
+                      "DIRECT_SUBORDINATE_RECHARGE_AMOUNT"
+                    ]
+                  }
+                }
+              },
+              "treasureSetting": {
+                "description": "寶箱設定. Required if: RewardType TREASURE",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "rewardType",
+                  "distributionMethod"
+                ],
+                "properties": {
+                  "betRequirement": {
+                    "description": "会员投注BC游戏",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "directSubBetRequirement": {
+                    "description": "直属下级投注BC游戏",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "distributionMethod": {
+                    "description": "發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "RANDOM",
+                      "FIXED"
+                    ]
+                  },
+                  "fixedAmount": {
+                    "description": "固定金额",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "maxAmount": {
+                    "description": "最大金额",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "minAmount": {
+                    "description": "最小金额",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "rewardType": {
+                    "description": "獎勵類型. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "USDT",
+                      "TON",
+                      "KOKON"
+                    ]
+                  }
+                }
               }
             }
           }
@@ -4784,18 +8191,37 @@
               "taskName",
               "taskType",
               "startTime",
-              "taskConditionType",
-              "taskConditionValue",
+              "actionType",
               "rewardType",
               "rewardAmount",
-              "createdAt",
-              "updatedAt"
+              "rewardClaimStatus",
+              "rechargeCondition",
+              "inviteFriendsCondition",
+              "playGameCondition",
+              "openLinkCondition",
+              "teamRechargeCondition",
+              "teamClassCondition",
+              "teamClassRewardSetting",
+              "treasureSetting"
             ],
             "properties": {
-              "createdAt": {
-                "description": "創建時間",
+              "accumulatedValue": {
+                "description": "累計值",
                 "type": "string",
-                "format": "date-time"
+                "format": "decimal"
+              },
+              "actionType": {
+                "description": "行為條件. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "LOGIN",
+                  "RECHARGE",
+                  "INVITE_FRIENDS",
+                  "TEAM_CLASS_ACHIEVEMENT",
+                  "PLAY_GAMES",
+                  "OPEN_LINK",
+                  "TEAM_RECHARGE"
+                ]
               },
               "endTime": {
                 "description": "結束時間, null代表無時間限制",
@@ -4807,40 +8233,305 @@
                 "description": "任務ID",
                 "type": "string"
               },
+              "inviteFriendsCondition": {
+                "description": "邀請好友行為條件. Required if: ActionType INVITE_FRIENDS",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "parameterValue",
+                  "inviteCount"
+                ],
+                "properties": {
+                  "inviteCount": {
+                    "description": "邀請數量",
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 1
+                  },
+                  "parameterType": {
+                    "description": "普通邀请 or 红包邀请. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "NORMAL_SEND",
+                      "RED_PACKET_SEND"
+                    ]
+                  },
+                  "parameterValue": {
+                    "description": "发送即生效 or 邀请注册 or 邀请有效用户. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "ONLY_INVITE",
+                      "INVITE_AND_REGISTER",
+                      "INVITE_VALID_USER"
+                    ]
+                  }
+                }
+              },
+              "openLinkCondition": {
+                "description": "打開連結行為條件. Required if: ActionType OPEN_LINK",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterValue"
+                ],
+                "properties": {
+                  "parameterValue": {
+                    "description": "url link",
+                    "type": "string"
+                  }
+                }
+              },
+              "playGameCondition": {
+                "description": "遊戲行為條件. Required if: ActionType PLAY_GAMES",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "gameCategory",
+                  "gameCode",
+                  "playCount"
+                ],
+                "properties": {
+                  "gameCategory": {
+                    "description": "休闲 or BC. Required if: ParameterType GAME_TYPE_COUNT. Allowed Enum",
+                    "type": "string",
+                    "nullable": true,
+                    "enum": [
+                      "BC_GAME",
+                      "CASUAL_GAME"
+                    ]
+                  },
+                  "gameCode": {
+                    "description": "遊戲代碼. Required if: ParameterType SPECIFIC_GAME_COUNT",
+                    "type": "string",
+                    "nullable": true,
+                    "minLength": 1
+                  },
+                  "parameterType": {
+                    "description": "指定类型 or 指定游戏. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "GAME_TYPE_COUNT",
+                      "SPECIFIC_GAME_COUNT"
+                    ]
+                  },
+                  "playCount": {
+                    "description": "遊戲次數",
+                    "type": "integer",
+                    "format": "int64",
+                    "minimum": 1
+                  }
+                }
+              },
+              "rechargeCondition": {
+                "description": "充值行為條件. Required if: ActionType RECHARGE",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "parameterValue"
+                ],
+                "properties": {
+                  "parameterType": {
+                    "description": "充值有效金额 or 充值次数. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "RECHARGE_AMOUNT",
+                      "RECHARGE_COUNT"
+                    ]
+                  },
+                  "parameterValue": {
+                    "description": "次數 or 金额. Greater than 0",
+                    "type": "string",
+                    "format": "decimal"
+                  }
+                }
+              },
               "rewardAmount": {
                 "description": "獎勵金額/數量",
                 "type": "string",
                 "format": "decimal"
               },
+              "rewardClaimStatus": {
+                "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "INELIGIBLE",
+                  "WAITING_CLAIM",
+                  "CLAIMED"
+                ]
+              },
               "rewardType": {
-                "description": "獎勵類型",
-                "type": "string"
+                "description": "獎勵類型. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "USDT",
+                  "TON",
+                  "KOKON",
+                  "HAMMER",
+                  "TREASURE"
+                ]
               },
               "startTime": {
                 "description": "開始時間",
                 "type": "string",
                 "format": "date-time"
               },
-              "taskConditionType": {
-                "description": "達成條件[類型]",
-                "type": "string"
-              },
-              "taskConditionValue": {
-                "description": "達成條件[值]",
-                "type": "string"
-              },
               "taskName": {
                 "description": "任務名稱",
                 "type": "string"
               },
               "taskType": {
-                "description": "任務類型",
-                "type": "string"
-              },
-              "updatedAt": {
-                "description": "最後操作時間",
+                "description": "任務類型. Allowed Enum",
                 "type": "string",
-                "format": "date-time"
+                "enum": [
+                  "DAILY",
+                  "ONE_TIME",
+                  "SPECIAL"
+                ]
+              },
+              "teamClassCondition": {
+                "description": "團隊等級行為條件. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                "type": "object",
+                "nullable": true,
+                "properties": {
+                  "teamClass": {
+                    "description": "团队等级. Allowed Enum",
+                    "type": "array",
+                    "maximum": 5,
+                    "minimum": 1,
+                    "enum": [
+                      "CLASS_1",
+                      "CLASS_2",
+                      "CLASS_3",
+                      "CLASS_4",
+                      "CLASS_5"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "teamClassRewardSetting": {
+                "description": "團隊等級獎勵設定. Required if: ActionType TEAM_CLASS_ACHIEVEMENT",
+                "type": "object",
+                "nullable": true,
+                "properties": {
+                  "class1Amount": {
+                    "description": "class1",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class2Amount": {
+                    "description": "class2",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class3Amount": {
+                    "description": "class3",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class4Amount": {
+                    "description": "class4",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "class5Amount": {
+                    "description": "class5",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  }
+                }
+              },
+              "teamRechargeCondition": {
+                "description": "團隊充值行為條件. Required if: ActionType TEAM_RECHARGE",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "parameterType",
+                  "depositAmount"
+                ],
+                "properties": {
+                  "depositAmount": {
+                    "description": "總充值金額. Greater than 0",
+                    "type": "string",
+                    "format": "decimal"
+                  },
+                  "parameterType": {
+                    "description": "团队总充值 or 直属下级总充值. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "TEAM_RECHARGE_AMOUNT",
+                      "DIRECT_SUBORDINATE_RECHARGE_AMOUNT"
+                    ]
+                  }
+                }
+              },
+              "treasureSetting": {
+                "description": "寶箱設定. Required if: RewardType TREASURE",
+                "type": "object",
+                "nullable": true,
+                "required": [
+                  "rewardType",
+                  "distributionMethod"
+                ],
+                "properties": {
+                  "betRequirement": {
+                    "description": "会员投注BC游戏",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "directSubBetRequirement": {
+                    "description": "直属下级投注BC游戏",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "distributionMethod": {
+                    "description": "發放機制, RANDOM: 隨機, FIXED: 固定. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "RANDOM",
+                      "FIXED"
+                    ]
+                  },
+                  "fixedAmount": {
+                    "description": "固定金额",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "maxAmount": {
+                    "description": "最大金额",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "minAmount": {
+                    "description": "最小金额",
+                    "type": "string",
+                    "nullable": true,
+                    "format": "decimal"
+                  },
+                  "rewardType": {
+                    "description": "獎勵類型. Allowed Enum",
+                    "type": "string",
+                    "enum": [
+                      "USDT",
+                      "TON",
+                      "KOKON"
+                    ]
+                  }
+                }
               }
             }
           }
@@ -5032,10 +8723,11 @@
         "finalClass": {
           "description": "目標等級",
           "type": "integer",
-          "format": "int64"
+          "format": "int64",
+          "minimum": 2
         },
         "shouldPlayUpgradeAnimation": {
-          "description": "是否需跑升等動畫",
+          "description": "是否需跑升等動畫(因時間差的可能,delete時又收到ShouldPlayUpgradeAnimation:true,可重複呼叫upgrade-animation功能)",
           "type": "boolean"
         }
       }
@@ -5052,10 +8744,10 @@
           "format": "email"
         },
         "kind": {
-          "description": "驗證類型",
+          "description": "驗證類型 0:純驗證無功能 1:綁定信箱 2:重置綁定信箱 3:綁定取款密碼 4:更新取款密碼 5:提款驗證",
           "type": "integer",
           "format": "int64",
-          "minimum": 0
+          "maximum": 5
         }
       }
     },

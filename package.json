@@ -66,6 +66,7 @@
     "react-hook-form": "^7.53.0",
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^15.0.2",
+    "react-image": "^4.1.0",
     "react-number-format": "^5.4.2",
     "react-qrcode-logo": "^3.0.0",
     "react-use": "^17.5.1",

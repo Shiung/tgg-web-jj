@@ -1,8 +1,12 @@
-enum GameId {
-  Mine = 1,
-  Crash = 2,
-  CatRussia = 3,
-  GoDown100Floors = 4,
+/**
+ * 參考
+ * https://docs.google.com/spreadsheets/d/1uN3ZDsea39P_Oa0GFE6DN8gHOkcc-KcF_qRY8WL-tG4/edit?usp=sharing
+ */
+enum GameCode {
+  Crash = '10110001',
+  Mines = '10110002',
+  CatRussia = '10220001',
+  GoDown100Floors = '10220002',
 }
 
 enum VenueType {
@@ -12,50 +16,45 @@ enum VenueType {
 
 type GameCurrency = 'usd' | 'K9'
 
-const gameList: Record<
-  GameId,
-  {
-    name: string
-    currency: GameCurrency
-    imgSrc: string
-    imgAlt: string
-    venueType: VenueType
-  }
-> = {
-  [GameId.Mine]: {
+interface BaseGameInfo {
+  currency: GameCurrency
+  name: string
+  fallbackImgSrc: string
+}
+
+const baseGameInfos: Record<GameCode, BaseGameInfo> = {
+  [GameCode.Mines]: {
+    currency: 'usd',
     name: 'Mines',
-    currency: 'usd',
-    imgSrc: '/images/home/carousel/mines.png',
-    imgAlt: 'mines',
-    venueType: VenueType.Crypto,
+    fallbackImgSrc: '/images/home/carousel/mines.png',
   },
-  [GameId.Crash]: {
+  [GameCode.Crash]: {
+    currency: 'usd',
     name: 'Crash',
-    imgSrc: '/images/home/carousel/crash.png',
-    imgAlt: 'crash',
-    currency: 'usd',
-    venueType: VenueType.Crypto,
+    fallbackImgSrc: '/images/home/carousel/crash.png',
   },
-  [GameId.CatRussia]: {
-    name: 'Cat Russia',
+  [GameCode.CatRussia]: {
     currency: 'K9',
-    imgSrc: '/images/home/carousel/cat-russia.png',
-    imgAlt: 'cat-russia',
-    venueType: VenueType.Casual,
+    name: 'Cat Russia',
+    fallbackImgSrc: '/images/home/carousel/cat-russia.png',
   },
-  [GameId.GoDown100Floors]: {
-    name: 'Go Down 100 Floors',
+  [GameCode.GoDown100Floors]: {
     currency: 'usd',
-    imgSrc: '/images/home/carousel/go-down-100-floors.png',
-    imgAlt: 'go-down-100-floors',
-    venueType: VenueType.Casual,
+    name: 'Go Down 100 Floors',
+    fallbackImgSrc: '/images/home/carousel/go-down-100-floors.png',
   },
 }
 
-const getGameRoute = (id: GameId, type: VenueType) => {
-  const gamePath = type === VenueType.Casual ? 'casual-game' : 'crypto-game'
-  return `/${gamePath}/${id}`
+// Type Guard
+function isValidGameCode(value: string): value is GameCode {
+  return Object.values(GameCode).includes(value as GameCode)
 }
 
-export { gameList, getGameRoute, GameId, VenueType }
-export type { GameCurrency }
+const getGameRoute = (gameCode: string, type: VenueType) => {
+  if (!isValidGameCode(gameCode)) return ''
+  const gamePath = type === VenueType.Casual ? 'casual-game' : 'crypto-game'
+  return `/${gamePath}/${gameCode}`
+}
+
+export { baseGameInfos, GameCode, VenueType, getGameRoute, isValidGameCode }
+export type { GameCurrency, BaseGameInfo }

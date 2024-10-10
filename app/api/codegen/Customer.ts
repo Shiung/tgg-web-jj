@@ -159,12 +159,12 @@ export class Customer<SecurityDataType = unknown> {
        */
       deviceId: string;
       /** first_name */
-      firstName?: string;
+      firstName: string;
       /**
        * Telegram id
        * @format int64
        */
-      id?: number;
+      id: number;
       /** language_code */
       languageCode?: string;
       /** last_name */
@@ -375,9 +375,10 @@ export class Customer<SecurityDataType = unknown> {
         /**
          * 目標等級
          * @format int64
+         * @min 2
          */
         finalClass?: number;
-        /** 是否需跑升等動畫 */
+        /** 是否需跑升等動畫(因時間差的可能,delete時又收到ShouldPlayUpgradeAnimation:true,可重複呼叫upgrade-animation功能) */
         shouldPlayUpgradeAnimation?: boolean;
       },
       any
@@ -393,10 +394,34 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerUpgradeAnimationDelete
    * @request DELETE:/ajax/customer/upgrade-animation
    */
-  customerUpgradeAnimationDelete = (params: RequestParams = {}) =>
-    this.http.request<any, any>({
+  customerUpgradeAnimationDelete = (
+    body: {
+      /**
+       * 清除目標等級
+       * @format int64
+       * @min 2
+       */
+      finalClass?: number;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.http.request<
+      {
+        /**
+         * 目標等級
+         * @format int64
+         * @min 2
+         */
+        finalClass?: number;
+        /** 是否需跑升等動畫(因時間差的可能,delete時又收到ShouldPlayUpgradeAnimation:true,可重複呼叫upgrade-animation功能) */
+        shouldPlayUpgradeAnimation?: boolean;
+      },
+      any
+    >({
       path: `/ajax/customer/upgrade-animation`,
       method: "DELETE",
+      body: body,
+      type: ContentType.Json,
       ...params,
     });
   /**
@@ -414,9 +439,9 @@ export class Customer<SecurityDataType = unknown> {
        */
       email: string;
       /**
-       * 驗證類型
+       * 驗證類型 0:純驗證無功能 1:綁定信箱 2:重置綁定信箱 3:綁定取款密碼 4:更新取款密碼 5:提款驗證
        * @format int64
-       * @min 0
+       * @max 5
        */
       kind?: number;
     },
