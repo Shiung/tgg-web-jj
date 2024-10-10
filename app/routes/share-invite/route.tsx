@@ -294,7 +294,7 @@ const ShareInvite: React.FC = () => {
             {/* Team Star Rating Section */}
             <div className="mt-6 flex w-full items-center space-x-1 text-base font-ultra">
               <div>Team Star Rating</div>
-              <InfoTooltip content="The star rating will be upgraded based on betting amount of your team. Higher star ratings lead to higher commission percentages." />
+              <InfoTooltip content="The star rating will be upgraded based on betting amount of your team. Higher star rating lead to higher commission percentages." />
             </div>
             <div className="relative mt-2 w-full rounded-xl bg-colorLinear-green p-3">
               <div className="absolute bottom-0 left-0 h-[126px] w-full bg-[url('/images/lucky-money/lucky-money-bg.svg')]"></div>
