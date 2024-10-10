@@ -44,12 +44,12 @@ const LuckyMoneyItem: React.FC<LuckyMoneyItemProps> = ({ type, status }) => {
         </div>
         {status === 0 && (
           <div className="-mb-3 -mr-3 mt-3 h-5 rounded-br-lg rounded-tl-lg bg-[#333333] px-2 py-1">
-            <div className="text-[10px] font-ultra leading-3 text-[#FF4D48]">Terminated</div>
+            <div className="text-[10px] font-ultra leading-3 text-app-red">Terminated</div>
           </div>
         )}
         {status === 1 && (
           <div className="-mb-3 -mr-3 mt-3 h-5 rounded-br-lg rounded-tl-lg bg-[#333333] px-2 py-1">
-            <div className="text-[10px] font-ultra leading-3 text-[#3AE45A]">Completed</div>
+            <div className="text-[10px] font-ultra leading-3 text-app-green">Completed</div>
           </div>
         )}
       </div>

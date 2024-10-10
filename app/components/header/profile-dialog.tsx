@@ -131,7 +131,7 @@ const ProfileDialog: React.FC = () => {
           {/* Support */}
           <div className="flex items-center justify-between">
             <span>{links.support.title}</span>
-            <a href={links.support.value} className="font-ultra text-[#2D9BE6]">
+            <a href={links.support.value} className="font-ultra text-app-blue">
               {links.support.text}
             </a>
           </div>

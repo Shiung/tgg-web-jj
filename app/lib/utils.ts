@@ -127,7 +127,10 @@ export function buildResourceImageUrl(path?: string): string {
     return path
   }
 
-  const currentDomain = window.location.origin
+  const currentDomain =
+    process.env.NODE_ENV === 'development'
+      ? import.meta.env.VITE_APP_DOMAIN
+      : window.location.origin
   return `${currentDomain}/resource/${path}`
 }
 

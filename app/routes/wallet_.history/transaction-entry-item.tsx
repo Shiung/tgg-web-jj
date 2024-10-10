@@ -11,7 +11,7 @@ const TransactionEntryItem = ({ record }: { record: TransactionEntry }) => {
       <p className="flex-1 font-ultra">{record.type}</p>
       <p
         className={`flex-1 text-right font-ultra ${
-          parseFloat(record.amount) < 0 ? 'text-[#FF4D48]' : 'text-white'
+          parseFloat(record.amount) < 0 ? 'text-app-red' : 'text-white'
         }`}
       >
         <Amount value={record.amount} thousandSeparator crypto="USDT" />

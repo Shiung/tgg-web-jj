@@ -48,7 +48,7 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure, onClaimBonu
           <div className="flex flex-[0_0_33%] flex-col items-center justify-center border-l border-dashed border-white/20 px-2 py-1">
             <Amount
               crypto="KOKON"
-              className="text-base font-ultra text-[#3AE45A]"
+              className="text-base font-ultra text-app-green"
               value={treasure.readyToClaimAmount}
             />
             <p className="text-xs text-white/70">Ready for claim</p>

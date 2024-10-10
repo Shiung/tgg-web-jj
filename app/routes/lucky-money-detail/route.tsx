@@ -83,12 +83,12 @@ const LuckyMoneyDetail = () => {
           <div className="flex justify-between text-xs font-normal">
             <div>2024-06-17</div>
             {luckyMoneyStatus && +luckyMoneyStatus === 1 && (
-              <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-ultra text-[#3AE45A]">
+              <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-ultra text-app-green">
                 Completed
               </div>
             )}
             {luckyMoneyStatus && +luckyMoneyStatus === 0 && (
-              <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-ultra text-[#FF4D48]">
+              <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-ultra text-app-red">
                 Terminated
               </div>
             )}

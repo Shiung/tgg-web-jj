@@ -13,7 +13,7 @@ export default function StandbyCard({
       {/* Game pannel */}
       <div className="relative z-10 mt-5 flex justify-center px-6">
         <div className="flex h-[94px] w-[100%] flex-col gap-1 rounded-xl bg-black bg-opacity-50 px-4 py-2 text-center">
-          <p className="text-center text-base font-extrabold leading-[22px] text-[#FDCB04]">
+          <p className="text-center text-base font-extrabold leading-[22px] text-app-yellow">
             GOLDEN EGG
           </p>
           <div className="flex h-[20px] items-center justify-center gap-2">

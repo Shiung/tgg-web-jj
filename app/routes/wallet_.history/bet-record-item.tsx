@@ -1,38 +1,47 @@
+import { useEffect } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { Currency } from './currency-switch'
-import { GameTransaction } from './bet-record'
 import { format } from 'date-fns'
 import { Button } from '~/components/ui/button'
 import { KokonIcon, UsdtIcon } from '~/components/color-icons'
-import CopyIcon from '~/icons/copy.svg?react'
 import Amount from '~/components/amount'
+import CopyIcon from '~/icons/copy.svg?react'
+import { Crypto } from '~/consts/crypto'
+import { successToast } from '~/lib/toast'
+
+import { GameTransaction } from './bet-record'
 
 export default function BetRecordItem({
   record,
   currency,
 }: {
   record: GameTransaction
-  currency: Currency
+  currency: Crypto
 }): JSX.Element {
-  const [, copyToClipboard] = useCopyToClipboard()
+  const [state, copyToClipboard] = useCopyToClipboard()
+
+  useEffect(() => {
+    if (!state.value) return
+    successToast('Copied')
+  }, [state])
+
   return (
     <div className="w-full rounded-xl bg-[#1C1C1C]">
       <div className="rounded-t-xl bg-[#333] text-sm font-ultra text-white">
-        <p className="px-3 py-1">Crash</p>
+        <p className="px-3 py-1">{record.gameName}</p>
       </div>
       <div className="flex flex-col space-y-2 px-3 py-2">
-        <div className="relative flex flex-col space-y-1 pb-3 before:absolute before:bottom-0 before:left-0 before:right-0 before:h-[0.5px] before:bg-white/20 before:content-['']">
+        <div className="relative flex flex-col space-y-1 pb-2 before:absolute before:bottom-0 before:left-0 before:right-0 before:h-[0.5px] before:bg-white/20 before:content-['']">
           <div className="flex items-center justify-between">
             <span className="text-xs text-white/70">Bet Amount</span>
             <div className="flex space-x-1">
               <span className="text-xs text-white">
-                {currency === Currency.USDT ? (
-                  <Amount value={+record.betGold} thousandSeparator />
+                {currency === Crypto.USDT ? (
+                  <Amount value={record.betGold} crypto={Crypto.USDT} />
                 ) : (
-                  <Amount value={+record.betGoldKokon} thousandSeparator />
+                  <Amount value={record.betGoldKokon} crypto={Crypto.KOKON} />
                 )}
               </span>
-              {currency === Currency.USDT ? (
+              {currency === Crypto.USDT ? (
                 <UsdtIcon className="my-auto h-3 w-3" />
               ) : (
                 <KokonIcon className="my-auto h-3 w-3" />
@@ -44,27 +53,27 @@ export default function BetRecordItem({
             <div className="flex space-x-1">
               <span
                 className={`text-sm font-ultra ${
-                  +(currency === Currency.USDT ? record.winGold : record.winGoldKokon) > 0
-                    ? 'text-[#3AE45A]'
-                    : +(currency === Currency.USDT ? record.winGold : record.winGoldKokon) < 0
-                      ? 'text-[#FF4D48]'
+                  +(currency === Crypto.USDT ? record.winGold : record.winGoldKokon) > 0
+                    ? 'text-app-green'
+                    : +(currency === Crypto.USDT ? record.winGold : record.winGoldKokon) < 0
+                      ? 'text-app-red'
                       : 'text-white'
                 }`}
               >
                 <span className="px-1">
-                  {+(currency === Currency.USDT ? record.winGold : record.winGoldKokon) > 0
+                  {+(currency === Crypto.USDT ? record.winGold : record.winGoldKokon) > 0
                     ? '+'
-                    : +(currency === Currency.USDT ? record.winGold : record.winGoldKokon) < 0
+                    : +(currency === Crypto.USDT ? record.winGold : record.winGoldKokon) < 0
                       ? '-'
                       : ''}
                 </span>
-                {currency === Currency.USDT ? (
-                  <Amount value={Math.abs(+record.winGold)} thousandSeparator />
+                {currency === Crypto.USDT ? (
+                  <Amount value={Math.abs(+record.winGold)} crypto={Crypto.USDT} />
                 ) : (
-                  <Amount value={Math.abs(+record.winGoldKokon)} thousandSeparator />
+                  <Amount value={Math.abs(+record.winGoldKokon)} crypto={Crypto.KOKON} />
                 )}
               </span>
-              {currency === Currency.USDT ? (
+              {currency === Crypto.USDT ? (
                 <UsdtIcon className="my-auto h-3 w-3" />
               ) : (
                 <KokonIcon className="my-auto h-3 w-3" />
@@ -72,7 +81,7 @@ export default function BetRecordItem({
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between pt-3 text-xs text-white/50">
+        <div className="flex items-center justify-between text-xs text-white/50">
           <div className="flex space-x-1">
             <span>{format(new Date(record.betTime), 'MM-dd')}</span>
             <span>{format(new Date(record.betTime), 'HH:mm')}</span>

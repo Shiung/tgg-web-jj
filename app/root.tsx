@@ -1,6 +1,5 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
 import type { LinksFunction } from '@remix-run/node'
-import { ClientOnly } from 'remix-utils/client-only'
 import { Toaster } from 'react-hot-toast'
 import MainNav from '~/components/main-nav'
 import Header from '~/components/header/index'
@@ -11,9 +10,8 @@ import NeedLoginDialog from '~/components/need-login-dialog'
 import DevTool from '~/components/dev-tool/index'
 import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 import { useSafePaddingClass } from '~/hooks/useSafePaddingClass'
-import { cn } from '~/lib/utils'
-
 import useRouteGuard from '~/hooks/useRouteGuard'
+import { cn } from '~/lib/utils'
 import { iconsLinks, prefetchAssetsLinks } from '~/consts/prefetch'
 
 import './tailwind.css'
@@ -44,7 +42,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
+  // route guard
   useRouteGuard()
+  // layout settings
   const maxWidth = useAppMaxWidth()
   const safePaddingClass = useSafePaddingClass()
 
@@ -67,16 +67,12 @@ export default function App() {
         <DevTool />
       </AppRoot>
       <ParticleBackground />
-      <ClientOnly>
-        {() => (
-          <Toaster
-            // 居中
-            containerStyle={{
-              top: '50%',
-            }}
-          />
-        )}
-      </ClientOnly>
+      <Toaster
+        // 居中
+        containerStyle={{
+          top: '50%',
+        }}
+      />
     </>
   )
 }

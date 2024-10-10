@@ -132,7 +132,7 @@ const TaskCard: React.FC<TaskCardProps> = props => {
               valid member.
             </p>
             {props.isLimitTask && (
-              <div className="mt-1 text-xs text-[#FF4D48]">
+              <div className="mt-1 text-xs text-app-red">
                 {props.limitTime && (
                   <p>
                     Limited Time: <span>{props.limitTime}</span>

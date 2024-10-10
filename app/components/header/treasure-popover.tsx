@@ -72,7 +72,7 @@ const TreasureSheet: React.FC<{ className: string }> = ({ className }) => {
                     crypto={treasure.crypto}
                     value={treasure.readyToClaimAmount}
                     useKM
-                    className="text-base font-ultra text-[#3AE45A]"
+                    className="text-base font-ultra text-app-green"
                   />
                   <p className="text-xs text-white/70">Ready for claim</p>
                 </div>

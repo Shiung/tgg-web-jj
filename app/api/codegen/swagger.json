@@ -2039,7 +2039,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Required, Minimum: 1)",
+            "description": "頁碼 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true

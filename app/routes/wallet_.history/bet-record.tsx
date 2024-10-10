@@ -1,21 +1,23 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
-import InfiniteScroll from '~/components/ui/infinite-scroll'
-import { cn } from '~/lib/utils'
-import styles from './index.module.scss'
-import NoDataView from './no-data-view'
-import { Currency, CurrencySwitch } from './currency-switch'
-import { apis } from '~/api'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
+import { formatRFC3339, startOfDay, endOfDay } from 'date-fns'
+import InfiniteScroll from '~/components/ui/infinite-scroll'
 import DatePickerSheet from '~/components/date-picker-sheet/index'
 import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
-import { formatRFC3339, startOfDay, endOfDay } from 'date-fns'
-import BetRecordItem from './bet-record-item'
+import { Skeleton } from '~/components/ui/skeleton'
+import { CurrencySwitch } from './currency-switch'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { cn } from '~/lib/utils'
 import { errorToast } from '~/lib/toast'
 import LoadingIcon from '~/icons/loading.svg?react'
+import { apis } from '~/api'
 import type { GetActiveGamesResponse } from '~/api/codegen/data-contracts'
+import { Crypto } from '~/consts/crypto'
+
+import styles from './index.module.scss'
+import BetRecordItem from './bet-record-item'
 import BetSkeleton from './bet-skeleton'
-import { Skeleton } from '~/components/ui/skeleton'
+import NoDataView from './no-data-view'
 
 interface FormValues {
   gameList: string
@@ -30,6 +32,9 @@ export interface GameTransaction {
   transactionId: string
   winGold: string
   winGoldKokon: string
+  /* 前端轉換 */
+  /* 遊戲名稱 */
+  gameName: string
 }
 
 interface GameTransactionRequest {
@@ -55,7 +60,7 @@ const defaultValues = {
 }
 
 export default function BetRecord({ currentTab }: { currentTab: string }) {
-  const [currency, setCurrency] = useState<Currency>(Currency.KOKON)
+  const [currency, setCurrency] = useState<Crypto.USDT | Crypto.KOKON>(Crypto.KOKON)
   const [isFirstLoading, setIsFirstLoading] = useState(true)
 
   const { control, watch } = useForm<FormValues>({
@@ -66,7 +71,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
   const formValues = watch()
 
   const toggleCurrency = () => {
-    setCurrency(currency === Currency.KOKON ? Currency.USDT : Currency.KOKON)
+    setCurrency(currency === Crypto.KOKON ? Crypto.USDT : Crypto.KOKON)
   }
 
   const { data: gameList, error: gameListError } = useQuery<GetActiveGamesResponse, Error>({
@@ -138,7 +143,17 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
     }
   }, [error])
 
-  const records = useMemo(() => data?.pages.flatMap(page => page.records) ?? [], [data])
+  const records = useMemo(
+    () =>
+      data?.pages.flatMap(page =>
+        page.records.map(record => ({
+          ...record,
+          gameName: gameList?.list?.find(game => game.id === record.subGameId)?.gameName || '',
+        }))
+      ) ?? [],
+    [data?.pages, gameList?.list]
+  )
+
   const isFetchData = useMemo(() => {
     return isFetching && !isFetchingNextPage && !data
   }, [isFetching, isFetchingNextPage, data])
