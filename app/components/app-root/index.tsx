@@ -14,6 +14,7 @@ import { useTelegramMock } from '~/hooks/useTelegramMock'
 import useTelegramNavigate from '~/hooks/useTelegramNavigate'
 import { useTelegramMiniAppAutoLogin } from '~/hooks/useTelegramLogin'
 import { useGetActiveGameListToStore } from '~/hooks/api/useGame'
+import { usePingPolling } from '~/hooks/api/usePolling'
 import { cn, mapSystemLanguageCode } from '~/lib/utils'
 
 import classes from './index.module.scss'
@@ -62,9 +63,11 @@ const TelegramInit: React.FC = () => {
   return null
 }
 
-const DataInit = () => {
+const AppInit = () => {
   // init data
   useGetActiveGameListToStore()
+  // polling
+  usePingPolling()
   return null
 }
 
@@ -101,8 +104,8 @@ export default function AppRoot({ children }: PropsWithChildren) {
           />
           {/* app框容器 */}
           <div className={cn('flex flex-col', minHClass)}>{children}</div>
-          {/* 初始數據獲取 */}
-          <DataInit />
+          {/* app初始相關數據獲取 */}
+          <AppInit />
           {/* Telegram 相關初始化 */}
           {inTelegram && <TelegramInit />}
           <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
