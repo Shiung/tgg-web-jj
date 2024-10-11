@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { formatRFC3339 } from 'date-fns'
+import { endOfDay, formatRFC3339, startOfDay, subDays } from 'date-fns'
 import InfiniteScroll from '~/components/ui/infinite-scroll'
 import DatePickerSheet from '~/components/date-picker-sheet/index'
 import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
@@ -113,7 +113,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
       currency: '0',
       type: '0',
       balance: '0',
-      dateTimeRange: { from: new Date(), to: new Date() },
+      dateTimeRange: { from: startOfDay(subDays(new Date(), 30)), to: endOfDay(new Date()) },
     },
   })
   const [isFirstLoading, setIsFirstLoading] = useState(true)
@@ -197,6 +197,10 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                   onChange={field.onChange}
                   range
                   showTimePicker
+                  rangeLimits={{
+                    minDate: startOfDay(subDays(new Date(), 30)),
+                    maxDate: endOfDay(new Date()),
+                  }}
                 />
               </div>
             )}

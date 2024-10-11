@@ -8,7 +8,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import useIntersectionObserver from '~/hooks/useIntersectionObserver'
 
-//NOTICE: For test
+// NOTICE: For test
 import { getMockCommissionData } from './fake-commisssionData'
 
 import CatEarsCard from '~/components/cat-ears-card'
@@ -25,7 +25,6 @@ import ShareTeamSkeleton from './share-team-skeleton'
 import Amount from '~/components/amount'
 import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
 import DatePickerSheet from '~/components/date-picker-sheet/index'
-import { errorToast } from '~/lib/toast'
 import { Skeleton } from '~/components/ui/skeleton'
 
 const PAGE_SIZE = 20
@@ -341,8 +340,8 @@ const Commission: React.FC = () => {
                   </div>
                 )}
                 value={field.value}
-                onConfirm={(selectedValue: string) => {
-                  field.onChange(selectedValue)
+                onConfirm={selectedValue => {
+                  field.onChange(selectedValue as string)
                 }}
               >
                 {levelOptions.map(option => (

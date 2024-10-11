@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { formatRFC3339, startOfDay, endOfDay } from 'date-fns'
+import { formatRFC3339, startOfDay, endOfDay, subDays } from 'date-fns'
 import InfiniteScroll from '~/components/ui/infinite-scroll'
 import DatePickerSheet from '~/components/date-picker-sheet/index'
 import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
@@ -56,7 +56,7 @@ interface GameTransactionResponse {
 
 const defaultValues = {
   gameList: '0',
-  dateTimeRange: { from: startOfDay(new Date()), to: endOfDay(new Date()) },
+  dateTimeRange: { from: startOfDay(subDays(new Date(), 30)), to: endOfDay(new Date()) },
 }
 
 export default function BetRecord({ currentTab }: { currentTab: string }) {
@@ -179,6 +179,10 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
                   onChange={field.onChange}
                   range
                   showTimePicker
+                  rangeLimits={{
+                    minDate: startOfDay(subDays(new Date(), 30)),
+                    maxDate: endOfDay(new Date()),
+                  }}
                 />
               </div>
             )}

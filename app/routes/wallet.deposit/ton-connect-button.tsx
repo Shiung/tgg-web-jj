@@ -18,11 +18,7 @@ export default function TonConnectButton({
   onWalletDisconnect,
 }: TonConnectButtonProps) {
   const [tonConnectUI] = useTonConnectUI()
-  const { open, state } = useTonConnectModal()
-
-  useEffect(() => {
-    console.log('TonConnectButton state:', state)
-  }, [state])
+  const { open } = useTonConnectModal()
 
   useEffect(() => {
     const unsubscribe = tonConnectUI.onStatusChange(wallet => {

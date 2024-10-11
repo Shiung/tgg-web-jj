@@ -14,33 +14,33 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
       showOutsideDays={showOutsideDays}
       className={cn('p-4', className)}
       classNames={{
-        months: 'flex flex-col space-y-4 sm:space-x-4 sm:space-y-0 justify-center',
-        month: 'flex flex-col items-center space-y-4',
-        month_caption: 'flex justify-center pt-1 relative items-center',
+        months: 'flex flex-col justify-center',
+        month: 'flex flex-col items-center space-y-2',
+        month_caption: 'h-9 flex justify-center relative items-center',
         caption_label: 'text-base font-ultra',
-        nav: 'space-x-2 flex items-center',
+        nav: 'relative space-x-2 flex items-center',
         button_previous: cn(
           buttonVariants({ variant: 'icon' }),
-          'h-5 w-5 bg-transparent p-0 text-white absolute left-5 top-5'
+          'h-5 w-5 bg-transparent p-0 text-white absolute left-5 top-2'
         ),
         button_next: cn(
           buttonVariants({ variant: 'icon' }),
-          'h-5 w-5 bg-transparent p-0 text-white absolute right-5 top-5'
+          'h-5 w-5 bg-transparent p-0 text-white absolute right-5 top-2'
         ),
         month_grid: 'w-full border-collapse space-y-1',
         weekdays: 'flex',
         weekday: 'text-white/70 rounded-md flex-auto font-normal text-[0.8rem]', // w-12
         week: 'grid grid-cols-7 w-full mt-2', // flex
-        day: 'aspect-square text-white text-center text-base p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-primary/10 [&:has([aria-selected])]:bg-primary/20 first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
-        day_button: 'h-full w-full p-0 font-normal aria-selected:opacity-100 hover:bg-white/10',
-        range_end: 'day-range-end',
-        selected:
-          'bg-primary text-black font-ultra hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground rounded-l-md rounded-r-md',
+        day: 'aspect-square text-white text-center text-base font-normal p-0 relative [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-primary/50 [&:has([aria-selected])]:bg-primary first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md focus-within:relative focus-within:z-20',
+        day_button: 'h-full w-full p-0 aria-selected:opacity-100 hover:bg-white/10',
+        range_start: 'bg-primary rounded-s-md aria-selected:text-black aria-selected:font-ultra',
+        range_end: 'bg-primary rounded-e-md aria-selected:text-black aria-selected:font-ultra',
+        selected: '',
         today: 'bg-[#1C1C1C] text-accent-foreground rounded-md',
         outside:
           'day-outside text-muted-foreground opacity-50 aria-selected:bg-primary/10 aria-selected:text-muted-foreground aria-selected:opacity-30',
         disabled: 'text-muted-foreground opacity-50',
-        range_middle: 'aria-selected:bg-primary/20 aria-selected:text-white',
+        range_middle: 'bg-primary/20 last:rounded-e-md first:rounded-s-md',
         hidden: 'invisible',
         ...classNames,
       }}

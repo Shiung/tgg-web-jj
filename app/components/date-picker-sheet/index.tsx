@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, ReactNode } from 'react'
 import { type DateRange } from 'react-day-picker'
-import { format, setHours, setMinutes } from 'date-fns'
+import { format, isAfter, isBefore, setHours, setMinutes } from 'date-fns'
 import {
   Sheet,
   SheetTrigger,
@@ -22,9 +22,10 @@ interface DatePickerSheetProps {
   value: Date | DateRange | undefined
   customTrigger?: (props: { displayTriggerDate: string | ReactNode | undefined }) => ReactNode
   onChange?: (date: Date | DateRange | undefined) => void
-  range?: boolean // 是否选择日期范围
-  showTimePicker?: boolean // 控制是否显示时间选择器
+  range?: boolean // 是否为日期范围选择
+  showTimePicker?: boolean // 是否显示时间选择器
   placeholder?: string
+  rangeLimits?: { minDate?: Date; maxDate?: Date }
 }
 
 // type guard
@@ -48,9 +49,10 @@ export default function DatePickerSheet({
   value,
   customTrigger,
   onChange,
-  range = false, // 默认为单个日期
-  showTimePicker = false, // 默认为不显示时间选择器
+  range = false,
+  showTimePicker = false,
   placeholder = 'Select Date',
+  rangeLimits,
 }: DatePickerSheetProps) {
   const [open, setOpen] = useState(false)
   const [internalDate, setInternalDate] = useState<Date | DateRange | undefined>(value)
@@ -119,6 +121,38 @@ export default function DatePickerSheet({
     }
   }, [placeholder, range, showTimePicker, value])
 
+  const disabledDates = useMemo(() => {
+    if (!rangeLimits) return undefined
+
+    const { minDate, maxDate } = rangeLimits
+
+    const disabled: any = {}
+    if (minDate) disabled.before = minDate
+    if (maxDate) disabled.after = maxDate
+
+    return disabled
+  }, [rangeLimits])
+
+  const isDateInRange = (date: Date | DateRange | undefined): boolean => {
+    if (!rangeLimits) return true
+    const { minDate, maxDate } = rangeLimits
+
+    if (date instanceof Date) {
+      if (minDate && isBefore(date, minDate)) return false
+      if (maxDate && isAfter(date, maxDate)) return false
+      return true
+    }
+
+    if (isDateRange(date)) {
+      const { from, to } = date
+      if (from && minDate && isBefore(from, minDate)) return false
+      if (to && maxDate && isAfter(to, maxDate)) return false
+      return true
+    }
+
+    return false
+  }
+
   useEffect(() => {
     if (open || value) {
       setInternalDate(value)
@@ -131,15 +165,19 @@ export default function DatePickerSheet({
     }
   }, [open, range, value])
 
-  const triggerContent = customTrigger ? (
-    customTrigger({
-      displayTriggerDate,
-    })
-  ) : (
-    <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
-      <span>{displayTriggerDate}</span>
-      <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
-    </Button>
+  const triggerContent = useMemo(
+    () =>
+      customTrigger ? (
+        customTrigger({
+          displayTriggerDate,
+        })
+      ) : (
+        <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
+          <span>{displayTriggerDate}</span>
+          <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
+        </Button>
+      ),
+    [customTrigger, displayTriggerDate, id]
   )
 
   return (
@@ -169,20 +207,22 @@ export default function DatePickerSheet({
             <Calendar
               mode="range"
               selected={internalDate as DateRange}
-              onSelect={date => setInternalDate(date)}
+              disabled={disabledDates}
+              onSelect={date => isDateInRange(date) && setInternalDate(date)}
               className="mt-2 p-0"
             />
           ) : (
             <Calendar
               mode="single"
               selected={internalDate as Date}
-              onSelect={date => setInternalDate(date)}
+              disabled={disabledDates}
+              onSelect={date => isDateInRange(date) && setInternalDate(date)}
               className="mt-2 p-0"
             />
           )}
           {/* TimePicker */}
           {showTimePicker && (
-            <div className="flex flex-1 flex-col items-stretch overflow-hidden rounded-lg bg-[#1C1C1C]">
+            <div className="flex flex-1 flex-shrink-0 flex-col items-stretch overflow-hidden rounded-lg bg-[#1C1C1C]">
               <div className="flex border-b-[0.5px] border-white/20 bg-[#1C1C1C] py-1 text-center text-base font-normal text-white/70">
                 <div className="flex-1">From</div>
                 {range && <div className="flex-1">To</div>}
