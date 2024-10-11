@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import {  useEffect, useState } from 'react'
+import Lottie from 'lottie-react'
 
 import { Dialog, DialogContent, DialogTrigger } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'

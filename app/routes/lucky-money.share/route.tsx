@@ -9,7 +9,7 @@ import NormalBag from './normal-bag'
 import LuckBag from './luck-bag'
 import ShareSheet from './share-sheet'
 
-import GetLuckyMoneyDialog from '~/components/get-lucky-money-dialog'
+import GetLuckyMoneyDialog from '~/components/get-lucky-money-dialog/index'
 
 export default function LuckyMoneyShare() {
   const [luckBagType, setLuckBagType] = useState(0)
