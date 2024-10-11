@@ -223,13 +223,12 @@
                               "description": "language code. Allowed Enum",
                               "type": "string",
                               "enum": [
-                                "ar-SA",
-                                "en-US",
-                                "es-ES",
-                                "fr-FR",
-                                "ja-JP",
-                                "ko-KR",
-                                ""
+                                "ar",
+                                "en",
+                                "es",
+                                "fr",
+                                "ja",
+                                "ko"
                               ]
                             },
                             "subTitle": {
@@ -1589,13 +1588,41 @@
                         "type": "string"
                       },
                       "winGold": {
-                        "description": "輸贏金額",
+                        "description": "派彩金額",
                         "type": "string"
                       },
                       "winGoldKokon": {
-                        "description": "輸贏金額(KOKON)",
+                        "description": "派彩金額(KOKON)",
                         "type": "string"
                       }
+                    }
+                  }
+                },
+                "summary": {
+                  "description": "統計",
+                  "type": "object",
+                  "required": [
+                    "totalBetGold",
+                    "totalBetGoldKokon",
+                    "totalWinGold",
+                    "totalWinGoldKokon"
+                  ],
+                  "properties": {
+                    "totalBetGold": {
+                      "description": "總投注金額",
+                      "type": "string"
+                    },
+                    "totalBetGoldKokon": {
+                      "description": "總投注金額(KOKON)",
+                      "type": "string"
+                    },
+                    "totalWinGold": {
+                      "description": "總派彩金額",
+                      "type": "string"
+                    },
+                    "totalWinGoldKokon": {
+                      "description": "總派彩金額(KOKON)",
+                      "type": "string"
                     }
                   }
                 }
@@ -2039,7 +2066,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Minimum: 1, Required)",
+            "description": "頁碼 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -2179,7 +2206,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Required, Minimum: 1)",
+            "description": "頁碼 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -2188,7 +2215,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -2230,7 +2257,7 @@
                         "format": "decimal"
                       },
                       "state": {
-                        "description": "狀態 1:待開始 2:進行中 3:已終止,餘款待確退(by用戶) 4:已完成,餘款待確退(發放完畢) 5:已終止且餘款已退還 6:已完成餘款已退還",
+                        "description": "狀態 1:進行中 2:已終止(用戶提前中斷發放) 3:已完成(發放完畢)",
                         "type": "integer",
                         "format": "int64"
                       }
@@ -2285,7 +2312,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Required, Minimum: 1)",
+            "description": "頁碼 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -2336,7 +2363,7 @@
                         "format": "decimal"
                       },
                       "state": {
-                        "description": "狀態 1:待開始 2:進行中 3:已終止,餘款待確退(by用戶) 4:已完成,餘款待確退(發放完畢) 5:已終止且餘款已退還 6:已完成餘款已退還",
+                        "description": "狀態 1:進行中 2:已終止(用戶提前中斷發放) 3:已完成(發放完畢)",
                         "type": "integer",
                         "format": "int64"
                       }
@@ -2421,13 +2448,12 @@
                               "description": "language code. Allowed Enum",
                               "type": "string",
                               "enum": [
-                                "ar-SA",
-                                "en-US",
-                                "es-ES",
-                                "fr-FR",
-                                "ja-JP",
-                                "ko-KR",
-                                ""
+                                "ar",
+                                "en",
+                                "es",
+                                "fr",
+                                "ja",
+                                "ko"
                               ]
                             },
                             "subTitle": {
@@ -3562,6 +3588,169 @@
                       }
                     }
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/rank/bc": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*BCRankController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "排行榜類型 (Required)",
+            "name": "rankType",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "rank"
+              ],
+              "properties": {
+                "rank": {
+                  "description": "排行榜",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "ranking",
+                      "customerName",
+                      "validBetGold"
+                    ],
+                    "properties": {
+                      "customerName": {
+                        "description": "會員名稱",
+                        "type": "string"
+                      },
+                      "ranking": {
+                        "description": "排名",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1
+                      },
+                      "reward": {
+                        "description": "獎金",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "rewardCurrency": {
+                        "description": "獎金幣別",
+                        "type": "string"
+                      },
+                      "validBetGold": {
+                        "description": "有效下注金額",
+                        "type": "string",
+                        "format": "decimal"
+                      }
+                    }
+                  }
+                },
+                "selfRank": {
+                  "description": "自己排名",
+                  "type": "object",
+                  "required": [
+                    "ranking",
+                    "customerName",
+                    "validBetGold"
+                  ],
+                  "properties": {
+                    "customerName": {
+                      "description": "會員名稱",
+                      "type": "string"
+                    },
+                    "ranking": {
+                      "description": "排名",
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 1
+                    },
+                    "reward": {
+                      "description": "獎金",
+                      "type": "string",
+                      "format": "decimal"
+                    },
+                    "rewardCurrency": {
+                      "description": "獎金幣別",
+                      "type": "string"
+                    },
+                    "validBetGold": {
+                      "description": "有效下注金額",
+                      "type": "string",
+                      "format": "decimal"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/rank/config": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*BCRankController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "bcRankDailyEntrance",
+                "bcRankDailyReward",
+                "bcRankWeeklyEntrance",
+                "bcRankWeeklyReward",
+                "bcRankMonthlyEntrance",
+                "bcRankMonthlyReward",
+                "shareRankEntrance",
+                "shareRankReward"
+              ],
+              "properties": {
+                "bcRankDailyEntrance": {
+                  "description": "BC每日排行榜",
+                  "type": "boolean"
+                },
+                "bcRankDailyReward": {
+                  "description": "BC每日排行榜獎金",
+                  "type": "boolean"
+                },
+                "bcRankMonthlyEntrance": {
+                  "description": "BC每月排行榜",
+                  "type": "boolean"
+                },
+                "bcRankMonthlyReward": {
+                  "description": "BC每月排行榜獎金",
+                  "type": "boolean"
+                },
+                "bcRankWeeklyEntrance": {
+                  "description": "BC每周排行榜",
+                  "type": "boolean"
+                },
+                "bcRankWeeklyReward": {
+                  "description": "BC每周排行榜獎金",
+                  "type": "boolean"
+                },
+                "shareRankEntrance": {
+                  "description": "分享排行榜",
+                  "type": "boolean"
+                },
+                "shareRankReward": {
+                  "description": "分享排行榜獎金",
+                  "type": "boolean"
                 }
               }
             }
@@ -4779,7 +4968,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Required, Minimum: 1)",
+            "description": "分頁頁數 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5125,7 +5314,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -5662,6 +5851,99 @@
     }
   },
   "definitions": {
+    "BCRankInfoRequest": {
+      "type": "object",
+      "required": [
+        "RankType"
+      ],
+      "properties": {
+        "RankType": {
+          "description": "排行榜類型",
+          "type": "string"
+        }
+      }
+    },
+    "BCRankInfoResponse": {
+      "type": "object",
+      "required": [
+        "rank"
+      ],
+      "properties": {
+        "rank": {
+          "description": "排行榜",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ranking",
+              "customerName",
+              "validBetGold"
+            ],
+            "properties": {
+              "customerName": {
+                "description": "會員名稱",
+                "type": "string"
+              },
+              "ranking": {
+                "description": "排名",
+                "type": "integer",
+                "format": "int64",
+                "minimum": 1
+              },
+              "reward": {
+                "description": "獎金",
+                "type": "string",
+                "format": "decimal"
+              },
+              "rewardCurrency": {
+                "description": "獎金幣別",
+                "type": "string"
+              },
+              "validBetGold": {
+                "description": "有效下注金額",
+                "type": "string",
+                "format": "decimal"
+              }
+            }
+          }
+        },
+        "selfRank": {
+          "description": "自己排名",
+          "type": "object",
+          "required": [
+            "ranking",
+            "customerName",
+            "validBetGold"
+          ],
+          "properties": {
+            "customerName": {
+              "description": "會員名稱",
+              "type": "string"
+            },
+            "ranking": {
+              "description": "排名",
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            },
+            "reward": {
+              "description": "獎金",
+              "type": "string",
+              "format": "decimal"
+            },
+            "rewardCurrency": {
+              "description": "獎金幣別",
+              "type": "string"
+            },
+            "validBetGold": {
+              "description": "有效下注金額",
+              "type": "string",
+              "format": "decimal"
+            }
+          }
+        }
+      }
+    },
     "BindEmailRequest": {
       "type": "object",
       "required": [
@@ -6378,16 +6660,6 @@
         }
       }
     },
-    "GetMaintenanceRequest": {
-      "type": "object",
-      "properties": {
-        "ProductId": {
-          "description": "產品ID",
-          "type": "integer",
-          "format": "uint64"
-        }
-      }
-    },
     "GetMaintenanceResponse": {
       "type": "object",
       "properties": {
@@ -6859,13 +7131,12 @@
                       "description": "language code. Allowed Enum",
                       "type": "string",
                       "enum": [
-                        "ar-SA",
-                        "en-US",
-                        "es-ES",
-                        "fr-FR",
-                        "ja-JP",
-                        "ko-KR",
-                        ""
+                        "ar",
+                        "en",
+                        "es",
+                        "fr",
+                        "ja",
+                        "ko"
                       ]
                     },
                     "subTitle": {
@@ -7043,13 +7314,41 @@
                 "type": "string"
               },
               "winGold": {
-                "description": "輸贏金額",
+                "description": "派彩金額",
                 "type": "string"
               },
               "winGoldKokon": {
-                "description": "輸贏金額(KOKON)",
+                "description": "派彩金額(KOKON)",
                 "type": "string"
               }
+            }
+          }
+        },
+        "summary": {
+          "description": "統計",
+          "type": "object",
+          "required": [
+            "totalBetGold",
+            "totalBetGoldKokon",
+            "totalWinGold",
+            "totalWinGoldKokon"
+          ],
+          "properties": {
+            "totalBetGold": {
+              "description": "總投注金額",
+              "type": "string"
+            },
+            "totalBetGoldKokon": {
+              "description": "總投注金額(KOKON)",
+              "type": "string"
+            },
+            "totalWinGold": {
+              "description": "總派彩金額",
+              "type": "string"
+            },
+            "totalWinGoldKokon": {
+              "description": "總派彩金額(KOKON)",
+              "type": "string"
             }
           }
         }
@@ -7334,7 +7633,7 @@
                 "format": "decimal"
               },
               "state": {
-                "description": "狀態 1:待開始 2:進行中 3:已終止,餘款待確退(by用戶) 4:已完成,餘款待確退(發放完畢) 5:已終止且餘款已退還 6:已完成餘款已退還",
+                "description": "狀態 1:進行中 2:已終止(用戶提前中斷發放) 3:已完成(發放完畢)",
                 "type": "integer",
                 "format": "int64"
               }
@@ -7378,6 +7677,53 @@
       "type": "object",
       "properties": {
         "succeed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "RankConfigResponse": {
+      "type": "object",
+      "required": [
+        "bcRankDailyEntrance",
+        "bcRankDailyReward",
+        "bcRankWeeklyEntrance",
+        "bcRankWeeklyReward",
+        "bcRankMonthlyEntrance",
+        "bcRankMonthlyReward",
+        "shareRankEntrance",
+        "shareRankReward"
+      ],
+      "properties": {
+        "bcRankDailyEntrance": {
+          "description": "BC每日排行榜",
+          "type": "boolean"
+        },
+        "bcRankDailyReward": {
+          "description": "BC每日排行榜獎金",
+          "type": "boolean"
+        },
+        "bcRankMonthlyEntrance": {
+          "description": "BC每月排行榜",
+          "type": "boolean"
+        },
+        "bcRankMonthlyReward": {
+          "description": "BC每月排行榜獎金",
+          "type": "boolean"
+        },
+        "bcRankWeeklyEntrance": {
+          "description": "BC每周排行榜",
+          "type": "boolean"
+        },
+        "bcRankWeeklyReward": {
+          "description": "BC每周排行榜獎金",
+          "type": "boolean"
+        },
+        "shareRankEntrance": {
+          "description": "分享排行榜",
+          "type": "boolean"
+        },
+        "shareRankReward": {
+          "description": "分享排行榜獎金",
           "type": "boolean"
         }
       }

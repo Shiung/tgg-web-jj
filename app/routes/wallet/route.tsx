@@ -86,6 +86,7 @@ export default function Wallet() {
                 className="text-xl font-ultra leading-6 text-primary"
                 value={data?.data.totalBalanceInUsdt}
                 crypto="USDT"
+                customMaxDec={2}
               />
               <Button
                 className={`h-4 w-4 transform bg-white/50 opacity-100 transition-transform ${
@@ -155,15 +156,16 @@ export default function Wallet() {
                         <p className="text-xs">{wallet.currency}</p>
                         <Amount
                           className="text-[10px] font-normal leading-3 text-white/70"
-                          value={parseAmount(wallet.balanceUsdt)}
-                          crypto="USDT"
+                          value={parseAmount(wallet.balance)}
+                          crypto={wallet.currency}
                         />
                       </div>
                     </div>
                     <Amount
                       className="text-right text-sm"
-                      value={parseAmount(wallet.balance)}
-                      crypto={wallet.currency}
+                      value={parseAmount(wallet.balanceUsdt)}
+                      crypto="USDT"
+                      customMaxDec={2}
                     />
                   </div>
                 ))

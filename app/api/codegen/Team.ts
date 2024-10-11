@@ -45,7 +45,7 @@ export class Team<SecurityDataType = unknown> {
        */
       endTime: string;
       /**
-       * 分頁頁數 (Required, Minimum: 1)
+       * 分頁頁數 (Minimum: 1, Required)
        * @format int64
        * @min 1
        */

@@ -9,6 +9,60 @@
  * ---------------------------------------------------------------
  */
 
+export interface BCRankInfoRequest {
+  /** 排行榜類型 */
+  RankType: string;
+}
+
+export interface BCRankInfoResponse {
+  /** 排行榜 */
+  rank: {
+    /** 會員名稱 */
+    customerName: string;
+    /**
+     * 排名
+     * @format int64
+     * @min 1
+     */
+    ranking: number;
+    /**
+     * 獎金
+     * @format decimal
+     */
+    reward?: string;
+    /** 獎金幣別 */
+    rewardCurrency?: string;
+    /**
+     * 有效下注金額
+     * @format decimal
+     */
+    validBetGold: string;
+  }[];
+  /** 自己排名 */
+  selfRank?: {
+    /** 會員名稱 */
+    customerName: string;
+    /**
+     * 排名
+     * @format int64
+     * @min 1
+     */
+    ranking: number;
+    /**
+     * 獎金
+     * @format decimal
+     */
+    reward?: string;
+    /** 獎金幣別 */
+    rewardCurrency?: string;
+    /**
+     * 有效下注金額
+     * @format decimal
+     */
+    validBetGold: string;
+  };
+}
+
 export interface BindEmailRequest {
   /** 驗證碼 */
   code: string;
@@ -414,14 +468,6 @@ export interface GetLogoResponse {
   image?: string;
 }
 
-export interface GetMaintenanceRequest {
-  /**
-   * 產品ID
-   * @format uint64
-   */
-  ProductId?: number;
-}
-
 export interface GetMaintenanceResponse {
   /**
    * 預約維護開始時間
@@ -688,7 +734,7 @@ export interface HomeCarouselListResponse {
     image?: string;
     language?: {
       /** language code. Allowed Enum */
-      code: "ar-SA" | "en-US" | "es-ES" | "fr-FR" | "ja-JP" | "ko-KR" | "";
+      code: "ar" | "en" | "es" | "fr" | "ja" | "ko";
       /**
        * @minLength 1
        * @maxLength 66
@@ -794,11 +840,22 @@ export interface ListGameTransactionResponse {
     subGameId: number;
     /** 投注單號 */
     transactionId: string;
-    /** 輸贏金額 */
+    /** 派彩金額 */
     winGold: string;
-    /** 輸贏金額(KOKON) */
+    /** 派彩金額(KOKON) */
     winGoldKokon: string;
   } | null)[];
+  /** 統計 */
+  summary?: {
+    /** 總投注金額 */
+    totalBetGold: string;
+    /** 總投注金額(KOKON) */
+    totalBetGoldKokon: string;
+    /** 總派彩金額 */
+    totalWinGold: string;
+    /** 總派彩金額(KOKON) */
+    totalWinGoldKokon: string;
+  };
 }
 
 export interface LoginRequest {
@@ -987,7 +1044,7 @@ export interface PacketsResponse {
      */
     remainingAmount?: string;
     /**
-     * 狀態 1:待開始 2:進行中 3:已終止,餘款待確退(by用戶) 4:已完成,餘款待確退(發放完畢) 5:已終止且餘款已退還 6:已完成餘款已退還
+     * 狀態 1:進行中 2:已終止(用戶提前中斷發放) 3:已完成(發放完畢)
      * @format int64
      */
     state?: number;
@@ -1017,6 +1074,25 @@ export interface PacketsResponse {
 
 export interface PingResponse {
   succeed?: boolean;
+}
+
+export interface RankConfigResponse {
+  /** BC每日排行榜 */
+  bcRankDailyEntrance: boolean;
+  /** BC每日排行榜獎金 */
+  bcRankDailyReward: boolean;
+  /** BC每月排行榜 */
+  bcRankMonthlyEntrance: boolean;
+  /** BC每月排行榜獎金 */
+  bcRankMonthlyReward: boolean;
+  /** BC每周排行榜 */
+  bcRankWeeklyEntrance: boolean;
+  /** BC每周排行榜獎金 */
+  bcRankWeeklyReward: boolean;
+  /** 分享排行榜 */
+  shareRankEntrance: boolean;
+  /** 分享排行榜獎金 */
+  shareRankReward: boolean;
 }
 
 export interface SettingResponse {

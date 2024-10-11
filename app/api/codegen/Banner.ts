@@ -36,7 +36,7 @@ export class Banner<SecurityDataType = unknown> {
           image?: string;
           language?: {
             /** language code. Allowed Enum */
-            code: "ar-SA" | "en-US" | "es-ES" | "fr-FR" | "ja-JP" | "ko-KR" | "";
+            code: "ar" | "en" | "es" | "fr" | "ja" | "ko";
             /**
              * @minLength 1
              * @maxLength 66

@@ -28,13 +28,13 @@ export class Packets<SecurityDataType = unknown> {
   packetsList = (
     query: {
       /**
-       * 頁碼 (Required, Minimum: 1)
+       * 頁碼 (Minimum: 1, Required)
        * @format int64
        * @min 1
        */
       page: number;
       /**
-       * 分頁筆數 (Minimum: 20, Required)
+       * 分頁筆數 (Required, Minimum: 20)
        * @format int64
        * @min 20
        */
@@ -64,7 +64,7 @@ export class Packets<SecurityDataType = unknown> {
            */
           remainingAmount?: string;
           /**
-           * 狀態 1:待開始 2:進行中 3:已終止,餘款待確退(by用戶) 4:已完成,餘款待確退(發放完畢) 5:已終止且餘款已退還 6:已完成餘款已退還
+           * 狀態 1:進行中 2:已終止(用戶提前中斷發放) 3:已完成(發放完畢)
            * @format int64
            */
           state?: number;
@@ -108,7 +108,7 @@ export class Packets<SecurityDataType = unknown> {
   packetsArchivedList = (
     query: {
       /**
-       * 頁碼 (Required, Minimum: 1)
+       * 頁碼 (Minimum: 1, Required)
        * @format int64
        * @min 1
        */
@@ -144,7 +144,7 @@ export class Packets<SecurityDataType = unknown> {
            */
           remainingAmount?: string;
           /**
-           * 狀態 1:待開始 2:進行中 3:已終止,餘款待確退(by用戶) 4:已完成,餘款待確退(發放完畢) 5:已終止且餘款已退還 6:已完成餘款已退還
+           * 狀態 1:進行中 2:已終止(用戶提前中斷發放) 3:已完成(發放完畢)
            * @format int64
            */
           state?: number;

@@ -16,6 +16,7 @@ type UserWalletItem = UserWallet & {
 }
 
 const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
+  const [open, setOpen] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const { data, isLoading, isFetching, refetch } = useGetHeaderWallet()
   const wallets = (data?.data.wallets || []).map<UserWalletItem>(wallet => ({
@@ -43,7 +44,7 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
   }
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger>
         {isLoading ? (
           <Skeleton className="mr-1 h-8 w-24 rounded-full" />
@@ -76,6 +77,7 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
             className="text-xl font-ultra text-primary"
             value={data?.data.totalBalanceInUsdt}
             crypto="USDT"
+            customMaxDec={2}
           />
         </div>
         <div className="mt-3 space-y-2">
@@ -90,20 +92,27 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
                   <p className="text-xs">{wallet.currency}</p>
                   <Amount
                     className="text-[10px] font-normal leading-3 text-white/70"
-                    value={parseAmount(wallet.balanceUsdt)}
-                    crypto="USDT"
+                    value={parseAmount(wallet.balance)}
+                    crypto={wallet.currency}
                   />
                 </div>
               </div>
               <Amount
                 className="text-right text-sm"
-                value={parseAmount(wallet.balance)}
-                crypto={wallet.currency}
+                value={parseAmount(wallet.balanceUsdt)}
+                crypto="USDT"
+                customMaxDec={2}
               />
             </div>
           ))}
         </div>
-        <ProtectedLink to="/wallet/deposit" prefetch="viewport">
+        <ProtectedLink
+          to="/wallet/deposit"
+          prefetch="viewport"
+          onClick={() => {
+            setOpen(false)
+          }}
+        >
           <Button className="mt-6 w-full" catEars>
             Deposit
           </Button>

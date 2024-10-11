@@ -175,11 +175,22 @@ export class Game<SecurityDataType = unknown> {
           subGameId: number;
           /** 投注單號 */
           transactionId: string;
-          /** 輸贏金額 */
+          /** 派彩金額 */
           winGold: string;
-          /** 輸贏金額(KOKON) */
+          /** 派彩金額(KOKON) */
           winGoldKokon: string;
         } | null)[];
+        /** 統計 */
+        summary?: {
+          /** 總投注金額 */
+          totalBetGold: string;
+          /** 總投注金額(KOKON) */
+          totalBetGoldKokon: string;
+          /** 總派彩金額 */
+          totalWinGold: string;
+          /** 總派彩金額(KOKON) */
+          totalWinGoldKokon: string;
+        };
       },
       any
     >({
