@@ -2075,7 +2075,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -2206,7 +2206,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Minimum: 1, Required)",
+            "description": "頁碼 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -2312,7 +2312,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Minimum: 1, Required)",
+            "description": "頁碼 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -3645,7 +3645,7 @@
                         "type": "string",
                         "format": "decimal"
                       },
-                      "rewardCurrency": {
+                      "rewardType": {
                         "description": "獎金幣別",
                         "type": "string"
                       },
@@ -3681,7 +3681,7 @@
                       "type": "string",
                       "format": "decimal"
                     },
-                    "rewardCurrency": {
+                    "rewardType": {
                       "description": "獎金幣別",
                       "type": "string"
                     },
@@ -3751,6 +3751,100 @@
                 "shareRankReward": {
                   "description": "分享排行榜獎金",
                   "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/rank/share": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*ShareRankController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "rank"
+              ],
+              "properties": {
+                "rank": {
+                  "description": "排行榜",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "ranking",
+                      "customerName",
+                      "validBetGold"
+                    ],
+                    "properties": {
+                      "customerName": {
+                        "description": "會員名稱",
+                        "type": "string"
+                      },
+                      "ranking": {
+                        "description": "排名",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1
+                      },
+                      "reward": {
+                        "description": "獎金",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "rewardType": {
+                        "description": "獎金幣別",
+                        "type": "string"
+                      },
+                      "validBetGold": {
+                        "description": "有效下注金額",
+                        "type": "string",
+                        "format": "decimal"
+                      }
+                    }
+                  }
+                },
+                "selfRank": {
+                  "description": "自己排名",
+                  "type": "object",
+                  "required": [
+                    "ranking",
+                    "customerName",
+                    "validBetGold"
+                  ],
+                  "properties": {
+                    "customerName": {
+                      "description": "會員名稱",
+                      "type": "string"
+                    },
+                    "ranking": {
+                      "description": "排名",
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 1
+                    },
+                    "reward": {
+                      "description": "獎金",
+                      "type": "string",
+                      "format": "decimal"
+                    },
+                    "rewardType": {
+                      "description": "獎金幣別",
+                      "type": "string"
+                    },
+                    "validBetGold": {
+                      "description": "有效下注金額",
+                      "type": "string",
+                      "format": "decimal"
+                    }
+                  }
                 }
               }
             }
@@ -5305,7 +5399,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Required, Minimum: 1)",
+            "description": "頁碼 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5895,7 +5989,7 @@
                 "type": "string",
                 "format": "decimal"
               },
-              "rewardCurrency": {
+              "rewardType": {
                 "description": "獎金幣別",
                 "type": "string"
               },
@@ -5931,7 +6025,7 @@
               "type": "string",
               "format": "decimal"
             },
-            "rewardCurrency": {
+            "rewardType": {
               "description": "獎金幣別",
               "type": "string"
             },

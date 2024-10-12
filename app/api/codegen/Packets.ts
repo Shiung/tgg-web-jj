@@ -28,7 +28,7 @@ export class Packets<SecurityDataType = unknown> {
   packetsList = (
     query: {
       /**
-       * 頁碼 (Minimum: 1, Required)
+       * 頁碼 (Required, Minimum: 1)
        * @format int64
        * @min 1
        */
@@ -108,7 +108,7 @@ export class Packets<SecurityDataType = unknown> {
   packetsArchivedList = (
     query: {
       /**
-       * 頁碼 (Minimum: 1, Required)
+       * 頁碼 (Required, Minimum: 1)
        * @format int64
        * @min 1
        */

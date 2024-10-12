@@ -31,7 +31,7 @@ export interface BCRankInfoResponse {
      */
     reward?: string;
     /** 獎金幣別 */
-    rewardCurrency?: string;
+    rewardType?: string;
     /**
      * 有效下注金額
      * @format decimal
@@ -54,7 +54,7 @@ export interface BCRankInfoResponse {
      */
     reward?: string;
     /** 獎金幣別 */
-    rewardCurrency?: string;
+    rewardType?: string;
     /**
      * 有效下注金額
      * @format decimal

@@ -50,7 +50,7 @@ export class Rank<SecurityDataType = unknown> {
            */
           reward?: string;
           /** 獎金幣別 */
-          rewardCurrency?: string;
+          rewardType?: string;
           /**
            * 有效下注金額
            * @format decimal
@@ -73,7 +73,7 @@ export class Rank<SecurityDataType = unknown> {
            */
           reward?: string;
           /** 獎金幣別 */
-          rewardCurrency?: string;
+          rewardType?: string;
           /**
            * 有效下注金額
            * @format decimal
@@ -118,6 +118,69 @@ export class Rank<SecurityDataType = unknown> {
       any
     >({
       path: `/ajax/rank/config`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*ShareRankController)
+   * @name RankShareList
+   * @request GET:/ajax/rank/share
+   */
+  rankShareList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /** 排行榜 */
+        rank: {
+          /** 會員名稱 */
+          customerName: string;
+          /**
+           * 排名
+           * @format int64
+           * @min 1
+           */
+          ranking: number;
+          /**
+           * 獎金
+           * @format decimal
+           */
+          reward?: string;
+          /** 獎金幣別 */
+          rewardType?: string;
+          /**
+           * 有效下注金額
+           * @format decimal
+           */
+          validBetGold: string;
+        }[];
+        /** 自己排名 */
+        selfRank?: {
+          /** 會員名稱 */
+          customerName: string;
+          /**
+           * 排名
+           * @format int64
+           * @min 1
+           */
+          ranking: number;
+          /**
+           * 獎金
+           * @format decimal
+           */
+          reward?: string;
+          /** 獎金幣別 */
+          rewardType?: string;
+          /**
+           * 有效下注金額
+           * @format decimal
+           */
+          validBetGold: string;
+        };
+      },
+      any
+    >({
+      path: `/ajax/rank/share`,
       method: "GET",
       ...params,
     });
