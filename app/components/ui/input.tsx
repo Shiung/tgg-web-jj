@@ -11,7 +11,7 @@ import { Label } from './label'
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   clearable?: boolean
   error?: string // 表單錯誤訊息
-  label?: string // 輸入框的標籤
+  label?: React.ReactNode // 輸入框的標籤
   id?: string // 用於與 label 關聯的 id
   hint?: string
   fieldSuffix?: React.ReactNode
@@ -49,8 +49,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     }, [fieldSuffix])
 
     return (
-      <div className="space-y-1">
-        {label && <Label htmlFor={id}>{label}</Label>}
+      <div className="flex flex-1 flex-col space-y-1">
+        {label && (
+          <Label className="ml-3" htmlFor={id}>
+            {label}
+          </Label>
+        )}
         <div className="relative w-full">
           <input
             type={inputType}

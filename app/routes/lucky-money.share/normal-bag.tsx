@@ -1,95 +1,206 @@
-import { useState } from 'react'
-
+import { motion } from 'framer-motion'
+import { Controller, useFormContext } from 'react-hook-form'
+import { NumericFormat } from 'react-number-format'
+import { Crypto, cryptoRules } from '~/consts/crypto'
 import AddIcon from '~/icons/add.svg?react'
 import MinusIcon from '~/icons/minus.svg?react'
 import { KokonIcon } from '~/components/color-icons'
 import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+import Amount from '~/components/amount'
+import WarningIcon from '~/icons/warning.svg?react'
 
-const NormalBag = () => {
-  const [amountEachBag, setAmountEachBag] = useState(10)
-  const [quantity, setQuantity] = useState(0)
+import type { FormData } from './route'
+import Message from './message'
+
+const NormalBag = ({ minValue = 0 }: { minValue?: number }) => {
+  const {
+    register,
+    control,
+    getValues,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useFormContext<FormData>()
+  const distributedEachBagAmount = watch('distributedEachBagAmount')
+  const quantity = watch('quantity')
+  const errorMessage = watch('errorMessage')
 
   return (
-    <div className="mt-3 rounded-lg bg-gradient-to-b from-[#FDCB04] to-[#FF4D00] p-2">
-      <div className="rounded-lg bg-[#1C1C1C] p-3">
-        <div className="mb-1 px-3 pb-1 text-xs text-[#FFFFFFB2]">Amount of each bag</div>
-        <div className="flex items-center justify-between rounded-[100px] bg-[#333333] px-3 py-[10px] text-xs">
-          <input
-            type="number"
-            value={amountEachBag}
-            onChange={e => setAmountEachBag(Number(e.target.value))}
-            className="w-full bg-transparent font-bold outline-none"
-            style={{ maxWidth: 'calc(100% - 50px)' }}
-          />
-          <span className="text-[#FFFFFF80]">KOKON</span>
-        </div>
+    <motion.div
+      layout
+      className="mt-3 flex flex-col items-stretch space-y-2 rounded-lg bg-gradient-to-b from-[#FDCB04] to-[#FF4D00] p-2"
+    >
+      {/* Amount of each bag */}
+      <div className="space-y-3 rounded-lg bg-[#1C1C1C] p-3">
+        <Controller
+          name="distributedEachBagAmount"
+          control={control}
+          rules={{
+            required: true,
+            validate: value => {
+              if (value < minValue) {
+                return `Amount of each bag shouldn’t be under ${minValue}`
+              }
+              return true
+            },
+          }}
+          render={({ field }) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { ref, onChange, ...restField } = field
+            return (
+              <NumericFormat
+                {...restField}
+                getInputRef={ref}
+                customInput={Input}
+                allowNegative={false}
+                decimalScale={cryptoRules.KOKON.maxDec}
+                isAllowed={({ floatValue }) => {
+                  if (floatValue === undefined || floatValue === null) return true
+                  // 整數部分位數限制
+                  const maxIntegerLength = cryptoRules.KOKON.maxInt
+                  const integerPart = String(floatValue).split('.')[0]
 
-        <div className="mt-3 flex space-x-2">
-          {[10, 100, 500, 1000].map(el => (
+                  return integerPart.length <= maxIntegerLength
+                }}
+                thousandSeparator
+                type="text"
+                inputMode="decimal"
+                pattern="[0-9]*"
+                id="distributedEachAmount"
+                label="Amount of each bag"
+                placeholder="Please enter"
+                onValueChange={({ floatValue }) => onChange(floatValue)}
+                className="h-9"
+                fieldSuffix={Crypto.KOKON}
+                error={errors.distributedEachBagAmount?.message}
+                clearable
+                onClear={() => setValue('distributedEachBagAmount', 0, { shouldValidate: true })}
+              />
+            )
+          }}
+        />
+        <div className="flex space-x-2">
+          {['10', '100', '500', '1000'].map(amount => (
             <Button
-              onClick={() => setAmountEachBag(el)}
+              key={amount}
+              type="button"
               variant="outlineSoft"
-              key={el}
-              className="flex-1"
+              className="h-7 flex-1"
+              onClick={() =>
+                setValue('distributedEachBagAmount', +amount, { shouldValidate: true })
+              }
             >
-              {el}
+              <Amount value={amount} crypto={Crypto.KOKON} />
             </Button>
           ))}
         </div>
       </div>
-      <div className="mt-2">
-        <div className="rounded-lg bg-[#1C1C1C] p-3">
-          <div className="mb-1 px-3 pb-1 text-xs text-[#FFFFFFB2]">Quantity</div>
-          <div className="flex items-center space-x-2">
-            <div className="flex flex-1 items-center justify-between rounded-[100px] bg-[#333333] px-3 py-[10px] text-xs">
-              <input
-                type="number"
-                value={quantity}
-                onChange={e => setQuantity(Number(e.target.value))}
-                className="w-full bg-transparent font-bold outline-none"
-                style={{ maxWidth: 'calc(100% - 50px)' }}
+
+      {/* Quantity */}
+      <div className="flex items-end space-x-1 rounded-lg bg-[#1C1C1C] p-3">
+        <Controller
+          name="quantity"
+          control={control}
+          rules={{
+            required: true,
+          }}
+          render={({ field }) => {
+            const { ref, onChange, ...restField } = field
+            return (
+              <NumericFormat
+                {...restField}
+                getInputRef={ref}
+                customInput={Input}
+                allowNegative={false}
+                type="text"
+                inputMode="decimal"
+                pattern="[0-9]*"
+                id="quantity"
+                label="Quantity"
+                onValueChange={({ floatValue }) => {
+                  if (floatValue === 0) {
+                    onChange(1)
+                    return
+                  }
+                  onChange(floatValue)
+                }}
+                className="h-9 flex-1"
               />
-              <span className="text-[#FFFFFF80]">KOKON</span>
-            </div>
-            <div className="flex h-9 min-h-9 w-9 min-w-9 items-center justify-center rounded-[100px] bg-[#333333]">
-              <AddIcon
-                onClick={() => setQuantity(Number(quantity) + 1)}
-                className="h-6 w-6 cursor-pointer text-[#FFFFFF80] active:text-[#FFFFFF]"
-              />
-            </div>
-            <div className="flex h-9 min-h-9 w-9 min-w-9 items-center justify-center rounded-[100px] bg-[#333333]">
-              <MinusIcon
-                onClick={() => setQuantity(Number(quantity) - 1)}
-                className="h-6 w-6 cursor-pointer text-[#FFFFFF80] active:text-[#FFFFFF]"
-              />
-            </div>
+            )
+          }}
+        />
+        <Button
+          variant="icon"
+          type="button"
+          className="h-9 flex-shrink-0 border-[0.5px] border-white/20 bg-[#333] p-[6px]"
+        >
+          <AddIcon
+            onClick={() => {
+              const currentQuantity = Number(getValues('quantity')) || 0
+              setValue('quantity', currentQuantity + 1)
+            }}
+            className="h-6 w-6"
+          />
+        </Button>
+        <Button
+          variant="icon"
+          type="button"
+          className="h-9 flex-shrink-0 border-[0.5px] border-white/20 bg-[#333] p-[6px]"
+        >
+          <MinusIcon
+            onClick={() => {
+              const currentQuantity = Number(getValues('quantity')) || 0
+              setValue('quantity', currentQuantity > 0 ? currentQuantity - 1 : 0)
+            }}
+            className="h-6 w-6"
+          />
+        </Button>
+      </div>
+
+      {/* Error */}
+      <Message
+        isVisible={!!errorMessage}
+        className="flex rounded-lg bg-[#1C1C1C] px-3 py-2 opacity-100 transition-opacity duration-300 ease-in-out"
+      >
+        <p className="flex items-center space-x-1 text-xs font-normal text-app-red">
+          <WarningIcon className="mr-1 h-4 w-4" />
+          <span>{errorMessage}</span>
+        </p>
+      </Message>
+
+      {/* Summary */}
+      <div className="flex items-center space-x-2 break-all p-3 text-xs font-normal text-white/70">
+        <div className="flex flex-[1_1_0] flex-col items-center space-y-1">
+          <div className="flex items-center space-x-1">
+            <KokonIcon className="h-5 w-5" />
+            <Amount
+              className="text-sm font-ultra text-white"
+              value={distributedEachBagAmount}
+              crypto={Crypto.KOKON}
+            />
           </div>
+          <span>Each bag</span>
         </div>
-        <div className="mt-2 flex items-center p-3 text-xs text-[#FFFFFF80]">
-          <div className="flex flex-1 flex-col items-center space-y-1">
-            <div className="flex items-center space-x-1">
-              <KokonIcon className="h-5 w-5" />
-              <div className="text-sm font-ultra text-[#FFFFFF]">{amountEachBag}</div>
-            </div>
-            <div className="">Each bag</div>
+        <div className="flex-shrink-0">X</div>
+        <div className="flex flex-[1_1_0] flex-col items-center space-y-1">
+          <span className="text-sm font-ultra text-white">{quantity}</span>
+          <span>Quantity</span>
+        </div>
+        <div className="flex-shrink-0">=</div>
+        <div className="flex flex-[1_1_0] flex-col items-center space-y-1">
+          <div className="flex items-center space-x-1">
+            <KokonIcon className="h-5 w-5" />
+            <Amount
+              className="text-sm font-ultra text-white"
+              value={+distributedEachBagAmount * quantity}
+              crypto={Crypto.KOKON}
+            />
           </div>
-          <div>X</div>
-          <div className="flex flex-1 flex-col items-center space-y-1">
-            <div className="flex items-center space-x-1">
-              <div className="text-sm font-ultra text-[#FFFFFF]">{quantity}</div>
-            </div>
-            <div className="">Quantity</div>
-          </div>
-          <div>=</div>
-          <div className="flex flex-1 flex-col items-center space-y-1">
-            <div className="flex items-center space-x-1">
-              <div className="text-sm font-ultra text-[#FFFFFF]">{amountEachBag * quantity}</div>
-            </div>
-            <div className="">Total Amount</div>
-          </div>
+          <div>Total Amount</div>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
