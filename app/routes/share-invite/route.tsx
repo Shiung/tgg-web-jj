@@ -23,6 +23,11 @@ import ProgressBar from './progress-bar'
 import RuleSheet from './rule-sheet'
 import TeamLevelCarousel from './teamlevel-carousel'
 
+// 配合 useMatches 聲明需要登录才能访问
+export const handle = {
+  requiresAuth: true,
+}
+
 const teamLevelCarouselImages = [
   '/images/share/teamStar-1.png',
   '/images/share/teamStar-2.png',

@@ -17,7 +17,7 @@ export const links = [
   { href: '/', i18n: 'game', SvgComponent: NavGame, needLogin: false, comp: Link },
   { href: '/rank', i18n: 'rank', SvgComponent: NavRank, needLogin: false, comp: Link },
   { href: '/task', i18n: 'task', SvgComponent: NavTask, needLogin: false, comp: Link },
-  { href: '/share-invite', i18n: 'share', SvgComponent: NavShare, needLogin: false, comp: Link },
+  { href: '/share-invite', i18n: 'share', SvgComponent: NavShare, needLogin: true, comp: Link },
   {
     href: '/wallet',
     i18n: 'wallet',
