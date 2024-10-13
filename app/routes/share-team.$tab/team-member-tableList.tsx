@@ -1,6 +1,7 @@
 import React from 'react'
 import { UsdtIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
+import { Crypto } from '~/consts/crypto'
 
 interface TeamMember {
   anchorPoint: number
@@ -55,10 +56,20 @@ const TeamMemberTableList: React.FC<TeamMemberTableListProps> = ({ data }) => {
                   </td>
                   <td className="text-right">{row.lv}</td>
                   <td className="text-right">
-                    <Amount value={row.totalBets} crypto="USDT" />
+                    <Amount
+                      value={row.totalBets}
+                      customMaxInt={7}
+                      customMaxDec={6}
+                      crypto={Crypto.USDT}
+                    />
                   </td>
                   <td className="text-right">
-                    <Amount value={row.totalDeposits} crypto="USDT" />
+                    <Amount
+                      value={row.totalDeposits}
+                      customMaxInt={7}
+                      customMaxDec={6}
+                      crypto={Crypto.USDT}
+                    />
                   </td>
                 </tr>
               ))}

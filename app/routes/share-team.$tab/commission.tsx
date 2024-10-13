@@ -23,6 +23,7 @@ import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import ArrowLineUpIcon from '~/icons/arrow-line-up.svg?react'
 import XIcon from '~/icons/x.svg?react'
 import LoadingIcon from '~/icons/loading.svg?react'
+import { Crypto } from '~/consts/crypto'
 
 import CommissionEmpty from './commission-empty'
 import CommissionTableList from './commission-tableList'
@@ -253,7 +254,12 @@ const Commission: React.FC = () => {
                 </div>
                 <div className="flex items-center space-x-1 text-sm text-white">
                   <UsdtIcon className="h-4 w-4" />
-                  <Amount value={parseAmount(customerTeamInfo?.data?.totalBets)} crypto="USDT" />
+                  <Amount
+                    value={parseAmount(customerTeamInfo?.data?.totalBets)}
+                    customMaxInt={7}
+                    customMaxDec={6}
+                    crypto={Crypto.USDT}
+                  />
                 </div>
               </div>
               <div className="flex flex-1 flex-col items-center space-y-1">
@@ -262,7 +268,7 @@ const Commission: React.FC = () => {
                   <KokonIcon className="h-4 w-4" />
                   <Amount
                     value={parseAmount(customerTeamInfo?.data?.totalCommission)}
-                    crypto="KOKON"
+                    crypto={Crypto.KOKON}
                     useKM
                   />
                 </div>

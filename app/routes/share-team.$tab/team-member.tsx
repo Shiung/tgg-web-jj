@@ -8,6 +8,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { apis } from '~/api'
 import { parseAmount } from '~/lib/amount'
 import useIntersectionObserver from '~/hooks/useIntersectionObserver'
+import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 import { UsdtIcon } from '~/components/color-icons'
 import XIcon from '~/icons/x.svg?react'
 import SortAscIcon from '~/icons/sort-asc.svg?react'
@@ -21,6 +22,7 @@ import CatEarsCard from '~/components/cat-ears-card'
 import Amount from '~/components/amount'
 import { Skeleton } from '~/components/ui/skeleton'
 import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
+import { Crypto } from '~/consts/crypto'
 
 import TeamMemberEmpty from './team-member-empty'
 import TeamMemberTableList from './team-member-tableList'
@@ -96,6 +98,7 @@ const sortOptions = [
 ]
 
 const TeamMember: React.FC = () => {
+  const maxWidth = useAppMaxWidth()
   // 取得用戶的團隊資訊
   const { data: customerTeamInfo, isLoading: customerTeamInfoLoading } = useQuery({
     queryKey: ['customerTeamInfoList'],
@@ -262,14 +265,24 @@ const TeamMember: React.FC = () => {
               </div>
               <div className="flex items-center space-x-1 text-sm text-white">
                 <UsdtIcon className="h-4 w-4" />
-                <Amount value={parseAmount(customerTeamInfo?.data?.totalBets)} crypto="USDT" />
+                <Amount
+                  value={parseAmount(customerTeamInfo?.data?.totalBets)}
+                  customMaxInt={7}
+                  customMaxDec={2}
+                  crypto={Crypto.USDT}
+                />
               </div>
             </div>
             <div className="flex min-h-[60px] flex-1 flex-col items-center justify-between">
               <div className="flex flex-1 items-center text-[#999999]">Total Deposit</div>
               <div className="flex items-center space-x-1 text-sm text-white">
                 <UsdtIcon className="h-4 w-4" />
-                <Amount value={parseAmount(customerTeamInfo?.data?.totalDeposit)} crypto="USDT" />
+                <Amount
+                  value={parseAmount(customerTeamInfo?.data?.totalDeposit)}
+                  customMaxInt={7}
+                  customMaxDec={2}
+                  crypto={Crypto.USDT}
+                />
               </div>
             </div>
           </div>
@@ -428,7 +441,10 @@ const TeamMember: React.FC = () => {
         </button>
       )}
       {latestSummary && (
-        <div className="fixed bottom-[88px] left-0 flex h-14 w-full items-center rounded-b-xl bg-black">
+        <div
+          className="fixed inset-x-0 bottom-[88px] mx-auto flex h-14 w-full items-center rounded-b-xl border-t border-white/20 bg-black"
+          style={{ maxWidth }}
+        >
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
             <div className="text-xs text-[#FFFFFFB2]">Member</div>
             <div className="text-xs font-ultra">{latestSummary.teamSize}</div>
@@ -440,7 +456,9 @@ const TeamMember: React.FC = () => {
               <Amount
                 className="text-xs font-ultra"
                 value={parseAmount(latestSummary.totalBets)}
-                crypto="USDT"
+                customMaxInt={7}
+                customMaxDec={6}
+                crypto={Crypto.USDT}
               />
             </div>
           </div>
@@ -451,7 +469,9 @@ const TeamMember: React.FC = () => {
               <Amount
                 className="text-xs font-ultra"
                 value={parseAmount(latestSummary.totalDeposit)}
-                crypto="USDT"
+                customMaxInt={7}
+                customMaxDec={6}
+                crypto={Crypto.USDT}
               />
             </div>
           </div>
