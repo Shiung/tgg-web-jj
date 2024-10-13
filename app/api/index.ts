@@ -6,6 +6,7 @@ import { Games } from './codegen/Games'
 import { Game } from './codegen/Game'
 import { Header } from './codegen/Header'
 import { PacketSetting } from './codegen/PacketSetting'
+import { PacketDraw } from './codegen/PacketDraw'
 import { Packets } from './codegen/Packets'
 import { Packet } from './codegen/Packet'
 import { Public } from './codegen/Public'
@@ -23,6 +24,7 @@ export const apis = {
   game: new Game(apiClient),
   header: new Header(apiClient),
   packetSetting: new PacketSetting(apiClient),
+  packetDraw: new PacketDraw(apiClient),
   packets: new Packets(apiClient),
   packet: new Packet(apiClient),
   public: new Public(apiClient),

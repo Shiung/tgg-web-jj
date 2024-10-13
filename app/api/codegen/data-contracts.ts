@@ -210,7 +210,12 @@ export interface CreateRequest {
    */
   distributedAmount?: string;
   /**
-   * 隨機金額上限
+   * 上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0). Allowed Enum
+   * @format int64
+   */
+  limitKind?: 0 | 1;
+  /**
+   * 固定金額
    * @format decimal
    */
   maxValue?: string;
@@ -219,6 +224,11 @@ export interface CreateRequest {
    * @format decimal
    */
   minValue?: string;
+  /**
+   * 數量
+   * @format int64
+   */
+  quantity?: number;
   /**
    * 隨機奬勵預算
    * @format decimal
@@ -328,6 +338,18 @@ export interface DepositSettingGetResponse {
     /** 開關 */
     switch?: boolean | null;
   }[];
+}
+
+export interface DrawRequest {
+  /** 紅包推介碼 */
+  referralCode?: string;
+}
+
+export interface DrawResponse {
+  /** 中獎金額 */
+  amount?: string;
+  /** 是否中獎 */
+  isWinned?: boolean;
 }
 
 export interface EnterGameRequest {
@@ -523,6 +545,18 @@ export interface GetRateResponse {
   withdrawRate: string;
   /** 賣出快捷設定 */
   withdrawSpeedAmount: number[];
+}
+
+export type GetSettingRequest = object;
+
+export interface GetSettingResponse {
+  /**
+   * 金額下限
+   * @format decimal
+   */
+  minValue?: string;
+  /** 快捷金額 */
+  shortcuts?: string[];
 }
 
 export type GetTreasuresRequest = object;
@@ -994,18 +1028,6 @@ export interface PacketResponse {
    * @format int64
    */
   remainingQuantity?: number;
-}
-
-export type PacketSettingRequest = object;
-
-export interface PacketSettingResponse {
-  /**
-   * 金額下限
-   * @format decimal
-   */
-  minValue?: string;
-  /** 快捷金額 */
-  shortcuts?: string[];
 }
 
 export interface PacketsRequest {

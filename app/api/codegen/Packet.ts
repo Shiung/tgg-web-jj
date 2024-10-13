@@ -35,7 +35,12 @@ export class Packet<SecurityDataType = unknown> {
        */
       distributedAmount?: string;
       /**
-       * 隨機金額上限
+       * 上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0). Allowed Enum
+       * @format int64
+       */
+      limitKind?: 0 | 1;
+      /**
+       * 固定金額
        * @format decimal
        */
       maxValue?: string;
@@ -44,6 +49,11 @@ export class Packet<SecurityDataType = unknown> {
        * @format decimal
        */
       minValue?: string;
+      /**
+       * 數量
+       * @format int64
+       */
+      quantity?: number;
       /**
        * 隨機奬勵預算
        * @format decimal
@@ -82,7 +92,7 @@ export class Packet<SecurityDataType = unknown> {
        */
       page: number;
       /**
-       * 分頁筆數 (Minimum: 20, Required)
+       * 分頁筆數 (Required, Minimum: 20)
        * @format int64
        * @min 20
        */

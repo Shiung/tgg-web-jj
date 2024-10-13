@@ -1982,8 +1982,17 @@
                   "type": "string",
                   "format": "decimal"
                 },
+                "limitKind": {
+                  "description": "上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0). Allowed Enum",
+                  "type": "integer",
+                  "format": "int64",
+                  "enum": [
+                    "0",
+                    "1"
+                  ]
+                },
                 "maxValue": {
-                  "description": "隨機金額上限",
+                  "description": "固定金額",
                   "type": "string",
                   "format": "decimal"
                 },
@@ -1991,6 +2000,11 @@
                   "description": "隨機金額下限",
                   "type": "string",
                   "format": "decimal"
+                },
+                "quantity": {
+                  "description": "數量",
+                  "type": "integer",
+                  "format": "int64"
                 },
                 "quota": {
                   "description": "隨機奬勵預算",
@@ -2010,6 +2024,48 @@
                 "referralCode": {
                   "description": "紅包推介碼",
                   "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/packet-draw": {
+      "post": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*PacketController)"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "referralCode": {
+                  "description": "紅包推介碼",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "description": "中獎金額",
+                  "type": "string"
+                },
+                "isWinned": {
+                  "description": "是否中獎",
+                  "type": "boolean"
                 }
               }
             }
@@ -2075,7 +2131,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -2206,7 +2262,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Required, Minimum: 1)",
+            "description": "頁碼 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5062,7 +5118,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Minimum: 1, Required)",
+            "description": "分頁頁數 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5071,7 +5127,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -5399,7 +5455,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Minimum: 1, Required)",
+            "description": "頁碼 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5408,7 +5464,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -6287,8 +6343,17 @@
           "type": "string",
           "format": "decimal"
         },
+        "limitKind": {
+          "description": "上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0). Allowed Enum",
+          "type": "integer",
+          "format": "int64",
+          "enum": [
+            "0",
+            "1"
+          ]
+        },
         "maxValue": {
-          "description": "隨機金額上限",
+          "description": "固定金額",
           "type": "string",
           "format": "decimal"
         },
@@ -6296,6 +6361,11 @@
           "description": "隨機金額下限",
           "type": "string",
           "format": "decimal"
+        },
+        "quantity": {
+          "description": "數量",
+          "type": "integer",
+          "format": "int64"
         },
         "quota": {
           "description": "隨機奬勵預算",
@@ -6494,6 +6564,28 @@
               }
             }
           }
+        }
+      }
+    },
+    "DrawRequest": {
+      "type": "object",
+      "properties": {
+        "referralCode": {
+          "description": "紅包推介碼",
+          "type": "string"
+        }
+      }
+    },
+    "DrawResponse": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "description": "中獎金額",
+          "type": "string"
+        },
+        "isWinned": {
+          "description": "是否中獎",
+          "type": "boolean"
         }
       }
     },
@@ -6838,6 +6930,27 @@
           "items": {
             "type": "integer",
             "format": "uint64"
+          }
+        }
+      }
+    },
+    "GetSettingRequest": {
+      "type": "object"
+    },
+    "GetSettingResponse": {
+      "type": "object",
+      "properties": {
+        "minValue": {
+          "description": "金額下限",
+          "type": "string",
+          "format": "decimal"
+        },
+        "shortcuts": {
+          "description": "快捷金額",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "decimal"
           }
         }
       }
@@ -7649,27 +7762,6 @@
           "description": "未發放個數",
           "type": "integer",
           "format": "int64"
-        }
-      }
-    },
-    "PacketSettingRequest": {
-      "type": "object"
-    },
-    "PacketSettingResponse": {
-      "type": "object",
-      "properties": {
-        "minValue": {
-          "description": "金額下限",
-          "type": "string",
-          "format": "decimal"
-        },
-        "shortcuts": {
-          "description": "快捷金額",
-          "type": "array",
-          "items": {
-            "type": "string",
-            "format": "decimal"
-          }
         }
       }
     },
