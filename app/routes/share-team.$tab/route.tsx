@@ -7,10 +7,10 @@ import TeamMember from './team-member'
 
 const ShareTeam: React.FC = () => {
   const params = useParams()
-  const [actvieTab, setActvieTab] = useState('Commission')
+  const [activeTab, setActiveTab] = useState('Commission')
   useEffect(() => {
     if (params?.tab) {
-      setActvieTab(params.tab)
+      setActiveTab(params.tab)
     }
   }, [params])
 
@@ -34,7 +34,7 @@ const ShareTeam: React.FC = () => {
 
       <div className="mt-3 flex flex-1 flex-col">
         {/* Tabs Navigation */}
-        <Tabs defaultValue="Commission" value={actvieTab} className="flex w-full flex-1 flex-col">
+        <Tabs defaultValue="Commission" value={activeTab} className="flex w-full flex-1 flex-col">
           <TabsList variant="cardTab" className="w-full overflow-x-auto">
             <TabsTrigger variant="cardTab" value="Commission" className="flex-1" asChild>
               <Link prefetch="viewport" to="/share-team/Commission">
@@ -47,9 +47,9 @@ const ShareTeam: React.FC = () => {
               </Link>
             </TabsTrigger>
           </TabsList>
-          <TabsContent value={actvieTab} className="mt-0 flex flex-1 bg-black">
-            {actvieTab === 'Commission' && <Commission />}
-            {actvieTab === 'TeamMember' && <TeamMember />}
+          <TabsContent value={activeTab} className="mt-0 flex flex-1 bg-black">
+            {activeTab === 'Commission' && <Commission />}
+            {activeTab === 'TeamMember' && <TeamMember />}
           </TabsContent>
         </Tabs>
       </div>

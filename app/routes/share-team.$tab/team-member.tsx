@@ -1,29 +1,30 @@
 import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
-import { apis } from '~/api'
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
-import { parseAmount } from '~/lib/amount'
 import { Controller, useForm } from 'react-hook-form'
-import useIntersectionObserver from '~/hooks/useIntersectionObserver'
 
 //NOTICE: For test
-import fetchTeamData from './fake-memberData'
+// import fetchTeamData from './fake-memberData'
 
-import CatEarsCard from '~/components/cat-ears-card'
+import { apis } from '~/api'
+import { parseAmount } from '~/lib/amount'
+import useIntersectionObserver from '~/hooks/useIntersectionObserver'
 import { UsdtIcon } from '~/components/color-icons'
 import XIcon from '~/icons/x.svg?react'
 import SortAscIcon from '~/icons/sort-asc.svg?react'
 import SortDescIcon from '~/icons/sort-desc.svg?react'
-import InfoTooltip from '~/components/info-tooltip'
 import SearchIcon from '~/icons/search.svg?react'
 import LoadingIcon from '~/icons/loading.svg?react'
-import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import ArrowLineUpIcon from '~/icons/arrow-line-up.svg?react'
+import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
+import InfoTooltip from '~/components/info-tooltip'
+import CatEarsCard from '~/components/cat-ears-card'
+import Amount from '~/components/amount'
+import { Skeleton } from '~/components/ui/skeleton'
+import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
+
 import TeamMemberEmpty from './team-member-empty'
 import TeamMemberTableList from './team-member-tableList'
-import Amount from '~/components/amount'
 import ShareTeamSkeleton from './share-team-skeleton'
-import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
-import { Skeleton } from '~/components/ui/skeleton'
 
 const levelOptions = [
   { value: '0', label: 'LV: all' },
@@ -340,11 +341,11 @@ const TeamMember: React.FC = () => {
                 title="Game List"
                 customTrigger={({ selectedLabel, placeholder }) => {
                   return (selectedLabel as React.ReactElement)?.props?.children === 'Default' ? (
-                    <div className="mr-1 mt-2 flex items-center justify-between rounded-full bg-[#FFFFFF33] p-[6px]">
+                    <div className="mr-1 mt-2 flex cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] p-[6px]">
                       <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
                     </div>
                   ) : (
-                    <div className="mr-1 mt-2 flex min-w-[120px] flex-1 items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2">
+                    <div className="mr-1 mt-2 flex min-w-[120px] flex-1 cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2">
                       {selectedLabel || placeholder}
                       <button
                         type="button"
@@ -381,7 +382,7 @@ const TeamMember: React.FC = () => {
                 id="game-list-dropdown"
                 title="Game List"
                 customTrigger={({ selectedLabel, placeholder }) => (
-                  <div className="mr-1 mt-2 flex min-w-[120px] flex-1 items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-1000 ease-in-out">
+                  <div className="mr-1 mt-2 flex min-w-[120px] flex-1 cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-1000 ease-in-out">
                     <div>{selectedLabel || placeholder}</div>
                     <ArrowLineDownIcon className="h-4 w-4" />
                   </div>

@@ -3,29 +3,30 @@ import { apis } from '~/api'
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
 import { parseAmount } from '~/lib/amount'
 import { Controller, useForm } from 'react-hook-form'
-import { format } from 'date-fns'
+import { endOfDay, format, formatRFC3339, startOfDay, subDays } from 'date-fns'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import useIntersectionObserver from '~/hooks/useIntersectionObserver'
 
 // NOTICE: For test
-import { getMockCommissionData } from './fake-commisssionData'
+// import { getMockCommissionData } from './fake-commisssionData'
 
+import useIntersectionObserver from '~/hooks/useIntersectionObserver'
 import CatEarsCard from '~/components/cat-ears-card'
 import { UsdtIcon, KokonIcon } from '~/components/color-icons'
 import InfoTooltip from '~/components/info-tooltip'
+import Amount from '~/components/amount'
+import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
+import { Skeleton } from '~/components/ui/skeleton'
+import DatePickerSheet from '~/components/date-picker-sheet/index'
 import SearchIcon from '~/icons/search.svg?react'
 import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import ArrowLineUpIcon from '~/icons/arrow-line-up.svg?react'
 import XIcon from '~/icons/x.svg?react'
 import LoadingIcon from '~/icons/loading.svg?react'
+
 import CommissionEmpty from './commission-empty'
 import CommissionTableList from './commission-tableList'
 import ShareTeamSkeleton from './share-team-skeleton'
-import Amount from '~/components/amount'
-import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
-import DatePickerSheet from '~/components/date-picker-sheet/index'
-import { Skeleton } from '~/components/ui/skeleton'
 
 const PAGE_SIZE = 20
 
@@ -113,8 +114,8 @@ const Commission: React.FC = () => {
     return {
       displayName,
       level: Number(selectedLevel),
-      startTime: from.toISOString(),
-      endTime: to.toISOString(),
+      startTime: formatRFC3339(from),
+      endTime: formatRFC3339(to),
       page: 1,
       pageSize: 20,
     }
@@ -334,7 +335,7 @@ const Commission: React.FC = () => {
                 id="game-list-dropdown"
                 title="Game List"
                 customTrigger={({ selectedLabel, placeholder }) => (
-                  <div className="mr-1 mt-2 flex min-w-[120px] flex-1 items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-1000 ease-in-out">
+                  <div className="mr-1 mt-2 flex min-w-[120px] flex-1 cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-1000 ease-in-out">
                     <div>{selectedLabel || placeholder}</div>
                     <ArrowLineDownIcon className="h-4 w-4" />
                   </div>
@@ -365,7 +366,7 @@ const Commission: React.FC = () => {
                       ? `${format(from, 'MM-dd')} - ${format(to, 'MM-dd')}`
                       : displayTriggerDate || '选择日期'
                   return (
-                    <div className="mt-2 flex min-w-[120px] flex-1 items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-300 ease-in-out">
+                    <div className="mt-2 flex min-w-[120px] flex-1 cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-300 ease-in-out">
                       <div className="truncate text-[#FFFFFFB2]">{displayText}</div>
                       <ArrowLineDownIcon className="h-4 w-4" />
                     </div>
@@ -377,6 +378,10 @@ const Commission: React.FC = () => {
                   }
                 }}
                 range
+                rangeLimits={{
+                  minDate: startOfDay(subDays(new Date(), 30)),
+                  maxDate: endOfDay(new Date()),
+                }}
               />
             )}
           />

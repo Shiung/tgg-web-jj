@@ -33,13 +33,23 @@ const isDateRange = (val?: Date | DateRange): val is DateRange => {
   return !!val && (val as DateRange).from !== undefined
 }
 
+const DEFAULT_START_TIME = '00:00'
+const DEFAULT_END_TIME = '23:59'
+
 const updateTimes = (date: Date | undefined, setTime: (time: string) => void) => {
-  setTime(date ? format(date, 'HH:mm') : '00:00')
+  setTime(date ? format(date, 'HH:mm') : DEFAULT_START_TIME)
 }
 
-const applyTimeToDate = (date: Date | undefined, time: string): Date | undefined => {
+const applyTimeToDate = (
+  date: Date | undefined,
+  time: string = DEFAULT_START_TIME
+): Date | undefined => {
   if (!date) return undefined
   const [hours, minutes] = time.split(':').map(Number)
+  if (isNaN(hours) || isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+    throw new RangeError('Invalid time value')
+  }
+
   return setMinutes(setHours(date, hours), minutes)
 }
 
@@ -56,17 +66,20 @@ export default function DatePickerSheet({
 }: DatePickerSheetProps) {
   const [open, setOpen] = useState(false)
   const [internalDate, setInternalDate] = useState<Date | DateRange | undefined>(value)
-  const [internalTimeFrom, setInternalTimeFrom] = useState('00:00')
-  const [internalTimeTo, setInternalTimeTo] = useState('00:00')
+  const [internalTimeFrom, setInternalTimeFrom] = useState(DEFAULT_START_TIME)
+  const [internalTimeTo, setInternalTimeTo] = useState(DEFAULT_END_TIME)
 
   const handleConfirm = () => {
     if (onChange) {
       if (range && isDateRange(internalDate)) {
-        const updatedFrom = applyTimeToDate(internalDate.from, internalTimeFrom)
-        const updatedTo = applyTimeToDate(internalDate.to, internalTimeTo)
+        const updatedFrom = applyTimeToDate(
+          internalDate.from,
+          internalTimeFrom || DEFAULT_START_TIME
+        )
+        const updatedTo = applyTimeToDate(internalDate.to, internalTimeTo || DEFAULT_END_TIME, true)
         onChange({ from: updatedFrom, to: updatedTo })
       } else if (internalDate instanceof Date) {
-        const updatedDate = applyTimeToDate(internalDate, internalTimeFrom)
+        const updatedDate = applyTimeToDate(internalDate, internalTimeFrom || DEFAULT_START_TIME)
         onChange(updatedDate)
       }
     }
@@ -76,8 +89,8 @@ export default function DatePickerSheet({
   // 清空选择
   const handleClear = () => {
     setInternalDate(undefined)
-    setInternalTimeFrom('00:00')
-    setInternalTimeTo('00:00')
+    setInternalTimeFrom(DEFAULT_START_TIME)
+    setInternalTimeTo(DEFAULT_END_TIME)
   }
 
   const displayDate = useMemo(() => {
