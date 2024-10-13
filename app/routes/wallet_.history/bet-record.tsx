@@ -74,7 +74,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
     setCurrency(currency === Crypto.KOKON ? Crypto.USDT : Crypto.KOKON)
   }
 
-  const { data: gameList, error: gameListError } = useQuery<GetActiveGamesResponse, Error>({
+  const { data: gameListRaw, error: gameListError } = useQuery<GetActiveGamesResponse, Error>({
     queryKey: ['gameList'],
     queryFn: async () => {
       try {
@@ -88,11 +88,9 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
     enabled: currentTab === 'bet',
   })
 
-  useEffect(() => {
-    if (gameListError) {
-      console.error('Error fetching game list:', gameListError)
-    }
-  }, [gameListError])
+  const bcGameOptions = useMemo(() => {
+    return gameListRaw?.list?.filter(game => game.gameType === 1) || [] // 1=BC, 2=休閒
+  }, [gameListRaw?.list])
 
   const fetchPosts = useCallback(
     async ({ pageParam = 1 }) => {
@@ -131,6 +129,27 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
       initialPageParam: 1,
     })
 
+  const records = useMemo(
+    () =>
+      data?.pages.flatMap(page =>
+        page.records.map(record => ({
+          ...record,
+          gameName: gameListRaw?.list?.find(game => game.id === record.subGameId)?.gameName || '',
+        }))
+      ) ?? [],
+    [data?.pages, gameListRaw?.list]
+  )
+
+  const isFetchData = useMemo(() => {
+    return isFetching && !isFetchingNextPage && !data
+  }, [isFetching, isFetchingNextPage, data])
+
+  useEffect(() => {
+    if (gameListError) {
+      console.error('Error fetching game list:', gameListError)
+    }
+  }, [gameListError])
+
   useEffect(() => {
     if (status === 'success') {
       setIsFirstLoading(false)
@@ -142,21 +161,6 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
       errorToast(error.message)
     }
   }, [error])
-
-  const records = useMemo(
-    () =>
-      data?.pages.flatMap(page =>
-        page.records.map(record => ({
-          ...record,
-          gameName: gameList?.list?.find(game => game.id === record.subGameId)?.gameName || '',
-        }))
-      ) ?? [],
-    [data?.pages, gameList?.list]
-  )
-
-  const isFetchData = useMemo(() => {
-    return isFetching && !isFetchingNextPage && !data
-  }, [isFetching, isFetchingNextPage, data])
 
   if (isFirstLoading) {
     return <BetSkeleton />
@@ -202,7 +206,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
                     onConfirm={field.onChange}
                   >
                     <DropdownOption value="0" label="All" />
-                    {gameList?.list?.map(data => (
+                    {bcGameOptions?.map(data => (
                       <DropdownOption
                         key={data.id}
                         value={data.id.toString()}

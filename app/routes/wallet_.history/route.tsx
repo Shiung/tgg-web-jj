@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import useStore from '~/stores/useStore'
 import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
-import TrnasactoionRecord from './transaction-record'
+import TransactionRecord from './transaction-record'
 import BetRecord from './bet-record'
 import { cn } from '~/lib/utils'
 
@@ -57,7 +57,7 @@ export default function History() {
             value="transaction"
             className={cn('mt-0 flex flex-col', currentTab === 'transaction' ? 'flex-1' : 'flex-0')}
           >
-            <TrnasactoionRecord currentTab={currentTab} />
+            <TransactionRecord currentTab={currentTab} />
           </TabsContent>
           <TabsContent
             value="bet"
