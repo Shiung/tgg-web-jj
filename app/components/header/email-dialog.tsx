@@ -61,7 +61,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
 
   const vbRef = useRef<VerifyButtonExpose>(null)
   const { addBindEmailHandler, verifyCodeEmailHandler } = useEmailActions(infoRefetch)
-  const { isEditEmail, stepStatus, isVerifiCurrentHandler } = useEmailStatus({
+  const { isEditEmail, stepStatus, isVerifyCurrentHandler } = useEmailStatus({
     email: storeEmail ?? '',
   })
 
@@ -71,7 +71,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
   function resetDialog() {
     reset() // 重置表單
     vbRef.current?.resetTimer() // 重置倒計時
-    isVerifiCurrentHandler(false)
+    isVerifyCurrentHandler(false)
   }
 
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -104,14 +104,14 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
       codeVal,
       () => {
         vbRef.current?.resetTimer()
-        isVerifiCurrentHandler(true)
+        isVerifyCurrentHandler(true)
         reset()
       },
       () => {
         errorToast(ToastConf.error)
       }
     )
-  }, [reset, isVerifiCurrentHandler, verifyCodeEmailHandler, getValues])
+  }, [reset, isVerifyCurrentHandler, verifyCodeEmailHandler, getValues])
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -150,6 +150,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
                 label={!isEditEmail ? 'Email' : 'Change Email'}
                 placeholder="Please enter"
                 clearable
+                onClear={() => setValue('email', '', { shouldValidate: true })}
                 error={errors.email?.message}
                 {...register('email')}
               />

@@ -1,10 +1,10 @@
 import { useCallback, useState, useMemo } from 'react'
-import { useBindEmail, useBindFundPin, useVerifycodeEmail } from '~/hooks/api/useCustomer'
+import { useBindEmail, useBindFundPin, useVerifyCodeEmail } from '~/hooks/api/useCustomer'
 import { EmailBindStep } from './constants'
 
 const useEmailActions = (infoRefetch: () => void) => {
   const { mutateAsync: bindEmailAPI } = useBindEmail()
-  const { mutateAsync: verifyCodeEmailAPI } = useVerifycodeEmail()
+  const { mutateAsync: verifyCodeEmailAPI } = useVerifyCodeEmail()
 
   const addBindEmailHandler = useCallback(
     async (
@@ -53,22 +53,22 @@ const useEmailActions = (infoRefetch: () => void) => {
 }
 
 const useEmailStatus = ({ email }: { email: string }) => {
-  const [isVerifiCurrent, setIsVerifiCurrent] = useState(false)
+  const [isVerifyCurrent, setIsVerifyCurrent] = useState(false)
   const isEditEmail = !!email
 
   const stepStatus = useMemo<EmailBindStep>(() => {
     return !isEditEmail
       ? EmailBindStep.addEmail
-      : isVerifiCurrent
+      : isVerifyCurrent
         ? EmailBindStep.updateNewEmail
         : EmailBindStep.validOldEmail
-  }, [isEditEmail, isVerifiCurrent])
+  }, [isEditEmail, isVerifyCurrent])
 
   return {
     isEditEmail,
-    isVerifiCurrent,
+    isVerifyCurrent,
     stepStatus,
-    isVerifiCurrentHandler: useCallback((b: boolean) => setIsVerifiCurrent(b), []),
+    isVerifyCurrentHandler: useCallback((b: boolean) => setIsVerifyCurrent(b), []),
   }
 }
 

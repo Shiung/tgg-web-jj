@@ -10,7 +10,7 @@ const useValidCodeEmail = () => {
   })
 }
 
-const useVerifycodeEmail = () => {
+const useVerifyCodeEmail = () => {
   return useMutation({
     mutationFn: apis.customer.customerVerifycodeCreate,
     onError: error => {
@@ -37,4 +37,4 @@ const useBindFundPin = () => {
   })
 }
 
-export { useValidCodeEmail, useVerifycodeEmail, useBindEmail, useBindFundPin }
+export { useValidCodeEmail, useVerifyCodeEmail, useBindEmail, useBindFundPin }
