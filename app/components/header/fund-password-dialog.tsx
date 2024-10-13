@@ -42,7 +42,7 @@ const formSchema = z
     verificationCode: z.string().min(1, 'Verification code is required'),
   })
   .refine(data => data.password === data.confirmPassword, {
-    message: "password don't match",
+    message: 'The password confirmation does not match',
     path: ['confirmPassword'],
   })
 
@@ -115,7 +115,7 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isChangePin ? 'Change Fund Password' : 'Set Fund Password'}</DialogTitle>
+          <DialogTitle>{isChangePin ? 'Change Your Password' : 'Set Your Password'}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col space-y-2 px-3 pb-6 pt-4 text-sm text-white/70">
