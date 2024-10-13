@@ -30,13 +30,14 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
 
   const handleRefresh = async (event: React.MouseEvent<SVGElement, MouseEvent>) => {
     event.stopPropagation()
-    if (isFetching) return
+    if (isRefreshing || isFetching) return
 
     setIsRefreshing(true)
+    const delayMs = 1500
     const start = Date.now()
     await refetch()
     const duration = Date.now() - start
-    const delay = duration < 1000 ? 1000 - duration : 0
+    const delay = duration < delayMs ? delayMs - duration : 0
 
     setTimeout(() => {
       setIsRefreshing(false)
@@ -59,7 +60,7 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
             <Amount className="text-sm font-ultra" value={kokonBalance} crypto="KOKON" />
             <RefreshIcon
               className={cn(
-                'h-4 w-4 text-primary transition-transform duration-500',
+                'h-4 w-4 cursor-pointer text-primary transition-transform duration-500',
                 isRefreshing ? 'animate-spin' : ''
               )}
               onClick={handleRefresh}
