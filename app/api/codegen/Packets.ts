@@ -28,13 +28,13 @@ export class Packets<SecurityDataType = unknown> {
   packetsList = (
     query: {
       /**
-       * 頁碼 (Minimum: 1, Required)
+       * 頁碼 (Required, Minimum: 1)
        * @format int64
        * @min 1
        */
       page: number;
       /**
-       * 分頁筆數 (Required, Minimum: 20)
+       * 分頁筆數 (Minimum: 20, Required)
        * @format int64
        * @min 20
        */

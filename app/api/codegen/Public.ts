@@ -84,6 +84,80 @@ export class Public<SecurityDataType = unknown> {
   /**
    * @description Auto-generated API documentation
    *
+   * @tags (*SubGameController)
+   * @name PublicGamesActiveList
+   * @request GET:/ajax/public/games/active
+   */
+  publicGamesActiveList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /** 列表 */
+        list: {
+          /**
+           * 維護結束時間
+           * @format date-time
+           */
+          TggMaintainEndAt?: string;
+          /**
+           * 維護開始時間
+           * @format date-time
+           */
+          TggMaintainStartAt?: string;
+          /**
+           * 遊戲ID
+           * @min 1
+           * @max 50
+           */
+          gameCode: string;
+          /**
+           * 遊戲Logo
+           * @min 1
+           * @max 200
+           */
+          gameLogo: string;
+          /**
+           * 遊戲名稱
+           * @min 1
+           * @max 50
+           */
+          gameName: string;
+          /**
+           * 遊戲類型
+           * @format uint64
+           */
+          gameType: number;
+          /**
+           * SubGameID
+           * @format uint64
+           */
+          id: number;
+          /**
+           * 維護狀態,1:維護中 2:非維護中 3:預約維護
+           * @format uint64
+           */
+          isGameMaintain: number;
+          /** 語言翻譯 */
+          translations: ({
+            /**
+             * 遊戲名稱
+             * @min 0
+             * @max 50
+             */
+            gameName?: string;
+            /** 語言代碼ex: 'en','ja','ko','ar','es','fr'. Allowed Enum */
+            language: "en" | "ja" | "ko" | "ar" | "es" | "fr";
+          } | null)[];
+        }[];
+      },
+      any
+    >({
+      path: `/ajax/public/games/active`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
    * @tags (*TaskController)
    * @name PublicTasksList
    * @request GET:/ajax/public/tasks
@@ -165,6 +239,11 @@ export class Public<SecurityDataType = unknown> {
            * @format decimal
            */
           rewardAmount: string;
+          /**
+           * 獎勵金額/數量上限, null代表無上限
+           * @format decimal
+           */
+          rewardAmountLimit?: string | null;
           /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
           rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
           /** 獎勵類型. Allowed Enum */
@@ -332,6 +411,11 @@ export class Public<SecurityDataType = unknown> {
            * @format decimal
            */
           rewardAmount: string;
+          /**
+           * 獎勵金額/數量上限, null代表無上限
+           * @format decimal
+           */
+          rewardAmountLimit?: string | null;
           /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
           rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
           /** 獎勵類型. Allowed Enum */
@@ -499,6 +583,11 @@ export class Public<SecurityDataType = unknown> {
            * @format decimal
            */
           rewardAmount: string;
+          /**
+           * 獎勵金額/數量上限, null代表無上限
+           * @format decimal
+           */
+          rewardAmountLimit?: string | null;
           /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
           rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
           /** 獎勵類型. Allowed Enum */

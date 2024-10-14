@@ -1659,9 +1659,20 @@
                       "gameCode",
                       "gameName",
                       "gameType",
+                      "isGameMaintain",
                       "translations"
                     ],
                     "properties": {
+                      "TggMaintainEndAt": {
+                        "description": "維護結束時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "TggMaintainStartAt": {
+                        "description": "維護開始時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
                       "gameCode": {
                         "description": "遊戲ID",
                         "type": "string",
@@ -1687,6 +1698,11 @@
                       },
                       "id": {
                         "description": "SubGameID",
+                        "type": "integer",
+                        "format": "uint64"
+                      },
+                      "isGameMaintain": {
+                        "description": "維護狀態,1:維護中 2:非維護中 3:預約維護",
                         "type": "integer",
                         "format": "uint64"
                       },
@@ -1757,9 +1773,20 @@
                       "gameCode",
                       "gameName",
                       "gameType",
+                      "isGameMaintain",
                       "translations"
                     ],
                     "properties": {
+                      "TggMaintainEndAt": {
+                        "description": "維護結束時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "TggMaintainStartAt": {
+                        "description": "維護開始時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
                       "gameCode": {
                         "description": "遊戲ID",
                         "type": "string",
@@ -1785,6 +1812,11 @@
                       },
                       "id": {
                         "description": "SubGameID",
+                        "type": "integer",
+                        "format": "uint64"
+                      },
+                      "isGameMaintain": {
+                        "description": "維護狀態,1:維護中 2:非維護中 3:預約維護",
                         "type": "integer",
                         "format": "uint64"
                       },
@@ -2262,7 +2294,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Minimum: 1, Required)",
+            "description": "頁碼 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -2271,7 +2303,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -2568,6 +2600,120 @@
         }
       }
     },
+    "/ajax/public/games/active": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*SubGameController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "list"
+              ],
+              "properties": {
+                "list": {
+                  "description": "列表",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "nullable": true,
+                    "required": [
+                      "id",
+                      "gameLogo",
+                      "gameCode",
+                      "gameName",
+                      "gameType",
+                      "isGameMaintain",
+                      "translations"
+                    ],
+                    "properties": {
+                      "TggMaintainEndAt": {
+                        "description": "維護結束時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "TggMaintainStartAt": {
+                        "description": "維護開始時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "gameCode": {
+                        "description": "遊戲ID",
+                        "type": "string",
+                        "maximum": 50,
+                        "minimum": 1
+                      },
+                      "gameLogo": {
+                        "description": "遊戲Logo",
+                        "type": "string",
+                        "maximum": 200,
+                        "minimum": 1
+                      },
+                      "gameName": {
+                        "description": "遊戲名稱",
+                        "type": "string",
+                        "maximum": 50,
+                        "minimum": 1
+                      },
+                      "gameType": {
+                        "description": "遊戲類型",
+                        "type": "integer",
+                        "format": "uint64"
+                      },
+                      "id": {
+                        "description": "SubGameID",
+                        "type": "integer",
+                        "format": "uint64"
+                      },
+                      "isGameMaintain": {
+                        "description": "維護狀態,1:維護中 2:非維護中 3:預約維護",
+                        "type": "integer",
+                        "format": "uint64"
+                      },
+                      "translations": {
+                        "description": "語言翻譯",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "nullable": true,
+                          "required": [
+                            "language"
+                          ],
+                          "properties": {
+                            "gameName": {
+                              "description": "遊戲名稱",
+                              "type": "string",
+                              "maximum": 50,
+                              "minimum": 0
+                            },
+                            "language": {
+                              "description": "語言代碼ex: 'en','ja','ko','ar','es','fr'. Allowed Enum",
+                              "type": "string",
+                              "enum": [
+                                "en",
+                                "ja",
+                                "ko",
+                                "ar",
+                                "es",
+                                "fr"
+                              ]
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/ajax/public/tasks": {
       "get": {
         "description": "Auto-generated API documentation",
@@ -2750,6 +2896,12 @@
                       "rewardAmount": {
                         "description": "獎勵金額/數量",
                         "type": "string",
+                        "format": "decimal"
+                      },
+                      "rewardAmountLimit": {
+                        "description": "獎勵金額/數量上限, null代表無上限",
+                        "type": "string",
+                        "nullable": true,
                         "format": "decimal"
                       },
                       "rewardClaimStatus": {
@@ -3107,6 +3259,12 @@
                         "type": "string",
                         "format": "decimal"
                       },
+                      "rewardAmountLimit": {
+                        "description": "獎勵金額/數量上限, null代表無上限",
+                        "type": "string",
+                        "nullable": true,
+                        "format": "decimal"
+                      },
                       "rewardClaimStatus": {
                         "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
                         "type": "string",
@@ -3460,6 +3618,12 @@
                       "rewardAmount": {
                         "description": "獎勵金額/數量",
                         "type": "string",
+                        "format": "decimal"
+                      },
+                      "rewardAmountLimit": {
+                        "description": "獎勵金額/數量上限, null代表無上限",
+                        "type": "string",
+                        "nullable": true,
                         "format": "decimal"
                       },
                       "rewardClaimStatus": {
@@ -4179,6 +4343,12 @@
                         "type": "string",
                         "format": "decimal"
                       },
+                      "rewardAmountLimit": {
+                        "description": "獎勵金額/數量上限, null代表無上限",
+                        "type": "string",
+                        "nullable": true,
+                        "format": "decimal"
+                      },
                       "rewardClaimStatus": {
                         "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
                         "type": "string",
@@ -4532,6 +4702,12 @@
                       "rewardAmount": {
                         "description": "獎勵金額/數量",
                         "type": "string",
+                        "format": "decimal"
+                      },
+                      "rewardAmountLimit": {
+                        "description": "獎勵金額/數量上限, null代表無上限",
+                        "type": "string",
+                        "nullable": true,
                         "format": "decimal"
                       },
                       "rewardClaimStatus": {
@@ -4889,6 +5065,12 @@
                         "type": "string",
                         "format": "decimal"
                       },
+                      "rewardAmountLimit": {
+                        "description": "獎勵金額/數量上限, null代表無上限",
+                        "type": "string",
+                        "nullable": true,
+                        "format": "decimal"
+                      },
                       "rewardClaimStatus": {
                         "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
                         "type": "string",
@@ -5127,7 +5309,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -5464,7 +5646,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -6636,9 +6818,20 @@
               "gameCode",
               "gameName",
               "gameType",
+              "isGameMaintain",
               "translations"
             ],
             "properties": {
+              "TggMaintainEndAt": {
+                "description": "維護結束時間",
+                "type": "string",
+                "format": "date-time"
+              },
+              "TggMaintainStartAt": {
+                "description": "維護開始時間",
+                "type": "string",
+                "format": "date-time"
+              },
               "gameCode": {
                 "description": "遊戲ID",
                 "type": "string",
@@ -6664,6 +6857,11 @@
               },
               "id": {
                 "description": "SubGameID",
+                "type": "integer",
+                "format": "uint64"
+              },
+              "isGameMaintain": {
+                "description": "維護狀態,1:維護中 2:非維護中 3:預約維護",
                 "type": "integer",
                 "format": "uint64"
               },
@@ -6724,9 +6922,20 @@
               "gameCode",
               "gameName",
               "gameType",
+              "isGameMaintain",
               "translations"
             ],
             "properties": {
+              "TggMaintainEndAt": {
+                "description": "維護結束時間",
+                "type": "string",
+                "format": "date-time"
+              },
+              "TggMaintainStartAt": {
+                "description": "維護開始時間",
+                "type": "string",
+                "format": "date-time"
+              },
               "gameCode": {
                 "description": "遊戲ID",
                 "type": "string",
@@ -6752,6 +6961,11 @@
               },
               "id": {
                 "description": "SubGameID",
+                "type": "integer",
+                "format": "uint64"
+              },
+              "isGameMaintain": {
+                "description": "維護狀態,1:維護中 2:非維護中 3:預約維護",
                 "type": "integer",
                 "format": "uint64"
               },
@@ -8175,6 +8389,12 @@
                 "type": "string",
                 "format": "decimal"
               },
+              "rewardAmountLimit": {
+                "description": "獎勵金額/數量上限, null代表無上限",
+                "type": "string",
+                "nullable": true,
+                "format": "decimal"
+              },
               "rewardClaimStatus": {
                 "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
                 "type": "string",
@@ -8530,6 +8750,12 @@
                 "type": "string",
                 "format": "decimal"
               },
+              "rewardAmountLimit": {
+                "description": "獎勵金額/數量上限, null代表無上限",
+                "type": "string",
+                "nullable": true,
+                "format": "decimal"
+              },
               "rewardClaimStatus": {
                 "description": "任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum",
                 "type": "string",
@@ -8883,6 +9109,12 @@
               "rewardAmount": {
                 "description": "獎勵金額/數量",
                 "type": "string",
+                "format": "decimal"
+              },
+              "rewardAmountLimit": {
+                "description": "獎勵金額/數量上限, null代表無上限",
+                "type": "string",
+                "nullable": true,
                 "format": "decimal"
               },
               "rewardClaimStatus": {

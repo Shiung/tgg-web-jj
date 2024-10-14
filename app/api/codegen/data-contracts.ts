@@ -367,6 +367,16 @@ export interface GetActiveGamesResponse {
   /** 列表 */
   list: {
     /**
+     * 維護結束時間
+     * @format date-time
+     */
+    TggMaintainEndAt?: string;
+    /**
+     * 維護開始時間
+     * @format date-time
+     */
+    TggMaintainStartAt?: string;
+    /**
      * 遊戲ID
      * @min 1
      * @max 50
@@ -394,6 +404,11 @@ export interface GetActiveGamesResponse {
      * @format uint64
      */
     id: number;
+    /**
+     * 維護狀態,1:維護中 2:非維護中 3:預約維護
+     * @format uint64
+     */
+    isGameMaintain: number;
     /** 語言翻譯 */
     translations: ({
       /**
@@ -414,6 +429,16 @@ export interface GetAllGamesResponse {
   /** 列表 */
   list: {
     /**
+     * 維護結束時間
+     * @format date-time
+     */
+    TggMaintainEndAt?: string;
+    /**
+     * 維護開始時間
+     * @format date-time
+     */
+    TggMaintainStartAt?: string;
+    /**
      * 遊戲ID
      * @min 1
      * @max 50
@@ -441,6 +466,11 @@ export interface GetAllGamesResponse {
      * @format uint64
      */
     id: number;
+    /**
+     * 維護狀態,1:維護中 2:非維護中 3:預約維護
+     * @format uint64
+     */
+    isGameMaintain: number;
     /** 語言翻譯 */
     translations: ({
       /**
@@ -1235,6 +1265,11 @@ export interface TaskQueryResponse {
      * @format decimal
      */
     rewardAmount: string;
+    /**
+     * 獎勵金額/數量上限, null代表無上限
+     * @format decimal
+     */
+    rewardAmountLimit?: string | null;
     /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
     rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
     /** 獎勵類型. Allowed Enum */
@@ -1402,6 +1437,11 @@ export interface TaskQueryResponse {
      * @format decimal
      */
     rewardAmount: string;
+    /**
+     * 獎勵金額/數量上限, null代表無上限
+     * @format decimal
+     */
+    rewardAmountLimit?: string | null;
     /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
     rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
     /** 獎勵類型. Allowed Enum */
@@ -1569,6 +1609,11 @@ export interface TaskQueryResponse {
      * @format decimal
      */
     rewardAmount: string;
+    /**
+     * 獎勵金額/數量上限, null代表無上限
+     * @format decimal
+     */
+    rewardAmountLimit?: string | null;
     /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
     rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
     /** 獎勵類型. Allowed Enum */
