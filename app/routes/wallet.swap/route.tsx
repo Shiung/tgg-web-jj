@@ -210,14 +210,14 @@ export default function Swap() {
             className="flex-1 data-[state=active]:bg-app-blue data-[state=active]:text-white"
             onClick={() => setCurrentTab('buy')}
           >
-            Buy KOKON
+            BUY KOKON
           </TabsTrigger>
           <TabsTrigger
             value="sell"
             className="flex-1 data-[state=active]:bg-app-blue data-[state=active]:text-white"
             onClick={() => setCurrentTab('sell')}
           >
-            Sell KOKON
+            SELL KOKON
           </TabsTrigger>
         </TabsList>
         <TabsContent value={currentTab} className="mt-0"></TabsContent>
