@@ -27,7 +27,7 @@ export default function History() {
   }, [])
 
   return (
-    <div className="flex flex-1 flex-col rounded-t-xl bg-black">
+    <div className="mb-2 flex flex-1 flex-col rounded-xl bg-black">
       <div className="relative mx-4 my-3">
         <ArrowLineLeftIcon
           className="absolute left-0 top-0 h-6 w-6 cursor-pointer"

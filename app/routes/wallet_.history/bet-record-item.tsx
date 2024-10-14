@@ -53,24 +53,38 @@ export default function BetRecordItem({
             <div className="flex space-x-1">
               <span
                 className={`text-sm font-ultra ${
-                  +(currency === Crypto.USDT ? record.winGold : record.winGoldKokon) > 0
+                  (currency === Crypto.USDT
+                    ? Number(record.winGold) - Number(record.betGold)
+                    : Number(record.winGoldKokon) - Number(record.betGoldKokon)) > 0
                     ? 'text-app-green'
-                    : +(currency === Crypto.USDT ? record.winGold : record.winGoldKokon) < 0
+                    : (currency === Crypto.USDT
+                          ? Number(record.winGold) - Number(record.betGold)
+                          : Number(record.winGoldKokon) - Number(record.betGoldKokon)) < 0
                       ? 'text-app-red'
                       : 'text-white'
                 }`}
               >
                 <span className="px-1">
-                  {+(currency === Crypto.USDT ? record.winGold : record.winGoldKokon) > 0
+                  {(currency === Crypto.USDT
+                    ? Number(record.winGold) - Number(record.betGold)
+                    : Number(record.winGoldKokon) - Number(record.betGoldKokon)) > 0
                     ? '+'
-                    : +(currency === Crypto.USDT ? record.winGold : record.winGoldKokon) < 0
+                    : (currency === Crypto.USDT
+                          ? Number(record.winGold) - Number(record.betGold)
+                          : Number(record.winGoldKokon) - Number(record.betGoldKokon)) < 0
                       ? '-'
                       : ''}
                 </span>
                 {currency === Crypto.USDT ? (
-                  <Amount value={Math.abs(+record.winGold)} crypto={Crypto.USDT} />
+                  <Amount
+                    value={Math.abs(Number(record.winGold) - Number(record.betGold))}
+                    crypto={Crypto.USDT}
+                  />
                 ) : (
-                  <Amount value={Math.abs(+record.winGoldKokon)} crypto={Crypto.KOKON} />
+                  <Amount
+                    value={Math.abs(Number(record.winGoldKokon) - Number(record.betGoldKokon))}
+                    crypto={Crypto.KOKON}
+                  />
                 )}
               </span>
               {currency === Crypto.USDT ? (
