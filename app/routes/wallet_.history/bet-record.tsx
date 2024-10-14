@@ -18,6 +18,8 @@ import styles from './index.module.scss'
 import BetRecordItem from './bet-record-item'
 import BetSkeleton from './bet-skeleton'
 import NoDataView from './no-data-view'
+import Amount from '~/components/amount'
+import { KokonIcon, UsdtIcon } from '~/components/color-icons'
 
 interface FormValues {
   gameList: string
@@ -52,12 +54,39 @@ interface GameTransactionResponse {
     totalRecord: number
   }
   records: GameTransaction[]
+  summary: {
+    totalBetGold: string
+    totalBetGoldKokon: string
+    totalWinGold: string
+    totalWinGoldKokon: string
+  }
 }
 
 const defaultValues = {
   gameList: '0',
   dateTimeRange: { from: startOfDay(subDays(new Date(), 30)), to: endOfDay(new Date()) },
 }
+
+const calculateDifference = (win: number | undefined, bet: number | undefined) =>
+  (Number(win ?? 0) - Number(bet ?? 0)).toString()
+
+const SummaryItem = ({
+  label,
+  value,
+  icon,
+}: {
+  label: string
+  value: React.ReactNode
+  icon?: React.ReactNode
+}) => (
+  <div className="flex flex-1 flex-col items-center justify-between space-y-1 text-xs">
+    <p className="text-white/70">{label}</p>
+    <div className="flex space-x-1">
+      {icon}
+      <span className="font-ultra text-white">{value}</span>
+    </div>
+  </div>
+)
 
 export default function BetRecord({ currentTab }: { currentTab: string }) {
   const [currency, setCurrency] = useState<Crypto.USDT | Crypto.KOKON>(Crypto.KOKON)
@@ -109,7 +138,8 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
           totalPage: res.data.pagination?.totalPage ?? 0,
           totalRecord: res.data.pagination?.totalRecord ?? 0,
         },
-        records: res.data.records || [],
+        records: res.data.records ?? [],
+        summary: res.data.summary ?? {},
       } as GameTransactionResponse
     },
     [formValues]
@@ -139,6 +169,11 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
       ) ?? [],
     [data?.pages, gameListRaw?.list]
   )
+
+  const summary = useMemo(() => {
+    if (!data?.pages || data.pages.length === 0) return null
+    return data.pages[data.pages.length - 1].summary
+  }, [data?.pages])
 
   const isFetchData = useMemo(() => {
     return isFetching && !isFetchingNextPage && !data
@@ -227,8 +262,13 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
         <Skeleton className="relative mt-3 flex-1 rounded-xl bg-[#1C1C1C] p-3" />
       ) : (
         <div className="relative mt-3 flex-1 rounded-xl p-3">
-          <div className="absolute bottom-0 left-0 right-0 top-0 overflow-y-auto">
-            <div className="space-y-2">
+          <div
+            className={cn(
+              'absolute left-0 right-0 top-0 overflow-y-auto',
+              records.length > 0 ? 'bottom-9' : 'bottom-0'
+            )}
+          >
+            <div className="space-y-2 pb-2">
               {records.length > 0 ? (
                 <>
                   {records.map((record: GameTransaction, index: number) => (
@@ -255,6 +295,59 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
                 <NoDataView showButton={true} />
               )}
             </div>
+          </div>
+          <div
+            className={cn(
+              'absolute bottom-0 left-0 right-0 h-9 space-x-2 py-2',
+              records.length > 0 && summary ? 'flex' : 'hidden'
+            )}
+          >
+            <SummaryItem label="Number" value={data?.pages[0].pagination.totalRecord} />
+            <SummaryItem
+              label="Bets"
+              value={
+                <Amount
+                  value={
+                    currency === Crypto.USDT ? summary?.totalBetGold : summary?.totalBetGoldKokon
+                  }
+                  crypto={currency}
+                  defaultValue="0"
+                />
+              }
+              icon={
+                currency === Crypto.USDT ? (
+                  <UsdtIcon className="my-auto h-3 w-3" />
+                ) : (
+                  <KokonIcon className="my-auto h-3 w-3" />
+                )
+              }
+            />
+            <SummaryItem
+              label="Win/Loss"
+              value={
+                <Amount
+                  value={
+                    currency === Crypto.USDT
+                      ? calculateDifference(
+                          Number(summary?.totalWinGold),
+                          Number(summary?.totalBetGold)
+                        )
+                      : calculateDifference(
+                          Number(summary?.totalWinGoldKokon),
+                          Number(summary?.totalBetGoldKokon)
+                        )
+                  }
+                  crypto={currency}
+                />
+              }
+              icon={
+                currency === Crypto.USDT ? (
+                  <UsdtIcon className="my-auto h-3 w-3" />
+                ) : (
+                  <KokonIcon className="my-auto h-3 w-3" />
+                )
+              }
+            />
           </div>
         </div>
       )}
