@@ -102,6 +102,11 @@ export class Tasks<SecurityDataType = unknown> {
            * @format decimal
            */
           rewardAmount: string;
+          /**
+           * 獎勵金額/數量上限, null代表無上限
+           * @format decimal
+           */
+          rewardAmountLimit?: string | null;
           /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
           rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
           /** 獎勵類型. Allowed Enum */
@@ -269,6 +274,11 @@ export class Tasks<SecurityDataType = unknown> {
            * @format decimal
            */
           rewardAmount: string;
+          /**
+           * 獎勵金額/數量上限, null代表無上限
+           * @format decimal
+           */
+          rewardAmountLimit?: string | null;
           /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
           rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
           /** 獎勵類型. Allowed Enum */
@@ -436,6 +446,11 @@ export class Tasks<SecurityDataType = unknown> {
            * @format decimal
            */
           rewardAmount: string;
+          /**
+           * 獎勵金額/數量上限, null代表無上限
+           * @format decimal
+           */
+          rewardAmountLimit?: string | null;
           /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
           rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
           /** 獎勵類型. Allowed Enum */

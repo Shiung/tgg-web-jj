@@ -210,12 +210,17 @@ export interface CreateRequest {
    */
   distributedAmount?: string;
   /**
+   * 固定金額
+   * @format decimal
+   */
+  fixedValue?: string;
+  /**
    * 上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0). Allowed Enum
    * @format int64
    */
   limitKind?: 0 | 1;
   /**
-   * 固定金額
+   * 隨機金額上限
    * @format decimal
    */
   maxValue?: string;
@@ -394,6 +399,21 @@ export interface GetActiveGamesResponse {
      * @format uint64
      */
     id: number;
+    /**
+     * 維護狀態,1:維護中 2:非維護中 3:預約維護
+     * @format uint64
+     */
+    isGameMaintain: number;
+    /**
+     * 維護結束時間
+     * @format date-time
+     */
+    maintainEndAt?: string;
+    /**
+     * 維護開始時間
+     * @format date-time
+     */
+    maintainStartAt?: string;
     /** 語言翻譯 */
     translations: ({
       /**
@@ -441,6 +461,21 @@ export interface GetAllGamesResponse {
      * @format uint64
      */
     id: number;
+    /**
+     * 維護狀態,1:維護中 2:非維護中 3:預約維護
+     * @format uint64
+     */
+    isGameMaintain: number;
+    /**
+     * 維護結束時間
+     * @format date-time
+     */
+    maintainEndAt?: string;
+    /**
+     * 維護開始時間
+     * @format date-time
+     */
+    maintainStartAt?: string;
     /** 語言翻譯 */
     translations: ({
       /**
@@ -936,6 +971,19 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
+  /** 推薦碼開獎資訊 */
+  packet?: {
+    /** 紅包發送人名稱 */
+    giverName?: string;
+    /** 為true時需開獎 */
+    isQualified?: boolean;
+    /** potential gain (max) */
+    maxValue?: string;
+    /** potential gain (min) */
+    minValue?: string;
+    /** 需顯示potential gain */
+    showPotential?: boolean;
+  };
   /** 登入token */
   token?: string;
 }
@@ -1160,6 +1208,55 @@ export interface ShareLinkRequest {
   referralCode?: string;
 }
 
+export interface ShareRankInfoResponse {
+  /** 排行榜 */
+  rank: {
+    /** 會員名稱 */
+    customerName: string;
+    /**
+     * 排名
+     * @format int64
+     * @min 1
+     */
+    ranking: number;
+    /**
+     * 獎金
+     * @format decimal
+     */
+    reward?: string;
+    /** 獎金幣別 */
+    rewardType?: string;
+    /**
+     * 直属下级人数
+     * @format uint64
+     */
+    subordinatesCount?: number;
+  }[];
+  /** 自己排名 */
+  selfRank?: {
+    /** 會員名稱 */
+    customerName: string;
+    /**
+     * 排名
+     * @format int64
+     * @min 1
+     */
+    ranking: number;
+    /**
+     * 獎金
+     * @format decimal
+     */
+    reward?: string;
+    /** 獎金幣別 */
+    rewardType?: string;
+    /**
+     * 直属下级人数
+     * @format uint64
+     */
+    subordinatesCount?: number;
+  };
+}
+
 export interface TaskQueryResponse {
   /** 每日任務列表 */
   dailyList?: {
@@ -1235,6 +1332,11 @@ export interface TaskQueryResponse {
      * @format decimal
      */
     rewardAmount: string;
+    /**
+     * 獎勵金額/數量上限, null代表無上限
+     * @format decimal
+     */
+    rewardAmountLimit?: string | null;
     /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
     rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
     /** 獎勵類型. Allowed Enum */
@@ -1402,6 +1504,11 @@ export interface TaskQueryResponse {
      * @format decimal
      */
     rewardAmount: string;
+    /**
+     * 獎勵金額/數量上限, null代表無上限
+     * @format decimal
+     */
+    rewardAmountLimit?: string | null;
     /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
     rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
     /** 獎勵類型. Allowed Enum */
@@ -1569,6 +1676,11 @@ export interface TaskQueryResponse {
      * @format decimal
      */
     rewardAmount: string;
+    /**
+     * 獎勵金額/數量上限, null代表無上限
+     * @format decimal
+     */
+    rewardAmountLimit?: string | null;
     /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
     rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
     /** 獎勵類型. Allowed Enum */
@@ -1752,6 +1864,12 @@ export interface TeamPerformanceResponse {
     /** 總入金加總 */
     totalDeposit?: string;
   };
+}
+
+export type TerminateRequest = object;
+
+export interface TerminateResponse {
+  succeed?: boolean;
 }
 
 export interface TransferBalanceRequest {

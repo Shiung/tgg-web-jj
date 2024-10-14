@@ -58,6 +58,21 @@ export class Games<SecurityDataType = unknown> {
            * @format uint64
            */
           id: number;
+          /**
+           * 維護狀態,1:維護中 2:非維護中 3:預約維護
+           * @format uint64
+           */
+          isGameMaintain: number;
+          /**
+           * 維護結束時間
+           * @format date-time
+           */
+          maintainEndAt?: string;
+          /**
+           * 維護開始時間
+           * @format date-time
+           */
+          maintainStartAt?: string;
           /** 語言翻譯 */
           translations: ({
             /**
@@ -117,6 +132,21 @@ export class Games<SecurityDataType = unknown> {
            * @format uint64
            */
           id: number;
+          /**
+           * 維護狀態,1:維護中 2:非維護中 3:預約維護
+           * @format uint64
+           */
+          isGameMaintain: number;
+          /**
+           * 維護結束時間
+           * @format date-time
+           */
+          maintainEndAt?: string;
+          /**
+           * 維護開始時間
+           * @format date-time
+           */
+          maintainStartAt?: string;
           /** 語言翻譯 */
           translations: ({
             /**
