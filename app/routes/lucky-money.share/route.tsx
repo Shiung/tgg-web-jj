@@ -140,7 +140,7 @@ export default function LuckyMoneyShare() {
                 role="button"
                 tabIndex={0}
                 className={cn(
-                  'aspect-[168/104] flex-1 rounded-lg border-[0.5px] border-solid border-primary',
+                  'aspect-[168/104] flex-1 rounded-lg shadow-[0_0_0_0.5px_#FFF200]',
                   'transition duration-300 ease-in-out',
                   distributeKind === option.value ? 'bg-primary/30' : ''
                 )}
@@ -164,8 +164,8 @@ export default function LuckyMoneyShare() {
             ))}
           </div>
           <AnimatePresence>
-            {distributeKind === 'FIXED' && <NormalBag />}
-            {distributeKind === 'RANDOM' && <LuckBag />}
+            {distributeKind === 'FIXED' && <NormalBag packetSetting={packetSettingRaw?.data} />}
+            {distributeKind === 'RANDOM' && <LuckBag packetSetting={packetSettingRaw?.data} />}
           </AnimatePresence>
         </div>
 

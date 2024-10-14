@@ -12,7 +12,7 @@ const SwitchTab = () => {
   const location = useLocation()
 
   return (
-    <div className="flex w-full space-x-2">
+    <div className="flex w-full flex-shrink-0 space-x-2">
       {tabs.map(tab => (
         <Link key={tab.label} prefetch="viewport" to={tab.path} className="flex-1">
           <Button

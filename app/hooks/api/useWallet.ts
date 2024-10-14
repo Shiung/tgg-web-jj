@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { WalletListResponse } from '~/api/codegen/data-contracts'
 import { apis } from '~/api/index'
@@ -7,29 +7,33 @@ import { isValidCrypto } from '~/consts/crypto'
 
 type UserWallet = NonNullable<WalletListResponse['wallets']>[number]
 
-const getHeaderWalletQueryKey = ['getHeaderWallet']
+const getHeaderWalletQueryKey = 'getHeaderWallet'
+const getWalletListQueryKey = 'getWalletList'
 
+/**
+ * Header 中錢包 popover 使用錢包資訊 api 的 hook
+ */
 const useGetHeaderWallet = () => {
   const isLoggedIn = useStore(state => state.isLoggedIn)
 
   return useQuery({
-    queryKey: getHeaderWalletQueryKey,
+    queryKey: [getHeaderWalletQueryKey],
     queryFn: () => apis.header.headerWalletList(),
     enabled: !!isLoggedIn,
+    staleTime: 30 * 1000, // 緩存 30 秒
   })
 }
 
 /**
  * 取得特定幣種的錢包資訊，與 useGetHeaderWallet
- * 使用相同的 queryKey，使用內建快取機制避免而不是重複請求
+ * 使用相同的 queryKey
+ * TODO: 確認使用內建快取機制避免而不是重複請求
  */
 const useGetCryptoWallet = (crypto: string) => {
-  const isLoggedIn = useStore(state => state.isLoggedIn)
-
   const { data } = useQuery({
-    queryKey: getHeaderWalletQueryKey,
+    queryKey: [getHeaderWalletQueryKey],
     queryFn: () => apis.header.headerWalletList(),
-    enabled: !!isLoggedIn,
+    enabled: false,
   })
 
   return useMemo(() => {
@@ -40,15 +44,40 @@ const useGetCryptoWallet = (crypto: string) => {
   }, [crypto, data?.data?.wallets])
 }
 
+/**
+ * Wallet 頁面使用錢包列表 api 的 hook
+ */
 const useGetWalletList = () => {
   const isLoggedIn = useStore(state => state.isLoggedIn)
 
   return useQuery({
-    queryKey: ['getWalletList'],
+    queryKey: [getWalletListQueryKey],
     queryFn: () => apis.wallet.walletListList(),
     enabled: !!isLoggedIn,
   })
 }
 
+const useRefreshWalletList = () => {
+  const queryClient = useQueryClient()
+
+  const refresh = async () => {
+    await queryClient.ensureQueryData({
+      queryKey: [getWalletListQueryKey],
+      queryFn: () => apis.wallet.walletListList(),
+    })
+  }
+
+  return {
+    refresh,
+  }
+}
+
 export type { UserWallet }
-export { useGetHeaderWallet, useGetCryptoWallet, useGetWalletList, getHeaderWalletQueryKey }
+export {
+  useGetHeaderWallet,
+  useGetCryptoWallet,
+  useGetWalletList,
+  useRefreshWalletList,
+  getHeaderWalletQueryKey,
+  getWalletListQueryKey,
+}

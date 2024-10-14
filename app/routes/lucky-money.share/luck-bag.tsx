@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Controller, useFormContext } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
@@ -8,10 +8,16 @@ import { Input } from '~/components/ui/input'
 import Amount from '~/components/amount'
 import { cryptoRules, Crypto } from '~/consts/crypto'
 import WarningIcon from '~/icons/warning.svg?react'
+import { GetSettingResponse } from '~/api/codegen/data-contracts'
 
 import type { FormData } from './route'
+import { QuickAmountSkeleton } from './skeleton'
 
-const LuckBag = ({ minValue = 10 }: { minValue?: number }) => {
+interface LuckBagProps {
+  packetSetting?: GetSettingResponse
+}
+
+const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
   const {
     control,
     setValue,
@@ -26,15 +32,22 @@ const LuckBag = ({ minValue = 10 }: { minValue?: number }) => {
     'hintMessage',
   ])
 
-  // 如果 maxValue 小于 minValue，则将 maxValue 设置为 minValue
-  useEffect(() => {
+  const minValue = useMemo(
+    () => parseFloat(packetSetting?.minValue || '0'),
+    [packetSetting?.minValue]
+  )
+
+  const handleMinValueBlur = () => {
     if (formMinValue < minValue) {
-      setValue('minValue', minValue)
+      setValue('minValue', minValue, { shouldValidate: true })
     }
+  }
+
+  const handleMaxValueBlur = () => {
     if (formMaxValue < formMinValue) {
-      setValue('maxValue', formMinValue)
+      setValue('maxValue', formMinValue, { shouldValidate: true })
     }
-  }, [formMinValue, formMaxValue, minValue, setValue])
+  }
 
   return (
     <motion.div
@@ -90,17 +103,21 @@ const LuckBag = ({ minValue = 10 }: { minValue?: number }) => {
           }}
         />
         <div className="flex space-x-2">
-          {['10', '100', '500', '1000'].map(amount => (
-            <Button
-              key={amount}
-              type="button"
-              variant="outlineSoft"
-              className="h-7 flex-1"
-              onClick={() => setValue('quota', +amount, { shouldValidate: true })}
-            >
-              <Amount value={amount} crypto={Crypto.KOKON} />
-            </Button>
-          ))}
+          {packetSetting?.shortcuts?.length ? (
+            packetSetting.shortcuts.map(amount => (
+              <Button
+                key={amount}
+                type="button"
+                variant="outlineSoft"
+                className="h-7 flex-1"
+                onClick={() => setValue('quota', +amount, { shouldValidate: true })}
+              >
+                <Amount value={amount} crypto={Crypto.KOKON} />
+              </Button>
+            ))
+          ) : (
+            <QuickAmountSkeleton />
+          )}
         </div>
       </div>
 
@@ -136,7 +153,9 @@ const LuckBag = ({ minValue = 10 }: { minValue?: number }) => {
                 onValueChange={({ floatValue }) => {
                   onChange(floatValue)
                 }}
+                onBlur={handleMinValueBlur}
                 className="h-9 flex-1"
+                fieldSuffix={Crypto.KOKON}
               />
             )
           }}
@@ -165,7 +184,9 @@ const LuckBag = ({ minValue = 10 }: { minValue?: number }) => {
                 onValueChange={({ floatValue }) => {
                   onChange(floatValue)
                 }}
+                onBlur={handleMaxValueBlur}
                 className="h-9 flex-1"
+                fieldSuffix={Crypto.KOKON}
               />
             )
           }}

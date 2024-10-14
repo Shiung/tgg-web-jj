@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useInfiniteQuery } from '@tanstack/react-query'
+
 import useStore from '~/stores/useStore'
 import { cn } from '~/lib/utils'
-
 import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
 import X from '~/icons/x.svg?react'
 import SvgCopy from '~/icons/copy.svg?react'
@@ -10,10 +11,59 @@ import { Link, useSearchParams, useNavigate } from '@remix-run/react'
 import { Avatar, AvatarFallback } from '~/components/ui/avatar'
 import { KokonIcon } from '~/components/color-icons'
 import StopSharingDialog from './stop-sharing-dialog'
+import { PacketResponse, PacketsResponse } from '~/api/codegen/data-contracts'
+import { apis } from '~/api'
+
+type Kind = NonNullable<PacketsResponse['list']>[number]['distributeKind']
+type State = NonNullable<PacketsResponse['list']>[number]['state']
 
 const LuckyMoneyDetail = () => {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+  const id = searchParams.get('id') || '1'
+  const kind: Kind = (searchParams.get('kind') || undefined) as Kind
+  const state: State = (searchParams.get('state') || undefined) as State
+
+  const {
+    data: detailInfiniteDataRaw,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    error,
+    isFetching,
+    status,
+  } = useInfiniteQuery<PacketResponse>({
+    queryKey: ['packetDetail', id],
+    queryFn: ({ pageParam = 1 }) =>
+      apis.packet.packetDetail(id, { page: pageParam as number, pageSize: 20 }).then(res => ({
+        ...res.data,
+        receiver: res.data.receiver || [],
+        pagination: {
+          pageSize: res.data.pagination?.pageSize ?? 0,
+          totalPage: res.data.pagination?.totalPage ?? 0,
+          totalRecord: res.data.pagination?.totalRecord ?? 0,
+        },
+      })),
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.pagination?.totalPage || 0 > allPages.length) {
+        return allPages.length + 1
+      }
+      return undefined
+    },
+    initialPageParam: 1,
+  })
+
+  const detailData = useMemo(() => {
+    const dataFields = detailInfiniteDataRaw?.pages?.[0]
+    return {
+      ...dataFields,
+      // 将每一页的 receiver[] 进行合并
+      receiver: detailInfiniteDataRaw?.pages?.flatMap(page => page.receiver) ?? [],
+    }
+  }, [detailInfiniteDataRaw])
+
   const [shareLink, setShareLink] = useState(window.location.origin)
+
   const handleCopyShareLink = () => {
     const tempInput = document.createElement('input')
     tempInput.value = shareLink
@@ -23,6 +73,7 @@ const LuckyMoneyDetail = () => {
     document.body.removeChild(tempInput)
     alert('Link copied to clipboard!')
   }
+
   const handleShare = async () => {
     try {
       if (typeof navigator === 'undefined' || !navigator.share) {
@@ -38,11 +89,6 @@ const LuckyMoneyDetail = () => {
     }
   }
 
-  // 获取特定的 search param
-  const [searchParams] = useSearchParams()
-  const luckyMoneyStatus = searchParams.get('status')
-  const luckyMoneyType = searchParams.get('type')
-
   const setNavVisibility = useStore(state => state.setNavVisibility)
   useEffect(() => {
     setNavVisibility(false)
@@ -57,7 +103,7 @@ const LuckyMoneyDetail = () => {
       <div
         className={cn(
           'rounded-t-lg bg-gradient-to-b p-4 pb-8',
-          luckyMoneyType && +luckyMoneyType === 0
+          detailData.distributeKind === 'FIXED'
             ? 'from-[#FDCB04] to-[#FF4D00]'
             : 'from-[#FF90C2] to-[#EB0070]'
         )}
@@ -72,9 +118,7 @@ const LuckyMoneyDetail = () => {
           >
             <ArrowLineLeftIcon className="h-6 w-6 text-[#FFFFFFB2]" />
           </Link>
-          <h1 className="text-lg font-ultra">
-            {luckyMoneyType === '0' ? 'Normal' : 'Luck Battle'}
-          </h1>
+          <h1 className="text-lg font-ultra">{kind === 'FIXED' ? 'Normal' : 'Luck Battle'}</h1>
           <Link to="/">
             <X className="h-6 w-6 text-[#FFFFFFB2]" />
           </Link>
@@ -82,12 +126,12 @@ const LuckyMoneyDetail = () => {
         <div className="flex flex-col space-y-2">
           <div className="flex justify-between text-xs font-normal">
             <div>2024-06-17</div>
-            {luckyMoneyStatus && +luckyMoneyStatus === 1 && (
+            {state === 1 && (
               <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-ultra text-app-green">
                 Completed
               </div>
             )}
-            {luckyMoneyStatus && +luckyMoneyStatus === 0 && (
+            {state && +state === 0 && (
               <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-ultra text-app-red">
                 Terminated
               </div>
@@ -168,7 +212,7 @@ const LuckyMoneyDetail = () => {
       </div>
 
       {/* 底部按钮 */}
-      {luckyMoneyStatus && +luckyMoneyStatus === 2 && <StopSharingDialog />}
+      {state && +state === 2 && <StopSharingDialog />}
     </div>
   )
 }

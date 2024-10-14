@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Controller, useFormContext } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
@@ -9,13 +10,23 @@ import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import Amount from '~/components/amount'
 import WarningIcon from '~/icons/warning.svg?react'
+import { GetSettingResponse } from '~/api/codegen/data-contracts'
 
 import type { FormData } from './route'
 import Message from './message'
+import { QuickAmountSkeleton } from './skeleton'
 
-const NormalBag = ({ minValue = 0 }: { minValue?: number }) => {
+interface NormalBagProps {
+  packetSetting?: GetSettingResponse
+}
+
+const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
+  const minValue = useMemo(
+    () => parseFloat(packetSetting?.minValue || '0'),
+    [packetSetting?.minValue]
+  )
+
   const {
-    register,
     control,
     getValues,
     setValue,
@@ -81,19 +92,23 @@ const NormalBag = ({ minValue = 0 }: { minValue?: number }) => {
           }}
         />
         <div className="flex space-x-2">
-          {['10', '100', '500', '1000'].map(amount => (
-            <Button
-              key={amount}
-              type="button"
-              variant="outlineSoft"
-              className="h-7 flex-1"
-              onClick={() =>
-                setValue('distributedEachBagAmount', +amount, { shouldValidate: true })
-              }
-            >
-              <Amount value={amount} crypto={Crypto.KOKON} />
-            </Button>
-          ))}
+          {packetSetting?.shortcuts?.length ? (
+            packetSetting.shortcuts.map(amount => (
+              <Button
+                key={amount}
+                type="button"
+                variant="outlineSoft"
+                className="h-7 flex-1"
+                onClick={() =>
+                  setValue('distributedEachBagAmount', +amount, { shouldValidate: true })
+                }
+              >
+                <Amount value={amount} crypto={Crypto.KOKON} />
+              </Button>
+            ))
+          ) : (
+            <QuickAmountSkeleton />
+          )}
         </div>
       </div>
 
