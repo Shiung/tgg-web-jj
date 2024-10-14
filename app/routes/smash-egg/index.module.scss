@@ -18,23 +18,44 @@
 
 .card-bg {
   width: 100%;
-  background: url('/images/smash-egg/bg-mask.png'), linear-gradient(180deg, #fdcb04 0%, #ff4d00 100%);
+  background: url('/images/smash-egg/bg-mask.png'),
+    linear-gradient(180deg, #fdcb04 0%, #ff4d00 100%);
   background-size: cover;
   background-repeat: no-repeat;
 }
 
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+}
+
 .marquee {
-  padding-inline: 4px;
+  display: inline-block;
   white-space: nowrap;
-  animation: marquee 5s linear infinite;
-  color: #fff;
+  padding-left: 100%;
+  animation: marquee 150s linear infinite;
 }
 
 @keyframes marquee {
   0% {
-    text-indent: 0%;
+    transform: translate(0, 0);
   }
   100% {
-    text-indent: -100%;
+    transform: translate(-100%, 0);
   }
+}
+
+// 當有多個元素時，確保它們並排顯示
+.marquee > * {
+  display: inline-block;
+  padding-right: 50px; // 調整元素之間的間距
+}
+
+.lottie-container {
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+}
+
+.hidden {
+  opacity: 0;
 }

@@ -9,7 +9,7 @@ import animationPath4 from '~/routes/smash-egg/lottie/changestg.json'
 import animationPath5 from '~/routes/smash-egg/lottie/copper03.json'
 import animationPath6 from '~/routes/smash-egg/lottie/copper04.json'
 import animationPath7 from '~/routes/smash-egg/lottie/copper05.json'
-import hammerAmi from '~/routes/smash-egg/lottie/hammer.json'
+import hammerAmi from '~/routes/smash-egg/lottie/-hammer.json'
 
 const animationFiles = [
   animationPath1,

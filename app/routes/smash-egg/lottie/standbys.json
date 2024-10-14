@@ -12,64 +12,64 @@
       "id": "image_0",
       "w": 356,
       "h": 198,
-      "u": "/images/smash-egg/lottie/standbys/images/",
-      "p": "img_0.png",
+      "u": "/images/smash-egg/lottie/",
+      "p": "face_hit.png",
       "e": 0
     },
     {
       "id": "image_1",
       "w": 356,
       "h": 198,
-      "u": "/images/smash-egg/lottie/standbys/images/",
-      "p": "img_1.png",
+      "u": "/images/smash-egg/lottie/",
+      "p": "face_normal.png",
       "e": 0
     },
     {
       "id": "image_2",
       "w": 600,
       "h": 709,
-      "u": "/images/smash-egg/lottie/standbys/images/",
-      "p": "img_2.png",
+      "u": "/images/smash-egg/lottie/",
+      "p": "s00.png",
       "e": 0
     },
     {
       "id": "image_3",
       "w": 600,
       "h": 709,
-      "u": "/images/smash-egg/lottie/standbys/images/",
-      "p": "img_3.png",
+      "u": "/images/smash-egg/lottie/",
+      "p": "c00.png",
       "e": 0
     },
     {
       "id": "image_4",
       "w": 600,
       "h": 709,
-      "u": "/images/smash-egg/lottie/standbys/images/",
-      "p": "img_4.png",
+      "u": "/images/smash-egg/lottie/",
+      "p": "g00.png",
       "e": 0
     },
     {
       "id": "image_5",
       "w": 146,
       "h": 60,
-      "u": "/images/smash-egg/lottie/standbys/images/",
-      "p": "img_5.png",
+      "u": "/images/smash-egg/lottie/",
+      "p": "Ellipse_6525.png",
       "e": 0
     },
     {
       "id": "image_6",
       "w": 268,
       "h": 94,
-      "u": "/images/smash-egg/lottie/standbys/images/",
-      "p": "img_6.png",
+      "u": "/images/smash-egg/lottie/",
+      "p": "image_13928.png",
       "e": 0
     },
     {
       "id": "image_7",
       "w": 296,
       "h": 92,
-      "u": "/images/smash-egg/lottie/standbys/images/",
-      "p": "img_7.png",
+      "u": "/images/smash-egg/lottie/",
+      "p": "Ellipse_6526.png",
       "e": 0
     }
   ],

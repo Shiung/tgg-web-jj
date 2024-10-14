@@ -1,7 +1,9 @@
+import React from 'react'
 import Footer from './footer'
 import styles from './index.module.scss'
+import type { CardTemplateProps } from './types'
 
-export default function CardTemplate({ children }: { children: React.ReactNode }) {
+const CardTemplate: React.FC<CardTemplateProps> = ({ children, marqueeList }) => {
   return (
     <div className="relative flex flex-1 flex-col justify-center">
       <div className="relative">
@@ -16,8 +18,10 @@ export default function CardTemplate({ children }: { children: React.ReactNode }
           {children}
         </div>
         {/* Footer */}
-        <Footer />
+        <Footer marqueeList={marqueeList} />
       </div>
     </div>
   )
 }
+
+export default CardTemplate
