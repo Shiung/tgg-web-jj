@@ -1,13 +1,8 @@
 import { Dialog, DialogContent, DialogFooter } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
+import type { AlertDialogProps } from './types'
 
-interface AlertDialogProps {
-  open?: boolean | undefined
-  confirm: () => void
-  cancel: () => void
-}
-
-const AlertDialog: React.FC<AlertDialogProps> = ({ open, confirm, cancel }) => {
+const AlertDialog = ({ open, confirm, cancel }: AlertDialogProps): JSX.Element => {
   return (
     <Dialog open={open}>
       <DialogContent className="px-4 py-4" defaultClose={false}>

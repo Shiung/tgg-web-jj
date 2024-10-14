@@ -121,7 +121,7 @@ export class Game<SecurityDataType = unknown> {
       /** @format uint64 */
       gameId?: number;
       /**
-       * 分頁頁數 (Required, Minimum: 1)
+       * 分頁頁數 (Minimum: 1, Required)
        * @format int64
        * @min 1
        */

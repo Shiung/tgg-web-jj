@@ -1,115 +1,32 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { Link } from '@remix-run/react'
-// import { PAGInit } from 'libpag'
-import { PAGView } from 'libpag/types/pag-view'
-import { PAGFile } from 'libpag/types/pag-file'
-import { PAGComposition } from 'libpag/types/pag-composition'
+import { LottieRefCurrentProps } from 'lottie-react'
 import useStore from '~/stores/useStore'
+import AppLoading from '~/components/app-loading'
+import { Button } from '~/components/ui/button'
+import { cn } from '~/lib/utils'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { apis } from '~/api'
+import { errorToast } from '~/lib/toast'
+
 import styles from './index.module.scss'
 import StandbyCard from './standby-card'
 import RulesDialog from './rules-dialog'
 import CardTemplate from './card-template'
 import AlertDialog from './alert-dialog'
-import { Button } from '~/components/ui/button'
+import LottieAnimation from './lottie-animation'
+import { Status, EggRecord, EggMarquee, PrizePool } from './types'
+import { hammerFile, standbyArr, goldArr, silverArr, copperArr, changeArr } from './animation-data'
 
 // 配合 useMatches 聲明需要登录才能访问
 export const handle = {
   requiresAuth: true,
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let PAG: any
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-let PAGInit: any
 const HAMMER_CANVAS_ID = 'hammer'
 const EGG_AREA_CANVAS_ID = 'egg_area'
-const HAMMER_PATH = '/images/smash-egg/animations/hammer.pag'
-const STANDBYG_PATH = '/images/smash-egg/animations/standbyg.pag'
-const STANDBYS_PATH = '/images/smash-egg/animations/standbys.pag'
-const STANDBYC_PATH = '/images/smash-egg/animations/standbyc.pag'
-const CHANGEGTS_PATH = '/images/smash-egg/animations/changegts.pag'
-const CHANGEGTC_PATH = '/images/smash-egg/animations/changegtc.pag'
-const CHANGECTG_PATH = '/images/smash-egg/animations/changectg.pag'
-const CHANGECTS_PATH = '/images/smash-egg/animations/changects.pag'
-const CHANGESTC_PATH = '/images/smash-egg/animations/changestc.pag'
-const CHANGESTG_PATH = '/images/smash-egg/animations/changestg.pag'
 
-const COPPER_N_PATH = '/images/smash-egg/animations/copper-n.pag'
-const COPPER_01_PATH = '/images/smash-egg/animations/copper-0.pag'
-const COPPER_02_PATH = '/images/smash-egg/animations/copper-1.pag'
-const COPPER_03_PATH = '/images/smash-egg/animations/copper-2.pag'
-const COPPER_04_PATH = '/images/smash-egg/animations/copper-3.pag'
-const COPPER_05_PATH = '/images/smash-egg/animations/copper-4.pag'
-
-const GOLD_N_PATH = '/images/smash-egg/animations/gold-n.pag'
-const GOLD_01_PATH = '/images/smash-egg/animations/gold-0.pag'
-const GOLD_02_PATH = '/images/smash-egg/animations/gold-1.pag'
-const GOLD_03_PATH = '/images/smash-egg/animations/gold-2.pag'
-const GOLD_04_PATH = '/images/smash-egg/animations/gold-3.pag'
-const GOLD_05_PATH = '/images/smash-egg/animations/gold-4.pag'
-
-const SILVER_N_PATH = '/images/smash-egg/animations/sliver-n.pag'
-const SILVER_01_PATH = '/images/smash-egg/animations/silver-0.pag'
-const SILVER_02_PATH = '/images/smash-egg/animations/silver-1.pag'
-const SILVER_03_PATH = '/images/smash-egg/animations/silver-2.pag'
-const SILVER_04_PATH = '/images/smash-egg/animations/silver-3.pag'
-const SILVER_05_PATH = '/images/smash-egg/animations/silver-4.pag'
-const allFilePats = [
-  HAMMER_PATH,
-  STANDBYG_PATH,
-  STANDBYS_PATH,
-  STANDBYC_PATH,
-  CHANGEGTS_PATH,
-  CHANGEGTC_PATH,
-  CHANGECTG_PATH,
-  CHANGECTS_PATH,
-  CHANGESTC_PATH,
-  CHANGESTG_PATH,
-  GOLD_01_PATH,
-  GOLD_02_PATH,
-  GOLD_03_PATH,
-  GOLD_04_PATH,
-  GOLD_05_PATH,
-  GOLD_N_PATH,
-  SILVER_01_PATH,
-  SILVER_02_PATH,
-  SILVER_03_PATH,
-  SILVER_04_PATH,
-  SILVER_05_PATH,
-  SILVER_N_PATH,
-  COPPER_01_PATH,
-  COPPER_02_PATH,
-  COPPER_03_PATH,
-  COPPER_04_PATH,
-  COPPER_05_PATH,
-  COPPER_N_PATH,
-]
-
-let standbyArr: ArrayBuffer[] = []
-let changeArr: ArrayBuffer[][] = []
-let hammerFile: null | ArrayBuffer = null
-let goldArr: ArrayBuffer[] = []
-let silverArr: ArrayBuffer[] = []
-let copperArr: ArrayBuffer[] = []
-let currentPlayFile: ArrayBuffer | undefined = undefined
-
-enum Status {
-  Init,
-  Standby,
-  BorkenEggPage,
-  Playing,
-  End,
-}
-
-let hammerPagView: PAGView | undefined
-let hammerPagFile: PAGFile | undefined
-let hammerPagComposition: PAGComposition | undefined
-
-let pannelPagView: PAGView | undefined
-let pannelPagFile: PAGFile | undefined
-let pannelPagComposition: PAGComposition | undefined
-
-let startX: number = 0
+let startX = 0
 
 export default function SmashEgg() {
   const [smashCount, setSmashCount] = useState(0)
@@ -118,8 +35,16 @@ export default function SmashEgg() {
   const [status, setStatus] = useState<Status>(Status.Init)
   const [open, setOpen] = useState(false)
   const [currentEgg, setCurrentEgg] = useState(0)
-  const [isChanging, setIsChanging] = useState(false)
-
+  const [animationData, setAnimationData] = useState(standbyArr[0])
+  const [reward, setReward] = useState(0)
+  const [nextEgg, setNextEgg] = useState<number | null>(null)
+  const lottieRefs = useRef<LottieRefCurrentProps>(null)
+  const [hammerCount, setHammerCount] = useState(0)
+  const hammerRefs = useRef<LottieRefCurrentProps>(null)
+  const [eggRecord, setEggRecord] = useState<EggRecord | null>(null)
+  const [prizePool, setPrizePool] = useState<PrizePool[]>([])
+  const [marqueeList, setMarqueeList] = useState<EggMarquee[]>([])
+  const queryClient = useQueryClient()
   const setHeaderVisibility = useStore(
     (state: { setHeaderVisibility: (visible: boolean) => void }) => state.setHeaderVisibility
   )
@@ -127,175 +52,147 @@ export default function SmashEgg() {
     (state: { setNavVisibility: (visible: boolean) => void }) => state.setNavVisibility
   )
 
-  const destoryHammerPagView = useCallback(async () => {
-    try {
-      if (hammerPagFile && !hammerPagFile.isDestroyed) {
-        hammerPagFile && hammerPagFile.destroy()
-        hammerPagFile = undefined
-      }
-      if (hammerPagComposition) {
-        hammerPagComposition.removeAllLayers()
-        hammerPagComposition.destroy()
-        hammerPagComposition = undefined
-      }
+  const { telegramUserData } = useStore(state => state)
 
-      if (hammerPagView && hammerPagView['pagSurface']) {
-        await hammerPagView['pagSurface'].clearAll()
-        await hammerPagView.stop()
-      }
-      if (hammerPagView && !hammerPagView.isDestroyed) {
-        hammerPagView['renderCanvas'] = null
-        await hammerPagView.destroy()
-        hammerPagView = undefined
-      }
-    } catch (error) {
-      console.log('@@ error', error)
-    }
-  }, [])
+  const statusRef = useRef(status)
+  const nextEggRef = useRef(nextEgg)
 
-  const destoryPanneelPagView = useCallback(async () => {
-    try {
-      if (pannelPagFile && !pannelPagFile.isDestroyed) {
-        pannelPagFile && pannelPagFile.destroy()
-        pannelPagFile = undefined
-      }
+  // 初始化 API
+  const {
+    data: eggData,
+    error: eggError,
+    isError: isEggError,
+    refetch: eggRefetch,
+  } = useQuery({
+    queryKey: ['initEgg'],
+    queryFn: async () => {
+      const response = await apis.campaign.campaignEggInfoCreate()
+      const data: any = response.data
+      data.updateTime = new Date().getTime()
+      return response.data
+    },
+    enabled: status === Status.Init,
+  })
 
-      if (pannelPagComposition) {
-        pannelPagComposition.removeAllLayers()
-        pannelPagComposition.destroy()
-        pannelPagComposition = undefined
-      }
+  // 開始砸蛋 API
+  const {
+    data: smashData,
+    error: smashError,
+    isError: isSmashError,
+    refetch: refetchSmash,
+  } = useQuery({
+    queryKey: ['startSmash'],
+    queryFn: async () => {
+      const eggLevel = currentEgg === 0 ? 'GOLD' : currentEgg === 1 ? 'NORMAL' : 'SILVER'
+      const response = await apis.campaign.campaignEggSmashCreate({ eggLevel })
+      return response.data
+    },
+    enabled: false,
+  })
 
-      if (pannelPagView && pannelPagView['pagSurface']) {
-        await pannelPagView['pagSurface'].clearAll()
-        await pannelPagView.stop()
-      }
-
-      if (pannelPagView && !pannelPagView.isDestroyed) {
-        pannelPagView['renderCanvas'] = null
-        await pannelPagView.destroy()
-        pannelPagView = undefined
-      }
-    } catch (error) {
-      console.log('@@ error', error)
-    }
-  }, [])
-
-  const handlePlayingAnimationEnd = () => {
-    setSmashCount(count => (count + 1 > 4 ? 4 : count + 1))
-    let timer: NodeJS.Timeout | undefined = undefined
-    setSmashTotal(prevTotal => {
-      const newTotal = prevTotal + 18 >= 100 ? 100 : prevTotal + 18
-      timer = setTimeout(() => {
-        if (newTotal >= 100) {
-          setStatus(Status.End)
-        } else {
-          setStatus(Status.BorkenEggPage)
-        }
-      }, 1000)
-      return newTotal
-    })
-    return () => clearTimeout(timer)
-  }
-
-  const performChangeAnimation = useCallback((pagFile: PAGFile) => {
-    return new Promise<void>(resolve => {
-      if (!pannelPagView) {
-        console.error('pannelPagView is not initialized')
-        resolve()
-        return
-      }
-
-      // 創建一個新的 PAGComposition
-      const composition = PAG.PAGComposition.make(pagFile.width(), pagFile.height())
-
-      // 將 pagFile 添加為 composition 的圖層
-      const layer = composition.addLayer(pagFile)
-
-      // 確保 layer 被正確添加
-      if (!layer) {
-        console.error('Failed to add layer to composition')
-        resolve()
-        return
-      }
-
-      // 使用新創建的 composition
-      pannelPagView.setComposition(composition)
-      pannelPagView.setRepeatCount(1)
-      pannelPagView.setProgress(0)
-
-      const onAnimationEnd = () => {
-        pannelPagView?.removeListener('onAnimationEnd', onAnimationEnd)
-        resolve()
-      }
-
-      pannelPagView.addListener('onAnimationEnd', onAnimationEnd)
-      pannelPagView.play()
-    })
-  }, [])
-
-  const performHammerAnimation = useCallback(async () => {
-    if (hammerPagView) return
-
-    try {
-      const canvas = document.getElementById(HAMMER_CANVAS_ID) as HTMLCanvasElement
-      if (!canvas) throw new Error('Canvas element not found')
-
-      hammerPagFile = await PAG.PAGFile.load(hammerFile)
-      if (!hammerPagFile) throw new Error('Failed to load hammer PAG file')
-
-      hammerPagComposition = PAG.PAGComposition.make(hammerPagFile.width(), hammerPagFile.height())
-      if (!hammerPagComposition) throw new Error('Failed to create hammer PAG composition')
-
-      const layer = hammerPagComposition.addLayer(hammerPagFile)
-      if (!layer) throw new Error('Failed to add layer to hammer PAG composition')
-
-      canvas.width = hammerPagComposition.width()
-      canvas.height = hammerPagComposition.height()
-
-      hammerPagView = await PAG.PAGView.init(hammerPagFile, canvas, { firstFrame: false })
-      if (!hammerPagView) throw new Error('Failed to initialize hammer PAG view')
-
-      hammerPagView.setRepeatCount(0)
-      await hammerPagView.play()
-    } catch (error) {
-      console.error('Error in performHammerAnimation:', error)
-    }
-  }, [])
-
-  const handleChangeEgg = useCallback(
-    async (isNext: boolean) => {
-      if (isChanging) return
-
-      try {
-        setIsChanging(true)
-
-        const nextPage = isNext ? currentEgg + 1 : currentEgg - 1
-        const newEgg = nextPage > 2 ? 0 : nextPage < 0 ? 2 : nextPage
-
-        // 加載新的 PAGFile
-        const newPagFile = await PAG.PAGFile.load(changeArr[currentEgg][isNext ? 1 : 0])
-
-        // 執行動畫
-        await performChangeAnimation(newPagFile)
-
-        // 更新 currentEgg
-        setCurrentEgg(newEgg)
-      } catch (error) {
-        console.log('@@ error', error)
-      } finally {
-        setIsChanging(false)
+  // 放棄蛋
+  const {
+    data: giveupData,
+    error: giveupError,
+    isError: isGiveupError,
+    refetch: refetchGiveup,
+  } = useQuery({
+    queryKey: ['giveupSmash'],
+    queryFn: async () => {
+      const eggLevel = currentEgg === 0 ? 'GOLD' : currentEgg === 1 ? 'NORMAL' : 'SILVER'
+      const response = await apis.campaign.campaignEggGiveupCreate({ eggLevel })
+      return {
+        data: response.data,
+        status: response.status,
       }
     },
-    [isChanging, currentEgg, performChangeAnimation]
-  )
+    enabled: false, // 禁用自动查询
+  })
+
+  // 活動設定
+  const {
+    data: activityData,
+    error: activityError,
+    isError: isActivityError,
+  } = useQuery({
+    queryKey: ['activityInfo'],
+    queryFn: async () => {
+      const response = await apis.campaign.campaignEggActivityInfoList()
+      return response.data
+    },
+    enabled: status === Status.Init || status === Status.Standby,
+  })
+
+  // 領取獎勵
+  const {
+    data: claimData,
+    error: claimError,
+    isError: isClaimError,
+    refetch: refetchClaim,
+  } = useQuery({
+    queryKey: ['claimReward'],
+    queryFn: async () => {
+      const response = await apis.campaign.campaignEggClaimCreate({
+        transactionId: eggData?.record?.transactionId || '',
+      })
+      return {
+        data: response.data,
+        status: response.status,
+      }
+    },
+    enabled: false,
+  })
+
+  // 跑馬燈
+  const {
+    data: marqueeData,
+    error: marqueeError,
+    isError: isMarqueeError,
+  } = useQuery({
+    queryKey: ['marqueeInfo'],
+    queryFn: async () => {
+      const response = await apis.campaign.campaignEggMarqueeList({ size: 15 })
+      return response.data
+    },
+    enabled: status === Status.Init,
+  })
+
+  // 创建一个函数来处理放弃操作
+  const handleGiveup = useCallback(() => {
+    refetchGiveup() // 手动触发查询
+  }, [refetchGiveup])
+
+  const handleSamsh = useCallback(() => {
+    refetchSmash()
+  }, [refetchSmash])
+
+  const handleClaim = useCallback(() => {
+    refetchClaim()
+    if (telegramUserData) {
+      const marquee = {
+        customerName: `${telegramUserData?.firstName || ''} ${telegramUserData?.lastName || ''}`,
+        eggLevel: eggRecord?.eggLevel || '',
+        reward: eggRecord?.reward || '',
+      }
+      setMarqueeList(prev => {
+        const newList = [...prev]
+        newList.splice(1, 0, marquee)
+        return newList
+      })
+    }
+  }, [refetchClaim, eggRecord, telegramUserData])
+
+  const setupHammerCount = useCallback((count: number) => {
+    setHammerCount(count)
+    hammerRefs.current?.goToAndPlay(0)
+  }, [])
 
   const handleStartButtonClick = () => {
-    setStatus(Status.BorkenEggPage)
+    setStatus(Status.BrokenEggPage)
   }
 
   const handleSmashButtonClick = () => {
-    setStatus(Status.Playing)
+    handleSamsh()
   }
 
   const handleGiveUpButtonClick = () => {
@@ -306,8 +203,10 @@ export default function SmashEgg() {
     setOpen(false)
     setSmashCount(0)
     setSmashTotal(0)
+    setAnimationData(standbyArr[0])
     setStatus(Status.Standby)
-  }, [])
+    queryClient.clear()
+  }, [queryClient])
 
   const handleTouchStart = useCallback(
     (e: React.TouchEvent) => {
@@ -315,6 +214,16 @@ export default function SmashEgg() {
       startX = e.touches[0].clientX
     },
     [status]
+  )
+
+  const handleChangeEgg = useCallback(
+    (isNext: boolean) => {
+      const nextPage = isNext ? currentEgg + 1 : currentEgg - 1
+      const newEgg = nextPage > 2 ? 0 : nextPage < 0 ? 2 : nextPage
+      setAnimationData(changeArr[currentEgg][isNext ? 1 : 0])
+      setNextEgg(newEgg)
+    },
+    [currentEgg]
   )
 
   const handleTouchEnd = useCallback(
@@ -330,188 +239,193 @@ export default function SmashEgg() {
     [status, handleChangeEgg]
   )
 
-  const initPagView = async () => {
-    PAGInit().then(pag => {
-      PAG = pag
-      setStatus(Status.Standby)
-      performHammerAnimation()
-    })
-  }
-
-  const loadAllPagFile = async () => {
-    const [
-      hammerBuffer,
-      standyGBuffer,
-      standySBuffer,
-      standyCBuffer,
-      changeGTSBuffer,
-      changeGTCBuffer,
-      changeSTCBuffer,
-      changeSTGBuffer,
-      changeCTGBuffer,
-      changeCTSBuffer,
-      gold01Buffer,
-      gold02Buffer,
-      gold03Buffer,
-      gold04Buffer,
-      gold05Buffer,
-      goldnBuffer,
-      silver01Buffer,
-      silver02Buffer,
-      silver03Buffer,
-      silver04Buffer,
-      silver05Buffer,
-      silvernBuffer,
-      copper01Buffer,
-      copper02Buffer,
-      copper03Buffer,
-      copper04Buffer,
-      copper05Buffer,
-      coppernBuffer,
-    ] = await Promise.all(
-      allFilePats.map(path => fetch(path).then(response => response.arrayBuffer()))
-    )
-    hammerFile = hammerBuffer
-    standbyArr = [standyGBuffer, standyCBuffer, standySBuffer]
-    changeArr = [
-      [changeGTSBuffer, changeGTCBuffer],
-      [changeSTCBuffer, changeSTGBuffer],
-      [changeCTGBuffer, changeCTSBuffer],
-    ]
-    goldArr = [gold01Buffer, gold02Buffer, gold03Buffer, gold04Buffer, goldnBuffer, gold05Buffer]
-    silverArr = [
-      silver01Buffer,
-      silver02Buffer,
-      silver03Buffer,
-      silver04Buffer,
-      silvernBuffer,
-      silver05Buffer,
-    ]
-    copperArr = [
-      copper01Buffer,
-      copper02Buffer,
-      copper03Buffer,
-      copper04Buffer,
-      coppernBuffer,
-      copper05Buffer,
-    ]
-    initPagView()
-  }
-
-  useEffect(() => {
-    if (status !== Status.Playing) return
-    const playBrokenEggAnimation = async () => {
-      try {
-        const pagFile = await PAG.PAGFile.load(currentPlayFile)
-
-        if (!pannelPagView) return
-
-        // 創建一個新的 PAGComposition
-        const composition = PAG.PAGComposition.make(pagFile.width(), pagFile.height())
-
-        // 將 pagFile 添加為 composition 的圖層
-        composition.addLayer(pagFile)
-
-        // 使用新創建的 composition
-        pannelPagView.setComposition(composition)
-        pannelPagView.setRepeatCount(1)
-        pannelPagView.setProgress(0)
-
-        await pannelPagView.play()
-
-        const onAnimationEnd = () => {
-          pannelPagView!.removeListener('onAnimationEnd', onAnimationEnd)
-          handlePlayingAnimationEnd()
-        }
-        pannelPagView.addListener('onAnimationEnd', onAnimationEnd)
-      } catch (error) {
-        console.error('Error playing broken egg animation:', error)
+  const handleComplete = useCallback(() => {
+    if (statusRef.current === Status.Standby) {
+      if (nextEggRef.current !== null) {
+        setCurrentEgg(nextEggRef.current)
+        setAnimationData(standbyArr[nextEggRef.current])
+        setNextEgg(null)
+      } else {
+        setTimeout(() => {
+          lottieRefs.current?.goToAndPlay(0, false)
+        }, 100)
       }
     }
-    playBrokenEggAnimation()
-  }, [status])
 
-  useEffect(() => {
-    if (status !== Status.Standby) return
-    const initializeStandbyAnimation = async () => {
-      try {
-        const canvas = document.getElementById(EGG_AREA_CANVAS_ID) as HTMLCanvasElement
-        pannelPagFile = (await PAG.PAGFile.load(standbyArr[currentEgg])) as PAGFile
-        pannelPagComposition = PAG.PAGComposition.make(
-          pannelPagFile.width(),
-          pannelPagFile.height()
-        ) as PAGComposition
-        pannelPagComposition.addLayer(pannelPagFile)
-
-        if (!pannelPagView) {
-          pannelPagView = (await PAG.PAGView.init(pannelPagComposition, canvas, {
-            isFirstFrame: false,
-          })) as PAGView
-        } else {
-          pannelPagView.setComposition(pannelPagComposition)
-        }
-
-        pannelPagView.setRepeatCount(0)
-        await pannelPagView.play()
-      } catch (error) {
-        console.error('Error in standby animation setup:', error)
-      }
+    if (statusRef.current === Status.Playing) {
+      eggRefetch()
     }
-    initializeStandbyAnimation()
-  }, [currentEgg, status])
+  }, [eggRefetch])
 
-  useEffect(() => {
+  const setupImageAndAnimaiton = useCallback(() => {
     const imgPath = currentEgg === 0 ? 'gold' : currentEgg === 1 ? 'cooper' : 'silver'
     const imgIndex = smashTotal >= 100 ? 'n' : smashCount > 4 ? 4 : smashCount
-    const animationIndex = smashTotal + 18 >= 100 ? 5 : smashCount > 4 ? 4 : smashCount
+    const animationIndex = smashTotal + 0.1 >= 100 ? 5 : smashCount > 4 ? 4 : smashCount
     const pagFile =
       currentEgg === 0
         ? goldArr[animationIndex]
         : currentEgg === 1
           ? copperArr[animationIndex]
           : silverArr[animationIndex]
+
+    setAnimationData(pagFile)
     setCurrentEggPath(`/images/smash-egg/${imgPath}-${imgIndex}.png`)
-    currentPlayFile = pagFile
-  }, [status, smashTotal, smashCount, currentEgg])
+  }, [currentEgg, smashTotal, smashCount])
 
   useEffect(() => {
-    import('libpag').then(module => {
-      PAGInit = module.PAGInit
-      loadAllPagFile()
-      setHeaderVisibility(false)
-      setNavVisibility(false)
-    })
+    if (status === Status.BrokenEggPage) {
+      setupImageAndAnimaiton()
+    }
+  }, [status, setupImageAndAnimaiton])
 
+  useEffect(() => {
+    if (isMarqueeError) {
+      errorToast(marqueeError?.message || 'An error occurred')
+    } else if (marqueeData) {
+      setMarqueeList(marqueeData.result || [])
+    }
+  }, [marqueeData, marqueeError, isMarqueeError])
+
+  useEffect(() => {
+    if (isClaimError) {
+      errorToast(claimError?.message || 'An error occurred')
+    } else if (!isClaimError && claimData) {
+      eggRefetch()
+    }
+  }, [claimData, claimError, isClaimError, eggRefetch])
+
+  useEffect(() => {
+    if (isActivityError) {
+      errorToast(activityError?.message || 'An error occurred')
+    } else if (activityData?.prizePool && activityData.prizePool.length > 0) {
+      setPrizePool(activityData.prizePool)
+    }
+  }, [activityData, activityError, isActivityError])
+
+  useEffect(() => {
+    if (isGiveupError) {
+      errorToast(giveupError?.message || 'An error occurred')
+    } else if (giveupData) {
+      resetTheGame()
+    }
+  }, [giveupData, giveupError, isGiveupError, resetTheGame])
+
+  useEffect(() => {
+    if (isSmashError) {
+      errorToast(smashError?.message || 'An error occurred')
+    } else if (smashData) {
+      setupHammerCount(Number(smashData.hammerRemaining ?? 0))
+      setTimeout(() => {
+        setReward(smashData.reward ? +smashData.reward : 0)
+        setSmashCount(smashData?.totalCount || 0)
+        setSmashTotal(() => {
+          const newTotal = smashData?.progress ? +smashData.progress : 0
+          return newTotal > 100 ? 100 : newTotal
+        })
+      }, 1000)
+      setStatus(Status.Playing)
+      if (lottieRefs.current) {
+        lottieRefs.current.goToAndPlay(0)
+      }
+    }
+  }, [smashData, smashError, isSmashError, setupHammerCount])
+
+  useEffect(() => {
+    if (isEggError) {
+      errorToast(eggError?.message || 'An error occurred')
+    } else if (eggData) {
+      setupHammerCount(eggData.hammerRemaining || 0)
+      if (eggData.record) {
+        const record = eggData.record
+        setEggRecord(record)
+        const currentEgg = record.eggLevel === 'GOLD' ? 0 : record.eggLevel === 'NORMAL' ? 1 : 2
+        const count = record.totalCount || 0
+        const total = record.progress ? +record.progress || 0 : 0
+        setCurrentEgg(currentEgg)
+        setSmashCount(count)
+        setSmashTotal(total)
+        setReward(record.reward ? +record.reward : 0)
+
+        if (!record.claimed && record.playStatus === 'SUCCESS') {
+          // 未領獎
+          setStatus(Status.End)
+          setCurrentEggPath(`/images/smash-egg/reward.png`)
+        } else if (record.playStatus === 'PLAYING') {
+          // 繼續上次的進度
+          setStatus(Status.BrokenEggPage)
+          const imgPath = currentEgg === 0 ? 'gold' : currentEgg === 1 ? 'cooper' : 'silver'
+          const imgIndex = total >= 100 ? 'n' : count > 4 ? 4 : count
+          const animationIndex = total + 0.1 >= 100 ? 5 : count > 4 ? 4 : count
+          const animationFile =
+            currentEgg === 0
+              ? goldArr[animationIndex]
+              : currentEgg === 1
+                ? copperArr[animationIndex]
+                : silverArr[animationIndex]
+
+          setTimeout(() => {
+            setAnimationData(animationFile)
+          }, 500)
+          setCurrentEggPath(`/images/smash-egg/${imgPath}-${imgIndex}.png`)
+        } else {
+          setAnimationData(standbyArr[currentEgg])
+          setTimeout(() => {
+            setStatus(Status.Standby)
+          }, 300)
+        }
+      } else {
+        // 沒有遊戲紀錄
+        setTimeout(() => {
+          resetTheGame()
+        }, 300)
+      }
+    }
+  }, [eggData, eggError, isEggError, setupHammerCount, resetTheGame])
+
+  useEffect(() => {
+    statusRef.current = status
+    nextEggRef.current = nextEgg
+  }, [status, nextEgg])
+
+  useEffect(() => {
+    setHeaderVisibility(false)
+    setNavVisibility(false)
     return () => {
-      destoryHammerPagView()
-      destoryPanneelPagView()
+      queryClient.clear()
       setHeaderVisibility(true)
       setNavVisibility(true)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const prizePoolItem = prizePool.find(
+    item => item.eggLevel === (currentEgg === 0 ? 'GOLD' : currentEgg === 1 ? 'NORMAL' : 'SILVER')
+  )
 
   return (
     <div
       className={`container relative flex flex-1 flex-col rounded-xl bg-[url('/images/smash-egg/bg-main.png')] bg-cover bg-no-repeat px-4 pt-3`}
     >
-      {/* PAG View */}
-      <div className={`absolute left-2 top-0 z-40 aspect-[41/51] w-[46px]`}>
-        <canvas id={HAMMER_CANVAS_ID} className="h-[100%] w-[100%]"></canvas>
-      </div>
-
+      {status === Status.Init && <AppLoading />}
+      <LottieAnimation
+        key={HAMMER_CANVAS_ID}
+        lottieRef={hammerRefs}
+        className="absolute -top-3.5 left-2 z-[35] aspect-[41/51] w-[60px]"
+        animationData={hammerFile}
+        loop={false}
+        autoplay={true}
+      />
       {/* Tool bar */}
-      <div className="z-30 flex aspect-[375/30] w-full justify-between">
+      <div className="z-[33] flex aspect-[375/30] w-full justify-between">
         {/* 可用工具數量 */}
         <div
           className={`relative flex w-[78px] items-center justify-end rounded-xl bg-white bg-opacity-30 px-3 py-1 text-right text-lg font-extrabold dark:text-white`}
         >
-          <span className="">x10</span>
+          <span className="">x{hammerCount}</span>
         </div>
 
         <div className="flex items-center justify-end gap-4">
           {/* 規則按鈕 */}
-          <RulesDialog />
+          <RulesDialog prizePools={prizePool} />
           {/* 關閉按鈕 */}
           <Link className="h-6 w-6" to="/">
             <img src="/images/smash-egg/icon-close.png" alt="" />
@@ -519,24 +433,29 @@ export default function SmashEgg() {
         </div>
       </div>
 
-      <CardTemplate>
-        {(status === Status.Standby || status === Status.Init) && (
+      <CardTemplate marqueeList={marqueeList}>
+        {status === Status.Standby && (
           <div
             className={`absolute bottom-0 left-0 right-0 aspect-[343/231] w-full rounded-b-xl ${styles['standby-bg']}`}
           ></div>
         )}
 
-        {(status === Status.BorkenEggPage || status === Status.End) && (
+        {(status === Status.BrokenEggPage || status === Status.End) && (
           <div className="dark:color-white relative top-2 px-4 text-xs">
             <h2 className="text-center font-extrabold">
               <span>ONE SMASH NEED</span>
               <i className="inline-block h-6 w-6 bg-[url('/images/smash-egg/hammer.png')] bg-contain bg-no-repeat"></i>
-              <span>X15</span>
+              <span>X{prizePoolItem?.hammerSpent || 0}</span>
             </h2>
 
             <div className="relative mt-2 flex items-center justify-center rounded-xl bg-black bg-opacity-70 py-1">
               <p className="text-center">
-                PRIZE POOL<span className="px-1 font-extrabold">500-10000</span>USDT
+                PRIZE POOL
+                <span className="px-1 font-extrabold">
+                  {prizePoolItem?.displayUsdtPrizeMin || 0}-
+                  {prizePoolItem?.displayUsdtPrizeMax || 0}
+                </span>
+                USDT
               </p>
             </div>
           </div>
@@ -546,12 +465,27 @@ export default function SmashEgg() {
         <div
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className="relative mt-5 aspect-[343/128]"
+          className="relative z-30 mt-5 aspect-[343/128]"
         >
           <div
-            className={`absolute bottom-[-30px] left-[50%] z-20 aspect-[343/343] w-[100%] translate-x-[-50%] ${status === Status.Playing ? `bottom-[-50px] aspect-[343/390]` : `aspect-[343/343]`} ${status === Status.Standby || status === Status.Playing ? 'block' : 'hidden'} `}
+            className={`${status === Status.Standby || status === Status.Playing ? 'block' : 'hidden'}`}
           >
-            <canvas id={EGG_AREA_CANVAS_ID} className="h-[100%] w-[100%]"></canvas>
+            <LottieAnimation
+              id={`${EGG_AREA_CANVAS_ID}}`}
+              lottieRef={lottieRefs}
+              className={cn(
+                `absolute bottom-[-30px] left-[50%] z-20 aspect-[343/343] w-[100%] translate-x-[-50%]`,
+                {
+                  'bottom-[-26px] aspect-[343/390]': status === Status.Playing,
+                  'aspect-[343/343]': status !== Status.Playing,
+                },
+                styles['lottie-container']
+              )}
+              animationData={animationData}
+              loop={false}
+              autoplay={true}
+              onComplete={() => handleComplete()}
+            />
           </div>
 
           <div
@@ -571,10 +505,12 @@ export default function SmashEgg() {
 
         {/* Body */}
         <div className="px-4">
-          {status === Status.Standby || status === Status.Init ? (
+          {status === Status.Standby ? (
             <StandbyCard
+              prizePool={prizePoolItem}
               handleStartButtonClick={handleStartButtonClick}
               handleChangeEgg={handleChangeEgg}
+              hammerCount={hammerCount}
             />
           ) : status === Status.Playing ? (
             <div className="mt-3 h-6 rounded-full bg-black p-[2px]">
@@ -586,7 +522,7 @@ export default function SmashEgg() {
                 {smashTotal}%
               </p>
             </div>
-          ) : status === Status.BorkenEggPage ? (
+          ) : status === Status.BrokenEggPage ? (
             <>
               <div className="mt-3 h-6 rounded-full bg-black p-[2px]">
                 <div
@@ -598,8 +534,13 @@ export default function SmashEgg() {
                 </p>
               </div>
               <div className="relative mt-3 flex justify-between gap-2 text-black">
-                <Button catEars className="flex-1" onClick={handleSmashButtonClick}>
-                  smasg x1
+                <Button
+                  catEars
+                  className="flex-1"
+                  disabled={hammerCount <= (prizePoolItem?.hammerSpent || 0)}
+                  onClick={handleSmashButtonClick}
+                >
+                  smasg x{prizePoolItem?.hammerSpent || 0}
                 </Button>
                 <Button catEars variant="gray" className="flex-1" onClick={handleGiveUpButtonClick}>
                   Give up this egg
@@ -610,12 +551,12 @@ export default function SmashEgg() {
             <>
               <div className="text-center text-[24px] font-[1000]">
                 <p>
-                  YOU GAIN <span className="text-[#FFF200]">768</span> USDT!{' '}
+                  YOU GAIN <span className="text-[#FFF200]">{reward}</span> USDT!{' '}
                 </p>
               </div>
 
               <div className="relative text-black">
-                <Button catEars className="w-full" onClick={resetTheGame}>
+                <Button catEars className="w-full" onClick={handleClaim}>
                   Claim
                 </Button>
               </div>
@@ -623,7 +564,7 @@ export default function SmashEgg() {
           )}
         </div>
       </CardTemplate>
-      <AlertDialog open={open} confirm={resetTheGame} cancel={() => setOpen(false)} />
+      <AlertDialog open={open} confirm={handleGiveup} cancel={() => setOpen(false)} />
     </div>
   )
 }
