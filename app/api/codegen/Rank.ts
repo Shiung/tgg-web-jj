@@ -149,10 +149,10 @@ export class Rank<SecurityDataType = unknown> {
           /** 獎金幣別 */
           rewardType?: string;
           /**
-           * 有效下注金額
-           * @format decimal
+           * 直属下级人数
+           * @format uint64
            */
-          validBetGold: string;
+          subordinatesCount?: number;
         }[];
         /** 自己排名 */
         selfRank?: {
@@ -172,10 +172,10 @@ export class Rank<SecurityDataType = unknown> {
           /** 獎金幣別 */
           rewardType?: string;
           /**
-           * 有效下注金額
-           * @format decimal
+           * 直属下级人数
+           * @format uint64
            */
-          validBetGold: string;
+          subordinatesCount?: number;
         };
       },
       any

@@ -94,16 +94,6 @@ export class Public<SecurityDataType = unknown> {
         /** 列表 */
         list: {
           /**
-           * 維護結束時間
-           * @format date-time
-           */
-          TggMaintainEndAt?: string;
-          /**
-           * 維護開始時間
-           * @format date-time
-           */
-          TggMaintainStartAt?: string;
-          /**
            * 遊戲ID
            * @min 1
            * @max 50
@@ -136,6 +126,16 @@ export class Public<SecurityDataType = unknown> {
            * @format uint64
            */
           isGameMaintain: number;
+          /**
+           * 維護結束時間
+           * @format date-time
+           */
+          maintainEndAt?: string;
+          /**
+           * 維護開始時間
+           * @format date-time
+           */
+          maintainStartAt?: string;
           /** 語言翻譯 */
           translations: ({
             /**

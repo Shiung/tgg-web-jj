@@ -301,12 +301,11 @@ export class Campaign<SecurityDataType = unknown> {
    * @name CampaignTreasuresClaimBonusCreate
    * @request POST:/ajax/campaign/treasures/{id}/claim-bonus
    */
-  campaignTreasuresClaimBonusCreate = (id: string, body: ClaimTreasureRequest, params: RequestParams = {}) =>
+  campaignTreasuresClaimBonusCreate = (id: string, body: object, params: RequestParams = {}) =>
     this.http.request<ClaimTreasureRequest, any>({
       path: `/ajax/campaign/treasures/${id}/claim-bonus`,
       method: "POST",
       body: body,
-      type: ContentType.Json,
       ...params,
     });
 }

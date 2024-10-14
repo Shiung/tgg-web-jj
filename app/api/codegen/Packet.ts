@@ -35,12 +35,17 @@ export class Packet<SecurityDataType = unknown> {
        */
       distributedAmount?: string;
       /**
+       * 固定金額
+       * @format decimal
+       */
+      fixedValue?: string;
+      /**
        * 上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0). Allowed Enum
        * @format int64
        */
       limitKind?: 0 | 1;
       /**
-       * 固定金額
+       * 隨機金額上限
        * @format decimal
        */
       maxValue?: string;
@@ -180,6 +185,25 @@ export class Packet<SecurityDataType = unknown> {
       path: `/ajax/packet/${packetId}`,
       method: "GET",
       query: query,
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*PacketController)
+   * @name PacketDelete
+   * @request DELETE:/ajax/packet/{packet_id}
+   */
+  packetDelete = (packetId: string, body: object, params: RequestParams = {}) =>
+    this.http.request<
+      {
+        succeed?: boolean;
+      },
+      any
+    >({
+      path: `/ajax/packet/${packetId}`,
+      method: "DELETE",
+      body: body,
       ...params,
     });
 }

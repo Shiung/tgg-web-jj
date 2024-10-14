@@ -979,6 +979,32 @@
             "schema": {
               "type": "object",
               "properties": {
+                "packet": {
+                  "description": "推薦碼開獎資訊",
+                  "type": "object",
+                  "properties": {
+                    "giverName": {
+                      "description": "紅包發送人名稱",
+                      "type": "string"
+                    },
+                    "isQualified": {
+                      "description": "為true時需開獎",
+                      "type": "boolean"
+                    },
+                    "maxValue": {
+                      "description": "potential gain (max)",
+                      "type": "string"
+                    },
+                    "minValue": {
+                      "description": "potential gain (min)",
+                      "type": "string"
+                    },
+                    "showPotential": {
+                      "description": "需顯示potential gain",
+                      "type": "boolean"
+                    }
+                  }
+                },
                 "token": {
                   "description": "登入token",
                   "type": "string"
@@ -1507,7 +1533,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -1663,16 +1689,6 @@
                       "translations"
                     ],
                     "properties": {
-                      "TggMaintainEndAt": {
-                        "description": "維護結束時間",
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "TggMaintainStartAt": {
-                        "description": "維護開始時間",
-                        "type": "string",
-                        "format": "date-time"
-                      },
                       "gameCode": {
                         "description": "遊戲ID",
                         "type": "string",
@@ -1705,6 +1721,16 @@
                         "description": "維護狀態,1:維護中 2:非維護中 3:預約維護",
                         "type": "integer",
                         "format": "uint64"
+                      },
+                      "maintainEndAt": {
+                        "description": "維護結束時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "maintainStartAt": {
+                        "description": "維護開始時間",
+                        "type": "string",
+                        "format": "date-time"
                       },
                       "translations": {
                         "description": "語言翻譯",
@@ -1777,16 +1803,6 @@
                       "translations"
                     ],
                     "properties": {
-                      "TggMaintainEndAt": {
-                        "description": "維護結束時間",
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "TggMaintainStartAt": {
-                        "description": "維護開始時間",
-                        "type": "string",
-                        "format": "date-time"
-                      },
                       "gameCode": {
                         "description": "遊戲ID",
                         "type": "string",
@@ -1819,6 +1835,16 @@
                         "description": "維護狀態,1:維護中 2:非維護中 3:預約維護",
                         "type": "integer",
                         "format": "uint64"
+                      },
+                      "maintainEndAt": {
+                        "description": "維護結束時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "maintainStartAt": {
+                        "description": "維護開始時間",
+                        "type": "string",
+                        "format": "date-time"
                       },
                       "translations": {
                         "description": "語言翻譯",
@@ -2014,6 +2040,11 @@
                   "type": "string",
                   "format": "decimal"
                 },
+                "fixedValue": {
+                  "description": "固定金額",
+                  "type": "string",
+                  "format": "decimal"
+                },
                 "limitKind": {
                   "description": "上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0). Allowed Enum",
                   "type": "integer",
@@ -2024,7 +2055,7 @@
                   ]
                 },
                 "maxValue": {
-                  "description": "固定金額",
+                  "description": "隨機金額上限",
                   "type": "string",
                   "format": "decimal"
                 },
@@ -2276,6 +2307,42 @@
                   "description": "未發放個數",
                   "type": "integer",
                   "format": "int64"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*PacketController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "Path parameter: packet_id",
+            "name": "packet_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "succeed": {
+                  "type": "boolean"
                 }
               }
             }
@@ -2631,16 +2698,6 @@
                       "translations"
                     ],
                     "properties": {
-                      "TggMaintainEndAt": {
-                        "description": "維護結束時間",
-                        "type": "string",
-                        "format": "date-time"
-                      },
-                      "TggMaintainStartAt": {
-                        "description": "維護開始時間",
-                        "type": "string",
-                        "format": "date-time"
-                      },
                       "gameCode": {
                         "description": "遊戲ID",
                         "type": "string",
@@ -2673,6 +2730,16 @@
                         "description": "維護狀態,1:維護中 2:非維護中 3:預約維護",
                         "type": "integer",
                         "format": "uint64"
+                      },
+                      "maintainEndAt": {
+                        "description": "維護結束時間",
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "maintainStartAt": {
+                        "description": "維護開始時間",
+                        "type": "string",
+                        "format": "date-time"
                       },
                       "translations": {
                         "description": "語言翻譯",
@@ -4000,8 +4067,7 @@
                     "type": "object",
                     "required": [
                       "ranking",
-                      "customerName",
-                      "validBetGold"
+                      "customerName"
                     ],
                     "properties": {
                       "customerName": {
@@ -4023,10 +4089,10 @@
                         "description": "獎金幣別",
                         "type": "string"
                       },
-                      "validBetGold": {
-                        "description": "有效下注金額",
-                        "type": "string",
-                        "format": "decimal"
+                      "subordinatesCount": {
+                        "description": "直属下级人数",
+                        "type": "integer",
+                        "format": "uint64"
                       }
                     }
                   }
@@ -4036,8 +4102,7 @@
                   "type": "object",
                   "required": [
                     "ranking",
-                    "customerName",
-                    "validBetGold"
+                    "customerName"
                   ],
                   "properties": {
                     "customerName": {
@@ -4059,10 +4124,10 @@
                       "description": "獎金幣別",
                       "type": "string"
                     },
-                    "validBetGold": {
-                      "description": "有效下注金額",
-                      "type": "string",
-                      "format": "decimal"
+                    "subordinatesCount": {
+                      "description": "直属下级人数",
+                      "type": "integer",
+                      "format": "uint64"
                     }
                   }
                 }
@@ -5646,7 +5711,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -6525,6 +6590,11 @@
           "type": "string",
           "format": "decimal"
         },
+        "fixedValue": {
+          "description": "固定金額",
+          "type": "string",
+          "format": "decimal"
+        },
         "limitKind": {
           "description": "上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0). Allowed Enum",
           "type": "integer",
@@ -6535,7 +6605,7 @@
           ]
         },
         "maxValue": {
-          "description": "固定金額",
+          "description": "隨機金額上限",
           "type": "string",
           "format": "decimal"
         },
@@ -6822,16 +6892,6 @@
               "translations"
             ],
             "properties": {
-              "TggMaintainEndAt": {
-                "description": "維護結束時間",
-                "type": "string",
-                "format": "date-time"
-              },
-              "TggMaintainStartAt": {
-                "description": "維護開始時間",
-                "type": "string",
-                "format": "date-time"
-              },
               "gameCode": {
                 "description": "遊戲ID",
                 "type": "string",
@@ -6864,6 +6924,16 @@
                 "description": "維護狀態,1:維護中 2:非維護中 3:預約維護",
                 "type": "integer",
                 "format": "uint64"
+              },
+              "maintainEndAt": {
+                "description": "維護結束時間",
+                "type": "string",
+                "format": "date-time"
+              },
+              "maintainStartAt": {
+                "description": "維護開始時間",
+                "type": "string",
+                "format": "date-time"
               },
               "translations": {
                 "description": "語言翻譯",
@@ -6926,16 +6996,6 @@
               "translations"
             ],
             "properties": {
-              "TggMaintainEndAt": {
-                "description": "維護結束時間",
-                "type": "string",
-                "format": "date-time"
-              },
-              "TggMaintainStartAt": {
-                "description": "維護開始時間",
-                "type": "string",
-                "format": "date-time"
-              },
               "gameCode": {
                 "description": "遊戲ID",
                 "type": "string",
@@ -6968,6 +7028,16 @@
                 "description": "維護狀態,1:維護中 2:非維護中 3:預約維護",
                 "type": "integer",
                 "format": "uint64"
+              },
+              "maintainEndAt": {
+                "description": "維護結束時間",
+                "type": "string",
+                "format": "date-time"
+              },
+              "maintainStartAt": {
+                "description": "維護開始時間",
+                "type": "string",
+                "format": "date-time"
               },
               "translations": {
                 "description": "語言翻譯",
@@ -7845,6 +7915,32 @@
     "LoginResponse": {
       "type": "object",
       "properties": {
+        "packet": {
+          "description": "推薦碼開獎資訊",
+          "type": "object",
+          "properties": {
+            "giverName": {
+              "description": "紅包發送人名稱",
+              "type": "string"
+            },
+            "isQualified": {
+              "description": "為true時需開獎",
+              "type": "boolean"
+            },
+            "maxValue": {
+              "description": "potential gain (max)",
+              "type": "string"
+            },
+            "minValue": {
+              "description": "potential gain (min)",
+              "type": "string"
+            },
+            "showPotential": {
+              "description": "需顯示potential gain",
+              "type": "boolean"
+            }
+          }
+        },
         "token": {
           "description": "登入token",
           "type": "string"
@@ -8211,6 +8307,85 @@
         "referralCode": {
           "description": "用戶分享時使用的推薦代碼",
           "type": "string"
+        }
+      }
+    },
+    "ShareRankInfoResponse": {
+      "type": "object",
+      "required": [
+        "rank"
+      ],
+      "properties": {
+        "rank": {
+          "description": "排行榜",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ranking",
+              "customerName"
+            ],
+            "properties": {
+              "customerName": {
+                "description": "會員名稱",
+                "type": "string"
+              },
+              "ranking": {
+                "description": "排名",
+                "type": "integer",
+                "format": "int64",
+                "minimum": 1
+              },
+              "reward": {
+                "description": "獎金",
+                "type": "string",
+                "format": "decimal"
+              },
+              "rewardType": {
+                "description": "獎金幣別",
+                "type": "string"
+              },
+              "subordinatesCount": {
+                "description": "直属下级人数",
+                "type": "integer",
+                "format": "uint64"
+              }
+            }
+          }
+        },
+        "selfRank": {
+          "description": "自己排名",
+          "type": "object",
+          "required": [
+            "ranking",
+            "customerName"
+          ],
+          "properties": {
+            "customerName": {
+              "description": "會員名稱",
+              "type": "string"
+            },
+            "ranking": {
+              "description": "排名",
+              "type": "integer",
+              "format": "int64",
+              "minimum": 1
+            },
+            "reward": {
+              "description": "獎金",
+              "type": "string",
+              "format": "decimal"
+            },
+            "rewardType": {
+              "description": "獎金幣別",
+              "type": "string"
+            },
+            "subordinatesCount": {
+              "description": "直属下级人数",
+              "type": "integer",
+              "format": "uint64"
+            }
+          }
         }
       }
     },
@@ -9429,6 +9604,17 @@
               "type": "string"
             }
           }
+        }
+      }
+    },
+    "TerminateRequest": {
+      "type": "object"
+    },
+    "TerminateResponse": {
+      "type": "object",
+      "properties": {
+        "succeed": {
+          "type": "boolean"
         }
       }
     },
