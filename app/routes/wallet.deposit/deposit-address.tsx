@@ -1,9 +1,11 @@
+import { useState } from 'react'
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
+import { MiddleTruncate } from '@re-dev/react-truncate'
+
 import AlertDialog from '~/components/alert-dialog'
 import { Button } from '~/components/ui/button'
-import { Input } from '~/components/ui/input'
 import UnlinkIcon from '~/icons/unlink.svg?react'
-import { useState } from 'react'
+import { Label } from '~/components/ui/label'
 
 const DepositAddress: React.FC = () => {
   const [tonConnectUI] = useTonConnectUI()
@@ -27,13 +29,12 @@ const DepositAddress: React.FC = () => {
   return (
     <>
       {tonConnectUI.connected && (
-        <Input
-          readOnly
-          className="h-9"
-          id="address"
-          label="Deposit address"
-          value={userFriendlyAddress}
-          fieldSuffix={
+        <>
+          <Label className="ml-3">Deposit address</Label>
+          <div className="relative flex h-9 w-full items-center justify-between rounded-full border-[0.5px] border-white/20 bg-[#333] px-3 py-2 text-sm font-ultra">
+            <div className="flex-1">
+              <MiddleTruncate end={4}>{userFriendlyAddress}</MiddleTruncate>
+            </div>
             <Button
               variant="icon"
               size="icon"
@@ -43,8 +44,8 @@ const DepositAddress: React.FC = () => {
             >
               <UnlinkIcon className="h-4 w-4" />
             </Button>
-          }
-        />
+          </div>
+        </>
       )}
       <AlertDialog
         isOpen={isAlertOpen}

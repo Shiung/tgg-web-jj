@@ -98,8 +98,8 @@ const DropdownSheet = ({
     })
   ) : (
     <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
-      <span>{selectedOption?.label || placeholder}</span>
-      <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
+      <span className="overflow-hidden text-ellipsis">{selectedOption?.label || placeholder}</span>
+      <ArrowLineDownIcon className="h-4 w-4 flex-shrink-0 text-white/70" />
     </Button>
   )
 

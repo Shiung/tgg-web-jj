@@ -17,6 +17,8 @@ import { useGetActiveGameListToStore } from '~/hooks/api/useGame'
 import { usePingPolling } from '~/hooks/api/usePolling'
 import { cn, mapSystemLanguageCode } from '~/lib/utils'
 
+import { TonClientProvider } from './ton-client-context'
+
 import classes from './index.module.scss'
 
 const queryClient = new QueryClient({
@@ -95,22 +97,24 @@ export default function AppRoot({ children }: PropsWithChildren) {
 
   return (
     <TonConnectUIProvider manifestUrl={manifestUrl}>
-      <SDKProvider acceptCustomStyles>
-        <QueryClientProvider client={queryClient}>
-          {/* 上方模擬圓角遮罩 */}
-          <div
-            className={cn(classes['top-corner'], isHeaderVisible ? 'top-[60px]' : 'top-3')}
-            style={{ maxWidth }}
-          />
-          {/* app框容器 */}
-          <div className={cn('flex flex-col', minHClass)}>{children}</div>
-          {/* app初始相關數據獲取 */}
-          <AppInit />
-          {/* Telegram 相關初始化 */}
-          {inTelegram && <TelegramInit />}
-          <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
-        </QueryClientProvider>
-      </SDKProvider>
+      <TonClientProvider>
+        <SDKProvider acceptCustomStyles>
+          <QueryClientProvider client={queryClient}>
+            {/* 上方模擬圓角遮罩 */}
+            <div
+              className={cn(classes['top-corner'], isHeaderVisible ? 'top-[60px]' : 'top-3')}
+              style={{ maxWidth }}
+            />
+            {/* app框容器 */}
+            <div className={cn('flex flex-col', minHClass)}>{children}</div>
+            {/* app初始相關數據獲取 */}
+            <AppInit />
+            {/* Telegram 相關初始化 */}
+            {inTelegram && <TelegramInit />}
+            <ReactQueryDevtools initialIsOpen={false} buttonPosition="bottom-right" />
+          </QueryClientProvider>
+        </SDKProvider>
+      </TonClientProvider>
     </TonConnectUIProvider>
   )
 }

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { Close as SheetPrimitiveClose } from '@radix-ui/react-dialog'
 import { useCopyToClipboard } from 'react-use'
 import { QRCode } from 'react-qrcode-logo'
@@ -30,14 +30,6 @@ interface DepositViaAddressDialogProps {
 
 const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ currency, info }) => {
   const [state, copyToClipboard] = useCopyToClipboard()
-
-  const displayAddress = useMemo(() => {
-    const address = info?.depositAddress || ''
-    const maxLength = 30
-    return address.length > maxLength
-      ? `${address.slice(0, maxLength - 4)}...${address.slice(-4)}`
-      : address
-  }, [info?.depositAddress])
 
   useEffect(() => {
     if (!state.value) return
@@ -77,22 +69,17 @@ const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ curre
             <Label htmlFor="address" className="text-xs">
               Deposit Address
             </Label>
-            <Input
-              readOnly
-              className="h-9"
-              id="address"
-              value={displayAddress}
-              fieldSuffix={
-                <Button
-                  variant="icon"
-                  size="icon"
-                  className="h-6 w-6 text-white"
-                  onClick={() => copyToClipboard(info?.depositAddress || '')}
-                >
-                  <CopyIcon className="h-4 w-4" />
-                </Button>
-              }
-            />
+            <div className="relative flex h-auto w-full items-center justify-between rounded-full border-[0.5px] border-white/20 bg-[#333] px-3 py-2 text-sm font-ultra">
+              <span className="flex-1 break-all">{info?.depositAddress || ''}</span>
+              <Button
+                variant="icon"
+                size="icon"
+                className="h-6 w-6 flex-shrink-0 text-white"
+                onClick={() => copyToClipboard(info?.depositAddress || '')}
+              >
+                <CopyIcon className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
           {/* Comment */}
           <div className="mt-3 w-full space-y-1">

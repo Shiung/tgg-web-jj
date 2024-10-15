@@ -1,23 +1,28 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ConnectedWallet, useTonConnectUI } from '@tonconnect/ui-react'
-import { beginCell, toNano } from '@ton/ton'
+import { Address, beginCell, JettonMaster, toNano } from '@ton/ton'
 import { useQuery } from '@tanstack/react-query'
 import { NumericFormat } from 'react-number-format'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+
+import { apis } from '~/api'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import Amount from '~/components/amount'
 import { cryptoDetails, cryptoRules, isValidCrypto, Crypto } from '~/consts/crypto'
-import { apis } from '~/api'
 import CloseIcon from '~/icons/x.svg?react'
 import { errorToast } from '~/lib/toast'
+import { useTonConnect } from '~/hooks/useTonConnect'
 
+import { JETTON_TRANSFER_GAS_FEES, USDT_MASTER_ADDRESS } from './const'
 import { DepositSkeleton } from './skeleton'
 import DepositAddress from './deposit-address'
 import TonConnectButton from './ton-connect-button'
 import DepositViaAddressDialog from './deposit-via-address-sheet'
 import SystemMaintenance from './system-maintenance'
+import { JettonWallet } from './JettonWallet'
+import { calculateUsdtAmount } from './helper'
 
 // 充值提交成功通知
 export const successNotify = () =>
@@ -65,6 +70,7 @@ interface DepositFormData {
 
 export default function Deposit() {
   // ton-connect 相關
+  const { sender, walletAddress, tonClient } = useTonConnect()
   const [tonConnectUI] = useTonConnectUI()
   const [isConnected, setIsConnected] = useState(tonConnectUI.connected)
 
@@ -132,34 +138,51 @@ export default function Deposit() {
   )
 
   const onSubmit = async (data: DepositFormData) => {
-    console.log('Form Data:', data)
+    console.log('Form Data:', data, tonClient, walletAddress)
     if (!isValid) return
     if (!isValidCrypto(data.currency)) return
+    if (!tonClient || !walletAddress) return
 
-    let transaction
-    if (data.currency === Crypto.TON) {
-      const body = beginCell().storeUint(0, 32).storeStringTail(data.comment).endCell()
-      transaction = {
-        validUntil: Math.floor(Date.now() / 1000) + 360, // 当前时间 + 6 分钟（单位：秒）
-        messages: [
-          {
-            address: data.address,
-            amount: toNano(data.amount).toString(), // nanoton
-            payload: body.toBoc().toString('base64'),
-          },
-        ],
-      }
-    } else if (data.currency === Crypto.USDT) {
-      console.log('USDT')
-    }
-    if (!transaction) return
-    console.log('交易信息:', transaction)
-
-    // 處理 TON 交易
     try {
-      const result = await tonConnectUI.sendTransaction(transaction)
-      console.log('交易成功發送', result)
-      successNotify()
+      // 處理 TON 交易
+      if (data.currency === Crypto.TON) {
+        const body = beginCell().storeUint(0, 32).storeStringTail(data.comment).endCell()
+        const transaction = {
+          validUntil: Math.floor(Date.now() / 1000) + 360, // 当前时间 + 6 分钟（单位：秒）
+          messages: [
+            {
+              address: data.address,
+              amount: toNano(data.amount).toString(), // nanoton
+              payload: body.toBoc().toString('base64'),
+            },
+          ],
+        }
+
+        const result = await tonConnectUI.sendTransaction(transaction)
+        console.log('TON transaction success', result)
+        successNotify()
+      } else if (data.currency === Crypto.USDT) {
+        // 處理 USDT 交易
+        console.log('USDT')
+        const jettonMaster = tonClient.open(JettonMaster.create(USDT_MASTER_ADDRESS))
+        const usersUsdtAddress = await jettonMaster.getWalletAddress(walletAddress)
+
+        console.log('USDT walletAddress:', walletAddress, 'data.address', data.address)
+
+        // creating and opening jetton wallet instance.
+        // First argument (provider) will be automatically substituted in methods, which names starts with 'get' or 'send'
+        const jettonWallet = tonClient.open(JettonWallet.createFromAddress(usersUsdtAddress))
+
+        await jettonWallet.sendTransfer(sender, {
+          fwdAmount: 1n,
+          comment: data.comment,
+          jettonAmount: calculateUsdtAmount(+data.amount * 100),
+          toAddress: Address.parse(data.address),
+          value: JETTON_TRANSFER_GAS_FEES,
+        })
+        console.log('USDT transaction success')
+        successNotify()
+      }
     } catch (error) {
       errorToast('Deposited unsuccessfully')
       console.error('交易失敗:', error)
