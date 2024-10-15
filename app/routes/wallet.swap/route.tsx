@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import Amount from '~/components/amount'
-import { parseAmount, formatKM, thousandSeparator } from '~/lib/amount'
+import { parseAmount, formatKM } from '~/lib/amount'
 import { successToast, errorToast } from '~/lib/toast'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import {
@@ -87,7 +87,7 @@ export default function Swap() {
               return pAmount >= settingRule.min
             },
             {
-              message: `Range: ${thousandSeparator(settingRule.min.toString())} ~ ${thousandSeparator(settingRule.max.toString())}`,
+              message: 'Insufficient balance',
             }
           )
           .refine(
@@ -97,7 +97,7 @@ export default function Swap() {
               return pAmount <= settingRule.max
             },
             {
-              message: `Range: ${thousandSeparator(settingRule.min.toString())} ~ ${thousandSeparator(settingRule.max.toString())}`,
+              message: 'Insufficient balance',
             }
           ),
       })
@@ -255,6 +255,8 @@ export default function Swap() {
                     label="Amount"
                     placeholder="Please enter"
                     onValueChange={values => {
+                      // useForm reset 情境下會導致空值set兩次 第二次觸發validate
+                      if (!values.value) return
                       field.onChange(values.value)
                     }}
                     className="h-9"
