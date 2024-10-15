@@ -73,9 +73,8 @@ const useGetActiveGameListToStore = () => {
   const setActiveGameList = useStore(state => state.setActiveGameList)
 
   const { data: activeGameListRaw, isLoading } = useQuery({
-    queryKey: ['gamesActiveList'],
-    queryFn: apis.games.gamesActiveList,
-    enabled: !!isLoggedIn,
+    queryKey: ['gamesActiveList', isLoggedIn],
+    queryFn: isLoggedIn ? apis.games.gamesActiveList : apis.public.publicGamesActiveList,
   })
 
   useEffect(() => {
