@@ -23,9 +23,9 @@
 }
 
 .header::before {
-  content: '';
+  content: "";
   position: absolute;
-  background: url('/images/long-wave.png') no-repeat;
+  background: url("/images/long-wave.png") no-repeat;
   background-size: cover;
   aspect-ratio: 375/126;
   left: 0;
@@ -35,9 +35,9 @@
 }
 
 .header::after {
-  content: '';
+  content: "";
   position: absolute;
-  background: url('/images/task/task-key-visual.png') no-repeat;
+  background: url("/images/task/task-key-visual.png") no-repeat;
   background-size: cover;
   aspect-ratio: 160/100;
   top: 0;
@@ -48,16 +48,21 @@
 
 @keyframes slide-up {
   0% {
-    transform: translateY(100%);
+    transform: translateY(0%);
+    background-color: #fff200;
   }
-  80% {
-    transform: translateY(-10%);
+  50% {
+    transform: translateY(-90%);
+  }
+  75% {
+    transform: translateY(0%);
   }
   100% {
-    transform: translateY(0);
+    transform: translateY(0%);
+    background-color: #3ae45a;
   }
 }
 
 .animate-slide-up {
-  animation: slide-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation: slide-up 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }

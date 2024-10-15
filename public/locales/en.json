@@ -3,5 +3,7 @@
   "rank": "Rank",
   "task": "Task",
   "share": "Share",
-  "wallet": "Wallet"
+  "wallet": "Wallet",
+  "treasure.betRequirement": "{{value}}% bet amount in Crypto games。",
+  "treasure.directSubBetRequirement" : "{{value}}% bet amount in Crypto games from level 1 friends。"
 }

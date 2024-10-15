@@ -6,6 +6,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { endOfDay, format, formatRFC3339, startOfDay, subDays } from 'date-fns'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 
 // NOTICE: For test
 // import { getMockCommissionData } from './fake-commisssionData'
@@ -50,6 +51,8 @@ const formSchema = z.object({
 })
 
 const Commission: React.FC = () => {
+  const maxWidth = useAppMaxWidth()
+
   // 取得用戶的團隊資訊
   const { data: customerTeamInfo, isLoading: customerTeamInfoLoading } = useQuery({
     queryKey: ['customerTeamInfoList'],
@@ -421,7 +424,10 @@ const Commission: React.FC = () => {
         </button>
       )}
       {latestSummary && (
-        <div className="fixed bottom-[88px] left-0 flex h-14 w-full items-center rounded-b-xl bg-black">
+        <div
+          className="fixed bottom-[88px] flex h-14 w-full items-center rounded-b-xl bg-black"
+          style={{ maxWidth, left: `calc((100vw - ${maxWidth}) / 2)` }}
+        >
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
             <div className="text-xs text-[#FFFFFFB2]">Total </div>
             <div className="text-xs font-ultra">{latestSummary.totalCount}</div>

@@ -1,4 +1,4 @@
-import { LottieComponentProps, LottieRef, LottieRefCurrentProps } from 'lottie-react'
+import { LottieComponentProps, LottieRefCurrentProps } from 'lottie-react'
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { Button } from '~/components/ui/button'
 
@@ -9,6 +9,7 @@ import animationPath4 from '~/routes/smash-egg/lottie/changestg.json'
 import animationPath5 from '~/routes/smash-egg/lottie/copper03.json'
 import animationPath6 from '~/routes/smash-egg/lottie/copper04.json'
 import animationPath7 from '~/routes/smash-egg/lottie/copper05.json'
+import animationPath8 from '../../public/lottie/giftbox/catbox.json'
 import hammerAmi from '~/routes/smash-egg/lottie/-hammer.json'
 
 const animationFiles = [
@@ -19,6 +20,7 @@ const animationFiles = [
   animationPath5,
   animationPath6,
   animationPath7,
+  animationPath8,
 ]
 
 export default function Lottie() {

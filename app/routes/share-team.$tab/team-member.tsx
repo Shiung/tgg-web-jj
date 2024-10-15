@@ -443,7 +443,7 @@ const TeamMember: React.FC = () => {
       {latestSummary && (
         <div
           className="fixed inset-x-0 bottom-[88px] mx-auto flex h-14 w-full items-center rounded-b-xl border-t border-white/20 bg-black"
-          style={{ maxWidth }}
+          style={{ maxWidth, left: `calc((100vw - ${maxWidth}) / 2)` }}
         >
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
             <div className="text-xs text-[#FFFFFFB2]">Member</div>
