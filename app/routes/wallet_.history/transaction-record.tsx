@@ -55,15 +55,15 @@ const typeOptions = [
   { value: '0', label: 'All' },
   { value: 'Deposit', label: 'Deposit' }, // 充值
   { value: 'Withdraw', label: 'Withdraw' }, // 提款
-  { value: 'Swap(Sell)', label: 'Swap(Sell)' }, // 兑换
-  { value: 'Swap(Buy)', label: 'Swap(Buy)' }, // 兑换
+  { value: 'Swap(sell)', label: 'Swap(Sell)' }, // 兑换
+  { value: 'Swap(buy)', label: 'Swap(Buy)' }, // 兑换
   { value: 'Commission', label: 'Commission' }, // 佣金
   { value: 'Game', label: 'Game' }, // 游戏
   { value: 'Task', label: 'Task' }, // 任務
   { value: 'Treasure', label: 'Treasure' }, // 宝箱
   { value: 'Rank', label: 'Rank' }, // 排行榜
-  { value: 'Lucky money', label: 'Lucky money' }, // 红包
-  { value: 'Smash egg', label: 'Smash egg' }, // 砸金蛋
+  { value: 'LuckMoney', label: 'Lucky money' }, // 红包
+  { value: 'SmashEgg', label: 'Smash egg' }, // 砸金蛋
   { value: 'Adjustment', label: 'Adjustment' }, // 人工调整
 ]
 
