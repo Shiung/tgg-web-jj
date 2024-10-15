@@ -15,7 +15,8 @@ import TransactionSkeleton from './transaction-skeleton'
 import TransactionEntryItem from './transaction-entry-item'
 import NoDataView from './no-data-view'
 import styles from './index.module.scss'
-
+import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
+import { KokonIcon, TonIcon, UsdtIcon } from '~/components/color-icons'
 interface TransactionRecordRequest {
   page: number
   pageSize: number
@@ -74,9 +75,33 @@ const balanceOptions = [
 
 const currencyOptions = [
   { value: '0', label: 'All' },
-  { value: 'USDT', label: 'USDT' },
-  { value: 'TON', label: 'TON' },
-  { value: 'KOKON', label: 'KOKON' },
+  {
+    value: 'USDT',
+    label: (
+      <div className="flex items-center space-x-1">
+        <UsdtIcon className="h-6 w-6 flex-shrink-0" />
+        <div>USDT</div>
+      </div>
+    ),
+  },
+  {
+    value: 'TON',
+    label: (
+      <div className="flex items-center space-x-1">
+        <TonIcon className="h-6 w-6 flex-shrink-0" />
+        <div>TON</div>
+      </div>
+    ),
+  },
+  {
+    value: 'KOKON',
+    label: (
+      <div className="flex items-center space-x-1">
+        <KokonIcon className="h-6 w-6 flex-shrink-0" />
+        <div>KOKON</div>
+      </div>
+    ),
+  },
 ]
 
 const fakeData = async (params: TransactionRecordRequest): Promise<any> => {
@@ -212,13 +237,21 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
               name="currency"
               control={control}
               render={({ field }) => (
-                <div className="flex h-full w-full min-w-0 flex-col">
+                <div className="flex h-full w-full min-w-0 flex-col text-white">
                   <DropdownSheet
                     id="currency-dropdown"
                     title="Currency"
                     placeholder="Currency"
                     value={field.value}
                     onConfirm={field.onChange}
+                    customTrigger={({ selectedLabel, placeholder }) => {
+                      return (
+                        <div className="flex flex-1 cursor-pointer items-center justify-between rounded-full border-[0.5px] border-white/20 px-3">
+                          {selectedLabel || placeholder}
+                          <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
+                        </div>
+                      )
+                    }}
                   >
                     {currencyOptions.map(option => (
                       <DropdownOption
