@@ -1,16 +1,18 @@
-import { useReducer, type Dispatch } from 'react'
+import { useEffect, useReducer, type Dispatch } from 'react'
 import { useOutletContext } from '@remix-run/react'
+import { useQuery } from '@tanstack/react-query'
+import { apis } from '~/api'
+import type { RankConfigResponse } from '~/api/codegen/data-contracts'
 
 type State = {
-  count: number
-  layout: 'LayOne' | 'LayTwo'
   isLoading: boolean
+  rankConfigList: RankConfigResponse
+  pageExist: { crypto: boolean; share: boolean } | undefined
 }
 
 type Action =
-  | { type: 'SET_COUNT'; count: State['count'] }
-  | { type: 'SET_LAYOUT'; layout: State['layout'] }
   | { type: 'SET_LOADING'; isLoading: State['isLoading'] }
+  | { type: 'SET_RANKCONFIG'; rankConfigList: State['rankConfigList'] }
 
 type ContextType = {
   state: State
@@ -18,19 +20,38 @@ type ContextType = {
 }
 
 const InitState: State = {
-  count: 99,
-  layout: 'LayOne',
   isLoading: false,
+  rankConfigList: {
+    bcRankDailyEntrance: false,
+    bcRankDailyReward: false,
+    bcRankMonthlyEntrance: false,
+    bcRankMonthlyReward: false,
+    bcRankWeeklyEntrance: false,
+    bcRankWeeklyReward: false,
+    shareRankEntrance: false,
+    shareRankReward: false,
+  },
+  pageExist: undefined,
 }
 
 const reducer = (state: State, action: Action) => {
   switch (action.type) {
-    case 'SET_COUNT':
-      return { ...state, count: action.count }
-    case 'SET_LAYOUT':
-      return { ...state, layout: action.layout }
     case 'SET_LOADING':
       return { ...state, isLoading: action.isLoading }
+    case 'SET_RANKCONFIG': {
+      const {
+        shareRankEntrance,
+        bcRankDailyEntrance,
+        bcRankMonthlyEntrance,
+        bcRankWeeklyEntrance,
+      } = action.rankConfigList ?? {}
+      const pageExist = {
+        crypto: !!bcRankDailyEntrance || !!bcRankMonthlyEntrance || !!bcRankWeeklyEntrance,
+        share: shareRankEntrance ?? false,
+      }
+
+      return { ...state, rankConfigList: action.rankConfigList, pageExist: { ...pageExist } }
+    }
     default:
       return state
   }
@@ -38,6 +59,16 @@ const reducer = (state: State, action: Action) => {
 
 export const useRankProvider = () => {
   const [state, action] = useReducer(reducer, InitState)
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['rankConfigList'],
+    queryFn: () => apis.rank.rankConfigList(),
+  })
+
+  useEffect(() => {
+    if (!data?.data) return
+    action({ type: 'SET_RANKCONFIG', rankConfigList: data?.data })
+  }, [data, isLoading])
 
   const contextVal: ContextType = {
     state,
