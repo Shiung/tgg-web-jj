@@ -1,294 +1,72 @@
-import React, { useState, useEffect } from 'react'
-import { Button } from '~/components/ui/button'
-import { Skeleton } from '~/components/ui/skeleton'
+import React, { useState, useRef, useCallback } from 'react'
 import { cn } from '~/lib/utils'
-import TaskContent from './task-content'
-import styles from './index.module.scss'
+import { type TaskQueryResponse } from '~/api/codegen/data-contracts'
+import { type TaskType, TaskTypeDisplayMap } from './type'
+import { useGetTask } from './hook/useGetTask'
+
+import { Button } from '~/components/ui/button'
+import TaskCard from './task-card'
 import TaskSubtaskSkeleton from './task-subtask-seleton'
-import { useRef, useCallback } from 'react'
-
-enum TaskType {
-  Daily = 'Daily',
-  Special = 'Special',
-  Single = 'Single',
-}
-
-const taskTypes = Object.values(TaskType)
-
-export enum StatusType {
-  InProgress,
-  Unclaimed,
-  Claimed,
-}
-
-export enum RewardType {
-  USDT,
-  TON,
-  KOKON,
-  Chest,
-  Hammer,
-}
-
-interface Reward {
-  type: RewardType
-  amount: number
-}
-
-const TaskList = [
-  {
-    title: 'Daily Task',
-    type: TaskType.Daily,
-    updateTime: '13:00(UTC-8)',
-    list: [
-      {
-        title: 'Everyday login',
-        status: StatusType.Unclaimed,
-        desc: 'Only when your friends registered and owned over 100 Kokon in their wallet are counted valid member.',
-        reward: {
-          type: RewardType.Hammer,
-          amount: 1,
-        } as Reward,
-        isLimitTask: true,
-        limitTime: '08/24 00:00~09/23:23:59',
-        limitQuantity: 1000,
-      },
-      {
-        title: 'Share with your friends',
-        status: StatusType.Claimed,
-        desc: '',
-        reward: {
-          type: RewardType.KOKON,
-          amount: 300,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-      {
-        title: 'Daily reward for 2 star group',
-        status: StatusType.Unclaimed,
-        desc: '',
-        reward: {
-          type: RewardType.Hammer,
-          amount: 200,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-      {
-        title: 'Share Kokon with your friends',
-        status: StatusType.InProgress,
-        desc: '',
-        reward: {
-          type: RewardType.KOKON,
-          amount: 100,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-      {
-        title: 'Invite 3 valid friends (0/3)',
-        status: StatusType.InProgress,
-        desc: '',
-        reward: {
-          type: RewardType.USDT,
-          amount: 1,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-      {
-        title: 'Invite 10 valid friends via lucky money (0/10)',
-        status: StatusType.InProgress,
-        desc: '',
-        reward: {
-          type: RewardType.TON,
-          amount: 1,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-      {
-        title: 'Play 10 times Casual games (0/10)',
-        status: StatusType.InProgress,
-        desc: '',
-        reward: {
-          type: RewardType.Chest,
-          amount: 1,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-    ],
-  },
-  {
-    title: 'Special Task',
-    type: TaskType.Special,
-    updateTime: '',
-    list: [
-      {
-        title: 'Share with your friends',
-        status: StatusType.Claimed,
-        desc: '',
-        reward: {
-          type: RewardType.KOKON,
-          amount: 300,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-      {
-        title: 'Daily reward for 2 star group',
-        status: StatusType.Unclaimed,
-        desc: '',
-        reward: {
-          type: RewardType.KOKON,
-          amount: 200,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-      {
-        title: 'Share Kokon with your friends',
-        status: StatusType.InProgress,
-        desc: '',
-        reward: {
-          type: RewardType.KOKON,
-          amount: 100,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-    ],
-  },
-  {
-    title: 'Single Task',
-    type: TaskType.Single,
-    updateTime: '',
-    list: [
-      {
-        title: 'Share with your friends',
-        status: StatusType.Claimed,
-        desc: '',
-        reward: {
-          type: RewardType.KOKON,
-          amount: 300,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-      {
-        title: 'Daily reward for 2 star group',
-        status: StatusType.Unclaimed,
-        desc: '',
-        reward: {
-          type: RewardType.KOKON,
-          amount: 200,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-      {
-        title: 'Share Kokon with your friends',
-        status: StatusType.InProgress,
-        desc: '',
-        reward: {
-          type: RewardType.KOKON,
-          amount: 100,
-        } as Reward,
-        isLimitTask: false,
-        limitTime: '',
-        limitQuantity: 0,
-      },
-    ],
-  },
-]
+import styles from './index.module.scss'
 
 const TaskSubtask: React.FC = () => {
-  const [taskType, setTaskType] = useState<TaskType>(TaskType.Daily)
-  const [isLoading, setIsLoading] = useState(true)
-  const [isFetch, setIsFetching] = useState(false)
+  const { tasks, isTasksLoading } = useGetTask()
 
-  // Create refs for each TaskContent
+  // 移動至指定 task 分類
+  const [taskType, setTaskType] = useState<TaskType>('dailyList')
   const taskRefs = useRef<Record<TaskType, React.RefObject<HTMLDivElement>>>({
-    [TaskType.Daily]: useRef<HTMLDivElement>(null),
-    [TaskType.Special]: useRef<HTMLDivElement>(null),
-    [TaskType.Single]: useRef<HTMLDivElement>(null),
+    dailyList: useRef<HTMLDivElement>(null),
+    specialList: useRef<HTMLDivElement>(null),
+    oneTimeList: useRef<HTMLDivElement>(null),
   })
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false)
-      // setIsFetching(true)
-    }, 1000)
-
-    return () => clearTimeout(timer)
-  }, [])
-
   const handleTaskTypeClick = useCallback((type: TaskType) => {
     setTaskType(type)
-    const targetElement = taskRefs.current[type].current
+    const targetElement = taskRefs.current[type as TaskType].current
     if (targetElement) {
-      const headerOffset = 60 // Adjust this value based on your header height
-      const elementPosition = targetElement.getBoundingClientRect().top
-      const offsetPosition = elementPosition + window.scrollY - headerOffset
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth',
-      })
+      targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }, [])
 
+  if (isTasksLoading || !tasks) {
+    return <TaskSubtaskSkeleton />
+  }
+
   return (
     <div className="flex flex-1 flex-col">
-      {isLoading ? (
-        <TaskSubtaskSkeleton />
-      ) : (
-        <>
-          <div className={cn(styles.header)}>
-            <p>Small effort</p>
-            <p className="pl-1"> but big earning!</p>
-          </div>
-
-          <div className="relative -top-4 flex flex-1 flex-col overflow-y-hidden rounded-xl bg-black px-3 py-4">
-            <div className="mb-5 flex space-x-2">
-              {taskTypes.map(type => (
-                <Button
-                  className="h-7 flex-1"
-                  variant="outlineSoft"
-                  isSelected={taskType === type}
-                  key={type}
-                  onClick={() => handleTaskTypeClick(type)}
-                >
-                  {type}
-                </Button>
-              ))}
-            </div>
-            <div className="flex flex-1 flex-col space-y-6">
-              {isFetch ? (
-                <Skeleton className="w-full flex-1 bg-[#1C1C1C]" />
-              ) : (
-                TaskList.map((task, index) => (
-                  <div key={index} ref={taskRefs.current[task.type as TaskType]}>
-                    <TaskContent title={task.title} updateTime={task.updateTime} list={task.list} />
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        </>
-      )}
+      <div className={cn(styles.header)}>
+        <p>Small effort</p>
+        <p className="pl-1"> but big earning!</p>
+      </div>
+      <div className="relative -top-4 flex flex-1 flex-col overflow-y-hidden rounded-xl bg-black px-3 py-4">
+        <div className="mb-5 flex space-x-2">
+          {tasks?.data &&
+            Object.keys(tasks.data).map(type => (
+              <Button
+                className="h-7 flex-1"
+                variant="outlineSoft"
+                isSelected={taskType === type}
+                key={type}
+                onClick={() => handleTaskTypeClick(type as TaskType)}
+              >
+                {TaskTypeDisplayMap[type as TaskType] || type}
+              </Button>
+            ))}
+        </div>
+        <div className="flex flex-1 flex-col space-y-6">
+          {tasks?.data &&
+            Object.keys(tasks?.data ?? {}).map((taskType, index) => (
+              <div key={index} ref={taskRefs.current[taskType as TaskType]}>
+                <TaskCard
+                  cardTitle={
+                    TaskTypeDisplayMap[taskType as TaskType] + ' Task' || taskType + ' Task'
+                  }
+                  updateTimeString={taskType === 'dailyList' ? 'Update every 13:00(UTC-8)' : ''}
+                  list={tasks?.data?.[taskType as keyof TaskQueryResponse]}
+                />
+              </div>
+            ))}
+        </div>
+      </div>
     </div>
   )
 }

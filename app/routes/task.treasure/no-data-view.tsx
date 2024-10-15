@@ -1,5 +1,6 @@
 import React from 'react'
 import { Button } from '~/components/ui/button'
+import { Link } from '@remix-run/react'
 
 interface NoDataViewProps {
   showButton?: boolean
@@ -20,9 +21,11 @@ const NoDataView: React.FC<NoDataViewProps> = ({
         Get the treasure from the reward of task.
       </p>
       {showButton && (
-        <Button catEars className="mt-3 w-full">
-          {buttonText}
-        </Button>
+        <Link to="/task/subtask" className="w-full">
+          <Button catEars className="mt-3 w-full">
+            {buttonText}
+          </Button>
+        </Link>
       )}
     </div>
   )

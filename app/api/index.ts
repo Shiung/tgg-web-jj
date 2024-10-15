@@ -15,6 +15,7 @@ import { Tasks } from './codegen/Tasks'
 import { Task } from './codegen/Task'
 import { Team } from './codegen/Team'
 import { Wallet } from './codegen/Wallet'
+import { Campaign } from './codegen/Campaign'
 
 export const apis = {
   banner: new Banner(apiClient),
@@ -33,5 +34,6 @@ export const apis = {
   task: new Task(apiClient),
   team: new Team(apiClient),
   wallet: new Wallet(apiClient),
+  campaign: new Campaign(apiClient),
   // 其他模塊往下繼續添加
 }
