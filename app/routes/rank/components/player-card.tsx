@@ -8,8 +8,12 @@ import Amount from '~/components/amount'
 type Props = {
   type: 'crypto' | 'share'
   rank: number
+  name: string
   currency: Crypto
+  reward: string
+  scoreCount: string
   isSelf?: boolean
+  rewardLock?: boolean
 }
 
 const Layout = ({
@@ -84,45 +88,48 @@ const Layout = ({
 const classForMessageStyle =
   "before:content-[''] before:absolute before:bg-white before:w-[15px] before:h-[7px] before:rotate-[38deg] before:bottom-[-5px] before:right-[23px] before:rounded-[50%]"
 
-const Title = () => {
+const Title: React.FC<Pick<Props, 'rewardLock' | 'type'>> = ({ rewardLock = false, type }) => {
   return (
     <Layout
       slot_first={<span className="text-xs font-normal text-white/70">Rank</span>}
-      slot_second={<span className="text-xs font-normal text-white/70">Player & Bet</span>}
-      slot_third={<span className="text-xs font-normal text-white/70">Reward</span>}
+      slot_second={
+        <span className="text-xs font-normal text-white/70">
+          {type === 'crypto' ? 'Player & Bet' : 'Player & Valid Friends'}
+        </span>
+      }
+      slot_third={!rewardLock && <span className="text-xs font-normal text-white/70">Reward</span>}
       isTitle
     />
   )
 }
 
-const PlayerCard: React.FC<Props> & { Title: React.FunctionComponent } = ({
-  currency,
-  rank,
-  type,
-  isSelf = false,
-}) => {
-  const currencyIcon = useMemo(() => cryptoDetails?.[currency], [currency])
+const PlayerCard: React.FC<Props> & {
+  Title: typeof Title
+} = ({ currency, rank, name, reward, scoreCount, type, isSelf = false, rewardLock = false }) => {
+  const currencyIcon = useMemo(() => currency && cryptoDetails?.[currency], [currency])
 
   return (
     <Layout
       slot_first={
         <>
           <img src="/images/rank/rank-medal.png" alt="background-board" className="h-9 w-9" />
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">{rank}</div>
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-ultra">
+            {rank > 999 ? '999+' : rank}
+          </div>
         </>
       }
       slot_second={
         <>
-          <div className="text-sm">Player name</div>
+          <div className="text-sm font-ultra">{isSelf ? 'Me' : name}</div>
           <div className="flex items-center space-x-1 text-xs text-white/70">
             {type === 'crypto' && <Icons.BetIcon className="h-3 w-3" />}
             {type === 'share' && <Icons.CatIcon className="h-3 w-3" />}
-            <Amount value={123456.123456} crypto={currency} />
+            <span>{scoreCount}</span>
           </div>
         </>
       }
       slot_third={
-        isSelf && type === 'crypto' ? (
+        isSelf && type === 'crypto' && !rewardLock && Number(reward) === 0 ? (
           <div className="absolute bottom-0 right-0">
             <div
               className={cn(
@@ -135,10 +142,14 @@ const PlayerCard: React.FC<Props> & { Title: React.FunctionComponent } = ({
             </div>
             <img src="/images/rank/rank-self-tip.png" alt="background-board" className="w-[72px]" />
           </div>
+        ) : rewardLock || !currency ? (
+          <></>
         ) : (
           <>
-            {currencyIcon.icon && <currencyIcon.icon className="h-4 w-4" />}
-            <span>20</span>
+            {currencyIcon?.icon && <currencyIcon.icon className="h-4 w-4" />}
+            <span>
+              <Amount value={reward} crypto={currency} />
+            </span>
           </>
         )
       }

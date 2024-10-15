@@ -13,6 +13,7 @@ import { Public } from './codegen/Public'
 import { System } from './codegen/System'
 import { Tasks } from './codegen/Tasks'
 import { Task } from './codegen/Task'
+import { Rank } from './codegen/Rank'
 import { Team } from './codegen/Team'
 import { Wallet } from './codegen/Wallet'
 import { Campaign } from './codegen/Campaign'
@@ -32,6 +33,7 @@ export const apis = {
   system: new System(apiClient),
   tasks: new Tasks(apiClient),
   task: new Task(apiClient),
+  rank: new Rank(apiClient),
   team: new Team(apiClient),
   wallet: new Wallet(apiClient),
   campaign: new Campaign(apiClient),

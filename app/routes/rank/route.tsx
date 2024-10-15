@@ -5,22 +5,45 @@ import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { useRankProvider } from './provider'
 import SkeletonBox from './components/skeleton'
 
-const LayOne: React.FC<{ children?: React.ReactNode; pathName?: string }> = props => {
+type TabLS = Array<{
+  value: 'crypto' | 'share'
+  title: string
+  to: string
+}>
+
+const TabConf: TabLS = [
+  {
+    value: 'crypto',
+    title: 'Crypto Rank',
+    to: '/rank/crypto',
+  },
+  {
+    value: 'share',
+    title: 'Share Rank',
+    to: '/rank/share',
+  },
+]
+
+const LayOne: React.FC<{
+  children?: React.ReactNode
+  pathName?: string
+  tabs?: TabLS
+}> = props => {
   const selectedTab = useMemo(() => props.pathName?.replace(/\/rank\//g, ''), [props.pathName])
+  if (!props.tabs) return
   return (
     <>
       <Tabs defaultValue="crypto" value={selectedTab} className="px-1 pb-3">
         <TabsList className="w-full">
-          <TabsTrigger value="crypto" className="flex-1" asChild>
-            <Link prefetch="viewport" to="/rank/crypto">
-              Crypto Rank
-            </Link>
-          </TabsTrigger>
-          <TabsTrigger value="share" className="flex-1" asChild>
-            <Link prefetch="viewport" to="/rank/share">
-              Share Rank
-            </Link>
-          </TabsTrigger>
+          {props.tabs.map(({ value, title, to }) => {
+            return (
+              <TabsTrigger key={value} value={value} className="flex-1" asChild>
+                <Link prefetch="viewport" to={to}>
+                  {title}
+                </Link>
+              </TabsTrigger>
+            )
+          })}
         </TabsList>
       </Tabs>
 
@@ -43,30 +66,38 @@ export default function Layout() {
     return LayOne
   }, [pathname])
 
-  useEffect(() => {
-    if (!init) return
-
-    // setting close
-    // navigate('/rank/coming-soon', { replace: true })
-
-    if (pathname === '/rank') {
-      navigate('/rank/crypto', { replace: true })
-    }
-  }, [navigate, pathname, init])
-
-  useEffect(() => {
-    setTimeout(() => {
-      setInit(true)
-    }, 3000)
-  }, [])
-
   const { contextVal } = useRankProvider()
+
+  const tabs = useMemo(() => {
+    if (!contextVal.state.pageExist) return []
+    return TabConf.filter(({ value }) => contextVal.state.pageExist?.[value] ?? false)
+  }, [contextVal.state.pageExist])
+
+  useEffect(() => {
+    const setting = contextVal.state.pageExist
+    if (!setting || init) return
+
+    let needReplace = pathname === '/rank' || pathname.includes('coming-soon')
+
+    if (!contextVal.state.pageExist?.crypto && !contextVal.state.pageExist?.share) {
+      navigate('/rank/coming-soon', { replace: true })
+    } else if (!contextVal.state.pageExist?.crypto) {
+      needReplace = needReplace || pathname.includes('crypto')
+      needReplace && navigate('/rank/share', { replace: true })
+    } else if (!contextVal.state.pageExist?.share) {
+      needReplace = needReplace || pathname.includes('share')
+      needReplace && navigate('/rank/crypto', { replace: true })
+    } else {
+      needReplace && navigate('/rank/crypto', { replace: true })
+    }
+    setInit(true)
+  }, [navigate, pathname, contextVal.state.pageExist, init])
 
   if (!init) return <SkeletonBox isInit />
 
   return (
     <div className="container mx-auto flex flex-1 flex-col rounded-t-xl p-0">
-      <CompLayout pathName={pathname}>
+      <CompLayout pathName={pathname} tabs={tabs}>
         <Outlet context={contextVal} />
       </CompLayout>
     </div>

@@ -1,30 +1,49 @@
 import { memo, useMemo, type FC } from 'react'
 import { cn } from '~/lib/utils'
 import { Button } from '~/components/ui/button'
+import Amount from '~/components/amount'
 import Icons from '~/icons'
 import { Crypto, cryptoDetails } from '~/consts/crypto'
 
+import type { BCRankInfoResponse, ShareRankInfoResponse } from '~/api/codegen/data-contracts'
 import Rules from './rules'
 
 type Props = {
   theme?: 'crypto' | 'share'
+  currency: Crypto
+  dataLs: BCRankInfoResponse['rank'] | ShareRankInfoResponse['rank']
+  rewardLock?: boolean
 }
 
 type UnitBoardProps = {
   id: string
   imgHeader: string
   imgBoard: string
-  currency: Crypto
+  currency?: Crypto
   avatar?: string
+  name?: string
+  reward?: string
+  scoreCount?: string
+  ranking: number
+  rewardLock?: boolean
 }
 
-const UnitBoard = ({ imgBoard, imgHeader, avatar, currency }: UnitBoardProps) => {
-  const currencyIcon = useMemo(() => cryptoDetails?.[currency], [currency])
+const UnitBoard = ({
+  imgBoard,
+  imgHeader,
+  avatar,
+  currency,
+  name,
+  scoreCount,
+  reward,
+  rewardLock = false,
+}: UnitBoardProps) => {
+  const currencyIcon = useMemo(() => currency && cryptoDetails?.[currency], [currency])
   return (
-    <div className="space-y-7 px-2 [&>div]:w-full">
+    <div className={cn('px-2 [&>div]:w-full', rewardLock ? 'space-y-3' : 'space-y-7')}>
       <div className="space-y-1 text-center">
-        <div className="text-[14px] font-ultra">Player Name</div>
-        <div className="text-[12px]">123,456.123456789</div>
+        <div className="text-[14px] font-ultra">{name}</div>
+        <div className="text-[12px]">{scoreCount}</div>
         <div className="relative w-full">
           <img src={imgHeader} alt="background-board-header" className="w-full" />
           {avatar && (
@@ -35,10 +54,14 @@ const UnitBoard = ({ imgBoard, imgHeader, avatar, currency }: UnitBoardProps) =>
         </div>
       </div>
       <div className="relative">
-        <div className="primary-gradient-border-rounded !absolute -top-4 left-1/2 flex h-[30px] min-w-[50%] -translate-x-1/2 items-center rounded-[100px] bg-black px-2 before:rounded-[100px]">
-          {currencyIcon?.icon && <currencyIcon.icon className="mr-1 h-4 w-4" />}
-          <span className="whitespace-nowrap text-base font-ultra">123</span>
-        </div>
+        {!rewardLock && (
+          <div className="primary-gradient-border-rounded !absolute -top-4 left-1/2 flex h-[30px] min-w-[50%] -translate-x-1/2 items-center rounded-[100px] bg-black px-2 before:rounded-[100px]">
+            {currencyIcon?.icon && <currencyIcon.icon className="mr-1 h-4 w-4" />}
+            <span className="whitespace-nowrap text-base font-ultra">
+              <Amount value={reward} crypto={currency} />
+            </span>
+          </div>
+        )}
         <img src={imgBoard} alt="background-board" className="w-full" />
       </div>
     </div>
@@ -48,25 +71,39 @@ const UnitBoard = ({ imgBoard, imgHeader, avatar, currency }: UnitBoardProps) =>
 const BoardConf: UnitBoardProps[] = [
   {
     id: 'second',
+    ranking: 2,
     imgHeader: '/images/rank/rank-board-header-2.png',
     imgBoard: '/images/rank/rank-board-2.png',
-    currency: Crypto.KOKON,
   },
   {
     id: 'first',
+    ranking: 1,
     imgHeader: '/images/rank/rank-board-header-1.png',
     imgBoard: '/images/rank/rank-board-1.png',
-    currency: Crypto.TON,
   },
   {
     id: 'third',
+    ranking: 3,
     imgHeader: '/images/rank/rank-board-header-3.png',
     imgBoard: '/images/rank/rank-board-3.png',
-    currency: Crypto.USDT,
   },
 ] as const
 
-const Board: FC<Props> = ({ theme = 'crypto' }) => {
+const Board: FC<Props> = ({ theme = 'crypto', dataLs, rewardLock = false }) => {
+  const ls = useMemo(() => {
+    return BoardConf.map(b => {
+      const findData = dataLs.find(({ ranking }) => ranking === b.ranking)
+      return {
+        ...b,
+        ...{ rewardLock: rewardLock || !findData?.rewardType },
+        ...(findData && 'rewardType' in findData && { currency: findData.rewardType as Crypto }),
+        ...(findData && 'customerName' in findData && { name: findData.customerName }),
+        ...(findData && 'reward' in findData && { reward: findData.reward }),
+        ...(findData && 'scoreCount' in findData && { scoreCount: findData.scoreCount as string }),
+      }
+    })
+  }, [dataLs, rewardLock])
+
   return (
     <div
       className={cn(
@@ -93,8 +130,8 @@ const Board: FC<Props> = ({ theme = 'crypto' }) => {
 
       <div className="absolute bottom-[15px] flex w-full items-end justify-around [&>div]:w-[30%]">
         {useMemo(() => {
-          return BoardConf.map(b => <UnitBoard key={b.id} {...b} />)
-        }, [])}
+          return ls.map(b => <UnitBoard key={b.id} {...b} />)
+        }, [ls])}
       </div>
     </div>
   )
