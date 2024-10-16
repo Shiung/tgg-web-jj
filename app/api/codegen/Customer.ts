@@ -248,18 +248,8 @@ export class Customer<SecurityDataType = unknown> {
   customerTeamPerformanceList = (query: CustomerTeamPerformanceListParams, params: RequestParams = {}) =>
     this.http.request<
       {
-        /**
-         * 回傳使用定位
-         * @format int64
-         */
-        anchorPoint?: number;
         /** 資料 */
         data?: {
-          /**
-           * 下頁定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位
-           * @format int64
-           */
-          anchorPoint?: number;
           /**
            * 團員等級
            * @format int64
@@ -272,6 +262,27 @@ export class Customer<SecurityDataType = unknown> {
           /** 反佣 */
           totalDeposits?: string;
         }[];
+        /** 分頁資訊 */
+        pagination?: {
+          /**
+           * 分頁筆數
+           * @format int64
+           * @min 20
+           */
+          pageSize: number;
+          /**
+           * 總頁數
+           * @format int64
+           * @min 0
+           */
+          totalPage?: number | null;
+          /**
+           * 總筆數
+           * @format int64
+           * @min 0
+           */
+          totalRecord?: number | null;
+        };
         /** 總計欄位 */
         summary?: {
           /**

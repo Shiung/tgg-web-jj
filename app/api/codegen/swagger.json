@@ -1153,13 +1153,21 @@
         ],
         "parameters": [
           {
+            "enum": [
+              "level bet deposit"
+            ],
             "type": "string",
+            "description": "排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序 (Allowed values: level bet deposit)",
             "name": "sortField",
             "in": "query"
           },
           {
-            "type": "boolean",
-            "description": "排序方向,true為升冪",
+            "enum": [
+              "desc",
+              "asc"
+            ],
+            "type": "string",
+            "description": "排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc)",
             "name": "sortOrder",
             "in": "query"
           },
@@ -1177,11 +1185,22 @@
             "in": "query"
           },
           {
+            "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁接續起始定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位",
-            "name": "anchorPoint",
-            "in": "query"
+            "description": "分頁頁數 (Required, Minimum: 1)",
+            "name": "page",
+            "in": "query",
+            "required": true
+          },
+          {
+            "minimum": 20,
+            "type": "integer",
+            "format": "int64",
+            "description": "分頁筆數 (Required, Minimum: 20)",
+            "name": "pageSize",
+            "in": "query",
+            "required": true
           }
         ],
         "responses": {
@@ -1190,22 +1209,12 @@
             "schema": {
               "type": "object",
               "properties": {
-                "anchorPoint": {
-                  "description": "回傳使用定位",
-                  "type": "integer",
-                  "format": "int64"
-                },
                 "data": {
                   "description": "資料",
                   "type": "array",
                   "items": {
                     "type": "object",
                     "properties": {
-                      "anchorPoint": {
-                        "description": "下頁定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位",
-                        "type": "integer",
-                        "format": "int64"
-                      },
                       "lv": {
                         "description": "團員等級",
                         "type": "integer",
@@ -1223,6 +1232,37 @@
                         "description": "反佣",
                         "type": "string"
                       }
+                    }
+                  }
+                },
+                "pagination": {
+                  "description": "分頁資訊",
+                  "type": "object",
+                  "required": [
+                    "pageSize",
+                    "totalRecord",
+                    "totalPage"
+                  ],
+                  "properties": {
+                    "pageSize": {
+                      "description": "分頁筆數",
+                      "type": "integer",
+                      "format": "int64",
+                      "minimum": 20
+                    },
+                    "totalPage": {
+                      "description": "總頁數",
+                      "type": "integer",
+                      "nullable": true,
+                      "format": "int64",
+                      "minimum": 0
+                    },
+                    "totalRecord": {
+                      "description": "總筆數",
+                      "type": "integer",
+                      "nullable": true,
+                      "format": "int64",
+                      "minimum": 0
                     }
                   }
                 },
@@ -1554,7 +1594,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Minimum: 1, Required)",
+            "description": "分頁頁數 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -9509,12 +9549,11 @@
     },
     "TeamPerformanceRequest": {
       "type": "object",
+      "required": [
+        "Page",
+        "PageSize"
+      ],
       "properties": {
-        "AnchorPoint": {
-          "description": "頁接續起始定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位",
-          "type": "integer",
-          "format": "int64"
-        },
         "Level": {
           "description": "團員等級",
           "type": "integer",
@@ -9524,34 +9563,46 @@
           "description": "團員名稱",
           "type": "string"
         },
+        "Page": {
+          "description": "分頁頁數",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        },
+        "PageSize": {
+          "description": "分頁筆數",
+          "type": "integer",
+          "format": "int64",
+          "minimum": 20
+        },
         "SortField": {
-          "type": "string"
+          "description": "排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序. Allowed Enum",
+          "type": "string",
+          "enum": [
+            "level",
+            "bet",
+            "deposit"
+          ]
         },
         "SortOrder": {
-          "description": "排序方向,true為升冪",
-          "type": "boolean"
+          "description": "排序欄位升降冪(asc,desc). Allowed Enum",
+          "type": "string",
+          "enum": [
+            "desc",
+            "eq=asc"
+          ]
         }
       }
     },
     "TeamPerformanceResponse": {
       "type": "object",
       "properties": {
-        "anchorPoint": {
-          "description": "回傳使用定位",
-          "type": "integer",
-          "format": "int64"
-        },
         "data": {
           "description": "資料",
           "type": "array",
           "items": {
             "type": "object",
             "properties": {
-              "anchorPoint": {
-                "description": "下頁定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位",
-                "type": "integer",
-                "format": "int64"
-              },
               "lv": {
                 "description": "團員等級",
                 "type": "integer",
@@ -9569,6 +9620,37 @@
                 "description": "反佣",
                 "type": "string"
               }
+            }
+          }
+        },
+        "pagination": {
+          "description": "分頁資訊",
+          "type": "object",
+          "required": [
+            "pageSize",
+            "totalRecord",
+            "totalPage"
+          ],
+          "properties": {
+            "pageSize": {
+              "description": "分頁筆數",
+              "type": "integer",
+              "format": "int64",
+              "minimum": 20
+            },
+            "totalPage": {
+              "description": "總頁數",
+              "type": "integer",
+              "nullable": true,
+              "format": "int64",
+              "minimum": 0
+            },
+            "totalRecord": {
+              "description": "總筆數",
+              "type": "integer",
+              "nullable": true,
+              "format": "int64",
+              "minimum": 0
             }
           }
         },

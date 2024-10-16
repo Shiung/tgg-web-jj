@@ -1853,35 +1853,33 @@ export interface TeamInfoResponse {
 
 export interface TeamPerformanceRequest {
   /**
-   * 頁接續起始定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位
-   * @format int64
-   */
-  AnchorPoint?: number;
-  /**
    * 團員等級
    * @format int64
    */
   Level?: number;
   /** 團員名稱 */
   Name?: string;
-  SortField?: string;
-  /** 排序方向,true為升冪 */
-  SortOrder?: boolean;
+  /**
+   * 分頁頁數
+   * @format int64
+   * @min 1
+   */
+  Page: number;
+  /**
+   * 分頁筆數
+   * @format int64
+   * @min 20
+   */
+  PageSize: number;
+  /** 排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序. Allowed Enum */
+  SortField?: "level" | "bet" | "deposit";
+  /** 排序欄位升降冪(asc,desc). Allowed Enum */
+  SortOrder?: "desc" | "eq=asc";
 }
 
 export interface TeamPerformanceResponse {
-  /**
-   * 回傳使用定位
-   * @format int64
-   */
-  anchorPoint?: number;
   /** 資料 */
   data?: {
-    /**
-     * 下頁定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位
-     * @format int64
-     */
-    anchorPoint?: number;
     /**
      * 團員等級
      * @format int64
@@ -1894,6 +1892,27 @@ export interface TeamPerformanceResponse {
     /** 反佣 */
     totalDeposits?: string;
   }[];
+  /** 分頁資訊 */
+  pagination?: {
+    /**
+     * 分頁筆數
+     * @format int64
+     * @min 20
+     */
+    pageSize: number;
+    /**
+     * 總頁數
+     * @format int64
+     * @min 0
+     */
+    totalPage?: number | null;
+    /**
+     * 總筆數
+     * @format int64
+     * @min 0
+     */
+    totalRecord?: number | null;
+  };
   /** 總計欄位 */
   summary?: {
     /**
@@ -2191,9 +2210,10 @@ export interface CustomerShareCreatePayload {
 }
 
 export interface CustomerTeamPerformanceListParams {
-  sortField?: string;
-  /** 排序方向,true為升冪 */
-  sortOrder?: boolean;
+  /** 排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序 (Allowed values: level bet deposit) */
+  sortField?: "level bet deposit";
+  /** 排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc) */
+  sortOrder?: "desc" | "asc";
   /** 團員名稱 */
   name?: string;
   /**
@@ -2202,10 +2222,17 @@ export interface CustomerTeamPerformanceListParams {
    */
   level?: number;
   /**
-   * 頁接續起始定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位
+   * 分頁頁數 (Required, Minimum: 1)
    * @format int64
+   * @min 1
    */
-  anchorPoint?: number;
+  page: number;
+  /**
+   * 分頁筆數 (Required, Minimum: 20)
+   * @format int64
+   * @min 20
+   */
+  pageSize: number;
 }
 
 export interface CustomerUpgradeAnimationDeletePayload {
@@ -2255,7 +2282,7 @@ export interface GameTransactionsListParams {
   /** @format uint64 */
   gameId?: number;
   /**
-   * 分頁頁數 (Minimum: 1, Required)
+   * 分頁頁數 (Required, Minimum: 1)
    * @format int64
    * @min 1
    */
