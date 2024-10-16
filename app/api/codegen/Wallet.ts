@@ -9,6 +9,11 @@
  * ---------------------------------------------------------------
  */
 
+import {
+  WalletHistoryListListParams,
+  WalletTransferCreatePayload,
+  WalletWithdrawCreatePayload,
+} from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Wallet<SecurityDataType = unknown> {
@@ -74,39 +79,7 @@ export class Wallet<SecurityDataType = unknown> {
    * @name WalletHistoryListList
    * @request GET:/ajax/wallet/history/list
    */
-  walletHistoryListList = (
-    query: {
-      /**
-       * 帳變時間(起日) (Required when TransactionTimeTo is present)
-       * @format date-time
-       */
-      transactionTimeFrom?: string;
-      /**
-       * 帳變時間(迄日) (Required when TransactionTimeFrom is present)
-       * @format date-time
-       */
-      transactionTimeTo?: string;
-      /** 幣種 TON USDT KOKON */
-      currency?: string;
-      /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw (Allowed values: Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw) */
-      type?: "Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw";
-      /** 收支 Income Expense */
-      balance?: string;
-      /**
-       * 頁碼 (Required, Minimum: 1)
-       * @format int64
-       * @min 1
-       */
-      page: number;
-      /**
-       * 分頁筆數 (Required, Minimum: 20)
-       * @format int64
-       * @min 20
-       */
-      pageSize: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  walletHistoryListList = (query: WalletHistoryListListParams, params: RequestParams = {}) =>
     this.http.request<
       {
         /** 帳變記錄列表 */
@@ -223,20 +196,7 @@ export class Wallet<SecurityDataType = unknown> {
    * @name WalletTransferCreate
    * @request POST:/ajax/wallet/transfer
    */
-  walletTransferCreate = (
-    body: {
-      /**
-       * 轉帳金額
-       * @format decimal
-       */
-      amount: string;
-      /** 轉帳幣別. Allowed Enum */
-      currency: "TON" | "USDT" | "KOKON";
-      /** 轉帳類型:IN:買入 OUT:賣出. Allowed Enum */
-      type: "IN" | "OUT";
-    },
-    params: RequestParams = {},
-  ) =>
+  walletTransferCreate = (body: WalletTransferCreatePayload, params: RequestParams = {}) =>
     this.http.request<any, any>({
       path: `/ajax/wallet/transfer`,
       method: "POST",
@@ -307,29 +267,7 @@ export class Wallet<SecurityDataType = unknown> {
    * @name WalletWithdrawCreate
    * @request POST:/ajax/wallet/withdraw
    */
-  walletWithdrawCreate = (
-    body: {
-      /**
-       * 申請金額. Greater than 0. Less than 10000000
-       * @format decimal
-       */
-      amount: string;
-      /** 區塊鏈網路，目前只有TON. Allowed Enum */
-      chainNet: "TON";
-      /** 幣別. Allowed Enum */
-      currency: "TON" | "USDT";
-      /** 資金密碼 */
-      fundPassword: string;
-      /**
-       * 自定義備註(選填)
-       * @maxLength 100
-       */
-      memo?: string;
-      /** 出款地址 */
-      recipientAddress: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  walletWithdrawCreate = (body: WalletWithdrawCreatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         /**

@@ -9,6 +9,17 @@
  * ---------------------------------------------------------------
  */
 
+import {
+  CustomerBindemailUpdatePayload,
+  CustomerBindpinUpdatePayload,
+  CustomerLocaleUpdatePayload,
+  CustomerLoginCreatePayload,
+  CustomerShareCreatePayload,
+  CustomerTeamPerformanceListParams,
+  CustomerUpgradeAnimationDeletePayload,
+  CustomerValidcodeCreatePayload,
+  CustomerVerifycodeCreatePayload,
+} from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Customer<SecurityDataType = unknown> {
@@ -25,18 +36,7 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerBindemailUpdate
    * @request PUT:/ajax/customer/bindemail
    */
-  customerBindemailUpdate = (
-    body: {
-      /** 驗證碼 */
-      code: string;
-      /**
-       * 收信信箱
-       * @format email
-       */
-      email: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  customerBindemailUpdate = (body: CustomerBindemailUpdatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         succeed?: boolean;
@@ -56,15 +56,7 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerBindpinUpdate
    * @request PUT:/ajax/customer/bindpin
    */
-  customerBindpinUpdate = (
-    body: {
-      /** 驗證碼 */
-      code: string;
-      /** 資金密碼 */
-      pin: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  customerBindpinUpdate = (body: CustomerBindpinUpdatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         succeed?: boolean;
@@ -121,13 +113,7 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerLocaleUpdate
    * @request PUT:/ajax/customer/locale
    */
-  customerLocaleUpdate = (
-    body: {
-      /** 語系 */
-      locale?: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  customerLocaleUpdate = (body: CustomerLocaleUpdatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         succeed?: boolean;
@@ -147,51 +133,7 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerLoginCreate
    * @request POST:/ajax/customer/login
    */
-  customerLoginCreate = (
-    body: {
-      /** 使用者頭像 */
-      avatar?: string;
-      /** 裝置類型, 如:Mini App, Web */
-      device?: string;
-      /**
-       * 裝置設備號
-       * @maxLength 50
-       */
-      deviceId: string;
-      /** first_name */
-      firstName: string;
-      /**
-       * Telegram id
-       * @format int64
-       */
-      id: number;
-      /** language_code */
-      languageCode?: string;
-      /** last_name */
-      lastName?: string;
-      /**
-       * 操作裝置系統, 如Android, Ios, Windows, MacOS
-       * @maxLength 15
-       */
-      os: string;
-      /**
-       * 產品Id
-       * @format uint64
-       * @min 1
-       */
-      productId: number;
-      /** 用戶分享推薦代碼 */
-      referralCode?: string;
-      /** username */
-      userName?: string;
-      /**
-       * 前端版本號
-       * @maxLength 15
-       */
-      version: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  customerLoginCreate = (body: CustomerLoginCreatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         /** 推薦碼開獎資訊 */
@@ -243,13 +185,7 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerShareCreate
    * @request POST:/ajax/customer/share
    */
-  customerShareCreate = (
-    body: {
-      /** 用戶分享時使用的推薦代碼 */
-      referralCode?: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  customerShareCreate = (body: CustomerShareCreatePayload, params: RequestParams = {}) =>
     this.http.request<any, any>({
       path: `/ajax/customer/share`,
       method: "POST",
@@ -309,26 +245,7 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerTeamPerformanceList
    * @request GET:/ajax/customer/team/performance
    */
-  customerTeamPerformanceList = (
-    query?: {
-      sortField?: string;
-      /** 排序方向,true為升冪 */
-      sortOrder?: boolean;
-      /** 團員名稱 */
-      name?: string;
-      /**
-       * 團員等級
-       * @format int64
-       */
-      level?: number;
-      /**
-       * 頁接續起始定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位
-       * @format int64
-       */
-      anchorPoint?: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  customerTeamPerformanceList = (query: CustomerTeamPerformanceListParams, params: RequestParams = {}) =>
     this.http.request<
       {
         /**
@@ -407,17 +324,7 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerUpgradeAnimationDelete
    * @request DELETE:/ajax/customer/upgrade-animation
    */
-  customerUpgradeAnimationDelete = (
-    body: {
-      /**
-       * 清除目標等級
-       * @format int64
-       * @min 2
-       */
-      finalClass?: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  customerUpgradeAnimationDelete = (body: CustomerUpgradeAnimationDeletePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         /**
@@ -444,22 +351,7 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerValidcodeCreate
    * @request POST:/ajax/customer/validcode
    */
-  customerValidcodeCreate = (
-    body: {
-      /**
-       * 收信信箱
-       * @format email
-       */
-      email: string;
-      /**
-       * 驗證類型 0:純驗證無功能 1:綁定信箱 2:重置綁定信箱 3:綁定取款密碼 4:更新取款密碼 5:提款驗證
-       * @format int64
-       * @max 5
-       */
-      kind?: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  customerValidcodeCreate = (body: CustomerValidcodeCreatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         succeed?: boolean;
@@ -479,13 +371,7 @@ export class Customer<SecurityDataType = unknown> {
    * @name CustomerVerifycodeCreate
    * @request POST:/ajax/customer/verifycode
    */
-  customerVerifycodeCreate = (
-    body: {
-      /** 驗證碼 */
-      code: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  customerVerifycodeCreate = (body: CustomerVerifycodeCreatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         succeed?: boolean;

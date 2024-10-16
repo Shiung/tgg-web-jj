@@ -9,6 +9,7 @@
  * ---------------------------------------------------------------
  */
 
+import { RankBcListParams } from "./data-contracts";
 import { HttpClient, RequestParams } from "./http-client";
 
 export class Rank<SecurityDataType = unknown> {
@@ -25,13 +26,7 @@ export class Rank<SecurityDataType = unknown> {
    * @name RankBcList
    * @request GET:/ajax/rank/bc
    */
-  rankBcList = (
-    query: {
-      /** 排行榜類型 (Required) */
-      rankType: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  rankBcList = (query: RankBcListParams, params: RequestParams = {}) =>
     this.http.request<
       {
         /** 排行榜 */

@@ -247,10 +247,10 @@ export interface CreateResponse {
 }
 
 export interface CustomerWalletChangeGetRequest {
-  /** 收支 Income Expense */
-  Balance?: string;
-  /** 幣種 TON USDT KOKON */
-  Currency?: string;
+  /** 收支 Income Expense. Allowed Enum */
+  Balance?: "Income" | "Expense";
+  /** 幣種 TON USDT KOKON. Allowed Enum */
+  Currency?: "TON" | "USDT" | "KOKON";
   /**
    * 頁碼
    * @format int64
@@ -543,6 +543,17 @@ export interface GetGameSettingResponse {
    */
   withdrawWaterRate: number;
 }
+
+export interface GetKokonWalletBalanceResponse {
+  /** 餘額 */
+  balance: string;
+  /** 幣種 */
+  currency: string;
+  /** KOKON餘額 */
+  kokonBalance: string;
+}
+
+export type GetKokonWalletRequest = object;
 
 export type GetLogoRequest = object;
 
@@ -1086,7 +1097,7 @@ export interface PacketResponse {
   /** 領取人名單 */
   receiver?: {
     /** @format decimal */
-    Amount?: string;
+    amount?: string;
     avatar?: string;
     name?: string;
   }[];
@@ -1117,6 +1128,8 @@ export interface PacketsRequest {
    * @min 20
    */
   PageSize: number;
+  /** 查詢狀態 1:進行中 2:已終止 3:已完成. Allowed Enum */
+  States?: "1" | "2" | "3";
 }
 
 export interface PacketsResponse {
@@ -1134,6 +1147,8 @@ export interface PacketsResponse {
      * @format decimal
      */
     distributedAmount?: string;
+    /** 紅包Id */
+    packetId?: string;
     /**
      * 目前餘額
      * @format decimal
@@ -1192,6 +1207,11 @@ export interface RankConfigResponse {
 }
 
 export interface SettingResponse {
+  /**
+   * 有效用戶設定
+   * @minLength 1
+   */
+  activeSetting: string;
   /** 升等設定 */
   classSetting?: {
     /**
@@ -1888,6 +1908,15 @@ export interface TeamPerformanceResponse {
   };
 }
 
+export interface TelegramConfigGetResponse {
+  /** telegram app name */
+  appName?: string;
+  /** telegram bot id */
+  botId?: string;
+  /** telegram bot name */
+  botName?: string;
+}
+
 export type TerminateRequest = object;
 
 export interface TerminateResponse {
@@ -2076,4 +2105,350 @@ export interface WithdrawingListResponse {
      */
     submissionTime: string;
   }[];
+}
+
+export interface CampaignEggClaimCreatePayload {
+  /** 領取ID */
+  transactionId: string;
+}
+
+export interface CampaignEggMarqueeListParams {
+  /**
+   * 筆數 (Required)
+   * @format int64
+   */
+  size: number;
+}
+
+export interface CustomerBindemailUpdatePayload {
+  /** 驗證碼 */
+  code: string;
+  /**
+   * 收信信箱
+   * @format email
+   */
+  email: string;
+}
+
+export interface CustomerBindpinUpdatePayload {
+  /** 驗證碼 */
+  code: string;
+  /** 資金密碼 */
+  pin: string;
+}
+
+export interface CustomerLocaleUpdatePayload {
+  /** 語系 */
+  locale?: string;
+}
+
+export interface CustomerLoginCreatePayload {
+  /** 使用者頭像 */
+  avatar?: string;
+  /** 裝置類型, 如:Mini App, Web */
+  device?: string;
+  /**
+   * 裝置設備號
+   * @maxLength 50
+   */
+  deviceId: string;
+  /** first_name */
+  firstName: string;
+  /**
+   * Telegram id
+   * @format int64
+   */
+  id: number;
+  /** language_code */
+  languageCode?: string;
+  /** last_name */
+  lastName?: string;
+  /**
+   * 操作裝置系統, 如Android, Ios, Windows, MacOS
+   * @maxLength 15
+   */
+  os: string;
+  /**
+   * 產品Id
+   * @format uint64
+   * @min 1
+   */
+  productId: number;
+  /** 用戶分享推薦代碼 */
+  referralCode?: string;
+  /** username */
+  userName?: string;
+  /**
+   * 前端版本號
+   * @maxLength 15
+   */
+  version: string;
+}
+
+export interface CustomerShareCreatePayload {
+  /** 用戶分享時使用的推薦代碼 */
+  referralCode?: string;
+}
+
+export interface CustomerTeamPerformanceListParams {
+  sortField?: string;
+  /** 排序方向,true為升冪 */
+  sortOrder?: boolean;
+  /** 團員名稱 */
+  name?: string;
+  /**
+   * 團員等級
+   * @format int64
+   */
+  level?: number;
+  /**
+   * 頁接續起始定位,取下頁時在搜尋條件帶回前次最後一條資料的anchorPoint做為定位
+   * @format int64
+   */
+  anchorPoint?: number;
+}
+
+export interface CustomerUpgradeAnimationDeletePayload {
+  /**
+   * 清除目標等級
+   * @format int64
+   * @min 2
+   */
+  finalClass?: number;
+}
+
+export interface CustomerValidcodeCreatePayload {
+  /**
+   * 收信信箱
+   * @format email
+   */
+  email: string;
+  /**
+   * 驗證類型 0:純驗證無功能 1:綁定信箱 2:重置綁定信箱 3:綁定取款密碼 4:更新取款密碼 5:提款驗證
+   * @format int64
+   * @max 5
+   */
+  kind?: number;
+}
+
+export interface CustomerVerifycodeCreatePayload {
+  /** 驗證碼 */
+  code: string;
+}
+
+export interface GameEnergyUpdatePayload {
+  /** @format uint64 */
+  gameId: number;
+}
+
+export interface GameTransactionsListParams {
+  /**
+   *  (Required)
+   * @format date-time
+   */
+  startTime: string;
+  /**
+   *  (Required)
+   * @format date-time
+   */
+  endTime: string;
+  /** @format uint64 */
+  gameId?: number;
+  /**
+   * 分頁頁數 (Minimum: 1, Required)
+   * @format int64
+   * @min 1
+   */
+  page: number;
+  /**
+   * 分頁筆數 (Required, Minimum: 20)
+   * @format int64
+   * @min 20
+   */
+  pageSize: number;
+}
+
+export interface GamesEnterCreatePayload {
+  currency: string;
+  language: string;
+}
+
+export interface PacketCreatePayload {
+  /** 紅包種類. Allowed Enum */
+  distributeKind?: "FIXED" | "RANDOM";
+  /**
+   * 發放總金額
+   * @format decimal
+   */
+  distributedAmount?: string;
+  /**
+   * 固定金額
+   * @format decimal
+   */
+  fixedValue?: string;
+  /**
+   * 上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0). Allowed Enum
+   * @format int64
+   */
+  limitKind?: 0 | 1;
+  /**
+   * 隨機金額上限
+   * @format decimal
+   */
+  maxValue?: string;
+  /**
+   * 隨機金額下限
+   * @format decimal
+   */
+  minValue?: string;
+  /**
+   * 數量
+   * @format int64
+   */
+  quantity?: number;
+  /**
+   * 隨機奬勵預算
+   * @format decimal
+   */
+  quota?: string;
+}
+
+export interface PacketDrawCreatePayload {
+  /** 紅包推介碼 */
+  referralCode?: string;
+}
+
+export interface PacketDetailParams {
+  /**
+   * 頁碼 (Required, Minimum: 1)
+   * @format int64
+   * @min 1
+   */
+  page: number;
+  /**
+   * 分頁筆數 (Required, Minimum: 20)
+   * @format int64
+   * @min 20
+   */
+  pageSize: number;
+  /** Path parameter: packet_id */
+  packetId: string;
+}
+
+export interface PacketsListParams {
+  /** 查詢狀態 1:進行中 2:已終止 3:已完成 (Allowed values: 1 2 3) */
+  states?: "1 2 3";
+  /**
+   * 頁碼 (Required, Minimum: 1)
+   * @format int64
+   * @min 1
+   */
+  page: number;
+  /**
+   * 分頁筆數 (Required, Minimum: 20)
+   * @format int64
+   * @min 20
+   */
+  pageSize: number;
+}
+
+export interface RankBcListParams {
+  /** 排行榜類型 (Required) */
+  rankType: string;
+}
+
+export interface TeamCommissionListListParams {
+  /** 玩家名稱 */
+  displayName?: string;
+  /**
+   * 玩家差距層級
+   * @format int64
+   */
+  level?: number;
+  /**
+   *  (Required)
+   * @format date-time
+   */
+  startTime: string;
+  /**
+   *  (Required)
+   * @format date-time
+   */
+  endTime: string;
+  /**
+   * 分頁頁數 (Required, Minimum: 1)
+   * @format int64
+   * @min 1
+   */
+  page: number;
+  /**
+   * 分頁筆數 (Required, Minimum: 20)
+   * @format int64
+   * @min 20
+   */
+  pageSize: number;
+}
+
+export interface WalletHistoryListListParams {
+  /**
+   * 帳變時間(起日) (Required when TransactionTimeTo is present)
+   * @format date-time
+   */
+  transactionTimeFrom?: string;
+  /**
+   * 帳變時間(迄日) (Required when TransactionTimeFrom is present)
+   * @format date-time
+   */
+  transactionTimeTo?: string;
+  /** 幣種 TON USDT KOKON (Allowed values: TON USDT KOKON) */
+  currency?: "TON USDT KOKON";
+  /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw (Allowed values: Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw) */
+  type?: "Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw";
+  /** 收支 Income Expense (Allowed values: Income Expense) */
+  balance?: "Income Expense";
+  /**
+   * 頁碼 (Required, Minimum: 1)
+   * @format int64
+   * @min 1
+   */
+  page: number;
+  /**
+   * 分頁筆數 (Required, Minimum: 20)
+   * @format int64
+   * @min 20
+   */
+  pageSize: number;
+}
+
+export interface WalletTransferCreatePayload {
+  /**
+   * 轉帳金額
+   * @format decimal
+   */
+  amount: string;
+  /** 轉帳幣別. Allowed Enum */
+  currency: "TON" | "USDT" | "KOKON";
+  /** 轉帳類型:IN:買入 OUT:賣出. Allowed Enum */
+  type: "IN" | "OUT";
+}
+
+export interface WalletWithdrawCreatePayload {
+  /**
+   * 申請金額. Greater than 0. Less than 10000000
+   * @format decimal
+   */
+  amount: string;
+  /** 區塊鏈網路，目前只有TON. Allowed Enum */
+  chainNet: "TON";
+  /** 幣別. Allowed Enum */
+  currency: "TON" | "USDT";
+  /** 資金密碼 */
+  fundPassword: string;
+  /**
+   * 自定義備註(選填)
+   * @maxLength 100
+   */
+  memo?: string;
+  /** 出款地址 */
+  recipientAddress: string;
 }

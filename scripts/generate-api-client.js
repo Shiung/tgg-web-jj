@@ -54,6 +54,8 @@ async function generateApiTypesBySwaggerTypescriptApi() {
       modular: true, // 启用模块化生成
       singleHttpClient: true, // 启用单一 httpClient 实例
       moduleNameIndex: 1, // 控制模块名称生成方式
+      extractRequestParams: true, // 提取请求参数
+      extractRequestBody: true, // 提取请求体
     })
 
     // const command = `npx swagger-typescript-api -p ${swaggerJsonPath} -o ${outputDir} --axios --modular --single-http-client --module-name-index 1`

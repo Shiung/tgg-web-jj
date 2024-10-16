@@ -9,6 +9,7 @@
  * ---------------------------------------------------------------
  */
 
+import { PacketCreatePayload, PacketDetailParams } from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Packet<SecurityDataType = unknown> {
@@ -25,48 +26,7 @@ export class Packet<SecurityDataType = unknown> {
    * @name PacketCreate
    * @request POST:/ajax/packet
    */
-  packetCreate = (
-    body: {
-      /** 紅包種類. Allowed Enum */
-      distributeKind?: "FIXED" | "RANDOM";
-      /**
-       * 發放總金額
-       * @format decimal
-       */
-      distributedAmount?: string;
-      /**
-       * 固定金額
-       * @format decimal
-       */
-      fixedValue?: string;
-      /**
-       * 上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0). Allowed Enum
-       * @format int64
-       */
-      limitKind?: 0 | 1;
-      /**
-       * 隨機金額上限
-       * @format decimal
-       */
-      maxValue?: string;
-      /**
-       * 隨機金額下限
-       * @format decimal
-       */
-      minValue?: string;
-      /**
-       * 數量
-       * @format int64
-       */
-      quantity?: number;
-      /**
-       * 隨機奬勵預算
-       * @format decimal
-       */
-      quota?: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  packetCreate = (body: PacketCreatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         /** 紅包推介碼 */
@@ -87,24 +47,7 @@ export class Packet<SecurityDataType = unknown> {
    * @name PacketDetail
    * @request GET:/ajax/packet/{packet_id}
    */
-  packetDetail = (
-    packetId: string,
-    query: {
-      /**
-       * 頁碼 (Minimum: 1, Required)
-       * @format int64
-       * @min 1
-       */
-      page: number;
-      /**
-       * 分頁筆數 (Required, Minimum: 20)
-       * @format int64
-       * @min 20
-       */
-      pageSize: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  packetDetail = ({ packetId, ...query }: PacketDetailParams, params: RequestParams = {}) =>
     this.http.request<
       {
         /**
@@ -163,7 +106,7 @@ export class Packet<SecurityDataType = unknown> {
         /** 領取人名單 */
         receiver?: {
           /** @format decimal */
-          Amount?: string;
+          amount?: string;
           avatar?: string;
           name?: string;
         }[];

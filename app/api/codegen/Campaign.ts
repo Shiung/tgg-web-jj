@@ -9,7 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { ClaimTreasureRequest } from "./data-contracts";
+import { CampaignEggClaimCreatePayload, CampaignEggMarqueeListParams, ClaimTreasureRequest } from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Campaign<SecurityDataType = unknown> {
@@ -63,13 +63,7 @@ export class Campaign<SecurityDataType = unknown> {
    * @name CampaignEggClaimCreate
    * @request POST:/ajax/campaign/egg/claim
    */
-  campaignEggClaimCreate = (
-    body: {
-      /** 領取ID */
-      transactionId: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  campaignEggClaimCreate = (body: CampaignEggClaimCreatePayload, params: RequestParams = {}) =>
     this.http.request<any, any>({
       path: `/ajax/campaign/egg/claim`,
       method: "POST",
@@ -157,16 +151,7 @@ export class Campaign<SecurityDataType = unknown> {
    * @name CampaignEggMarqueeList
    * @request GET:/ajax/campaign/egg/marquee
    */
-  campaignEggMarqueeList = (
-    query: {
-      /**
-       * 筆數 (Required)
-       * @format int64
-       */
-      size: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  campaignEggMarqueeList = (query: CampaignEggMarqueeListParams, params: RequestParams = {}) =>
     this.http.request<
       {
         /** 金蛋跑馬燈 */

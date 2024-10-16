@@ -9,6 +9,7 @@
  * ---------------------------------------------------------------
  */
 
+import { TeamCommissionListListParams } from "./data-contracts";
 import { HttpClient, RequestParams } from "./http-client";
 
 export class Team<SecurityDataType = unknown> {
@@ -25,40 +26,7 @@ export class Team<SecurityDataType = unknown> {
    * @name TeamCommissionListList
    * @request GET:/ajax/team/commission/list
    */
-  teamCommissionListList = (
-    query: {
-      /** 玩家名稱 */
-      displayName?: string;
-      /**
-       * 玩家差距層級
-       * @format int64
-       */
-      level?: number;
-      /**
-       *  (Required)
-       * @format date-time
-       */
-      startTime: string;
-      /**
-       *  (Required)
-       * @format date-time
-       */
-      endTime: string;
-      /**
-       * 分頁頁數 (Minimum: 1, Required)
-       * @format int64
-       * @min 1
-       */
-      page: number;
-      /**
-       * 分頁筆數 (Required, Minimum: 20)
-       * @format int64
-       * @min 20
-       */
-      pageSize: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  teamCommissionListList = (query: TeamCommissionListListParams, params: RequestParams = {}) =>
     this.http.request<
       {
         /** 佣金明細 */
@@ -141,6 +109,11 @@ export class Team<SecurityDataType = unknown> {
   teamSettingList = (params: RequestParams = {}) =>
     this.http.request<
       {
+        /**
+         * 有效用戶設定
+         * @minLength 1
+         */
+        activeSetting: string;
         /** 升等設定 */
         classSetting?: {
           /**

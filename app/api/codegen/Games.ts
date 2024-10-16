@@ -9,6 +9,7 @@
  * ---------------------------------------------------------------
  */
 
+import { GamesEnterCreatePayload } from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Games<SecurityDataType = unknown> {
@@ -173,14 +174,7 @@ export class Games<SecurityDataType = unknown> {
    * @name GamesEnterCreate
    * @request POST:/ajax/games/{id}/enter
    */
-  gamesEnterCreate = (
-    id: string,
-    body: {
-      currency: string;
-      language: string;
-    },
-    params: RequestParams = {},
-  ) =>
+  gamesEnterCreate = (id: string, body: GamesEnterCreatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         gameUrl: string;

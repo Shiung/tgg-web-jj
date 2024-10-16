@@ -1,5 +1,6 @@
 import { apiClient } from './api-client'
 import { Banner } from './codegen/Banner'
+import { Config } from './codegen/Config'
 import { Campaign } from './codegen/Campaign'
 import { Customer } from './codegen/Customer'
 import { Games } from './codegen/Games'
@@ -19,6 +20,7 @@ import { Wallet } from './codegen/Wallet'
 
 export const apis = {
   banner: new Banner(apiClient),
+  config: new Config(apiClient),
   campaign: new Campaign(apiClient),
   customer: new Customer(apiClient),
   games: new Games(apiClient),

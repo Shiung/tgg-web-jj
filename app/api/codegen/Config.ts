@@ -9,10 +9,9 @@
  * ---------------------------------------------------------------
  */
 
-import { PacketDrawCreatePayload } from "./data-contracts";
-import { ContentType, HttpClient, RequestParams } from "./http-client";
+import { HttpClient, RequestParams } from "./http-client";
 
-export class PacketDraw<SecurityDataType = unknown> {
+export class Config<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
 
   constructor(http: HttpClient<SecurityDataType>) {
@@ -22,24 +21,24 @@ export class PacketDraw<SecurityDataType = unknown> {
   /**
    * @description Auto-generated API documentation
    *
-   * @tags (*PacketController)
-   * @name PacketDrawCreate
-   * @request POST:/ajax/packet-draw
+   * @tags (*TelegramController)
+   * @name ConfigTelegramList
+   * @request GET:/ajax/config/telegram
    */
-  packetDrawCreate = (body: PacketDrawCreatePayload, params: RequestParams = {}) =>
+  configTelegramList = (params: RequestParams = {}) =>
     this.http.request<
       {
-        /** 中獎金額 */
-        amount?: string;
-        /** 是否中獎 */
-        isWinned?: boolean;
+        /** telegram app name */
+        appName?: string;
+        /** telegram bot id */
+        botId?: string;
+        /** telegram bot name */
+        botName?: string;
       },
       any
     >({
-      path: `/ajax/packet-draw`,
-      method: "POST",
-      body: body,
-      type: ContentType.Json,
+      path: `/ajax/config/telegram`,
+      method: "GET",
       ...params,
     });
 }

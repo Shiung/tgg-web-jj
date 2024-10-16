@@ -9,6 +9,7 @@
  * ---------------------------------------------------------------
  */
 
+import { GameEnergyUpdatePayload, GameTransactionsListParams } from "./data-contracts";
 import { ContentType, HttpClient, RequestParams } from "./http-client";
 
 export class Game<SecurityDataType = unknown> {
@@ -44,13 +45,7 @@ export class Game<SecurityDataType = unknown> {
    * @name GameEnergyUpdate
    * @request PUT:/ajax/game/energy
    */
-  gameEnergyUpdate = (
-    body: {
-      /** @format uint64 */
-      gameId: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  gameEnergyUpdate = (body: GameEnergyUpdatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         balance: string;
@@ -106,35 +101,7 @@ export class Game<SecurityDataType = unknown> {
    * @name GameTransactionsList
    * @request GET:/ajax/game/transactions
    */
-  gameTransactionsList = (
-    query: {
-      /**
-       *  (Required)
-       * @format date-time
-       */
-      startTime: string;
-      /**
-       *  (Required)
-       * @format date-time
-       */
-      endTime: string;
-      /** @format uint64 */
-      gameId?: number;
-      /**
-       * 分頁頁數 (Required, Minimum: 1)
-       * @format int64
-       * @min 1
-       */
-      page: number;
-      /**
-       * 分頁筆數 (Required, Minimum: 20)
-       * @format int64
-       * @min 20
-       */
-      pageSize: number;
-    },
-    params: RequestParams = {},
-  ) =>
+  gameTransactionsList = (query: GameTransactionsListParams, params: RequestParams = {}) =>
     this.http.request<
       {
         /** 分頁 */
@@ -197,6 +164,29 @@ export class Game<SecurityDataType = unknown> {
       path: `/ajax/game/transactions`,
       method: "GET",
       query: query,
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*GameController)
+   * @name GameWalletList
+   * @request GET:/ajax/game/wallet
+   */
+  gameWalletList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /** 餘額 */
+        balance: string;
+        /** 幣種 */
+        currency: string;
+        /** KOKON餘額 */
+        kokonBalance: string;
+      },
+      any
+    >({
+      path: `/ajax/game/wallet`,
+      method: "GET",
       ...params,
     });
 }
