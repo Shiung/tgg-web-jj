@@ -1,13 +1,31 @@
 import { useCallback } from 'react'
 import { useUtils } from '@telegram-apps/sdk-react'
 import useStore from '~/stores/useStore'
+import { apis } from '~/api/index'
+import { useMutation } from '@tanstack/react-query'
+import { type InfoResponse } from '~/api/codegen/data-contracts'
 
 export function useShare() {
   const inTelegram = useStore(state => state.inTelegram)
+  const { referralCode } = useStore<InfoResponse>(state => state.info)
   const utils = useUtils()
+
+  // 邀請連結打點
+  const { mutate: shareGA } = useMutation({
+    mutationFn: () => apis.customer.customerShareCreate({ referralCode }),
+    onError: error => {
+      console.error('[ERROR] shareGA', error)
+    },
+  })
 
   const shareUrl = useCallback(
     (url: string, text?: string) => {
+      if (referralCode) {
+        shareGA()
+      } else {
+        console.warn('[WARN] referralCode is not found')
+      }
+
       if (inTelegram) {
         // 在 Telegram 內使用 Telegram 的分享方法
         utils.shareURL(url, text)
@@ -17,7 +35,6 @@ export function useShare() {
           navigator
             .share({
               url: url,
-              text: text,
               title: text || 'Share',
             })
             .catch(error => console.log('Error sharing:', error))
@@ -28,7 +45,7 @@ export function useShare() {
         }
       }
     },
-    [inTelegram, utils]
+    [inTelegram, utils, shareGA, referralCode]
   )
 
   return {

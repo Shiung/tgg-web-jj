@@ -22,6 +22,7 @@ const createUserSlice: StateCreator<UserSlice, [], [], UserSlice> = set => ({
       ...('email' in info && { email: info.email }),
       ...('pin' in info && { pin: info.pin }),
       ...('avatar' in info && { avatar: info.avatar }),
+      ...('referralCode' in info && { referralCode: info.referralCode }),
     }
     if (!Object.keys(updateInfo)) return
     set(state => ({
