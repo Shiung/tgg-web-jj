@@ -35,7 +35,7 @@ const ToastConf = {
 
 const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
   const {
-    info: { email: storeEmail },
+    userInfo: { email: storeEmail },
   } = useStore(state => state)
 
   const { isEditEmail, stepStatus, isVerifyCurrentHandler } = useEmailStatus({

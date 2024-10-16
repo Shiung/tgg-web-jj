@@ -51,7 +51,7 @@ const ShareInvite: React.FC = () => {
   }, [customerInfo])
 
   // 剪貼簿 與分享功能
-  const { shareUrl } = useShare()
+  const { shareUrl, isLoading } = useShare()
   const [state, copyToClipboard] = useCopyToClipboard()
 
   useEffect(() => {
@@ -210,7 +210,12 @@ const ShareInvite: React.FC = () => {
                   />
                 </div>
               </div>
-              <Button catEars className="mt-4 w-full font-ultra" onClick={handleShareURL}>
+              <Button
+                catEars
+                className="mt-4 w-full font-ultra"
+                loading={isLoading}
+                onClick={handleShareURL}
+              >
                 Share
               </Button>
             </div>
@@ -352,7 +357,9 @@ const ShareInvite: React.FC = () => {
 
       {/* 規則說明 */}
       <RuleSheet
-        teamSettingList={teamSettingList?.data ?? { classSetting: [], commissionSetting: [] }}
+        teamSettingList={
+          teamSettingList?.data ?? { activeSetting: '', classSetting: [], commissionSetting: [] }
+        }
       />
     </div>
   )
