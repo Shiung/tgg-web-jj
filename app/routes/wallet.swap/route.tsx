@@ -23,12 +23,13 @@ import BigNumber from 'bignumber.js'
 
 import { useActions } from './hooks'
 
+import SystemMaintenance from '~/routes/wallet/system-maintenance'
 import { useWalletContext } from '~/routes/wallet/provider'
 
 const coins = depositCurrencies.map(crypto => ({
   name: cryptoDetails[crypto].name,
   icon: cryptoDetails[crypto].icon,
-  amount: 0,
+  amount: '0',
 }))
 
 interface SwapFormData {
@@ -37,8 +38,8 @@ interface SwapFormData {
 }
 
 const ToastConf = {
-  done: 'Transfer Done',
-  error: 'Code is incorrect',
+  done: 'Swapped successfully',
+  error: 'Swapped unsuccessfully',
 } as const
 
 export default function Swap() {
@@ -123,10 +124,11 @@ export default function Swap() {
 
   const coinsCompute = useMemo(() => {
     const wallets = state.wallets
-    return coins.map(c => ({
-      ...c,
-      amount: wallets?.find(({ currency }) => currency === c.name)?.balance ?? 0,
-    }))
+    return coins.reduce<typeof coins>((returnArr, cur) => {
+      const find = wallets?.find(({ currency }) => currency === cur.name)
+      if (!find) return returnArr
+      return returnArr.concat([{ ...cur, amount: find?.balance ?? '0' }])
+    }, [])
   }, [state.wallets])
 
   const resetHandler = useCallback(() => {
@@ -200,6 +202,8 @@ export default function Swap() {
   useEffect(() => {
     resetHandler()
   }, [currentTab, resetHandler])
+
+  if (!state.wallets?.length) return <SystemMaintenance />
 
   return (
     <div className="space-y-6 bg-black p-4">
@@ -331,9 +335,13 @@ export default function Swap() {
                 <WarningIcon className="h-4 w-4" />
                 <span>Insufficient balance</span>
               </span>
-              <Link to="/wallet/deposit">
-                <Button className="flex h-6 items-center justify-center px-3">Go to deposit</Button>
-              </Link>
+              {currentTab === 'buy' && (
+                <Link to="/wallet/deposit">
+                  <Button className="flex h-6 items-center justify-center px-3">
+                    Go to deposit
+                  </Button>
+                </Link>
+              )}
             </div>
           )}
         </div>
@@ -360,7 +368,7 @@ export default function Swap() {
             disabled={!isValid || !isAmountSufficient}
             loading={isSubmitting}
           >
-            Buy
+            {currentTab === 'buy' ? 'Buy' : 'Sell'}
           </Button>
         </div>
       </form>
