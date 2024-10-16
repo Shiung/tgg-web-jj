@@ -74,11 +74,10 @@ export default function LuckyMoneyList() {
     <div className="-mt-4 flex w-full flex-1 flex-col items-stretch justify-between rounded-[12px] bg-black p-4">
       <div className="flex flex-1 flex-col">
         <SwitchTab />
-        {/* list */}
         {/* fakeList */}
         {list.length > 0 ? (
           <div className="mt-6 flex w-full flex-1 flex-col">
-            {fakeList.map((item, index) => (
+            {list.map((item, index) => (
               <LuckyMoneyItem key={index} {...item} />
             ))}
           </div>
