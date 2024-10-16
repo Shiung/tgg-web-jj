@@ -88,8 +88,8 @@ export class Wallet<SecurityDataType = unknown> {
       transactionTimeTo?: string;
       /** 幣種 TON USDT KOKON */
       currency?: string;
-      /** 交易類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
-      type?: string;
+      /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw (Allowed values: Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw) */
+      type?: "Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw";
       /** 收支 Income Expense */
       balance?: string;
       /**
@@ -99,7 +99,7 @@ export class Wallet<SecurityDataType = unknown> {
        */
       page: number;
       /**
-       * 分頁筆數 (Minimum: 20, Required)
+       * 分頁筆數 (Required, Minimum: 20)
        * @format int64
        * @min 20
        */
@@ -120,8 +120,21 @@ export class Wallet<SecurityDataType = unknown> {
            * @format date-time
            */
           transactionTime: string;
-          /** 交易類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
-          type: string;
+          /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw. Allowed Enum */
+          type:
+            | "Adjustment"
+            | "Bet"
+            | "Commission"
+            | "Deposit"
+            | "Game"
+            | "LuckyMoney"
+            | "Rank"
+            | "SmashEgg"
+            | "Swap(buy)"
+            | "Swap(sell)"
+            | "Task"
+            | "Treasure"
+            | "Withdraw";
         }[];
         /** 分頁資訊 */
         pagination?: {

@@ -91,7 +91,7 @@ export class Packet<SecurityDataType = unknown> {
     packetId: string,
     query: {
       /**
-       * 頁碼 (Required, Minimum: 1)
+       * 頁碼 (Minimum: 1, Required)
        * @format int64
        * @min 1
        */

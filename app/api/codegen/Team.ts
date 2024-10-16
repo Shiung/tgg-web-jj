@@ -45,7 +45,7 @@ export class Team<SecurityDataType = unknown> {
        */
       endTime: string;
       /**
-       * 分頁頁數 (Required, Minimum: 1)
+       * 分頁頁數 (Minimum: 1, Required)
        * @format int64
        * @min 1
        */
@@ -171,10 +171,6 @@ export class Team<SecurityDataType = unknown> {
           level1: string;
           /** 二級佣金比例 */
           level2: string;
-          /** 三級佣金比例 */
-          level3: string;
-          /** 四級佣金比例 */
-          level4: string;
         }[];
       },
       any

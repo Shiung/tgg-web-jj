@@ -34,7 +34,7 @@ export class Packets<SecurityDataType = unknown> {
        */
       page: number;
       /**
-       * 分頁筆數 (Minimum: 20, Required)
+       * 分頁筆數 (Required, Minimum: 20)
        * @format int64
        * @min 20
        */

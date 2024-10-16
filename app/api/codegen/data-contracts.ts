@@ -273,8 +273,21 @@ export interface CustomerWalletChangeGetRequest {
    * @format date-time
    */
   TransactionTimeTo?: string | null;
-  /** 交易類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
-  TxCategory?: string;
+  /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw. Allowed Enum */
+  TxCategory?:
+    | "Adjustment"
+    | "Bet"
+    | "Commission"
+    | "Deposit"
+    | "Game"
+    | "LuckyMoney"
+    | "Rank"
+    | "SmashEgg"
+    | "Swap(buy)"
+    | "Swap(sell)"
+    | "Task"
+    | "Treasure"
+    | "Withdraw";
 }
 
 export interface CustomerWalletChangeGetResponse {
@@ -289,8 +302,21 @@ export interface CustomerWalletChangeGetResponse {
      * @format date-time
      */
     transactionTime: string;
-    /** 交易類型 Adjustment Bet Commission Deposit Game LuckMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw */
-    type: string;
+    /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw. Allowed Enum */
+    type:
+      | "Adjustment"
+      | "Bet"
+      | "Commission"
+      | "Deposit"
+      | "Game"
+      | "LuckyMoney"
+      | "Rank"
+      | "SmashEgg"
+      | "Swap(buy)"
+      | "Swap(sell)"
+      | "Task"
+      | "Treasure"
+      | "Withdraw";
   }[];
   /** 分頁資訊 */
   pagination?: {
@@ -1196,10 +1222,6 @@ export interface SettingResponse {
     level1: string;
     /** 二級佣金比例 */
     level2: string;
-    /** 三級佣金比例 */
-    level3: string;
-    /** 四級佣金比例 */
-    level4: string;
   }[];
 }
 
