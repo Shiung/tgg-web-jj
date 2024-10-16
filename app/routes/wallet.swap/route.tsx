@@ -329,9 +329,13 @@ export default function Swap() {
                 <WarningIcon className="h-4 w-4" />
                 <span>Insufficient balance</span>
               </span>
-              <Link to="/wallet/deposit">
-                <Button className="flex h-6 items-center justify-center px-3">Go to deposit</Button>
-              </Link>
+              {currentTab === 'buy' && (
+                <Link to="/wallet/deposit">
+                  <Button className="flex h-6 items-center justify-center px-3">
+                    Go to deposit
+                  </Button>
+                </Link>
+              )}
             </div>
           )}
         </div>
