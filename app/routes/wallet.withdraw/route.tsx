@@ -21,6 +21,7 @@ import VerifyButton, { type VerifyButtonExpose } from '~/components/verify-butto
 import WithdrawSuccessDialog from './withdraw-success-dialog'
 import WithdrewSkeleton from './withdrew-skeleton'
 import SystemMaintenance from './system-maintenance'
+import { successToast } from '~/lib/toast'
 
 type FormData = {
   amount: string
@@ -497,7 +498,10 @@ export default function Withdraw() {
             className="h-6 flex-1"
             ref={vbRef}
             kind={ValidCode.withdrawFundPin}
-            successCallBack={() => {}}
+            successCallBack={successToast.bind(
+              null,
+              'The verification code has sent, please check your mailbox.'
+            )}
             errorCallBack={() => {}}
           />
         </div>
