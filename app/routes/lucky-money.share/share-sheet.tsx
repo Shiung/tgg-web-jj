@@ -44,10 +44,11 @@ const ShareSheet: React.FC = () => {
     if (!isValid || isSubmitting || createPacket.isPending) return
     const shareData: CreateRequest = {
       distributeKind: data.distributeKind,
-      limitKind: (data.distributeKind === 'FIXED' ? 1 : 0) as 0 | 1, // 上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0)
+      limitKind: (data.distributeKind === 'FIXED' ? 0 : 1) as 0 | 1, // 上限類型 0:個數 1:金額,若是FIXED發送類型時固定需為0)
     }
     if (data.distributeKind === 'FIXED') {
-      shareData.distributedAmount = `${data.distributedEachBagAmount * data.quantity}`
+      shareData.distributedAmount = `${data.fixedValue * data.quantity}`
+      shareData.fixedValue = `${data.fixedValue}`
       shareData.quantity = data.quantity
     } else {
       shareData.maxValue = `${data.maxValue}`

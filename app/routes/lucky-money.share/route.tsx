@@ -28,7 +28,7 @@ export type FormData = {
   /* 隨機奬勵預算 */
   quota: number
   /* 固定每包金額 */
-  distributedEachBagAmount: number
+  fixedValue: number
   /* 固定總數量 */
   quantity: number
   // 提示訊息
@@ -67,30 +67,23 @@ export default function LuckyMoneyShare() {
     mode: 'onChange',
   })
 
-  const [
-    distributeKind,
-    distributedEachBagAmount,
-    quantity,
-    minValue,
-    maxValue,
-    quota,
-    errorMessage,
-  ] = methods.watch([
-    'distributeKind',
-    'distributedEachBagAmount',
-    'quantity',
-    'minValue',
-    'maxValue',
-    'quota',
-    'errorMessage',
-  ])
+  const [distributeKind, fixedValue, quantity, minValue, maxValue, quota, errorMessage] =
+    methods.watch([
+      'distributeKind',
+      'fixedValue',
+      'quantity',
+      'minValue',
+      'maxValue',
+      'quota',
+      'errorMessage',
+    ])
 
   useEffect(() => {
     const kokonBalance = parseAmount(kokonWallet?.balance)
 
     if (distributeKind === 'FIXED') {
       // 固定紅包
-      const distributedAmount = (distributedEachBagAmount || 0) * (quantity || 0)
+      const distributedAmount = (fixedValue || 0) * (quantity || 0)
       methods.setValue(
         'errorMessage',
         distributedAmount > kokonBalance ? 'Insufficient balance in wallet' : ''
@@ -113,7 +106,7 @@ export default function LuckyMoneyShare() {
     }
   }, [
     distributeKind,
-    distributedEachBagAmount,
+    fixedValue,
     minValue,
     maxValue,
     kokonWallet?.balance,

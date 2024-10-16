@@ -33,7 +33,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
     watch,
     formState: { errors },
   } = useFormContext<FormData>()
-  const distributedEachBagAmount = watch('distributedEachBagAmount')
+  const fixedValue = watch('fixedValue')
   const quantity = watch('quantity')
   const errorMessage = watch('errorMessage')
 
@@ -45,7 +45,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
       {/* Amount of each bag */}
       <div className="space-y-3 rounded-lg bg-[#1C1C1C] p-3">
         <Controller
-          name="distributedEachBagAmount"
+          name="fixedValue"
           control={control}
           rules={{
             required: true,
@@ -84,9 +84,9 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 onValueChange={({ floatValue }) => onChange(floatValue)}
                 className="h-9"
                 fieldSuffix={Crypto.KOKON}
-                error={errors.distributedEachBagAmount?.message}
+                error={errors.fixedValue?.message}
                 clearable
-                onClear={() => setValue('distributedEachBagAmount', 0, { shouldValidate: true })}
+                onClear={() => setValue('fixedValue', 0, { shouldValidate: true })}
               />
             )
           }}
@@ -99,9 +99,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 type="button"
                 variant="outlineSoft"
                 className="h-7 flex-1"
-                onClick={() =>
-                  setValue('distributedEachBagAmount', +amount, { shouldValidate: true })
-                }
+                onClick={() => setValue('fixedValue', +amount, { shouldValidate: true })}
               >
                 <Amount value={amount} crypto={Crypto.KOKON} />
               </Button>
@@ -191,7 +189,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
             <KokonIcon className="h-5 w-5" />
             <Amount
               className="text-sm font-ultra text-white"
-              value={distributedEachBagAmount}
+              value={fixedValue}
               crypto={Crypto.KOKON}
             />
           </div>
@@ -208,7 +206,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
             <KokonIcon className="h-5 w-5" />
             <Amount
               className="text-sm font-ultra text-white"
-              value={+distributedEachBagAmount * quantity}
+              value={fixedValue * quantity}
               crypto={Crypto.KOKON}
             />
           </div>
