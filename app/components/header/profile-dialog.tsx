@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +16,7 @@ import { apis } from '~/api/index'
 import useStore from '~/stores/useStore'
 import type { UserSlice } from '~/stores/userSlice'
 import { successToast } from '~/lib/toast'
+import { emitter } from '~/lib/emitter'
 
 const links = {
   support: {
@@ -36,6 +37,7 @@ const empty: UserSlice['userInfo'] = {}
 
 const ProfileDialog: React.FC = () => {
   const [state, copyToClipboard] = useCopyToClipboard()
+  const [open, setIsOpen] = useState(false)
   const { i18n } = useTranslation()
   const { inTelegram, isLoggedIn, telegramUserData, setUserInfo, logout } = useStore(state => state)
   const { data, refetch } = useQuery({
@@ -44,6 +46,13 @@ const ProfileDialog: React.FC = () => {
     enabled: !!isLoggedIn,
   })
   const userData = useMemo(() => data?.data ?? empty, [data])
+
+  useEffect(() => {
+    emitter.on('openProfileDialog', v => setIsOpen(v))
+    return () => {
+      emitter.off('openProfileDialog')
+    }
+  }, [])
 
   useEffect(() => {
     setUserInfo(userData)
@@ -55,7 +64,7 @@ const ProfileDialog: React.FC = () => {
   }, [state])
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={o => setIsOpen(o)}>
       <DialogTrigger asChild>
         <Avatar className="cursor-pointer">
           <AvatarImage src={telegramUserData?.photoUrl || ''} />

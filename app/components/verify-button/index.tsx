@@ -36,7 +36,7 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
     ref
   ) => {
     const {
-      info: { email: storeEmail },
+      userInfo: { email: storeEmail },
       verificationTs,
       setVerificationTs,
     } = useStore(state => state)
