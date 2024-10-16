@@ -36,8 +36,6 @@ const levelOptions = [
   { value: '0', label: 'LV: all' },
   { value: '1', label: 'LV: 1' },
   { value: '2', label: 'LV: 2' },
-  { value: '3', label: 'LV: 3' },
-  { value: '4', label: 'LV: 4' },
 ]
 
 // 定義 Zod schema
@@ -342,7 +340,7 @@ const Commission: React.FC = () => {
             render={({ field }) => (
               <DropdownSheet
                 id="game-list-dropdown"
-                title="Game List"
+                title="LV"
                 customTrigger={({ selectedLabel, placeholder }) => (
                   <div className="mr-1 mt-2 flex min-w-[120px] flex-1 cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-1000 ease-in-out">
                     <div>{selectedLabel || placeholder}</div>

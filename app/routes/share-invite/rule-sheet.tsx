@@ -189,7 +189,7 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
                 <span className="mt-1 text-xs text-white">Earn</span>
               </div>
             </div>
-            <div>Get commission on the bets from all your team member who are lv 1 to lv 4. </div>
+            <div>Get commission on the bets from all your team member who are lv 1 to lv 2. </div>
             <div>
               Bet amount are defined as valid bets in crypto games (Mines, Crash).Valid bets will
               only be calculated for bets that have been settled and produced a win or loss result.
@@ -202,7 +202,7 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
             <img src="/images/share/referralDiagram.png" alt="progress-1" className="w-full" />
             <div>
               Only when your friends registered and owned over 100 KOKON in their wallet are counted
-              valid member. Your team members can create a lv 1 to lv 4 Referral Team for you. The
+              valid member. Your team members can create a lv 1 to lv 2 Referral Team for you. The
               more members they bring in your team, the greater your income will be.
             </div>
           </div>
