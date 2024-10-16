@@ -33,15 +33,34 @@ const ToastConf = {
   error: 'Code is incorrect',
 } as const
 
-const formSchema = z.object({
-  email: z.string().email({ message: 'Please enter email address' }),
-  verificationCode: z.string().min(1, 'Verification code is required'),
-})
-
 const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
   const {
     info: { email: storeEmail },
   } = useStore(state => state)
+
+  const { isEditEmail, stepStatus, isVerifyCurrentHandler } = useEmailStatus({
+    email: storeEmail ?? '',
+  })
+
+  const formSchema = useMemo(() => {
+    return z
+      .object({
+        email: z.string().email({ message: 'Please enter email address' }),
+        verificationCode: z.string().min(1, 'Verification code is required'),
+      })
+      .refine(
+        data => {
+          const state =
+            !storeEmail || stepStatus !== EmailBindStep.updateNewEmail || data.email !== storeEmail
+          return state
+        },
+        {
+          message: 'Please don’t enter the same email as current email',
+          path: ['email'],
+        }
+      )
+  }, [storeEmail, stepStatus])
+
   const {
     register,
     handleSubmit,
@@ -61,9 +80,6 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
 
   const vbRef = useRef<VerifyButtonExpose>(null)
   const { addBindEmailHandler, verifyCodeEmailHandler } = useEmailActions(infoRefetch)
-  const { isEditEmail, stepStatus, isVerifyCurrentHandler } = useEmailStatus({
-    email: storeEmail ?? '',
-  })
 
   const [open, setOpen] = useState(false)
   const watchedEmail = watch('email')
