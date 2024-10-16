@@ -257,9 +257,9 @@ export default function Withdraw() {
           amount: formData.amount,
           chainNet: 'TON',
           currency: selectedCurrency,
-          memo: formData.memo,
           fundPassword: formData.fundPassword,
           recipientAddress: formData.address,
+          ...(!!formData.memo && { memo: formData.memo }),
         })
       },
     })
@@ -324,7 +324,7 @@ export default function Withdraw() {
             <Label htmlFor="memo" className="text-xs">
               Memo (optional)
             </Label>
-            <Input className="h-9" id="memo" placeholder="Please enter" />
+            <Input className="h-9" {...register('memo')} placeholder="Please enter" />
           </div>
           <div className="flex space-x-2 rounded-lg bg-[#333] p-2 text-xs text-white/70">
             <InfoIcon className="h-4 w-4 flex-shrink-0" />
