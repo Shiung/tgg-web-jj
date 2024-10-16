@@ -40,7 +40,7 @@ const DevLoginDialog: React.FC = () => {
       const loginData = prepareLoginRequest({ first_name: '' } as TelegramOAuthUser)
       if (!loginData) throw new Error('Failed to prepare login data')
       loginData.id = data.id
-      loginData.firstName = data.firstName
+      loginData.firstName = data.firstName || ''
       data.referralCode && (loginData.referralCode = data.referralCode)
       console.log('Logging in with data:', loginData)
 

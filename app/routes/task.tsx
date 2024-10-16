@@ -2,6 +2,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { Link, Outlet, useLocation, useNavigate } from '@remix-run/react'
 import { useEffect, useState } from 'react'
 
+// 配合 useMatches 聲明需要登录才能访问
+export const handle = {
+  requiresAuth: true,
+}
+
 const DEFAULT_TAB = 'subtask'
 export default function Task() {
   const [currentTab, setCurrentTab] = useState(DEFAULT_TAB)

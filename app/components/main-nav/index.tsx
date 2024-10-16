@@ -4,6 +4,7 @@ import { useHapticFeedback } from '@telegram-apps/sdk-react'
 import { useTranslation } from 'react-i18next'
 import useStore from '~/stores/useStore'
 import { cn } from '~/lib/utils'
+
 import NavGame from './icons/game'
 import NavRank from './icons/rank'
 import NavTask from './icons/task'
@@ -14,15 +15,19 @@ import ProtectedLink from '../protected-link'
 import classes from './index.module.scss'
 
 export const links = [
-  { href: '/', i18n: 'game', SvgComponent: NavGame, needLogin: false, comp: Link },
-  { href: '/rank', i18n: 'rank', SvgComponent: NavRank, needLogin: false, comp: Link },
-  { href: '/task', i18n: 'task', SvgComponent: NavTask, needLogin: false, comp: Link },
-  { href: '/share-invite', i18n: 'share', SvgComponent: NavShare, needLogin: true, comp: Link },
+  { href: '/', i18n: 'game', SvgComponent: NavGame, comp: Link },
+  { href: '/rank', i18n: 'rank', SvgComponent: NavRank, comp: Link },
+  { href: '/task', i18n: 'task', SvgComponent: NavTask, comp: ProtectedLink },
+  {
+    href: '/share-invite',
+    i18n: 'share',
+    SvgComponent: NavShare,
+    comp: ProtectedLink,
+  },
   {
     href: '/wallet',
     i18n: 'wallet',
     SvgComponent: NavWallet,
-    needLogin: true,
     comp: ProtectedLink,
   },
 ] as const
