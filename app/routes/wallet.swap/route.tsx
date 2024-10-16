@@ -38,8 +38,8 @@ interface SwapFormData {
 }
 
 const ToastConf = {
-  done: 'Transfer Done',
-  error: 'Code is incorrect',
+  done: 'Swapped successfully',
+  error: 'Swapped unsuccessfully',
 } as const
 
 export default function Swap() {
@@ -366,7 +366,7 @@ export default function Swap() {
             disabled={!isValid || !isAmountSufficient}
             loading={isSubmitting}
           >
-            Buy
+            {currentTab === 'buy' ? 'Buy' : 'Sell'}
           </Button>
         </div>
       </form>
