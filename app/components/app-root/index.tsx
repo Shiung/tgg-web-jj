@@ -15,6 +15,7 @@ import useTelegramNavigate from '~/hooks/useTelegramNavigate'
 import { useTelegramMiniAppAutoLogin } from '~/hooks/useTelegramLogin'
 import { useGetActiveGameListToStore } from '~/hooks/api/useGame'
 import { usePingPolling } from '~/hooks/api/usePolling'
+import { useGetTelegramConfigToStore } from '~/hooks/api/useConfig'
 import { cn, mapSystemLanguageCode } from '~/lib/utils'
 
 import { TonClientProvider } from './ton-client-context'
@@ -67,6 +68,7 @@ const TelegramInit: React.FC = () => {
 
 const AppInit = () => {
   // init data
+  useGetTelegramConfigToStore()
   useGetActiveGameListToStore()
   // polling
   usePingPolling()

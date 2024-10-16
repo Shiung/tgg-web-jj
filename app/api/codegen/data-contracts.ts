@@ -2282,7 +2282,7 @@ export interface GameTransactionsListParams {
   /** @format uint64 */
   gameId?: number;
   /**
-   * 分頁頁數 (Required, Minimum: 1)
+   * 分頁頁數 (Minimum: 1, Required)
    * @format int64
    * @min 1
    */
@@ -2372,7 +2372,7 @@ export interface PacketsListParams {
    */
   page: number;
   /**
-   * 分頁筆數 (Required, Minimum: 20)
+   * 分頁筆數 (Minimum: 20, Required)
    * @format int64
    * @min 20
    */
