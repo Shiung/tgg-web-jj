@@ -1,13 +1,15 @@
 import { useEffect, useMemo } from 'react'
-import useStore from '~/stores/useStore'
+import { Link } from '@remix-run/react'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import qs from 'qs'
 
+import useStore from '~/stores/useStore'
 import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
 import X from '~/icons/x.svg?react'
-import { Link } from '@remix-run/react'
 import LuckyMoneyItem from '~/routes/lucky-money.list/lucky-money-item'
-import { useInfiniteQuery } from '@tanstack/react-query'
 import { apis } from '~/api'
 import { Button } from '~/components/ui/button'
+
 import { ListSkeleton } from './skeleton'
 
 const QUERY_STATE = [2, 3]
@@ -18,9 +20,12 @@ const LuckyMoneyHistory = () => {
     queryKey: ['packetsList', QUERY_STATE],
     queryFn: ({ pageParam = 1 }) =>
       apis.packets
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        .packetsList({ states: QUERY_STATE, page: pageParam, pageSize: 20 })
+        .packetsList(
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          { states: QUERY_STATE, page: pageParam, pageSize: 20 },
+          { paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' }) }
+        )
         .then(res => ({
           list: res.data.list || [],
           pagination: {

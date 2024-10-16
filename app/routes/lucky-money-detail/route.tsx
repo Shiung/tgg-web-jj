@@ -13,15 +13,15 @@ import { Button } from '~/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { KokonIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
-import StopSharingDialog from './stop-sharing-dialog'
 import { PacketResponse, PacketsResponse } from '~/api/codegen/data-contracts'
 import { apis } from '~/api'
 import { useShare } from '~/hooks/useShare'
 import { successToast } from '~/lib/toast'
+import { parseAmount } from '~/lib/amount'
 import { Crypto } from '~/consts/crypto'
 
 import { DetailSkeleton } from './skeleton'
-import { parseAmount } from '~/lib/amount'
+import TerminateSharingDialog from './terminate-sharing-dialog'
 import NoData from './no-data'
 
 type Kind = NonNullable<PacketsResponse['list']>[number]['distributeKind']
@@ -93,6 +93,10 @@ const LuckyMoneyDetail = () => {
   const handleShareURL = useCallback(() => {
     shareUrl(shareUrlLink, 'I am sending limited lucky bags. Click here to get one!')
   }, [shareUrl, shareUrlLink])
+
+  const handleTerminateSuccess = useCallback(() => {
+    navigate('/lucky-money/list')
+  }, [navigate])
 
   const motionProps = useMemo(() => {
     // 定义初始颜色（黑色）
@@ -285,7 +289,7 @@ const LuckyMoneyDetail = () => {
                       <KokonIcon className="h-4 w-4" />
                       <Amount
                         crypto={Crypto.KOKON}
-                        value={receiverItem?.Amount}
+                        value={receiverItem?.amount}
                         className="text-sm font-ultra"
                       />
                     </div>
@@ -298,7 +302,13 @@ const LuckyMoneyDetail = () => {
           </div>
 
           {/* 終止按钮 */}
-          {state === STATE.progressing && <StopSharingDialog />}
+          {state === STATE.progressing && (
+            <TerminateSharingDialog
+              id={id}
+              remaining={detailData.remainingAmount}
+              onTerminateSuccess={handleTerminateSuccess}
+            />
+          )}
         </>
       )}
     </div>

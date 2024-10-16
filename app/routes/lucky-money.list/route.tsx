@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Link } from '@remix-run/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import qs from 'qs'
 
 import { Button } from '~/components/ui/button'
 import { apis } from '~/api'
@@ -16,9 +17,12 @@ export default function LuckyMoneyList() {
     queryKey: ['packetsList', QUERY_STATE],
     queryFn: ({ pageParam = 1 }) =>
       apis.packets
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        .packetsList({ states: QUERY_STATE, page: pageParam, pageSize: 20 })
+        .packetsList(
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          { states: QUERY_STATE, page: pageParam, pageSize: 20 },
+          { paramsSerializer: params => qs.stringify(params, { arrayFormat: 'repeat' }) }
+        )
         .then(res => ({
           list: res.data.list || [],
           pagination: {
