@@ -1,27 +1,27 @@
 import { useCallback } from 'react'
 import { useUtils } from '@telegram-apps/sdk-react'
+import { useMutation } from '@tanstack/react-query'
+
 import useStore from '~/stores/useStore'
 import { apis } from '~/api/index'
-import { useMutation } from '@tanstack/react-query'
-import { type InfoResponse } from '~/api/codegen/data-contracts'
 
 export function useShare() {
   const inTelegram = useStore(state => state.inTelegram)
-  const { referralCode } = useStore<InfoResponse>(state => state.info)
+  const { referralCode } = useStore(state => state.userInfo)
   const utils = useUtils()
 
   // 邀請連結打點
-  const { mutate: shareGA } = useMutation({
+  const { mutate: shareGA, isPending } = useMutation({
     mutationFn: () => apis.customer.customerShareCreate({ referralCode }),
     onError: error => {
-      console.error('[ERROR] shareGA', error)
+      console.error('[ERROR] shareGA error', error)
     },
   })
 
   const shareUrl = useCallback(
-    (url: string, text?: string) => {
+    async (url: string, text?: string) => {
       if (referralCode) {
-        shareGA()
+        await shareGA()
       } else {
         console.warn('[WARN] referralCode is not found')
       }
@@ -39,9 +39,8 @@ export function useShare() {
             })
             .catch(error => console.log('Error sharing:', error))
         } else {
-          // 如果瀏覽器不支持原生分享，可以提供一個後備方案
+          // 如果瀏覽器不支持原生分享，TODO: 實作後備方案
           console.log('Web Share API not supported')
-          // 這裡可以添加一個自定義的分享方法，比如複製鏈接到剪貼板
         }
       }
     },
@@ -50,5 +49,6 @@ export function useShare() {
 
   return {
     shareUrl,
+    isLoading: isPending,
   }
 }
