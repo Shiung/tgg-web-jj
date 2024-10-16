@@ -23,12 +23,13 @@ import BigNumber from 'bignumber.js'
 
 import { useActions } from './hooks'
 
+import SystemMaintenance from '~/routes/wallet/system-maintenance'
 import { useWalletContext } from '~/routes/wallet/provider'
 
 const coins = depositCurrencies.map(crypto => ({
   name: cryptoDetails[crypto].name,
   icon: cryptoDetails[crypto].icon,
-  amount: 0,
+  amount: '0',
 }))
 
 interface SwapFormData {
@@ -123,10 +124,11 @@ export default function Swap() {
 
   const coinsCompute = useMemo(() => {
     const wallets = state.wallets
-    return coins.map(c => ({
-      ...c,
-      amount: wallets?.find(({ currency }) => currency === c.name)?.balance ?? 0,
-    }))
+    return coins.reduce<typeof coins>((returnArr, cur) => {
+      const find = wallets?.find(({ currency }) => currency === cur.name)
+      if (!find) return returnArr
+      return returnArr.concat([{ ...cur, amount: find?.balance ?? '0' }])
+    }, [])
   }, [state.wallets])
 
   const resetHandler = useCallback(() => {
@@ -200,6 +202,8 @@ export default function Swap() {
   useEffect(() => {
     resetHandler()
   }, [currentTab, resetHandler])
+
+  if (!state.wallets?.length) return <SystemMaintenance />
 
   return (
     <div className="space-y-6 bg-black p-4">
