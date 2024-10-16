@@ -50,7 +50,7 @@ type FormValues = z.infer<typeof formSchema>
 
 const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
   const {
-    info: { pin: storePin },
+    userInfo: { pin: storePin },
   } = useStore(state => state)
   const {
     register,

@@ -32,22 +32,22 @@ const links = {
   },
 }
 
-const empty: UserSlice['info'] = {}
+const empty: UserSlice['userInfo'] = {}
 
 const ProfileDialog: React.FC = () => {
   const [state, copyToClipboard] = useCopyToClipboard()
   const { i18n } = useTranslation()
-  const { inTelegram, isLoggedIn, telegramUserData, setInfo, logout } = useStore(state => state)
+  const { inTelegram, isLoggedIn, telegramUserData, setUserInfo, logout } = useStore(state => state)
   const { data, refetch } = useQuery({
     queryKey: ['customerInfo'],
     queryFn: apis.customer.customerInfoList,
     enabled: !!isLoggedIn,
   })
-  const userData = data?.data ?? empty
+  const userData = useMemo(() => data?.data ?? empty, [data])
 
   useEffect(() => {
-    setInfo(userData)
-  }, [userData, setInfo])
+    setUserInfo(userData)
+  }, [userData, setUserInfo])
 
   useEffect(() => {
     if (!state.value) return
