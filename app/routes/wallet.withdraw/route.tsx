@@ -4,12 +4,12 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NumericFormat } from 'react-number-format'
+
 import { parseAmount } from '~/lib/amount'
-import { ValidCode } from '~/components/verify-button/constants'
-import { useToast } from '~/hooks/use-toast'
-import { cryptoDetails, isValidCrypto, cryptoRules } from '~/consts/crypto'
+import { successToast } from '~/lib/toast'
 import { apis } from '~/api/index'
 import type { WithdrawRequest, WithdrawSettingGetResponse } from '~/api/codegen/data-contracts'
+import { ValidCode } from '~/components/verify-button/constants'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import InfoIcon from '~/icons/info.svg?react'
@@ -18,10 +18,13 @@ import { UsdtIcon } from '~/components/color-icons'
 import { Label } from '~/components/ui/label'
 import InfoTooltip from '~/components/info-tooltip'
 import VerifyButton, { type VerifyButtonExpose } from '~/components/verify-button'
+import { cryptoDetails, isValidCrypto, cryptoRules } from '~/consts/crypto'
+import { useToast } from '~/hooks/use-toast'
+
 import WithdrawSuccessDialog from './withdraw-success-dialog'
+import WithdrawDeniedDialog from './withdraw-denied-dialog'
 import WithdrewSkeleton from './withdrew-skeleton'
 import SystemMaintenance from './system-maintenance'
-import { successToast } from '~/lib/toast'
 
 type FormData = {
   amount: string
@@ -35,7 +38,7 @@ type FormData = {
 
 export default function Withdraw() {
   // 當前選擇幣種
-  const [selectedCurrency, setSelectedCurrency] = useState('USDT')
+  const [selectedCurrency, setSelectedCurrency] = useState<'USDT' | 'TON'>('USDT')
 
   const selectedCurrencyRule = useMemo(() => {
     return isValidCrypto(selectedCurrency) ? cryptoRules[selectedCurrency] : null
@@ -476,6 +479,7 @@ export default function Withdraw() {
               className="h-9"
               type="password"
               id="password"
+              autoComplete="new-password"
               placeholder="Please enter"
               {...register('fundPassword')}
               error={errors?.fundPassword?.message}
@@ -530,6 +534,8 @@ export default function Withdraw() {
         isOpen={isSuccessDialogOpen}
         onClose={() => setIsSuccessDialogOpen(false)}
       />
+      {/* 確認是否有綁定提現密碼 */}
+      <WithdrawDeniedDialog />
     </div>
   )
 }
