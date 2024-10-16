@@ -1,49 +1,73 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
+import { Link, useSearchParams, useNavigate } from '@remix-run/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { motion } from 'framer-motion'
+import { useCopyToClipboard } from 'react-use'
+import { formatDate } from 'date-fns'
 
 import useStore from '~/stores/useStore'
-import { cn } from '~/lib/utils'
 import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
 import X from '~/icons/x.svg?react'
 import SvgCopy from '~/icons/copy.svg?react'
 import { Button } from '~/components/ui/button'
-import { Link, useSearchParams, useNavigate } from '@remix-run/react'
-import { Avatar, AvatarFallback } from '~/components/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { KokonIcon } from '~/components/color-icons'
+import Amount from '~/components/amount'
 import StopSharingDialog from './stop-sharing-dialog'
 import { PacketResponse, PacketsResponse } from '~/api/codegen/data-contracts'
 import { apis } from '~/api'
+import { useShare } from '~/hooks/useShare'
+import { successToast } from '~/lib/toast'
+import { Crypto } from '~/consts/crypto'
+
+import { DetailSkeleton } from './skeleton'
+import { parseAmount } from '~/lib/amount'
+import NoData from './no-data'
 
 type Kind = NonNullable<PacketsResponse['list']>[number]['distributeKind']
-type State = NonNullable<PacketsResponse['list']>[number]['state']
+
+/**
+ * state 狀態 1:進行中 2:已終止(用戶提前中斷發放) 3:已完成(發放完畢)
+ * 0 or undefined 為可能預期外的狀態
+ */
+const STATE = {
+  progressing: '1',
+  terminated: '2',
+  completed: '3',
+}
 
 const LuckyMoneyDetail = () => {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
-  const id = searchParams.get('id') || '1'
-  const kind: Kind = (searchParams.get('kind') || undefined) as Kind
-  const state: State = (searchParams.get('state') || undefined) as State
+  const id = searchParams.get('id') || ''
+  const kind: Kind = (searchParams.get('kind') || '') as Kind
+  const state = searchParams.get('state') || ''
+
+  const [copyState, copyToClipboard] = useCopyToClipboard()
+  const { shareUrl } = useShare()
 
   const {
     data: detailInfiniteDataRaw,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    error,
-    isFetching,
-    status,
+    // fetchNextPage,
+    // hasNextPage,
+    // isFetchingNextPage,
+    // error,
+    isLoading,
+    // status,
   } = useInfiniteQuery<PacketResponse>({
     queryKey: ['packetDetail', id],
     queryFn: ({ pageParam = 1 }) =>
-      apis.packet.packetDetail(id, { page: pageParam as number, pageSize: 20 }).then(res => ({
-        ...res.data,
-        receiver: res.data.receiver || [],
-        pagination: {
-          pageSize: res.data.pagination?.pageSize ?? 0,
-          totalPage: res.data.pagination?.totalPage ?? 0,
-          totalRecord: res.data.pagination?.totalRecord ?? 0,
-        },
-      })),
+      apis.packet
+        .packetDetail({ packetId: id, page: pageParam as number, pageSize: 20 })
+        .then(res => ({
+          ...res.data,
+          receiver: res.data.receiver || [],
+          pagination: {
+            pageSize: res.data.pagination?.pageSize ?? 0,
+            totalPage: res.data.pagination?.totalPage ?? 0,
+            totalRecord: res.data.pagination?.totalRecord ?? 0,
+          },
+        })),
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.pagination?.totalPage || 0 > allPages.length) {
         return allPages.length + 1
@@ -62,32 +86,64 @@ const LuckyMoneyDetail = () => {
     }
   }, [detailInfiniteDataRaw])
 
-  const [shareLink, setShareLink] = useState(window.location.origin)
+  const shareUrlLink = useMemo(() => {
+    return `${window.location.origin}`
+  }, [])
 
-  const handleCopyShareLink = () => {
-    const tempInput = document.createElement('input')
-    tempInput.value = shareLink
-    document.body.appendChild(tempInput)
-    tempInput.select()
-    document.execCommand('copy')
-    document.body.removeChild(tempInput)
-    alert('Link copied to clipboard!')
-  }
+  const handleShareURL = useCallback(() => {
+    shareUrl(shareUrlLink, 'I am sending limited lucky bags. Click here to get one!')
+  }, [shareUrl, shareUrlLink])
 
-  const handleShare = async () => {
-    try {
-      if (typeof navigator === 'undefined' || !navigator.share) {
-        return
-      }
-      await navigator.share({
-        title: 'Title',
-        text: 'Share Content',
-        url: 'shareLink',
-      })
-    } catch (err) {
-      console.log('err', err)
+  const motionProps = useMemo(() => {
+    // 定义初始颜色（黑色）
+    const initialColors = {
+      startColor: '#000000',
+      endColor: '#000000',
     }
-  }
+
+    // 根据 distributeKind 确定目标颜色
+    const targetColors =
+      detailData.distributeKind === 'FIXED'
+        ? {
+            startColor: '#FDCB04',
+            endColor: '#FF4D00',
+          }
+        : {
+            startColor: '#FF90C2',
+            endColor: '#EB0070',
+          }
+
+    // 动画变体
+    const variants = {
+      hidden: {
+        opacity: 0,
+        filter: 'blur(10px)',
+        '--start-color': initialColors.startColor,
+        '--end-color': initialColors.endColor,
+      },
+      visible: {
+        opacity: 1,
+        filter: 'blur(0px)',
+        '--start-color': targetColors.startColor,
+        '--end-color': targetColors.endColor,
+        transition: {
+          duration: 1,
+          ease: 'easeInOut',
+          filter: { duration: 0.6 },
+          opacity: { duration: 0.6 },
+        },
+      },
+    }
+
+    return {
+      variants,
+    }
+  }, [detailData.distributeKind])
+
+  useEffect(() => {
+    if (!copyState.value) return
+    successToast('Copied')
+  }, [copyState])
 
   const setNavVisibility = useStore(state => state.setNavVisibility)
   useEffect(() => {
@@ -99,120 +155,152 @@ const LuckyMoneyDetail = () => {
 
   return (
     <div className="container m-0 flex flex-1 flex-col bg-black p-0 text-white">
-      {/* 顶部卡片 */}
-      <div
-        className={cn(
-          'rounded-t-lg bg-gradient-to-b p-4 pb-8',
-          detailData.distributeKind === 'FIXED'
-            ? 'from-[#FDCB04] to-[#FF4D00]'
-            : 'from-[#FF90C2] to-[#EB0070]'
-        )}
+      {/* Top Info */}
+      <motion.div
+        className="rounded-t-lg bg-gradient-to-b p-4 pb-8"
+        style={{
+          backgroundImage: 'linear-gradient(to bottom, var(--start-color), var(--end-color))',
+          willChange: 'opacity, filter, --start-color, --end-color',
+        }}
+        initial="hidden"
+        animate="visible"
+        variants={motionProps.variants}
       >
-        <div className="mb-4 flex items-center justify-between">
-          <Link
-            to="#"
-            onClick={e => {
-              e.preventDefault()
-              navigate(-1)
-            }}
-          >
-            <ArrowLineLeftIcon className="h-6 w-6 text-[#FFFFFFB2]" />
-          </Link>
+        {/* Title */}
+        <div className="flex items-center justify-between">
+          <Button variant="icon" size="icon" onClick={() => navigate(-1)}>
+            <ArrowLineLeftIcon className="h-6 w-6 text-white" />
+          </Button>
           <h1 className="text-lg font-ultra">{kind === 'FIXED' ? 'Normal' : 'Luck Battle'}</h1>
-          <Link to="/">
-            <X className="h-6 w-6 text-[#FFFFFFB2]" />
-          </Link>
+          <Button variant="icon" size="icon">
+            <Link to="/">
+              <X className="h-6 w-6 text-white" />
+            </Link>
+          </Button>
         </div>
-        <div className="flex flex-col space-y-2">
+        <div className="mt-4 flex flex-col space-y-2">
           <div className="flex justify-between text-xs font-normal">
-            <div>2024-06-17</div>
-            {state === 1 && (
-              <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-ultra text-app-green">
-                Completed
+            <span>
+              {detailData.createdAt ? formatDate(detailData.createdAt, 'yyyy-MM-dd') : ''}
+            </span>
+            {state === STATE.terminated && (
+              <div className="rounded-full bg-[#333333] px-2 py-1 text-[10px] font-ultra text-app-red">
+                Terminated
               </div>
             )}
-            {state && +state === 0 && (
-              <div className="rounded-[100px] bg-[#333333] px-2 py-1 text-[10px] font-ultra text-app-red">
-                Terminated
+            {state === STATE.completed && (
+              <div className="rounded-full bg-[#333333] px-2 py-1 text-[10px] font-ultra text-app-green">
+                Completed
               </div>
             )}
           </div>
           <div className="flex items-center justify-between font-ultra">
-            <p className="text-base">Normal</p>
-            <div className="flex items-center justify-center text-lg">
+            <p className="text-base">Total amount</p>
+            <div className="flex items-center justify-center space-x-1 text-lg text-primary">
               <KokonIcon className="h-4 w-4" />
-              <div className="ml-1">18.88K</div>
+              <Amount
+                crypto={Crypto.KOKON}
+                value={
+                  parseAmount(detailData.distributedAmount) +
+                  parseAmount(detailData.remainingAmount)
+                }
+                useKM
+              />
             </div>
           </div>
           <div className="flex justify-between font-ultra">
             <p className="text-base">Remaining</p>
-            <div className="flex items-center justify-center text-lg">
+            <div className="flex items-center justify-center space-x-1 text-lg text-primary">
               <KokonIcon className="h-4 w-4" />
-              <div className="ml-1">9.88K</div>
+              <Amount crypto={Crypto.KOKON} value={detailData.remainingAmount} useKM />
             </div>
           </div>
         </div>
         <div className="mt-4 flex items-center justify-between border-t border-white/30 pt-4">
           <div className="flex items-center justify-center">
-            <p className="text-xs font-normal text-[#FFFFFFB2]">Each bag amount</p>
-            <div className="ml-2 flex items-center justify-center">
+            <p className="text-xs font-normal text-white/70">Each bag amount</p>
+            <div className="ml-2 flex items-center justify-center space-x-1">
               <KokonIcon className="h-4 w-4" />
-              <div className="ml-1 font-bold">1,888</div>
+              <Amount
+                className="font-bold"
+                crypto={Crypto.KOKON}
+                value={detailData.eachBagAmount}
+              />
             </div>
           </div>
           <div className="flex items-center justify-center text-xs font-normal">
-            <div className="text-[#FFFFFFB2]">Quantity</div>
-            <div className="ml-2 flex items-center justify-center space-x-1">
-              <div className="font-ultra">5</div>
-              <div>/</div>
-              <div>10</div>
-            </div>
+            <div className="text-white/30">Quantity</div>
+            <span className="ml-2 flex items-center justify-center space-x-1">
+              <span className="font-ultra">{detailData.distributedQuantity}</span>
+              <span>/</span>
+              <span>
+                {parseAmount(detailData.distributedQuantity) +
+                  parseAmount(detailData.remainingQuantity)}
+              </span>
+            </span>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* 分享連結和按鈕 */}
-      <div className="-mt-4 flex items-center justify-between rounded-2xl bg-black p-4 shadow-lg">
-        <div className="mr-2 flex flex-grow items-center rounded-full bg-gray-800 px-4 py-2">
-          <input
-            type="text"
-            value={shareLink}
-            onChange={e => setShareLink(e.target.value)}
-            className="flex-grow bg-transparent text-xs font-ultra outline-none"
-          />
-          <SvgCopy className="h-4 w-4 text-[#FFFFFFB2]" onClick={handleCopyShareLink} />
-        </div>
-        <Button className="min-w-[120px]" catEars onClick={handleShare}>
-          Share
-        </Button>
-      </div>
-
-      {/* 用户列表 */}
-      <div className="mt-4 flex-1 space-y-3 overflow-y-auto px-4">
-        {[1, 2, 3, 4, 5].map((_, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-between rounded-xl bg-[#1C1C1C] px-3 py-1"
-          >
-            <div className="flex items-center justify-center">
-              {/* Avatar */}
-              <Avatar>
-                {/* test https://github.com/shadcn.png */}
-                {/* <AvatarImage src="https://github.com/shadcn.png" /> */}
-                <AvatarFallback className="h-9 w-9" delayMs={600} />
-              </Avatar>
-              <div className="ml-2 text-xs font-normal">User1234</div>
+      {isLoading ? (
+        <DetailSkeleton />
+      ) : (
+        <>
+          {/* 分享連結和按鈕 */}
+          <div className="z-10 -mt-4 flex items-center justify-between space-x-2 rounded-2xl bg-black p-4 shadow-lg">
+            <div className="relative flex h-9 flex-1 items-center justify-between rounded-full bg-[#333] px-3 py-2 text-sm font-ultra">
+              <span className="flex-1 text-ellipsis">{shareUrlLink}</span>
+              <Button
+                variant="icon"
+                size="icon"
+                type="button"
+                className="h-6 w-6 text-white"
+                onClick={() => copyToClipboard(shareUrlLink)}
+              >
+                <SvgCopy className="h-4 w-4" />
+              </Button>
             </div>
-            <div className="flex items-center justify-center">
-              <KokonIcon className="h-4 w-4" />
-              <div className="ml-[5px] text-sm font-ultra">1,888</div>
-            </div>
+            <Button className="w-[120px] flex-shrink-0" catEars onClick={handleShareURL}>
+              Share
+            </Button>
           </div>
-        ))}
-      </div>
 
-      {/* 底部按钮 */}
-      {state && +state === 2 && <StopSharingDialog />}
+          {/* 用户列表 */}
+          <div className="mt-4 flex flex-1 flex-col space-y-3 overflow-y-auto px-4">
+            {detailData.receiver?.length ? (
+              <>
+                {detailData.receiver.map((receiverItem, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center justify-between rounded-xl bg-[#1C1C1C] px-3 py-1"
+                  >
+                    <div className="flex items-center justify-center">
+                      <Avatar className="cursor-pointer">
+                        <AvatarImage src={receiverItem?.avatar || ''} />
+                        <AvatarFallback delayMs={600} />
+                      </Avatar>
+                      <span className="ml-2 text-xs font-normal">{receiverItem?.name}</span>
+                    </div>
+                    <div className="flex items-center justify-center space-x-1">
+                      <KokonIcon className="h-4 w-4" />
+                      <Amount
+                        crypto={Crypto.KOKON}
+                        value={receiverItem?.Amount}
+                        className="text-sm font-ultra"
+                      />
+                    </div>
+                  </div>
+                ))}
+              </>
+            ) : (
+              <NoData />
+            )}
+          </div>
+
+          {/* 終止按钮 */}
+          {state === STATE.progressing && <StopSharingDialog />}
+        </>
+      )}
     </div>
   )
 }

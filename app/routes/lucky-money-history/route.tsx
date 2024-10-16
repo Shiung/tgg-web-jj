@@ -1,21 +1,45 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import useStore from '~/stores/useStore'
 
 import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
 import X from '~/icons/x.svg?react'
 import { Link } from '@remix-run/react'
 import LuckyMoneyItem from '~/routes/lucky-money.list/lucky-money-item'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { apis } from '~/api'
+import { Button } from '~/components/ui/button'
+import { ListSkeleton } from './skeleton'
+
+const QUERY_STATE = [2, 3]
 
 const LuckyMoneyHistory = () => {
-  const fakeLuckyMoneyList: Array<{ type: 0 | 1; status: 0 | 1 }> = [
-    { type: 0, status: 0 },
-    { type: 1, status: 1 },
-    { type: 0, status: 1 },
-    { type: 0, status: 0 },
-    { type: 0, status: 0 },
-  ]
-
   const setNavVisibility = useStore(state => state.setNavVisibility)
+  const { data, isLoading } = useInfiniteQuery({
+    queryKey: ['packetsList', QUERY_STATE],
+    queryFn: ({ pageParam = 1 }) =>
+      apis.packets
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        .packetsList({ states: QUERY_STATE, page: pageParam, pageSize: 20 })
+        .then(res => ({
+          list: res.data.list || [],
+          pagination: {
+            pageSize: res.data.pagination?.pageSize ?? 0,
+            totalPage: res.data.pagination?.totalPage ?? 0,
+            totalRecord: res.data.pagination?.totalRecord ?? 0,
+          },
+        })),
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.pagination.totalPage > allPages.length) {
+        return allPages.length + 1
+      }
+      return undefined
+    },
+    initialPageParam: 1,
+  })
+
+  const list = useMemo(() => data?.pages.flatMap(page => page.list) ?? [], [data?.pages])
+
   useEffect(() => {
     setNavVisibility(false)
     return () => {
@@ -25,21 +49,26 @@ const LuckyMoneyHistory = () => {
 
   return (
     <div className="container m-0 flex flex-1 flex-col rounded-t-xl bg-black p-0 text-white">
-      {/* 頭部 */}
+      {/* Header */}
       <div className="flex h-14 items-center justify-between p-4">
-        <Link prefetch="viewport" to="/lucky-money/list">
-          <ArrowLineLeftIcon className="h-6 w-6 text-[#FFFFFFB2]" />
-        </Link>
+        <Button variant="icon" size="icon">
+          <Link prefetch="viewport" to="/lucky-money/list">
+            <ArrowLineLeftIcon className="h-6 w-6 text-[#FFFFFFB2]" />
+          </Link>
+        </Button>
         <div className="text-lg font-ultra">History</div>
-        <Link to="/">
-          <X className="h-6 w-6 text-[#FFFFFFB2]" />
-        </Link>
+        <Button variant="icon" size="icon">
+          <Link to="/">
+            <X className="h-6 w-6 text-[#FFFFFFB2]" />
+          </Link>
+        </Button>
       </div>
 
-      {/* 用户列表 */}
+      {/* History List */}
       <div className="flex-1 space-y-3 overflow-y-auto p-4">
-        {fakeLuckyMoneyList.map((el, index) => (
-          <LuckyMoneyItem key={index} type={el.type} status={el.status} />
+        {isLoading && <ListSkeleton />}
+        {list.map((item, index) => (
+          <LuckyMoneyItem key={index} {...item} />
         ))}
       </div>
     </div>
