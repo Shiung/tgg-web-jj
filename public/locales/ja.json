@@ -28,7 +28,7 @@
   "single": "シングル",
   "special": "スペシャル",
   "daily": "毎日",
-  "subtask.updateTimeString": "13:00（UTC+8）ごとに更新",
+  "subtask.updateTimeString": "毎13:00（UTC+8）更新",
   "eggRule.title": "スマッシュエッグのルール",
   "eggRule.heading": "スマッシュエッグへようこそ。ハンマーを消費して大きな賞品をゲットしよう。スマッシュエッグの種類によって、もらえる賞品や必要なハンマーが異なります：",
   "eggRule.hint": "卵を割ると、<amount1></amount1> - <amount2></amount2> USDTを獲得できます。",
@@ -50,5 +50,8 @@
   "smash": "スマッシュ",
   "giveupEgg": "この卵をあきらめる",
   "claim": "クレーム",
-  "eggClaimMsg": "あなたは<amount1></amount1> USDTを得る！"
+  "eggClaimMsg": "あなたは<amount1></amount1> USDTを得る！",
+  "CurrencyConversion": "通貨換算",
+  "CurrencyConversion.Description": "お客様のKOKONコインは、ゲーム用にUSDTに変換されます。",
+  "OK": "OK"
 }

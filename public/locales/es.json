@@ -20,7 +20,7 @@
   "referralTeam": "Equipo de referencia",
   "rule.referralTeam.Description": "Sólo cuando tus amigos se registren y tengan más de {{value}} KOKON en su monedero contarán como miembros válidos. Los miembros de tu equipo pueden crear un Equipo de Referencia de lv 1 a lv 2 para ti. Cuantos más miembros traigan a tu equipo, mayores serán tus ingresos.",
   "teamRatingSystem": "Sistema de clasificación por equipos",
-  "teamRatingSystem.Description": "Hay cinco niveles de valoración, de 1 a 5 estrellas. Todos los equipos de referencia empiezan con 1 estrella y pueden subir de nivel completando tareas. Cuanto mayor sea la puntuación de tu equipo, más recompensas obtendrá.",
+  "teamRatingSystem.Description": "Hay cinco niveles de valoración, de 1 a 5 estrellas. Todos los equipos de referencia empiezan con 1 estrella y pueden mejorar su puntuación completando tareas. Cuanto mayor sea la puntuación de tu equipo, más recompensas obtendrá.",
   "commissionRatio": "Ratio de Comisión",
   "upgradeRequirement": "Requisitos de actualización",
   "subtask.cardDescription": "Pequeño esfuerzo",
@@ -50,5 +50,8 @@
   "smash": "Smash",
   "giveupEgg": "Deja este huevo",
   "claim": "Reclamación",
-  "eggClaimMsg": "¡GANAS <amount1></amount1> USDT!"
+  "eggClaimMsg": "¡GANAS <amount1></amount1> USDT!",
+  "CurrencyConversion": "Conversión de divisas",
+  "CurrencyConversion.Description": "Tus monedas KOKON se convertirán a USDT para jugar.",
+  "OK": "OK"
 }
