@@ -4,24 +4,26 @@ import { useQuery } from '@tanstack/react-query'
 import { useCopyToClipboard } from 'react-use'
 import { apis } from '~/api'
 import { useShare } from '~/hooks/useShare'
+import { parseAmount } from '~/lib/amount'
+import { successToast } from '~/lib/toast'
+
+// 元件
+import CatEarsCard from '~/components/cat-ears-card'
 import SvgCopy from '~/icons/copy.svg?react'
 import SvgHistory from '~/icons/history.svg?react'
 import SvgCommission from '~/icons/commission.svg?react'
 import SvgInvite from '~/icons/invite.svg?react'
 import { Button } from '~/components/ui/button'
 import { KokonIcon, StarIcon } from '~/components/color-icons'
-import CatEarsCard from '~/components/cat-ears-card'
-import InfoTooltip from '~/components/info-tooltip'
-import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import Amount from '~/components/amount'
+import InfoTooltip from '~/components/info-tooltip'
 import { Input } from '~/components/ui/input'
-import { parseAmount } from '~/lib/amount'
-import { successToast } from '~/lib/toast'
-
+import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import ShareInviteSkeleton from './share-invite-skeleton'
 import ProgressBar from './progress-bar'
 import RuleSheet from './rule-sheet'
 import TeamLevelCarousel from './teamlevel-carousel'
+import LevelupDialog from './levelup-dialog'
 
 // 配合 useMatches 聲明需要登录才能访问
 export const handle = {
@@ -137,6 +139,20 @@ const ShareInvite: React.FC = () => {
       },
     ]
   }, [currentClassSetting, customerTeamInfo])
+
+  // 檢查是否要跳升級動畫
+  const [showLevelup, setShowLevelup] = useState(false)
+  // apis.customer.customerUpgradeAnimationList
+  const { data: upgradeAnimationList } = useQuery({
+    queryKey: ['customerUpgradeAnimationList'],
+    queryFn: () => apis.customer.customerUpgradeAnimationList(),
+    retry: false,
+  })
+  useEffect(() => {
+    if (upgradeAnimationList?.data?.shouldPlayUpgradeAnimation) {
+      setShowLevelup(true)
+    }
+  }, [upgradeAnimationList])
 
   return (
     <div className="container flex flex-1 flex-col p-0">
@@ -354,6 +370,13 @@ const ShareInvite: React.FC = () => {
           </div>
         </>
       )}
+      <LevelupDialog
+        isOpen={showLevelup}
+        finalClass={upgradeAnimationList?.data?.finalClass ?? 0}
+        onClose={() => {
+          setShowLevelup(false)
+        }}
+      />
 
       {/* 規則說明 */}
       <RuleSheet
