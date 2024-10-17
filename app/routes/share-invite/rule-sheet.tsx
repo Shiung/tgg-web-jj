@@ -1,5 +1,6 @@
 import { type SettingResponse } from '~/api/codegen/data-contracts'
 import useStore from '~/stores/useStore'
+import { useTranslation } from 'react-i18next'
 
 import {
   Sheet,
@@ -104,22 +105,22 @@ const formatCommissionSetting = (commissionSetting: SettingResponse['commissionS
   }, {} as TableData)
 }
 
-const formatClassSetting = (classSetting: SettingResponse['classSetting']) => {
+const useFormatClassSetting = (classSetting: SettingResponse['classSetting']) => {
+  const { t } = useTranslation()
+
   if (!classSetting || classSetting.length === 0) return null
 
   return classSetting.reduce((acc, el, index) => {
     if (index === 0) {
-      // 初始化
       acc = {
         headers: [],
         rows: [
-          { label: 'Team Member Numbers', values: [] },
-          { label: 'Team Member Betting amount', values: [] },
-          { label: 'Team Member Deposit amount', values: [] },
+          { label: t('teamMemberNumbers'), values: [] },
+          { label: t('teamMemberBettingAmount'), values: [] },
+          { label: t('teamMemberDepositAmount'), values: [] },
         ],
       }
     }
-
     // 添加 header
     acc.headers.push(`${el.class} → ${el.class + 1}`)
 
@@ -145,9 +146,10 @@ interface RuleSheetProps {
   teamSettingList: SettingResponse
 }
 const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
-  const classSettingTable = formatClassSetting(teamSettingList.classSetting)
+  const classSettingTable = useFormatClassSetting(teamSettingList.classSetting)
   const commissionSettingTable = formatCommissionSetting(teamSettingList.commissionSetting)
   const maxWidth = useStore(state => state.maxWidth)
+  const { t } = useTranslation()
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -164,59 +166,49 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
       >
         <SheetHeader className="my-0 bg-transparent p-0">
           <SheetTitle className="mt-12 h-10 rounded-t-xl bg-[#1C1C1C] text-lg font-ultra leading-10">
-            Rule
+            {t('rule')}
           </SheetTitle>
         </SheetHeader>
         <SheetClose className="top-[54px]"></SheetClose>
         <div className="flex flex-1 flex-col bg-black p-4 text-[#FFFFFFB2]">
           {/* Refer And Earn */}
           <div className="mb-6 flex flex-col space-y-2 text-sm">
-            <div className="text-base font-ultra text-white">Refer And Earn</div>
-            <div>Invite friends to bring you Continuous Commission!</div>
+            <div className="text-base font-ultra text-white">{t('referAndEarn')}</div>
+            <div>{t('referAndEarnDescription')}</div>
             <div className="flex h-32 items-center justify-center rounded-lg bg-gradient-to-b from-[#92EE6D] to-[#007E36] p-4">
               <div className="flex flex-col items-center">
                 <img src="/images/share/step-1.png" alt="step-1" className="h-[72px] w-[100px]" />
-                <span className="mt-1 text-xs text-white">Invite</span>
+                <span className="mt-1 text-xs text-white">{t('invite')}</span>
               </div>
               <div className="mx-1 flex-1 border-t border-dashed border-black"></div>
               <div className="flex flex-col items-center">
                 <img src="/images/share/step-2.png" alt="step-2" className="h-[72px] w-[100px]" />
-                <span className="mt-1 text-center text-xs text-white">Make Them Play</span>
+                <span className="mt-1 text-center text-xs text-white">{t('makeThemPlay')}</span>
               </div>
               <div className="mx-1 flex-1 border-t border-dashed border-black"></div>
               <div className="flex flex-col items-center">
                 <img src="/images/share/step-3.png" alt="step-3" className="h-[72px] w-[100px]" />
-                <span className="mt-1 text-xs text-white">Earn</span>
+                <span className="mt-1 text-xs text-white">{t('earn')}</span>
               </div>
             </div>
-            <div>Get commission on the bets from all your team member who are lv 1 to lv 2. </div>
-            <div>
-              Bet amount are defined as valid bets in crypto games (Mines, Crash).Valid bets will
-              only be calculated for bets that have been settled and produced a win or loss result.
-              Any games played, tied, or canceled will not be counted in valid bets.
-            </div>
+            <div>{t('referAndEarn.Description2')}</div>
+            <div>{t('referAndEarn.Description3')}</div>
           </div>
-          {/* Referral Team */}
+          {/* Referral Team section */}
           <div className="mb-6 flex flex-col space-y-2 text-sm">
-            <div className="text-base font-ultra text-white">Referral Team</div>
+            <div className="text-base font-ultra text-white">{t('referralTeam')}</div>
             <img src="/images/share/referralDiagram.png" alt="progress-1" className="w-full" />
             <div>
-              Only when your friends registered and owned over 100 KOKON in their wallet are counted
-              valid member. Your team members can create a lv 1 to lv 2 Referral Team for you. The
-              more members they bring in your team, the greater your income will be.
+              {t('rule.referralTeam.Description', { value: teamSettingList.activeSetting || '-' })}
             </div>
           </div>
-          {/* Team Rating System */}
+          {/* Team Rating System section */}
           <div className="mb-6 flex flex-col space-y-2 text-sm">
-            <div className="text-base font-ultra text-white">Team Rating System</div>
-            <div>
-              There are five rating levels from 1 star to 5 star. Every referral team starts from 1
-              rating star, and you can upgrade your team rating through completing assignments. The
-              higher rating your team is, the more rewards your team get.
-            </div>
-            <div className="text-base font-ultra text-white">Commission Ratio</div>
+            <div className="text-base font-ultra text-white">{t('teamRatingSystem')}</div>
+            <div>{t('teamRatingSystemDescription')}</div>
+            <div className="text-base font-ultra text-white">{t('commissionRatio')}</div>
             <TableDemo tableData={commissionSettingTable} />
-            <div className="text-base font-ultra text-white">Upgrade Requirement</div>
+            <div className="text-base font-ultra text-white">{t('upgradeRequirement')}</div>
             <TableDemo tableData={classSettingTable} isAlternateHorizontal={false} />
           </div>
         </div>
