@@ -17,6 +17,8 @@ import AlertDialog from './alert-dialog'
 import LottieAnimation from './lottie-animation'
 import { Status, EggRecord, EggMarquee, PrizePool } from './types'
 import { hammerFile, standbyArr, goldArr, silverArr, copperArr, changeArr } from './animation-data'
+import { Trans, useTranslation } from 'react-i18next'
+import Amount from '~/components/amount'
 
 // 配合 useMatches 聲明需要登录才能访问
 export const handle = {
@@ -45,6 +47,8 @@ export default function SmashEgg() {
   const [prizePool, setPrizePool] = useState<PrizePool[]>([])
   const [marqueeList, setMarqueeList] = useState<EggMarquee[]>([])
   const queryClient = useQueryClient()
+  const { t } = useTranslation()
+  const pricePool = t('pricePool')
   const setHeaderVisibility = useStore(
     (state: { setHeaderVisibility: (visible: boolean) => void }) => state.setHeaderVisibility
   )
@@ -151,7 +155,7 @@ export default function SmashEgg() {
   } = useQuery({
     queryKey: ['marqueeInfo'],
     queryFn: async () => {
-      const response = await apis.campaign.campaignEggMarqueeList({ size: 15 })
+      const response = await apis.campaign.campaignEggMarqueeList({ size: 30 })
       return response.data
     },
     enabled: status === Status.Init,
@@ -203,8 +207,9 @@ export default function SmashEgg() {
     setOpen(false)
     setSmashCount(0)
     setSmashTotal(0)
-    setAnimationData(standbyArr[0])
     setStatus(Status.Standby)
+    setCurrentEgg(0)
+    setAnimationData(standbyArr[0])
     queryClient.clear()
   }, [queryClient])
 
@@ -418,7 +423,7 @@ export default function SmashEgg() {
       <div className="z-[33] flex aspect-[375/30] w-full justify-between">
         {/* 可用工具數量 */}
         <div
-          className={`relative flex w-[78px] items-center justify-end rounded-xl bg-white bg-opacity-30 px-3 py-1 text-right text-lg font-extrabold dark:text-white`}
+          className={`relative flex w-auto min-w-[78px] items-center justify-end rounded-xl bg-white bg-opacity-30 py-1 pl-9 pr-3 text-right text-lg font-ultra dark:text-white`}
         >
           <span className="">x{hammerCount}</span>
         </div>
@@ -442,20 +447,26 @@ export default function SmashEgg() {
 
         {(status === Status.BrokenEggPage || status === Status.End) && (
           <div className="dark:color-white relative top-2 px-4 text-xs">
-            <h2 className="text-center font-extrabold">
-              <span>ONE SMASH NEED</span>
-              <i className="inline-block h-6 w-6 bg-[url('/images/smash-egg/hammer.png')] bg-contain bg-no-repeat"></i>
-              <span>X{prizePoolItem?.hammerSpent || 0}</span>
-            </h2>
+            <h2
+              className="flex items-center justify-center text-center font-ultra"
+              dangerouslySetInnerHTML={{
+                __html: t('eggSmashNeedHammer', {
+                  icon: `<i class="inline-block h-6 w-6 mx-2 bg-[url('/images/smash-egg/hammer.png')] bg-contain bg-no-repeat"></i>`,
+                  hammer: `<span>${prizePoolItem?.hammerSpent ?? 0}</span>`,
+                }),
+              }}
+            ></h2>
 
             <div className="relative mt-2 flex items-center justify-center rounded-xl bg-black bg-opacity-70 py-1">
               <p className="text-center">
-                PRIZE POOL
-                <span className="px-1 font-extrabold">
-                  {prizePoolItem?.displayUsdtPrizeMin || 0}-
-                  {prizePoolItem?.displayUsdtPrizeMax || 0}
-                </span>
-                USDT
+                {pricePool.split('{{value}}')[0]}
+                <span className="px-1 text-xs font-ultra tracking-[-1px]">
+                  {' '}
+                  <Amount value={prizePoolItem?.displayUsdtPrizeMin ?? 0} crypto="USDT" />
+                  -
+                  <Amount value={prizePoolItem?.displayUsdtPrizeMax ?? 0} crypto="USDT" />
+                </span>{' '}
+                {pricePool.split('{{value}}')[1]}
               </p>
             </div>
           </div>
@@ -518,7 +529,7 @@ export default function SmashEgg() {
                 className={`${styles['progress-bar']} h-[100%]`}
                 style={{ width: `${smashTotal}%` }}
               ></div>
-              <p className="relative top-[-20px] z-10 text-center text-sm font-extrabold">
+              <p className="relative top-[-20px] z-10 text-center text-sm font-ultra">
                 {smashTotal}%
               </p>
             </div>
@@ -529,7 +540,7 @@ export default function SmashEgg() {
                   className={`${styles['progress-bar']} h-[100%]`}
                   style={{ width: `${smashTotal}%` }}
                 ></div>
-                <p className="relative top-[-20px] z-10 text-center text-sm font-extrabold">
+                <p className="relative top-[-20px] z-10 text-center text-sm font-ultra">
                   {smashTotal}%
                 </p>
               </div>
@@ -537,27 +548,32 @@ export default function SmashEgg() {
                 <Button
                   catEars
                   className="flex-1"
-                  disabled={hammerCount <= (prizePoolItem?.hammerSpent || 0)}
+                  disabled={hammerCount < (prizePoolItem?.hammerSpent || 1)}
                   onClick={handleSmashButtonClick}
                 >
-                  smasg x{prizePoolItem?.hammerSpent || 0}
+                  {t('smash')} x{prizePoolItem?.hammerSpent || 0}
                 </Button>
                 <Button catEars variant="gray" className="flex-1" onClick={handleGiveUpButtonClick}>
-                  Give up this egg
+                  {t('giveupEgg')}
                 </Button>
               </div>
             </>
           ) : (
             <>
-              <div className="text-center text-[24px] font-[1000]">
+              <div className="pb-2 text-center text-[24px] font-[1000]">
                 <p>
-                  YOU GAIN <span className="text-[#FFF200]">{reward}</span> USDT!{' '}
+                  <Trans
+                    i18nKey="eggClaimMsg"
+                    components={{
+                      amount1: <Amount value={reward} crypto="USDT" className="text-primary" />,
+                    }}
+                  ></Trans>
                 </p>
               </div>
 
               <div className="relative text-black">
                 <Button catEars className="w-full" onClick={handleClaim}>
-                  Claim
+                  {t('claim')}
                 </Button>
               </div>
             </>
