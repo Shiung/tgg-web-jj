@@ -39,7 +39,7 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
               {treasure?.remainingUnlockAmount && Number(treasure?.remainingUnlockAmount) > 0 ? (
                 <>
                   <Amount
-                    crypto="KOKON"
+                    crypto={treasure?.rewardType}
                     className="text-xl font-ultra text-primary"
                     value={treasure?.remainingUnlockAmount}
                     useKM={treasure?.rewardType === 'KOKON'}
@@ -56,7 +56,7 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
             {treasure?.remainingClaimAmount && Number(treasure?.remainingClaimAmount) > 0 ? (
               <>
                 <Amount
-                  crypto="KOKON"
+                  crypto={treasure?.rewardType}
                   className="text-base font-ultra text-[#3AE45A]"
                   value={treasure?.remainingClaimAmount}
                   useKM={treasure?.rewardType === 'KOKON'}

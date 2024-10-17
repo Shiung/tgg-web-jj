@@ -4,8 +4,10 @@ import type { InfoResponse } from '~/api/codegen/data-contracts'
 export interface UserSlice {
   userInfo: InfoResponse
   verificationTs: number
+  baseTreasure: { [id: number]: string } | null
   setUserInfo: (info: InfoResponse) => void
   setVerificationTs: (ts: number) => void
+  setBaseTreasure: (data: { [id: number]: string } | null) => void
 }
 
 const createUserSlice: StateCreator<UserSlice, [], [], UserSlice> = set => ({
@@ -16,6 +18,7 @@ const createUserSlice: StateCreator<UserSlice, [], [], UserSlice> = set => ({
     avatar: '',
   },
   verificationTs: 0,
+  baseTreasure: null,
   setUserInfo: info => {
     const updateInfo = {
       ...('customerId' in info && { customerId: info.customerId }),
@@ -34,6 +37,9 @@ const createUserSlice: StateCreator<UserSlice, [], [], UserSlice> = set => ({
   },
   setVerificationTs: ts => {
     set({ verificationTs: ts })
+  },
+  setBaseTreasure: baseTreasure => {
+    set({ baseTreasure })
   },
 })
 
