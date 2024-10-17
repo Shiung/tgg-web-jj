@@ -84,6 +84,7 @@ export default function SmashEgg() {
     error: smashError,
     isError: isSmashError,
     refetch: refetchSmash,
+    isFetching: isSmashing,
   } = useQuery({
     queryKey: ['startSmash'],
     queryFn: async () => {
@@ -133,6 +134,7 @@ export default function SmashEgg() {
     error: claimError,
     isError: isClaimError,
     refetch: refetchClaim,
+    isFetching: isClaiming,
   } = useQuery({
     queryKey: ['claimReward'],
     queryFn: async () => {
@@ -550,6 +552,7 @@ export default function SmashEgg() {
                   className="flex-1"
                   disabled={hammerCount < (prizePoolItem?.hammerSpent || 1)}
                   onClick={handleSmashButtonClick}
+                  loading={isSmashing}
                 >
                   {t('smash')} x{prizePoolItem?.hammerSpent || 0}
                 </Button>
@@ -572,7 +575,7 @@ export default function SmashEgg() {
               </div>
 
               <div className="relative text-black">
-                <Button catEars className="w-full" onClick={handleClaim}>
+                <Button catEars className="w-full" onClick={handleClaim} loading={isClaiming}>
                   {t('claim')}
                 </Button>
               </div>
