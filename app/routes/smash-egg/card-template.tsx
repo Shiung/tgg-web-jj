@@ -2,14 +2,18 @@ import React from 'react'
 import Footer from './footer'
 import styles from './index.module.scss'
 import type { CardTemplateProps } from './types'
+import { useTranslation } from 'react-i18next'
 
 const CardTemplate: React.FC<CardTemplateProps> = ({ children, marqueeList }) => {
+  const { t } = useTranslation()
   return (
     <div className="relative flex flex-1 flex-col justify-center">
       <div className="relative">
         {/* Header */}
         <div className="relative top-[22px] z-10 mx-auto flex aspect-[267/46] w-[80%] items-center justify-center bg-[url('/images/smash-egg/bg-title.png')] bg-contain bg-no-repeat">
-          <h1 className="text-center text-[20px] font-extrabold dark:text-white">SMASH EGG</h1>
+          <h1 className="text-center text-[20px] font-ultra dark:text-white">
+            {t('eggCardTitle')}
+          </h1>
         </div>
 
         <div

@@ -1,12 +1,16 @@
 import styles from './index.module.scss'
 import { useMemo } from 'react'
 import type { FooterProps } from './types'
+import { Trans, useTranslation } from 'react-i18next'
+import Amount from '~/components/amount'
+import { s } from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
 
 const eggName = (string: string): string => {
   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
 }
 
 export default function Footer({ marqueeList }: FooterProps) {
+  const { t } = useTranslation()
   const repeatedMarqueeList = useMemo(() => {
     return marqueeList ? [...marqueeList, ...marqueeList] : []
   }, [marqueeList])
@@ -19,7 +23,7 @@ export default function Footer({ marqueeList }: FooterProps) {
           src="/images/smash-egg/winner.png"
           alt="Winner"
         />
-        <span className="text-[16px] font-extrabold">WINNER</span>
+        <span className="text-[16px] font-ultra">{t('eggFooterTitle')}</span>
         <img
           className="inline-block h-[33px] w-[52px]"
           src="/images/smash-egg/winner.png"
@@ -32,9 +36,23 @@ export default function Footer({ marqueeList }: FooterProps) {
           <div className={styles.marquee}>
             {repeatedMarqueeList.map((item, index) => (
               <p key={`${item.customerName}-${index}`}>
-                {item.customerName} just broke a{' '}
-                <span className="text-[#FFF200]">{eggName(item.eggLevel)} egg</span> with{' '}
-                <span className="text-4 px-1 font-extrabold">{item.reward}</span>USDT!
+                <Trans
+                  i18nKey="eggMarquee"
+                  values={{
+                    user: item.customerName,
+                    eggName: t(`eggName.${item.eggLevel}`),
+                  }}
+                  components={{
+                    egg: <span className="text-[#FFF200]" />, // 添加自定義樣式
+                    amount1: (
+                      <Amount
+                        value={item.reward}
+                        crypto="USDT"
+                        className="text-4 px-1 font-ultra text-primary"
+                      />
+                    ),
+                  }}
+                ></Trans>
               </p>
             ))}
           </div>

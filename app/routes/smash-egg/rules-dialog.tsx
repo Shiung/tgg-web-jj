@@ -1,3 +1,4 @@
+import React from 'react'
 import { Button } from '~/components/ui/button'
 import {
   Dialog,
@@ -8,8 +9,12 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog'
 import type { RulesDialogProps } from './types'
+import { useTranslation, Trans } from 'react-i18next'
+import Amount from '~/components/amount'
 
 const RulesDialog: React.FC<RulesDialogProps> = ({ prizePools }) => {
+  const { t } = useTranslation()
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -19,13 +24,10 @@ const RulesDialog: React.FC<RulesDialogProps> = ({ prizePools }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Rules of Smash Egg</DialogTitle>
+          <DialogTitle>{t('eggRule.title')}</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-6 px-3 text-base text-white/70">
-          <p className="text-center">
-            Welcome to Smash Egg. Consume the hammer to get the big prize. Depending on the type of
-            egg, the rewards and the required hammer for each smash are different:
-          </p>
+        <div className="flex flex-col gap-6 px-3 pt-4 text-base text-white/70">
+          <p className="text-center">{t('eggRule.heading')}</p>
           <div className="flex flex-col gap-3">
             {prizePools.map(item => (
               <div
@@ -34,34 +36,45 @@ const RulesDialog: React.FC<RulesDialogProps> = ({ prizePools }) => {
               >
                 <div className="rounded-[6px] bg-[#ffffff33]">
                   <div className="flex items-center justify-between px-2">
-                    <p className="text-sm font-extrabold text-white">
+                    <p className="text-sm font-ultra text-white">
                       {item.eggLevel.charAt(0).toUpperCase() + item.eggLevel.slice(1).toLowerCase()}
                     </p>
                     <p>
                       <i className="relative top-0.5 inline-block h-4 w-[13.6px] bg-[url('/images/smash-egg/hammer.png')] bg-contain bg-no-repeat" />
-                      <span className="px-1 text-sm font-extrabold text-[#FFF200]">
+                      <span className="px-1 text-sm font-ultra text-[#FFF200]">
                         x{item.hammerSpent}
                       </span>
-                      <span className="text-xs">per smash</span>
+                      <span className="text-xs">{t('perSmash')}</span>
                     </p>
                   </div>
                 </div>
                 <p className="text-xs">
-                  You can get{' '}
-                  <span className="text-white">
-                    {item.displayUsdtPrizeMin}-{item.displayUsdtPrizeMax}
-                  </span>{' '}
-                  USDT after egg is broken.
+                  <Trans
+                    i18nKey="eggRule.hint"
+                    components={{
+                      amount1: (
+                        <Amount
+                          value={item.displayUsdtPrizeMin}
+                          crypto="USDT"
+                          className="text-white"
+                        />
+                      ),
+                      amount2: (
+                        <Amount
+                          value={item.displayUsdtPrizeMax}
+                          crypto="USDT"
+                          className="text-white"
+                        />
+                      ),
+                    }}
+                  ></Trans>
                 </p>
               </div>
             ))}
           </div>
           <div className="rounded-xl bg-[#FDCB041A] px-3 py-2 text-[#FFF200]">
-            <div className="text-sm font-extrabold">Notice</div>
-            <div className="mt-2 text-xs">
-              You have to smash the egg continuously until the egg is broken. If you give up
-              halfway, the consumed hammer will not be returned.
-            </div>
+            <div className="text-sm font-ultra">{t('eggRule.noticeTitle')}</div>
+            <div className="mt-2 text-xs">{t('eggRule.noticeContens')}</div>
           </div>
         </div>
         <DialogFooter className="flex flex-row space-x-2 p-3" />

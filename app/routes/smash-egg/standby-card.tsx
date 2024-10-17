@@ -1,5 +1,7 @@
 import { Button } from '~/components/ui/button'
 import type { StandbyCardProps } from './types'
+import { Trans, useTranslation } from 'react-i18next'
+import Amount from '~/components/amount'
 
 export default function StandbyCard({
   handleStartButtonClick,
@@ -7,44 +9,39 @@ export default function StandbyCard({
   prizePool,
   hammerCount,
 }: StandbyCardProps) {
-  const getEggLevelText = (level: string | undefined) => {
-    switch (level) {
-      case 'NORMAL':
-        return 'NORMAL EGG'
-      case 'SILVER':
-        return 'SILVER EGG'
-      case 'GOLD':
-        return 'GOLDEN EGG'
-      default:
-        return ''
-    }
-  }
-
+  const { t } = useTranslation()
+  const pricePool = t('pricePool')
   return (
     <div>
       {/* Game pannel */}
       <div className="relative z-10 mt-5 flex justify-center px-6">
         <div className="flex h-[94px] w-[100%] flex-col gap-1 rounded-xl bg-black bg-opacity-50 px-4 py-2 text-center">
-          <p className="text-center text-base font-extrabold leading-[22px] text-[#FDCB04]">
-            {getEggLevelText(prizePool?.eggLevel)}
+          <p className="text-center text-base font-ultra leading-[22px] text-[#FDCB04]">
+            {t(`eggName.${prizePool?.eggLevel || ''}`).toLocaleUpperCase()}
           </p>
-          <div className="flex h-[20px] items-center justify-center gap-2">
-            <span className="color-white text-xs font-extrabold leading-[16px]">
-              ONE SMASH NEED
-            </span>
-            <i className="inline-block h-5 w-7 bg-[url('/images/smash-egg/hammer.png')] bg-contain bg-no-repeat" />
-            <span className="color-white text-sm font-extrabold leading-[18px]">
-              X{prizePool?.hammerSpent ?? 0}
-            </span>
+          <div className="h-[20px]">
+            <span
+              className='class="color-white flex items-center justify-center text-xs font-ultra leading-[16px]'
+              dangerouslySetInnerHTML={{
+                __html: t('eggSmashNeedHammer', {
+                  icon: `<i class="inline-block h-5 w-7 bg-[url('/images/smash-egg/hammer.png')] bg-contain bg-no-repeat"></i>`,
+                  hammer: `<span class="color-white text-sm font-ultra leading-[18px]">
+                            ${prizePool?.hammerSpent ?? 0}
+                          </span>`,
+                }),
+              }}
+            ></span>
           </div>
 
-          <p className="flex h-[] items-center justify-center gap-1 rounded-xl bg-black bg-opacity-70 px-3 text-sm">
-            PRIZE POOL{' '}
-            <span className="text-lg font-extrabold tracking-[-2px]">
+          <p className="flex items-center justify-center gap-1 rounded-xl bg-black bg-opacity-70 px-3 py-1.5 text-xs">
+            {pricePool.split('{{value}}')[0]}
+            <span className="text-xs font-ultra tracking-[-1px]">
               {' '}
-              {prizePool?.displayUsdtPrizeMin ?? 0}-{prizePool?.displayUsdtPrizeMax ?? 0}
+              <Amount value={prizePool?.displayUsdtPrizeMin ?? 0} crypto="USDT" />
+              -
+              <Amount value={prizePool?.displayUsdtPrizeMax ?? 0} crypto="USDT" />
             </span>{' '}
-            USDT
+            {pricePool.split('{{value}}')[1]}
           </p>
         </div>
 
@@ -67,7 +64,7 @@ export default function StandbyCard({
         <Button
           catEars
           className="w-full"
-          disabled={hammerCount <= (prizePool?.hammerSpent ?? 0)}
+          disabled={hammerCount < (prizePool?.hammerSpent ?? 1)}
           onClick={handleStartButtonClick}
         >
           Start
