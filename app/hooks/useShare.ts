@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useUtils } from '@telegram-apps/sdk-react'
 import { useMutation } from '@tanstack/react-query'
 
@@ -7,6 +7,7 @@ import { apis } from '~/api/index'
 
 export function useShare() {
   const inTelegram = useStore(state => state.inTelegram)
+  const telegramConfig = useStore(state => state.telegramConfig)
   const { referralCode } = useStore(state => state.userInfo)
   const utils = useUtils()
 
@@ -18,7 +19,15 @@ export function useShare() {
     },
   })
 
-  const shareUrl = useCallback(
+  const tDotMeBaseShareUrl = useMemo(() => {
+    if (!telegramConfig?.botName || telegramConfig?.appName) window.location.origin
+    return `https://t.me/${telegramConfig.botName}/${telegramConfig.appName}`
+  }, [telegramConfig.appName, telegramConfig.botName])
+
+  /**
+   * 分享連結 (Telegram 內使用 Telegram 的分享方法)
+   */
+  const share = useCallback(
     async (url: string, text?: string) => {
       if (referralCode) {
         await shareGA()
@@ -48,7 +57,8 @@ export function useShare() {
   )
 
   return {
-    shareUrl,
+    share,
+    tDotMeBaseShareUrl,
     isLoading: isPending,
   }
 }

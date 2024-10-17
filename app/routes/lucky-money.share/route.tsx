@@ -11,7 +11,7 @@ import { parseAmount } from '~/lib/amount'
 import { Button } from '~/components/ui/button'
 import { useGetCryptoWallet } from '~/hooks/api/useWallet'
 
-// import GetLuckyMoneyDialog from '~/components/get-lucky-money-dialog/index'
+import GetLuckyMoneyDialog from '~/components/get-lucky-money-dialog/index'
 
 import NormalBag from './normal-bag'
 import LuckBag from './luck-bag'

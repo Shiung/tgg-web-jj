@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useLocation } from '@remix-run/react'
+import { Link, useLocation, useNavigate } from '@remix-run/react'
 import { useHapticFeedback } from '@telegram-apps/sdk-react'
 import { useTranslation } from 'react-i18next'
 import useStore from '~/stores/useStore'
@@ -35,6 +35,7 @@ export const links = [
 const MainNav: React.FC = () => {
   const { t } = useTranslation()
   const location = useLocation()
+  const navigate = useNavigate()
   const hapticFeedback = useHapticFeedback(true)
   const maxWidth = useStore(state => state.maxWidth)
   const [activeLink, setActiveLink] = useState(location.pathname)
@@ -51,8 +52,9 @@ const MainNav: React.FC = () => {
     (href: string) => {
       setActiveLink(href)
       hapticFeedback?.impactOccurred('medium')
+      navigate(href)
     },
-    [hapticFeedback]
+    [hapticFeedback, navigate]
   )
 
   useEffect(() => {

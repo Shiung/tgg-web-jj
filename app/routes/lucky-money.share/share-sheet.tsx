@@ -18,11 +18,11 @@ import { CreateRequest } from '~/api/codegen/data-contracts'
 import type { FormData } from './route'
 import { Input } from '~/components/ui/input'
 import { useCopyToClipboard } from 'react-use'
-import { successToast } from '~/lib/toast'
+import { errorToast, successToast } from '~/lib/toast'
 import { useShare } from '~/hooks/useShare'
 
 const ShareSheet: React.FC = () => {
-  const { shareUrl } = useShare()
+  const { share, tDotMeBaseShareUrl } = useShare()
   const [state, copyToClipboard] = useCopyToClipboard()
   const [open, setOpen] = useState(false)
   const [shareUrlLink, setShareUrlLink] = useState('')
@@ -59,7 +59,8 @@ const ShareSheet: React.FC = () => {
     try {
       const res = await createPacket.mutateAsync(shareData)
       if (res.data.referralCode) {
-        setShareUrlLink(`${window.location.origin}/?startapp=${res.data.referralCode}`)
+        successToast('Share successful')
+        setShareUrlLink(`${tDotMeBaseShareUrl}/?startapp=${res.data.referralCode}`)
         setOpen(true)
       } else {
         setShareUrlLink('')
@@ -68,17 +69,18 @@ const ShareSheet: React.FC = () => {
       console.log('packetCreate res:', res)
     } catch (error) {
       console.error('packetCreate failed:', error)
+      errorToast('Share failed')
       setShareUrlLink('')
       setOpen(false)
     }
   }
 
   const handleShareURL = useCallback(() => {
-    shareUrl(
+    share(
       shareUrlLink,
       'I am sharing the LIMITED lucky money bags with friends. Click here to get one!'
     )
-  }, [shareUrl, shareUrlLink])
+  }, [share, shareUrlLink])
 
   const handleSheetChange = (isOpen: boolean) => {
     setOpen(isOpen)
@@ -126,7 +128,7 @@ const ShareSheet: React.FC = () => {
           <div className="flex w-full flex-col items-stretch space-y-4 bg-[url('/images/long-wave.png')] bg-contain p-3 pb-8">
             <Input
               readOnly
-              className="h-9 text-white"
+              className="h-9 truncate text-white"
               value={shareUrlLink}
               fieldSuffix={
                 <Button

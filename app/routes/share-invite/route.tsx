@@ -43,16 +43,16 @@ const ShareInvite: React.FC = () => {
     queryFn: apis.customer.customerInfoList,
   })
 
+  // 剪貼簿 與分享功能
+  const { share, isLoading, tDotMeBaseShareUrl } = useShare()
+  const [state, copyToClipboard] = useCopyToClipboard()
+
   const shareUrlLink = useMemo(() => {
     if (!customerInfo?.data?.referralCode) {
       return ''
     }
-    return `${window.location.origin}/?startapp=${customerInfo.data.referralCode}`
-  }, [customerInfo])
-
-  // 剪貼簿 與分享功能
-  const { shareUrl, isLoading } = useShare()
-  const [state, copyToClipboard] = useCopyToClipboard()
+    return `${tDotMeBaseShareUrl}/?startapp=${customerInfo.data.referralCode}`
+  }, [customerInfo, tDotMeBaseShareUrl])
 
   useEffect(() => {
     if (!state.value) return
@@ -60,8 +60,8 @@ const ShareInvite: React.FC = () => {
   }, [state])
 
   const handleShareURL = useCallback(() => {
-    shareUrl(shareUrlLink, 'Join my team to play the game and earn KOKON coin.')
-  }, [shareUrl, shareUrlLink])
+    share(shareUrlLink, 'Join my team to play the game and earn KOKON coin.')
+  }, [share, shareUrlLink])
 
   // 當前選擇的 teamLevel
   const [teamLevel, setTeamLevel] = useState(0)
@@ -194,7 +194,7 @@ const ShareInvite: React.FC = () => {
                 <div className="flex-1">
                   <Input
                     readOnly
-                    className="h-9 w-full"
+                    className="h-9 w-full truncate"
                     id="address"
                     value={shareUrlLink}
                     fieldSuffix={

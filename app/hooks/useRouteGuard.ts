@@ -28,7 +28,7 @@ export default function useRouteGuard() {
     if (_startParam === 'wallet') {
       navigate('/wallet/deposit', { replace: true })
     } else if (/^r_/.test(_startParam)) {
-      // 實作分享邀請碼功能，預期以某字符開頭 例如r_ 開頭 eg: r_xdgYdr6
+      // 實作分享/紅包邀請碼功能，預期以某字符開頭 例如r_ 開頭 eg: r_xdgYdr6
       localStorage.setItem('referralCode', _startParam)
     } else if (_startParam === 'debug') {
       import('eruda').then(lib => lib.default.init())

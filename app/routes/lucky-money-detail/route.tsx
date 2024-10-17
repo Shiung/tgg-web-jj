@@ -44,7 +44,6 @@ const LuckyMoneyDetail = () => {
   const state = searchParams.get('state') || ''
 
   const [copyState, copyToClipboard] = useCopyToClipboard()
-  const { shareUrl } = useShare()
 
   const {
     data: detailInfiniteDataRaw,
@@ -86,13 +85,15 @@ const LuckyMoneyDetail = () => {
     }
   }, [detailInfiniteDataRaw])
 
+  const { share, tDotMeBaseShareUrl } = useShare()
   const shareUrlLink = useMemo(() => {
-    return `${window.location.origin}`
-  }, [])
+    if (!detailData.referralCode) return ''
+    return `${tDotMeBaseShareUrl}?startapp=${detailData.referralCode}`
+  }, [detailData.referralCode, tDotMeBaseShareUrl])
 
   const handleShareURL = useCallback(() => {
-    shareUrl(shareUrlLink, 'I am sending limited lucky bags. Click here to get one!')
-  }, [shareUrl, shareUrlLink])
+    share(shareUrlLink, 'I am sending limited lucky bags. Click here to get one!')
+  }, [share, shareUrlLink])
 
   const handleTerminateSuccess = useCallback(() => {
     navigate('/lucky-money/list')
@@ -251,9 +252,9 @@ const LuckyMoneyDetail = () => {
       ) : (
         <>
           {/* 分享連結和按鈕 */}
-          <div className="z-10 -mt-4 flex items-center justify-between space-x-2 rounded-2xl bg-black p-4 shadow-lg">
-            <div className="relative flex h-9 flex-1 items-center justify-between rounded-full bg-[#333] px-3 py-2 text-sm font-ultra">
-              <span className="flex-1 text-ellipsis">{shareUrlLink}</span>
+          <div className="z-10 -mt-4 flex items-center justify-between rounded-2xl bg-black p-4 shadow-lg">
+            <div className="relative flex h-9 max-w-[calc(100%_-_128px)] flex-1 items-center justify-between rounded-full bg-[#333] px-3 py-2 text-sm font-ultra">
+              <span className="flex-1 truncate">{shareUrlLink}</span>
               <Button
                 variant="icon"
                 size="icon"
