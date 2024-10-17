@@ -5,5 +5,11 @@
   "share": "Share",
   "wallet": "Wallet",
   "treasure.betRequirement": "{{value}}% bet amount in Crypto games。",
-  "treasure.directSubBetRequirement" : "{{value}}% bet amount in Crypto games from level 1 friends。"
+  "treasure.directSubBetRequirement" : "{{value}}% bet amount in Crypto games from level 1 friends。",
+  "subtask.cardDescription": "Small effort",
+  "subtask.cardDescription2": "but big earning!",
+  "single": "Single",
+  "special": "Special",
+  "daily": "Daily",
+  "subtask.updateTimeString": "Update every 13:00 (UTC+8)"
 }

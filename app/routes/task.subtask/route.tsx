@@ -1,8 +1,9 @@
 import React, { useState, useRef, useCallback } from 'react'
 import { cn } from '~/lib/utils'
 import { type TaskQueryResponse } from '~/api/codegen/data-contracts'
-import { type TaskType, TaskTypeDisplayMap } from './type'
+import { type TaskType, useTaskTypeDisplayMap } from './type'
 import { useGetTask } from './hook/useGetTask'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '~/components/ui/button'
 import TaskCard from './task-card'
@@ -10,6 +11,8 @@ import TaskSubtaskSkeleton from './task-subtask-seleton'
 import styles from './index.module.scss'
 
 const TaskSubtask: React.FC = () => {
+  const { t } = useTranslation()
+  const taskTypeDisplayMap = useTaskTypeDisplayMap()
   const { tasks, isTasksLoading } = useGetTask()
 
   // 移動至指定 task 分類
@@ -34,8 +37,8 @@ const TaskSubtask: React.FC = () => {
   return (
     <div className="flex flex-1 flex-col">
       <div className={cn(styles.header)}>
-        <p>Small effort</p>
-        <p className="pl-1"> but big earning!</p>
+        <p>{t('subtask.cardDescription')}</p>
+        <p className="pl-1">{t('subtask.cardDescription2')}</p>
       </div>
       <div className="relative -top-4 flex flex-1 flex-col overflow-y-hidden rounded-xl bg-black px-3 py-4">
         <div className="mb-5 flex space-x-2">
@@ -48,7 +51,7 @@ const TaskSubtask: React.FC = () => {
                 key={type}
                 onClick={() => handleTaskTypeClick(type as TaskType)}
               >
-                {TaskTypeDisplayMap[type as TaskType] || type}
+                {taskTypeDisplayMap[type as TaskType] || type}
               </Button>
             ))}
         </div>
@@ -58,9 +61,9 @@ const TaskSubtask: React.FC = () => {
               <div key={index} ref={taskRefs.current[taskType as TaskType]}>
                 <TaskCard
                   cardTitle={
-                    TaskTypeDisplayMap[taskType as TaskType] + ' Task' || taskType + ' Task'
+                    taskTypeDisplayMap[taskType as TaskType] + ' Task' || taskType + ' Task'
                   }
-                  updateTimeString={taskType === 'dailyList' ? 'Update every 13:00(UTC-8)' : ''}
+                  updateTimeString={taskType === 'dailyList' ? t('subtask.updateTimeString') : ''}
                   list={tasks?.data?.[taskType as keyof TaskQueryResponse]}
                 />
               </div>
