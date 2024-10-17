@@ -52,10 +52,28 @@ const sortOptions = [
     ),
   },
   {
+    value: { sortOrder: 'desc', sortField: 'level' },
+    label: (
+      <div className="flex items-center space-x-1">
+        <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
+        <div>LV</div>
+      </div>
+    ),
+  },
+  {
     value: { sortOrder: 'asc', sortField: 'bet' },
     label: (
       <div className="flex items-center space-x-1">
         <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
+        <div>Total Bets</div>
+      </div>
+    ),
+  },
+  {
+    value: { sortOrder: 'desc', sortField: 'bet' },
+    label: (
+      <div className="flex items-center space-x-1">
+        <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
         <div>Total Bets</div>
       </div>
     ),
@@ -66,24 +84,6 @@ const sortOptions = [
       <div className="flex items-center space-x-1">
         <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
         <div>Total Deposit</div>
-      </div>
-    ),
-  },
-  {
-    value: { sortOrder: 'desc', sortField: 'level' },
-    label: (
-      <div className="flex items-center space-x-1">
-        <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
-        <div>LV</div>
-      </div>
-    ),
-  },
-  {
-    value: { sortOrder: 'desc', sortField: 'bet' },
-    label: (
-      <div className="flex items-center space-x-1">
-        <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
-        <div>Total Bets</div>
       </div>
     ),
   },
