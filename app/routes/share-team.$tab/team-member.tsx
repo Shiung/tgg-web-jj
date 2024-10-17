@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
 
@@ -23,10 +23,13 @@ import Amount from '~/components/amount'
 import { Skeleton } from '~/components/ui/skeleton'
 import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
 import { Crypto } from '~/consts/crypto'
+import InfiniteScroll from '~/components/ui/infinite-scroll'
 
 import TeamMemberEmpty from './team-member-empty'
 import TeamMemberTableList from './team-member-tableList'
 import ShareTeamSkeleton from './share-team-skeleton'
+
+const PAGE_SIZE = 20
 
 const levelOptions = [
   { value: '0', label: 'LV: all' },
@@ -40,7 +43,7 @@ const sortOptions = [
     label: <div>Default</div>,
   },
   {
-    value: { sortOrder: true, sortField: 'level' },
+    value: { sortOrder: 'asc', sortField: 'level' },
     label: (
       <div className="flex items-center space-x-1">
         <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
@@ -49,7 +52,7 @@ const sortOptions = [
     ),
   },
   {
-    value: { sortOrder: true, sortField: 'bet' },
+    value: { sortOrder: 'asc', sortField: 'bet' },
     label: (
       <div className="flex items-center space-x-1">
         <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
@@ -58,7 +61,7 @@ const sortOptions = [
     ),
   },
   {
-    value: { sortOrder: true, sortField: 'deposit' },
+    value: { sortOrder: 'asc', sortField: 'deposit' },
     label: (
       <div className="flex items-center space-x-1">
         <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
@@ -67,7 +70,7 @@ const sortOptions = [
     ),
   },
   {
-    value: { sortOrder: false, sortField: 'level' },
+    value: { sortOrder: 'desc', sortField: 'level' },
     label: (
       <div className="flex items-center space-x-1">
         <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
@@ -76,7 +79,7 @@ const sortOptions = [
     ),
   },
   {
-    value: { sortOrder: false, sortField: 'bet' },
+    value: { sortOrder: 'desc', sortField: 'bet' },
     label: (
       <div className="flex items-center space-x-1">
         <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
@@ -85,7 +88,7 @@ const sortOptions = [
     ),
   },
   {
-    value: { sortOrder: false, sortField: 'deposit' },
+    value: { sortOrder: 'desc', sortField: 'deposit' },
     label: (
       <div className="flex items-center space-x-1">
         <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
@@ -125,24 +128,26 @@ const TeamMember: React.FC = () => {
   interface QueryParams {
     name?: string
     level?: number
-    sortOrder?: boolean
-    sortField?: string
+    sortOrder?: 'desc' | 'asc'
+    sortField?: 'level' | 'bet' | 'deposit'
   }
-  const queryParams: QueryParams = useMemo(() => {
-    const { sortOrder, sortField } = selectedSort
+  const queryParams = useMemo<QueryParams>(() => {
+    const { sortOrder, sortField } = selectedSort as Pick<QueryParams, 'sortField' | 'sortOrder'>
     return {
-      ...(sortOrder !== '' &&
-        sortField !== '' && {
-          sortOrder: !!sortOrder,
+      ...(!!sortOrder &&
+        !!sortField && {
+          sortOrder,
           sortField,
         }),
-      name: selectedDisplayName,
+      ...(!!selectedDisplayName && {
+        name: selectedDisplayName,
+      }),
       level: Number(selectedLevel),
     }
   }, [selectedDisplayName, selectedSort, selectedLevel])
 
   //NOTICE: For test
-  // mock use => queryFn: ({ pageParam = 0 }) => fetchTeamData(pageParam, queryParams),
+  // mock use => queryFn: ({ pageParam = 1 }) => fetchTeamData(pageParam, PAGE_SIZE, queryParams),
   // live use =>   queryFn: ({ pageParam = 0 }) => apis.customer.customerTeamPerformanceList({ ...queryParams, anchorPoint: pageParam }),
 
   const {
@@ -153,23 +158,28 @@ const TeamMember: React.FC = () => {
     isLoading: isTeamPerformanceListLoading,
   } = useInfiniteQuery({
     queryKey: ['customerTeamPerformanceList', queryParams],
-    queryFn: ({ pageParam = 0 }) =>
-      apis.customer.customerTeamPerformanceList({ ...queryParams, anchorPoint: pageParam }),
-    getNextPageParam: lastPage => {
+    queryFn: ({ pageParam = 1 }) =>
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      apis.customer.customerTeamPerformanceList({
+        ...queryParams,
+        page: pageParam,
+        pageSize: PAGE_SIZE,
+      }),
+    getNextPageParam: (lastPage, allPages) => {
       if (
-        lastPage.data.data &&
-        Array.isArray(lastPage.data.data) &&
-        lastPage.data.data.length > 0
+        lastPage.data?.pagination?.totalPage &&
+        lastPage.data?.pagination?.totalPage > allPages.length
       ) {
-        return lastPage.data.data[lastPage.data.data.length - 1].anchorPoint
+        return allPages.length + 1
       }
       return undefined
     },
-    initialPageParam: 0,
+    initialPageParam: 1,
   })
 
   const flattenedData = useMemo(() => {
-    return TeamPerformanceListData?.pages.flatMap(page => page.data?.data) || []
+    return TeamPerformanceListData?.pages.flatMap(page => page.data?.data).filter(d => !!d) || []
   }, [TeamPerformanceListData])
 
   // 獲取最新的匯總數據
@@ -183,37 +193,6 @@ const TeamMember: React.FC = () => {
     }
     return null
   }, [TeamPerformanceListData])
-
-  // 滾動加載
-  const loadMoreRef = useRef<HTMLDivElement>(null)
-  const loadMoreData = useCallback(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage()
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
-
-  useEffect(() => {
-    const currentLoadMoreRef = loadMoreRef.current
-
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting) {
-          loadMoreData()
-        }
-      },
-      { threshold: 1.0 }
-    )
-
-    if (currentLoadMoreRef) {
-      observer.observe(currentLoadMoreRef)
-    }
-
-    return () => {
-      if (currentLoadMoreRef) {
-        observer.unobserve(currentLoadMoreRef)
-      }
-    }
-  }, [loadMoreData])
 
   // 回到顶部
   const [topRef, istopflagVisible, scrollToTop] = useIntersectionObserver<HTMLDivElement>()
@@ -416,14 +395,18 @@ const TeamMember: React.FC = () => {
         ) : flattenedData?.length > 0 ? (
           <>
             <TeamMemberTableList data={flattenedData} />
-            <div ref={loadMoreRef} className="h-20">
-              {isFetchingNextPage && (
+            <InfiniteScroll
+              hasMore={!!hasNextPage}
+              isLoading={isFetchingNextPage}
+              next={fetchNextPage}
+              threshold={1}
+            >
+              {hasNextPage && (
                 <div className="mt-2 flex w-full items-center justify-center">
                   <LoadingIcon className="h-6 w-6 animate-spin" />
                 </div>
               )}
-              {!hasNextPage && <div className="mt-2 text-center">--- end ---</div>}
-            </div>
+            </InfiniteScroll>
           </>
         ) : (
           <TeamMemberEmpty />
@@ -439,41 +422,44 @@ const TeamMember: React.FC = () => {
         </button>
       )}
       {latestSummary && (
-        <div
-          className="fixed inset-x-0 bottom-[88px] mx-auto flex h-14 w-full items-center rounded-b-xl border-t border-white/20 bg-black"
-          style={{ maxWidth, left: `calc((100vw - ${maxWidth}) / 2)` }}
-        >
-          <div className="flex flex-1 flex-col items-center justify-center space-y-1">
-            <div className="text-xs text-[#FFFFFFB2]">Member</div>
-            <div className="text-xs font-ultra">{latestSummary.teamSize}</div>
-          </div>
-          <div className="flex flex-1 flex-col items-center justify-center space-y-1">
-            <div className="text-xs text-[#FFFFFFB2]">Bets</div>
-            <div className="flex items-center space-x-1">
-              <UsdtIcon className="h-3 w-3" />
-              <Amount
-                className="text-xs font-ultra"
-                value={parseAmount(latestSummary.totalBets)}
-                customMaxInt={7}
-                customMaxDec={6}
-                crypto={Crypto.USDT}
-              />
+        <>
+          <div className="h-14" id="blockArea"></div>
+          <div
+            className="fixed inset-x-0 bottom-[88px] mx-auto flex h-14 w-full items-center rounded-b-xl border-t border-white/20 bg-black"
+            style={{ maxWidth }}
+          >
+            <div className="flex flex-1 flex-col items-center justify-center space-y-1">
+              <div className="text-xs text-[#FFFFFFB2]">Member</div>
+              <div className="text-xs font-ultra">{latestSummary.teamSize}</div>
+            </div>
+            <div className="flex flex-1 flex-col items-center justify-center space-y-1">
+              <div className="text-xs text-[#FFFFFFB2]">Bets</div>
+              <div className="flex items-center space-x-1">
+                <UsdtIcon className="h-3 w-3" />
+                <Amount
+                  className="text-xs font-ultra"
+                  value={parseAmount(latestSummary.totalBets)}
+                  customMaxInt={7}
+                  customMaxDec={6}
+                  crypto={Crypto.USDT}
+                />
+              </div>
+            </div>
+            <div className="flex flex-1 flex-col items-center justify-center space-y-1">
+              <div className="text-xs text-[#FFFFFFB2]">Deposit</div>
+              <div className="flex items-center space-x-1">
+                <UsdtIcon className="h-3 w-3" />
+                <Amount
+                  className="text-xs font-ultra"
+                  value={parseAmount(latestSummary.totalDeposit)}
+                  customMaxInt={7}
+                  customMaxDec={6}
+                  crypto={Crypto.USDT}
+                />
+              </div>
             </div>
           </div>
-          <div className="flex flex-1 flex-col items-center justify-center space-y-1">
-            <div className="text-xs text-[#FFFFFFB2]">Deposit</div>
-            <div className="flex items-center space-x-1">
-              <UsdtIcon className="h-3 w-3" />
-              <Amount
-                className="text-xs font-ultra"
-                value={parseAmount(latestSummary.totalDeposit)}
-                customMaxInt={7}
-                customMaxDec={6}
-                crypto={Crypto.USDT}
-              />
-            </div>
-          </div>
-        </div>
+        </>
       )}
     </div>
   )
