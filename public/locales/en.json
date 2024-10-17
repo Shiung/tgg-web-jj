@@ -1,4 +1,11 @@
 {
+  "errorMessage.unknown.error": "Unknown error",
+  "errorMessage.website.token.not.valid": "Token is not valid",
+  "errorMessage.not.valid.locale": "Locale is not valid",
+  "errorMessage.not.valid.kind": "Kind is not valid",
+  "errorMessage.under.maintenance": "Under maintenance",
+  "errorMessage.packet.been.sent.out": "Sorry,\n all bags have been sent out!",
+  "errorMessage.packet.claimer.not.qualified": "Sorry,\n you are not qualified.",
   "game": "Game",
   "rank": "Rank",
   "task": "Task",

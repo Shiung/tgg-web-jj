@@ -3,8 +3,10 @@ import { Link } from '@remix-run/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import qs from 'qs'
 
-import { Button } from '~/components/ui/button'
 import { apis } from '~/api'
+import { Button } from '~/components/ui/button'
+import InfiniteScroll from '~/components/ui/infinite-scroll'
+import LoadingIcon from '~/icons/loading.svg?react'
 
 import LuckyMoneyItem from './lucky-money-item'
 import SwitchTab from '../lucky-money/switch-tab'
@@ -13,7 +15,7 @@ import { ListSkeleton } from './skeleton'
 const QUERY_STATE = [1]
 
 export default function LuckyMoneyList() {
-  const { data, isLoading } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
     queryKey: ['packetsList', QUERY_STATE],
     queryFn: ({ pageParam = 1 }) =>
       apis.packets
@@ -31,13 +33,14 @@ export default function LuckyMoneyList() {
             totalRecord: res.data.pagination?.totalRecord ?? 0,
           },
         })),
+    initialPageParam: 1,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage.pagination.totalPage > allPages.length) {
         return allPages.length + 1
       }
       return undefined
     },
-    initialPageParam: 1,
+    retry: false,
   })
 
   const list = useMemo(() => data?.pages.flatMap(page => page.list) ?? [], [data?.pages])
@@ -46,12 +49,24 @@ export default function LuckyMoneyList() {
     <div className="-mt-4 flex w-full flex-1 flex-col items-stretch justify-between rounded-[12px] bg-black p-4">
       <div className="flex flex-1 flex-col">
         <SwitchTab />
-        {isLoading && <ListSkeleton />}
-        {list.length > 0 ? (
+        {isLoading ? (
+          <ListSkeleton />
+        ) : list.length > 0 ? (
           <div className="mt-6 flex w-full flex-1 flex-col">
-            {list.map((item, index) => (
-              <LuckyMoneyItem key={index} {...item} />
+            {list.map(item => (
+              <LuckyMoneyItem key={item.packetId} {...item} />
             ))}
+            <InfiniteScroll
+              hasMore={!!hasNextPage}
+              isLoading={!!isFetchingNextPage}
+              next={fetchNextPage}
+            >
+              {hasNextPage && (
+                <div>
+                  <LoadingIcon className="m-auto h-6 w-6 animate-spin" />
+                </div>
+              )}
+            </InfiniteScroll>
           </div>
         ) : (
           <div className="m-auto flex flex-col items-center justify-center text-xs font-semibold text-white/70">

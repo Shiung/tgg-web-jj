@@ -1,4 +1,11 @@
 {
+  "errorMessage.unknown.error": "Error desconocido",
+  "errorMessage.website.token.not.valid": "El token no es válido",
+  "errorMessage.not.valid.locale": "La configuración regional no es válida",
+  "errorMessage.not.valid.kind": "El tipo no es válido",
+  "errorMessage.under.maintenance": "En mantenimiento",
+  "errorMessage.packet.been.sent.out": "Lo sentimos,\n ¡todas las bolsas han sido enviadas!",
+  "errorMessage.packet.claimer.not.qualified": "Lo sentimos,\n no estás cualificado.",
   "game": "Juego",
   "rank": "Rango",
   "task": "Tarea",

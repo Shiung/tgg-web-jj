@@ -8,6 +8,7 @@ import { formatDate } from 'date-fns'
 import useStore from '~/stores/useStore'
 import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
 import X from '~/icons/x.svg?react'
+import LoadingIcon from '~/icons/loading.svg?react'
 import SvgCopy from '~/icons/copy.svg?react'
 import { Button } from '~/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
@@ -23,6 +24,7 @@ import { Crypto } from '~/consts/crypto'
 import { DetailSkeleton } from './skeleton'
 import TerminateSharingDialog from './terminate-sharing-dialog'
 import NoData from './no-data'
+import InfiniteScroll from '~/components/ui/infinite-scroll'
 
 type Kind = NonNullable<PacketsResponse['list']>[number]['distributeKind']
 
@@ -47,12 +49,10 @@ const LuckyMoneyDetail = () => {
 
   const {
     data: detailInfiniteDataRaw,
-    // fetchNextPage,
-    // hasNextPage,
-    // isFetchingNextPage,
-    // error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
     isLoading,
-    // status,
   } = useInfiniteQuery<PacketResponse>({
     queryKey: ['packetDetail', id],
     queryFn: ({ pageParam = 1 }) =>
@@ -88,7 +88,7 @@ const LuckyMoneyDetail = () => {
   const { share, tDotMeBaseShareUrl } = useShare()
   const shareUrlLink = useMemo(() => {
     if (!detailData.referralCode) return ''
-    return `${tDotMeBaseShareUrl}?startapp=${detailData.referralCode}`
+    return `${tDotMeBaseShareUrl}/?startapp=${detailData.referralCode}`
   }, [detailData.referralCode, tDotMeBaseShareUrl])
 
   const handleShareURL = useCallback(() => {
@@ -106,17 +106,25 @@ const LuckyMoneyDetail = () => {
       endColor: '#000000',
     }
 
-    // 根据 distributeKind 确定目标颜色
-    const targetColors =
-      detailData.distributeKind === 'FIXED'
-        ? {
-            startColor: '#FDCB04',
-            endColor: '#FF4D00',
-          }
-        : {
-            startColor: '#FF90C2',
-            endColor: '#EB0070',
-          }
+    const targetColors = initialColors
+    if (detailData.distributeKind === 'FIXED') {
+      targetColors.startColor = '#FDCB04'
+      targetColors.endColor = '#FF4D00'
+    } else if (detailData.distributeKind === 'RANDOM') {
+      targetColors.startColor = '#FF90C2'
+      targetColors.endColor = '#EB0070'
+    }
+
+    // const targetColors =
+    //   detailData.distributeKind === 'FIXED'
+    //     ? {
+    //         startColor: '#FDCB04',
+    //         endColor: '#FF4D00',
+    //       }
+    //     : {
+    //         startColor: '#FF90C2',
+    //         endColor: '#EB0070',
+    //       }
 
     // 动画变体
     const variants = {
@@ -296,6 +304,17 @@ const LuckyMoneyDetail = () => {
                     </div>
                   </div>
                 ))}
+                <InfiniteScroll
+                  hasMore={!!hasNextPage}
+                  isLoading={!!isFetchingNextPage}
+                  next={fetchNextPage}
+                >
+                  {hasNextPage && (
+                    <div>
+                      <LoadingIcon className="m-auto h-6 w-6 animate-spin" />
+                    </div>
+                  )}
+                </InfiniteScroll>
               </>
             ) : (
               <NoData />

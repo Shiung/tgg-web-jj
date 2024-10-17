@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
 import Lottie from 'lottie-react'
 import { Loader2 } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 import { Dialog, DialogContent } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
@@ -11,16 +12,23 @@ import Amount from '~/components/amount'
 import useStore from '~/stores/useStore'
 import { apis } from '~/api'
 import { Crypto } from '~/consts/crypto'
-
-import luckyBagAnimationData from './lottie/lucky-bag.json'
 import { errorToast } from '~/lib/toast'
 
+import luckyBagAnimationData from './lottie/lucky-bag.json'
+
+const packetDrawErrorCodes = {
+  'packet.been.sent.out': 'errorMessage.packet.been.sent.out', // 紅包已發完
+  'packet.claimer.not.qualified': 'errorMessage.packet.claimer.not.qualified', // 不符合領取資格
+}
+
 const GetLuckyMoneyDialog: React.FC = () => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [status, setStatus] = useState<'initial' | 'animation' | 'result'>('initial')
   const { giverName, isQualified, maxValue, minValue, showPotential } = useStore(
     state => state.packet
   )
+  const [packetDrawFailTitle, setPacketDrawFailTitle] = useState('')
 
   const {
     mutateAsync: packetDraw,
@@ -42,11 +50,20 @@ const GetLuckyMoneyDialog: React.FC = () => {
       console.log('draw occur res', res)
 
       setStatus('animation')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       // 错误处理
       console.error('draw occur error', error)
-      errorToast(error?.message)
-      setStatus('initial')
+      const errorMessage = error?.message
+      if (errorMessage && errorMessage in packetDrawErrorCodes) {
+        setPacketDrawFailTitle(
+          packetDrawErrorCodes[errorMessage as keyof typeof packetDrawErrorCodes]
+        )
+        setStatus('result')
+      } else {
+        errorToast(errorMessage)
+        setStatus('initial')
+      }
     }
   }
 
@@ -64,6 +81,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
   useEffect(() => {
     if (!isOpen) {
       setStatus('initial')
+      setPacketDrawFailTitle('')
     }
   }, [isOpen])
 
@@ -166,12 +184,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
                   </div>
                 </>
               ) : (
-                <>
-                  <div className="text-center">
-                    <p>Sorry,</p>
-                    <p>you are not qualified.</p>
-                  </div>
-                </>
+                <div className="whitespace-pre-line text-center">{t(packetDrawFailTitle)}</div>
               )}
               <div className="relative flex aspect-[375/344] w-full flex-col items-center justify-end">
                 <img

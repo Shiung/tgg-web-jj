@@ -1,4 +1,11 @@
 {
+  "errorMessage.unknown.error": "Erreur inconnue",
+  "errorMessage.website.token.not.valid": "Le jeton n'est pas valide",
+  "errorMessage.not.valid.locale": "La langue locale n'est pas valide",
+  "errorMessage.not.valid.kind": "Le type n'est pas valide",
+  "errorMessage.under.maintenance": "Sous maintenance",
+  "errorMessage.packet.been.sent.out": "Désolé,\n tous les sacs ont été envoyés !",
+  "errorMessage.packet.claimer.not.qualified": "Désolé,\n vous n'êtes pas qualifié.",
   "game": "Jeu",
   "rank": "Rang",
   "task": "Tâche",
