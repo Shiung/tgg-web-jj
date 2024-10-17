@@ -1,10 +1,20 @@
+import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
+
 // 後端定義任務類型
 export type TaskType = 'dailyList' | 'specialList' | 'oneTimeList'
 // 前端顯示任務類型對應表
-export const TaskTypeDisplayMap: Record<TaskType, string> = {
-  dailyList: 'Daily',
-  specialList: 'Special',
-  oneTimeList: 'Single',
+export const useTaskTypeDisplayMap = () => {
+  const { t } = useTranslation()
+
+  return useMemo(
+    () => ({
+      dailyList: t('daily'),
+      specialList: t('special'),
+      oneTimeList: t('single'),
+    }),
+    [t]
+  )
 }
 
 // 獎勵類型
