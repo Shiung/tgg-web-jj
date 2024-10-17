@@ -169,7 +169,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   }, [task])
 
   // 任務領取
-  const { mutateAsync: claimRewardAsync } = useMutation({
+  const { mutateAsync: claimRewardAsync, isPending } = useMutation({
     mutationFn: (id: string) => apis.task.taskClaimRewardIdCreate(id),
     onSuccess: () => {
       setBtnStatus('CLAIMED')
@@ -258,6 +258,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
                 )
               }
               disabled={buttonState.disabled}
+              loading={isPending}
             >
               {buttonState.text}
             </Button>
