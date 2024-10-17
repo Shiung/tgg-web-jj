@@ -50,5 +50,8 @@
   "smash": "스매시",
   "giveupEgg": "이 달걀 포기하기",
   "claim": "클레임",
-  "eggClaimMsg": "<금액1></금액1> USDT를 얻었습니다!"
+  "eggClaimMsg": "<금액1></금액1> USDT를 얻었습니다!",
+  "CurrencyConversion": "통화 변환",
+  "CurrencyConversion.Description": "코콘 코인은 게임을 위해 USDT로 전환됩니다.",
+  "OK": "확인"
 }

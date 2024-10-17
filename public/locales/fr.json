@@ -50,5 +50,8 @@
   "smash": "Smash",
   "giveupEgg": "Renoncer à cet œuf",
   "claim": "Réclamation",
-  "eggClaimMsg": "VOUS GAGNEZ <mount1></amount1> USDT !"
+  "eggClaimMsg": "VOUS GAGNEZ <mount1></amount1> USDT !",
+  "CurrencyConversion": "Conversion des devises",
+  "CurrencyConversion.Description": "Vos pièces KOKON seront converties en USDT pour le jeu.",
+  "OK": "OK"
 }

@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import type { MetaFunction } from '@remix-run/node'
-import { Link } from '@remix-run/react'
+import { Link, useNavigate } from '@remix-run/react'
 import Autoplay from 'embla-carousel-autoplay'
 // import { Button } from '~/components/ui/button'
 import {
@@ -12,13 +13,14 @@ import {
 } from '~/components/ui/carousel'
 import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
 import ProtectedLink from '~/components/protected-link'
-import { GameCode, getGameRoute } from '~/consts/game'
+import { GameCode, getGameRoute, VenueType } from '~/consts/game'
 import useStore from '~/stores/useStore'
 import { buildResourceImageUrl } from '~/lib/utils'
 
 import GameImg from './game-img'
 import { GameEntranceSkeleton, NewReleaseCarouselContentSkeleton } from './skeleton'
 import Footer from './footer'
+import CurrencyConversionDialog from './currency-conversion-dialog'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'KOKON' }, { name: 'description', content: 'Welcome to KOKON!' }]
@@ -46,6 +48,19 @@ export default function Index() {
   const maxWidth = useStore(state => state.maxWidth)
   const activeGameList = useStore(state => state.activeGameList)
   const isActiveGameListFetching = useStore(state => state.isActiveGameListFetching)
+  const navigate = useNavigate()
+
+  // Crypto類型遊戲 先顯示貨幣轉換對話框
+  const [isCurrencyConversionDialogOpen, setIsCurrencyConversionDialogOpen] = useState(false)
+  const [cryptoPageLink, setCryptoPageLink] = useState<string | null>(null)
+  const handleGameClick = (code: GameCode, gameType: VenueType) => {
+    if (gameType === VenueType.Crypto) {
+      setIsCurrencyConversionDialogOpen(true)
+      setCryptoPageLink(getGameRoute(code, gameType))
+    } else {
+      navigate(getGameRoute(code, gameType))
+    }
+  }
 
   return (
     <div className="container px-0">
@@ -99,6 +114,9 @@ export default function Index() {
                 <ProtectedLink
                   key={`game-${code}`}
                   prefetch="viewport"
+                  onClick={() => {
+                    handleGameClick(code, currentGameInfo.gameType)
+                  }}
                   to={getGameRoute(code, currentGameInfo.gameType)}
                   className="relative flex-1 overflow-hidden rounded-2xl"
                 >
@@ -169,7 +187,10 @@ export default function Index() {
                   <ProtectedLink
                     className="relative pr-2"
                     prefetch="viewport"
-                    to={getGameRoute(game.gameCode, game.gameType)}
+                    onClick={() => {
+                      handleGameClick(game.gameCode as GameCode, game.gameType)
+                    }}
+                    to={getGameRoute(game.gameCode as GameCode, game.gameType)}
                   >
                     <span className="absolute inset-x-0 top-2 z-10 mx-auto min-h-8 pl-2 pr-4 text-center text-sm font-ultra">
                       {game.gameName}
@@ -199,6 +220,14 @@ export default function Index() {
       >
         <SvgEnterByFloating imgUrl="/images/lucky-money/lucky-money.png" />
       </Link>
+
+      <CurrencyConversionDialog
+        isOpen={isCurrencyConversionDialogOpen}
+        cryptoPageLink={cryptoPageLink}
+        onClose={() => {
+          setIsCurrencyConversionDialogOpen(false)
+        }}
+      />
     </div>
   )
 }
