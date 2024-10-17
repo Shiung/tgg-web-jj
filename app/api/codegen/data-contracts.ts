@@ -371,10 +371,7 @@ export interface DepositSettingGetResponse {
   }[];
 }
 
-export interface DrawRequest {
-  /** 紅包推介碼 */
-  referralCode?: string;
-}
+export type DrawRequest = object;
 
 export interface DrawResponse {
   /** 中獎金額 */
@@ -875,6 +872,19 @@ export interface InfoResponse {
   email?: string;
   /** 語系 */
   language?: string;
+  /** 推薦碼開獎資訊 */
+  packet?: {
+    /** 紅包發送人名稱 */
+    giverName?: string;
+    /** 為true時需開獎 */
+    isQualified?: boolean;
+    /** potential gain (max) */
+    maxValue?: string;
+    /** potential gain (min) */
+    minValue?: string;
+    /** 需顯示potential gain */
+    showPotential?: boolean;
+  };
   /** 資金密碼 */
   pin?: string;
   /**
@@ -1008,19 +1018,6 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  /** 推薦碼開獎資訊 */
-  packet?: {
-    /** 紅包發送人名稱 */
-    giverName?: string;
-    /** 為true時需開獎 */
-    isQualified?: boolean;
-    /** potential gain (max) */
-    maxValue?: string;
-    /** potential gain (min) */
-    minValue?: string;
-    /** 需顯示potential gain */
-    showPotential?: boolean;
-  };
   /** 登入token */
   token?: string;
 }
@@ -2210,8 +2207,8 @@ export interface CustomerShareCreatePayload {
 }
 
 export interface CustomerTeamPerformanceListParams {
-  /** 排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序 (Allowed values: level bet deposit) */
-  sortField?: "level bet deposit";
+  /** 排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序 (Allowed values: level, bet, deposit) */
+  sortField?: "level" | "bet" | "deposit";
   /** 排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc) */
   sortOrder?: "desc" | "asc";
   /** 團員名稱 */
@@ -2228,7 +2225,7 @@ export interface CustomerTeamPerformanceListParams {
    */
   page: number;
   /**
-   * 分頁筆數 (Required, Minimum: 20)
+   * 分頁筆數 (Minimum: 20, Required)
    * @format int64
    * @min 20
    */
@@ -2340,11 +2337,6 @@ export interface PacketCreatePayload {
   quota?: string;
 }
 
-export interface PacketDrawCreatePayload {
-  /** 紅包推介碼 */
-  referralCode?: string;
-}
-
 export interface PacketDetailParams {
   /**
    * 頁碼 (Required, Minimum: 1)
@@ -2363,8 +2355,8 @@ export interface PacketDetailParams {
 }
 
 export interface PacketsListParams {
-  /** 查詢狀態 1:進行中 2:已終止 3:已完成 (Allowed values: 1 2 3) */
-  states?: "1 2 3";
+  /** 查詢狀態 1:進行中 2:已終止 3:已完成 (Allowed values: 1, 2, 3) */
+  states?: "1" | "2" | "3";
   /**
    * 頁碼 (Required, Minimum: 1)
    * @format int64
@@ -2403,7 +2395,7 @@ export interface TeamCommissionListListParams {
    */
   endTime: string;
   /**
-   * 分頁頁數 (Minimum: 1, Required)
+   * 分頁頁數 (Required, Minimum: 1)
    * @format int64
    * @min 1
    */
@@ -2427,12 +2419,25 @@ export interface WalletHistoryListListParams {
    * @format date-time
    */
   transactionTimeTo?: string;
-  /** 幣種 TON USDT KOKON (Allowed values: TON USDT KOKON) */
-  currency?: "TON USDT KOKON";
-  /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw (Allowed values: Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw) */
-  type?: "Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw";
-  /** 收支 Income Expense (Allowed values: Income Expense) */
-  balance?: "Income Expense";
+  /** 幣種 TON USDT KOKON (Allowed values: TON, USDT, KOKON) */
+  currency?: "TON" | "USDT" | "KOKON";
+  /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw (Allowed values: Adjustment, Bet, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw) */
+  type?:
+    | "Adjustment"
+    | "Bet"
+    | "Commission"
+    | "Deposit"
+    | "Game"
+    | "LuckyMoney"
+    | "Rank"
+    | "SmashEgg"
+    | "Swap(buy)"
+    | "Swap(sell)"
+    | "Task"
+    | "Treasure"
+    | "Withdraw";
+  /** 收支 Income Expense (Allowed values: Income, Expense) */
+  balance?: "Income" | "Expense";
   /**
    * 頁碼 (Required, Minimum: 1)
    * @format int64

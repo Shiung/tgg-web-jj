@@ -30,6 +30,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
 
   // 有可領取的寶箱動畫
   const controls = useAnimationControls()
+
   useEffect(() => {
     if (categorizedTreasures.unlocking.length > 0) {
       const animate = async () => {
@@ -86,7 +87,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger>
         <div className="relative flex items-center">
-          <button onClick={handleToggle} className="focus-visible:outline-none">
+          <button onClick={handleToggle}>
             <motion.div animate={controls}>
               <img
                 src="/images/header/treasure.png"
@@ -102,7 +103,11 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
           )}
         </div>
       </PopoverTrigger>
-      <PopoverContent className="primary-gradient-border-rounded flex max-h-[378px] w-screen max-w-md flex-col p-4">
+      <PopoverContent
+        className="primary-gradient-border-rounded flex max-h-[378px] w-screen max-w-md flex-col p-4"
+        onOpenAutoFocus={e => e.preventDefault()}
+        onCloseAutoFocus={e => e.preventDefault()}
+      >
         {categorizedTreasures.unlocking.length === 0 ? (
           <Empty />
         ) : (

@@ -9,8 +9,7 @@
  * ---------------------------------------------------------------
  */
 
-import { PacketDrawCreatePayload } from "./data-contracts";
-import { ContentType, HttpClient, RequestParams } from "./http-client";
+import { HttpClient, RequestParams } from "./http-client";
 
 export class PacketDraw<SecurityDataType = unknown> {
   http: HttpClient<SecurityDataType>;
@@ -26,7 +25,7 @@ export class PacketDraw<SecurityDataType = unknown> {
    * @name PacketDrawCreate
    * @request POST:/ajax/packet-draw
    */
-  packetDrawCreate = (body: PacketDrawCreatePayload, params: RequestParams = {}) =>
+  packetDrawCreate = (body: object, params: RequestParams = {}) =>
     this.http.request<
       {
         /** 中獎金額 */
@@ -39,7 +38,6 @@ export class PacketDraw<SecurityDataType = unknown> {
       path: `/ajax/packet-draw`,
       method: "POST",
       body: body,
-      type: ContentType.Json,
       ...params,
     });
 }

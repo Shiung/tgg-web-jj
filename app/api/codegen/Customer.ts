@@ -90,6 +90,19 @@ export class Customer<SecurityDataType = unknown> {
         email?: string;
         /** 語系 */
         language?: string;
+        /** 推薦碼開獎資訊 */
+        packet?: {
+          /** 紅包發送人名稱 */
+          giverName?: string;
+          /** 為true時需開獎 */
+          isQualified?: boolean;
+          /** potential gain (max) */
+          maxValue?: string;
+          /** potential gain (min) */
+          minValue?: string;
+          /** 需顯示potential gain */
+          showPotential?: boolean;
+        };
         /** 資金密碼 */
         pin?: string;
         /**
@@ -136,19 +149,6 @@ export class Customer<SecurityDataType = unknown> {
   customerLoginCreate = (body: CustomerLoginCreatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
-        /** 推薦碼開獎資訊 */
-        packet?: {
-          /** 紅包發送人名稱 */
-          giverName?: string;
-          /** 為true時需開獎 */
-          isQualified?: boolean;
-          /** potential gain (max) */
-          maxValue?: string;
-          /** potential gain (min) */
-          minValue?: string;
-          /** 需顯示potential gain */
-          showPotential?: boolean;
-        };
         /** 登入token */
         token?: string;
       },

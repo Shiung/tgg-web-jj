@@ -8,6 +8,7 @@ import ParticleBackground from '~/components/particle-background'
 import AppLoading from '~/components/app-loading'
 import NeedLoginDialog from '~/components/need-login-dialog'
 import DevTool from '~/components/dev-tool/index'
+import GetLuckyMoneyDialog from '~/components/get-lucky-money-dialog'
 import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 import { useSafePaddingClass } from '~/hooks/useSafePaddingClass'
 import useRouteGuard from '~/hooks/useRouteGuard'
@@ -62,8 +63,11 @@ export default function App() {
           <Outlet />
         </main>
         <MainNav />
+        {/* 需要登入彈窗 */}
         <NeedLoginDialog />
-        {/* 開發使用工具欄 */}
+        {/* 紅包 */}
+        <GetLuckyMoneyDialog />
+        {/* 開發使用工具 */}
         <DevTool />
       </AppRoot>
       <ParticleBackground />

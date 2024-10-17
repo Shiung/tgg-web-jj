@@ -867,6 +867,32 @@
                   "description": "語系",
                   "type": "string"
                 },
+                "packet": {
+                  "description": "推薦碼開獎資訊",
+                  "type": "object",
+                  "properties": {
+                    "giverName": {
+                      "description": "紅包發送人名稱",
+                      "type": "string"
+                    },
+                    "isQualified": {
+                      "description": "為true時需開獎",
+                      "type": "boolean"
+                    },
+                    "maxValue": {
+                      "description": "potential gain (max)",
+                      "type": "string"
+                    },
+                    "minValue": {
+                      "description": "potential gain (min)",
+                      "type": "string"
+                    },
+                    "showPotential": {
+                      "description": "需顯示potential gain",
+                      "type": "boolean"
+                    }
+                  }
+                },
                 "pin": {
                   "description": "資金密碼",
                   "type": "string"
@@ -1009,32 +1035,6 @@
             "schema": {
               "type": "object",
               "properties": {
-                "packet": {
-                  "description": "推薦碼開獎資訊",
-                  "type": "object",
-                  "properties": {
-                    "giverName": {
-                      "description": "紅包發送人名稱",
-                      "type": "string"
-                    },
-                    "isQualified": {
-                      "description": "為true時需開獎",
-                      "type": "boolean"
-                    },
-                    "maxValue": {
-                      "description": "potential gain (max)",
-                      "type": "string"
-                    },
-                    "minValue": {
-                      "description": "potential gain (min)",
-                      "type": "string"
-                    },
-                    "showPotential": {
-                      "description": "需顯示potential gain",
-                      "type": "boolean"
-                    }
-                  }
-                },
                 "token": {
                   "description": "登入token",
                   "type": "string"
@@ -1154,10 +1154,12 @@
         "parameters": [
           {
             "enum": [
-              "level bet deposit"
+              "level",
+              "bet",
+              "deposit"
             ],
             "type": "string",
-            "description": "排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序 (Allowed values: level bet deposit)",
+            "description": "排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序 (Allowed values: level, bet, deposit)",
             "name": "sortField",
             "in": "query"
           },
@@ -1197,7 +1199,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -2211,13 +2213,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {
-                "referralCode": {
-                  "description": "紅包推介碼",
-                  "type": "string"
-                }
-              }
+              "type": "object"
             }
           }
         ],
@@ -2464,13 +2460,15 @@
         "parameters": [
           {
             "enum": [
-              "1 2 3"
+              "1",
+              "2",
+              "3"
             ],
             "type": "array",
             "items": {
               "type": "integer"
             },
-            "description": "查詢狀態 1:進行中 2:已終止 3:已完成 (Allowed values: 1 2 3)",
+            "description": "查詢狀態 1:進行中 2:已終止 3:已完成 (Allowed values: 1, 2, 3)",
             "name": "states",
             "in": "query"
           },
@@ -5320,7 +5318,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Minimum: 1, Required)",
+            "description": "分頁頁數 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5635,28 +5633,43 @@
           },
           {
             "enum": [
-              "TON USDT KOKON"
+              "TON",
+              "USDT",
+              "KOKON"
             ],
             "type": "string",
-            "description": "幣種 TON USDT KOKON (Allowed values: TON USDT KOKON)",
+            "description": "幣種 TON USDT KOKON (Allowed values: TON, USDT, KOKON)",
             "name": "currency",
             "in": "query"
           },
           {
             "enum": [
-              "Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw"
+              "Adjustment",
+              "Bet",
+              "Commission",
+              "Deposit",
+              "Game",
+              "LuckyMoney",
+              "Rank",
+              "SmashEgg",
+              "Swap(buy)",
+              "Swap(sell)",
+              "Task",
+              "Treasure",
+              "Withdraw"
             ],
             "type": "string",
-            "description": "交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw (Allowed values: Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw)",
+            "description": "交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw (Allowed values: Adjustment, Bet, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw)",
             "name": "type",
             "in": "query"
           },
           {
             "enum": [
-              "Income Expense"
+              "Income",
+              "Expense"
             ],
             "type": "string",
-            "description": "收支 Income Expense (Allowed values: Income Expense)",
+            "description": "收支 Income Expense (Allowed values: Income, Expense)",
             "name": "balance",
             "in": "query"
           },
@@ -6836,13 +6849,7 @@
       }
     },
     "DrawRequest": {
-      "type": "object",
-      "properties": {
-        "referralCode": {
-          "description": "紅包推介碼",
-          "type": "string"
-        }
-      }
+      "type": "object"
     },
     "DrawResponse": {
       "type": "object",
@@ -7724,6 +7731,32 @@
           "description": "語系",
           "type": "string"
         },
+        "packet": {
+          "description": "推薦碼開獎資訊",
+          "type": "object",
+          "properties": {
+            "giverName": {
+              "description": "紅包發送人名稱",
+              "type": "string"
+            },
+            "isQualified": {
+              "description": "為true時需開獎",
+              "type": "boolean"
+            },
+            "maxValue": {
+              "description": "potential gain (max)",
+              "type": "string"
+            },
+            "minValue": {
+              "description": "potential gain (min)",
+              "type": "string"
+            },
+            "showPotential": {
+              "description": "需顯示potential gain",
+              "type": "boolean"
+            }
+          }
+        },
         "pin": {
           "description": "資金密碼",
           "type": "string"
@@ -7956,32 +7989,6 @@
     "LoginResponse": {
       "type": "object",
       "properties": {
-        "packet": {
-          "description": "推薦碼開獎資訊",
-          "type": "object",
-          "properties": {
-            "giverName": {
-              "description": "紅包發送人名稱",
-              "type": "string"
-            },
-            "isQualified": {
-              "description": "為true時需開獎",
-              "type": "boolean"
-            },
-            "maxValue": {
-              "description": "potential gain (max)",
-              "type": "string"
-            },
-            "minValue": {
-              "description": "potential gain (min)",
-              "type": "string"
-            },
-            "showPotential": {
-              "description": "需顯示potential gain",
-              "type": "boolean"
-            }
-          }
-        },
         "token": {
           "description": "登入token",
           "type": "string"
