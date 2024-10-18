@@ -99,7 +99,7 @@ const Commission: React.FC = () => {
     defaultValues: {
       displayName: '',
       level: '0',
-      dateTimeRange: { from: new Date(), to: new Date() },
+      dateTimeRange: { from: startOfDay(new Date()), to: endOfDay(new Date()) },
       page: 1,
       pageSize: 20,
     },
