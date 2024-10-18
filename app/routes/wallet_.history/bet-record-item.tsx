@@ -7,8 +7,8 @@ import Amount from '~/components/amount'
 import CopyIcon from '~/icons/copy.svg?react'
 import { Crypto } from '~/consts/crypto'
 import { successToast } from '~/lib/toast'
-
 import { GameTransaction } from './bet-record'
+import { useTranslation } from 'react-i18next'
 
 export default function BetRecordItem({
   record,
@@ -18,7 +18,7 @@ export default function BetRecordItem({
   currency: Crypto
 }): JSX.Element {
   const [state, copyToClipboard] = useCopyToClipboard()
-
+  const { t } = useTranslation()
   useEffect(() => {
     if (!state.value) return
     successToast('Copied')
@@ -32,7 +32,7 @@ export default function BetRecordItem({
       <div className="flex flex-col space-y-2 px-3 py-2">
         <div className="relative flex flex-col space-y-1 pb-2 before:absolute before:bottom-0 before:left-0 before:right-0 before:h-[0.5px] before:bg-white/20 before:content-['']">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-white/70">Bet Amount</span>
+            <span className="text-xs text-white/70">{t('betAmount')}</span>
             <div className="flex space-x-1">
               <span className="text-xs text-white">
                 {currency === Crypto.USDT ? (
@@ -49,7 +49,7 @@ export default function BetRecordItem({
             </div>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-xs text-white/70">Win/Lose</span>
+            <span className="text-xs text-white/70">{t('winLoss')}</span>
             <div className="flex space-x-1">
               <span
                 className={`text-sm font-ultra ${
