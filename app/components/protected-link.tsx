@@ -23,21 +23,21 @@ export default function ProtectedLink({
     else if (onClick) onClick(e) // 如果有 onClick 回调，则执行
   }
 
+  if (isLoggedIn && to && !onClick)
+    // 如果已登录且没有 onClick 回调，则直接使用 to 跳转
+    return (
+      <Link to={to} className={className} {...rest}>
+        {children}
+      </Link>
+    )
   return (
     <>
       {/* 預載路由資源 */}
       {isLoggedIn && <PrefetchPageLinks page={to as string} />}
-      {/* 如果已登录且没有 onClick 回调，则直接使用 to 跳转 */}
-      {isLoggedIn && to && !onClick ? (
-        <Link to={to} className={className} {...rest}>
-          {children}
-        </Link>
-      ) : (
-        // eslint-disable-next-line jsx-a11y/anchor-is-valid
-        <a href="#" className={className} onClick={handleClick}>
-          {children}
-        </a>
-      )}
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+      <a href="#" className={className} onClick={handleClick}>
+        {children}
+      </a>
     </>
   )
 }

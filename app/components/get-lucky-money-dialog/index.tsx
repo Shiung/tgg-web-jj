@@ -54,14 +54,13 @@ const GetLuckyMoneyDialog: React.FC = () => {
     } catch (error: any) {
       // 错误处理
       console.error('draw occur error', error)
-      const errorMessage = error?.message
-      if (errorMessage && errorMessage in packetDrawErrorCodes) {
+      if (error?.errorCode in packetDrawErrorCodes) {
         setPacketDrawFailTitle(
-          packetDrawErrorCodes[errorMessage as keyof typeof packetDrawErrorCodes]
+          packetDrawErrorCodes[error.errorCode as keyof typeof packetDrawErrorCodes]
         )
         setStatus('result')
       } else {
-        errorToast(errorMessage)
+        error?.message && errorToast(error.message)
         setStatus('initial')
       }
     }

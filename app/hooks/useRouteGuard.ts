@@ -1,12 +1,15 @@
 import { useEffect } from 'react'
 import { useLocation, useNavigate, useMatches, useSearchParams } from '@remix-run/react'
 import useStore from '~/stores/useStore'
+import { useMaintenanceGuard } from './useMaintenanceGuard'
 
 interface RouteHandle {
   requiresAuth?: boolean
 }
 
 export default function useRouteGuard() {
+  // maintenance guard
+  useMaintenanceGuard()
   const matches = useMatches()
   const isLoggedIn = useStore(state => state.isLoggedIn)
   const inTelegram = useStore(state => state.inTelegram)

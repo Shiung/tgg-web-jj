@@ -45,6 +45,7 @@ const AnimatedCounter = ({
   // 數字動畫處理
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true })
+
   useIsomorphicLayoutEffect(() => {
     const element = ref.current
     if (!element) return

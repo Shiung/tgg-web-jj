@@ -6,29 +6,23 @@ import {
   useSwipeBehavior,
 } from '@telegram-apps/sdk-react'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 import useStore from '~/stores/useStore'
 import { useTelegramMock } from '~/hooks/useTelegramMock'
 import useTelegramNavigate from '~/hooks/useTelegramNavigate'
 import { useTelegramMiniAppAutoLogin } from '~/hooks/useTelegramLogin'
 import { useGetActiveGameListToStore } from '~/hooks/api/useGame'
-import { usePingPolling } from '~/hooks/api/usePolling'
+import { useMaintenancePolling, usePingPolling } from '~/hooks/api/usePolling'
 import { useGetTelegramConfigToStore } from '~/hooks/api/useConfig'
 import { cn, mapSystemLanguageCode } from '~/lib/utils'
 
 import { TonClientProvider } from './ton-client-context'
+import queryClient from './queryClient'
 
 import classes from './index.module.scss'
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 3,
-    },
-  },
-})
 
 const TelegramInit: React.FC = () => {
   useTelegramNavigate()
@@ -72,6 +66,8 @@ const AppInit = () => {
   useGetActiveGameListToStore()
   // polling
   usePingPolling()
+  useMaintenancePolling()
+
   return null
 }
 
