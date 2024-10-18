@@ -16,14 +16,20 @@ interface CommissionItem {
 
 interface CommissionTableListProps {
   data: CommissionItem[]
-  summary?: {
-    totalBet: string
-    totalCommission: string
-    totalCount: number
-  } | null
 }
 
-const CommissionTableList: React.FC<CommissionTableListProps> = ({ data, summary }) => {
+const SendStatusIcon = ({ sendStatus }: { sendStatus?: number }) => {
+  switch (sendStatus) {
+    case 1:
+      return <WaitingIcon className="ml-1 h-3 w-3" />
+    case 3:
+      return <CheckIcon className="ml-1 h-3 w-3" />
+    default:
+      return null
+  }
+}
+
+const CommissionTableList: React.FC<CommissionTableListProps> = ({ data }) => {
   const groupedData = useMemo(() => {
     const groups: { [key: string]: CommissionItem[] } = {}
     data.forEach(item => {
@@ -40,17 +46,6 @@ const CommissionTableList: React.FC<CommissionTableListProps> = ({ data, summary
 
   const truncateName = (name: string, maxLength: number = 9) => {
     return name.length > maxLength ? name.slice(0, maxLength) + '...' : name
-  }
-
-  const getStatusIcon = (sendStatus: number) => {
-    switch (sendStatus) {
-      case 1:
-        return <CheckIcon className="ml-1 h-3 w-3 text-green-500" />
-      case 0:
-        return <WaitingIcon className="ml-1 h-3 w-3 text-yellow-500" />
-      default:
-        return <CheckIcon className="ml-1 h-3 w-3 text-red-500" />
-    }
   }
 
   return (
@@ -97,7 +92,9 @@ const CommissionTableList: React.FC<CommissionTableListProps> = ({ data, summary
                     <td className="text-right">
                       <Amount value={row.commissionAmount} crypto="KOKON" />
                     </td>
-                    <td className="flex justify-end text-right">{getStatusIcon(row.sendStatus)}</td>
+                    <td className="text-right align-middle">
+                      <SendStatusIcon sendStatus={row.sendStatus} />
+                    </td>
                   </tr>
                 ))}
               </tbody>

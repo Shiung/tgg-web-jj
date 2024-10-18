@@ -40,7 +40,7 @@ const generateCommissionItem = (): CommissionItem => {
     displayName: `用戶${Math.floor(Math.random() * 1000)}`,
     level: Math.floor(Math.random() * 4) + 1,
     memberId: Math.floor(Math.random() * 10000) + 1000,
-    sendStatus: Math.floor(Math.random() * 2),
+    sendStatus: Math.random() < 0.5 ? 1 : 3,
   }
 }
 
