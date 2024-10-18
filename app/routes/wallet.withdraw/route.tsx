@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { NumericFormat } from 'react-number-format'
 
 import { parseAmount } from '~/lib/amount'
-import { successToast } from '~/lib/toast'
+import { successToast, errorToast } from '~/lib/toast'
 import { apis } from '~/api/index'
 import type { WithdrawRequest, WithdrawSettingGetResponse } from '~/api/codegen/data-contracts'
 import { ValidCode } from '~/components/verify-button/constants'
@@ -19,7 +19,6 @@ import { Label } from '~/components/ui/label'
 import InfoTooltip from '~/components/info-tooltip'
 import VerifyButton, { type VerifyButtonExpose } from '~/components/verify-button'
 import { cryptoDetails, isValidCrypto, cryptoRules } from '~/consts/crypto'
-import { useToast } from '~/hooks/use-toast'
 
 import WithdrawSuccessDialog from './withdraw-success-dialog'
 import WithdrawDeniedDialog from './withdraw-denied-dialog'
@@ -224,16 +223,11 @@ export default function Withdraw() {
   const vbRef = useRef<VerifyButtonExpose>(null)
 
   // 送出表單流程 先檢查驗證碼正確 在送出提款請求
-  const { toast } = useToast()
-
   const verifycodeCheck = useMutation({
     mutationFn: (code: string) => apis.customer.customerVerifycodeCreate({ code }),
     // TODO: spec 錯誤訊息 確認是哪一邊要維護 還有 i18n
-    onError: () => {
-      toast({
-        title: 'Code is incorrect',
-        variant: 'error',
-      })
+    onError: (error: { response: { data: { message: string } } }) => {
+      errorToast(error?.response?.data?.message ?? 'Verification code is incorrect')
     },
   })
 
@@ -243,10 +237,7 @@ export default function Withdraw() {
       setIsSuccessDialogOpen(true)
     },
     onError: error => {
-      toast({
-        title: error?.response?.data.message || error.message,
-        variant: 'error',
-      })
+      errorToast(error?.response?.data.message || error.message)
     },
   })
   const [isSuccessDialogOpen, setIsSuccessDialogOpen] = useState(false)
