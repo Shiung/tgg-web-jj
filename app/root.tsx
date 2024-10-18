@@ -46,29 +46,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function ErrorBoundary() {
-  const error = useRouteError()
-  console.error(error)
-  return (
-    <html lang="en">
-      <head>
-        <title>Oh no!</title>
-        <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
-        />
-        <Meta />
-        <Links />
-      </head>
-      <body className="dark bg-background font-sans antialiased">
-        Somethings went wrong !
-        <Scripts />
-      </body>
-    </html>
-  )
-}
-
 export default function App() {
   // route guard
   useRouteGuard()
