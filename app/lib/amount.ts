@@ -19,7 +19,7 @@ export function thousandSeparator(numStr: string): string {
 export function formatKM(num: number) {
   const map = [
     { suffix: 'M', threshold: 1e6, precision: 2 },
-    { suffix: 'K', threshold: 1e3, precision: 2 },
+    { suffix: 'K', threshold: 1e4, precision: 2 },
     { suffix: '', threshold: 1, precision: 0 },
   ]
 
