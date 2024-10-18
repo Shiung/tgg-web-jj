@@ -83,7 +83,7 @@ const LuckyMoneyItem: React.FC<LuckyMoneyItemProps> = ({
                 className="ml-1"
               />
             </div>
-            {state === 0 && (
+            {state === 1 && (
               <div className="text-xs font-normal text-white/70">
                 <Amount crypto={Crypto.KOKON} value={remainingAmount} useKM /> remaining
               </div>

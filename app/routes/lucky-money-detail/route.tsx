@@ -234,22 +234,42 @@ const LuckyMoneyDetail = () => {
             <p className="text-xs font-normal text-white/70">Each bag amount</p>
             <div className="ml-2 flex items-center justify-center space-x-1">
               <KokonIcon className="h-4 w-4" />
-              <Amount
-                className="font-bold"
-                crypto={Crypto.KOKON}
-                value={detailData.eachBagAmount}
-              />
+              {detailData.distributeKind === 'FIXED' ? (
+                <Amount
+                  className="font-ultra"
+                  crypto={Crypto.KOKON}
+                  value={detailData.eachBagAmount}
+                />
+              ) : (
+                <>
+                  <Amount
+                    className="font-ultra"
+                    crypto={Crypto.KOKON}
+                    value={detailData.minBagAmount}
+                  />
+                  <span> ~ </span>
+                  <Amount
+                    className="font-ultra"
+                    crypto={Crypto.KOKON}
+                    value={detailData.maxBagAmount}
+                  />
+                </>
+              )}
             </div>
           </div>
           <div className="flex items-center justify-center text-xs font-normal">
-            <div className="text-white/30">Quantity</div>
+            <div className="text-white/70">Quantity</div>
             <span className="ml-2 flex items-center justify-center space-x-1">
               <span className="font-ultra">{detailData.distributedQuantity}</span>
-              <span>/</span>
-              <span>
-                {parseAmount(detailData.distributedQuantity) +
-                  parseAmount(detailData.remainingQuantity)}
-              </span>
+              {detailData.distributeKind === 'FIXED' && (
+                <>
+                  <span>/</span>
+                  <span>
+                    {parseAmount(detailData.distributedQuantity) +
+                      parseAmount(detailData.remainingQuantity)}
+                  </span>
+                </>
+              )}
             </span>
           </div>
         </div>
