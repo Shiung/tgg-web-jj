@@ -45,7 +45,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
 
   const handleMaxValueBlur = () => {
     if (formMaxValue < formMinValue) {
-      setValue('maxValue', formMinValue, { shouldValidate: true })
+      setValue('maxValue', formMinValue + 1, { shouldValidate: true })
     }
   }
 

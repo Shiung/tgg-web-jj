@@ -117,6 +117,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
           control={control}
           rules={{
             required: true,
+            min: 1,
           }}
           render={({ field }) => {
             const { ref, onChange, ...restField } = field
@@ -129,6 +130,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 type="text"
                 inputMode="decimal"
                 pattern="[0-9]*"
+                decimalScale={0}
                 id="quantity"
                 label="Quantity"
                 onValueChange={({ floatValue }) => {
@@ -139,6 +141,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                   onChange(floatValue)
                 }}
                 className="h-9 flex-1"
+                fieldSuffix="Bags"
               />
             )
           }}
