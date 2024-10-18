@@ -11,6 +11,8 @@ import { useQuery } from '@tanstack/react-query'
 import { apis } from '~/api'
 import type { RankConfigResponse, BCRankInfoResponse } from '~/api/codegen/data-contracts'
 
+import { useTranslation } from 'react-i18next'
+
 type TabOption = {
   value: 'DAILY' | 'WEEKLY' | 'MONTHLY'
   key: keyof RankConfigResponse
@@ -21,19 +23,19 @@ type TabOption = {
 const TabLsConf: Array<TabOption> = [
   {
     value: 'DAILY',
-    name: 'Daily',
+    name: 'rank.subNav.daily',
     key: 'bcRankDailyEntrance',
     rewardKey: 'bcRankDailyReward',
   },
   {
     value: 'WEEKLY',
-    name: 'Weekly',
+    name: 'rank.subNav.weekly',
     key: 'bcRankWeeklyEntrance',
     rewardKey: 'bcRankWeeklyReward',
   },
   {
     value: 'MONTHLY',
-    name: 'Monthly',
+    name: 'rank.subNav.monthly',
     key: 'bcRankMonthlyEntrance',
     rewardKey: 'bcRankMonthlyReward',
   },
@@ -43,6 +45,7 @@ export default function Crypto() {
   const [currentTab, setCurrentTab] = useState<TabOption>(TabLsConf[0])
   const [init, setInit] = useState<boolean>(false)
   const { state } = useRankContext()
+  const { t } = useTranslation()
 
   const tabLs = useMemo(() => {
     return TabLsConf.filter(({ key }) => state.rankConfigList?.[key] ?? false)
@@ -82,16 +85,16 @@ export default function Crypto() {
         className="-mt-4 flex w-full flex-1 flex-col"
       >
         <TabsList variant="cardTab" className="relative w-full overflow-x-auto">
-          {tabLs.map(t => {
+          {tabLs.map(l => {
             return (
               <TabsTrigger
-                key={t.value}
+                key={l.value}
                 variant="cardTab"
-                value={t.value}
+                value={l.value}
                 className="flex-1"
                 asChild
               >
-                <button onClick={setCurrentTab.bind(null, t)}>{t.name}</button>
+                <button onClick={setCurrentTab.bind(null, l)}>{t(l.name)}</button>
               </TabsTrigger>
             )
           })}

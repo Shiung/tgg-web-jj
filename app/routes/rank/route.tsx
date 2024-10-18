@@ -5,21 +5,23 @@ import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import { useRankProvider } from './provider'
 import SkeletonBox from './components/skeleton'
 
+import { useTranslation } from 'react-i18next'
+
 type TabLS = Array<{
   value: 'crypto' | 'share'
-  title: string
+  titleKey: string
   to: string
 }>
 
 const TabConf: TabLS = [
   {
     value: 'crypto',
-    title: 'Crypto Rank',
+    titleKey: 'rank.nav.crypto',
     to: '/rank/crypto',
   },
   {
     value: 'share',
-    title: 'Share Rank',
+    titleKey: 'rank.nav.share',
     to: '/rank/share',
   },
 ]
@@ -29,17 +31,18 @@ const LayOne: React.FC<{
   pathName?: string
   tabs?: TabLS
 }> = props => {
+  const { t } = useTranslation()
   const selectedTab = useMemo(() => props.pathName?.replace(/\/rank\//g, ''), [props.pathName])
   if (!props.tabs) return
   return (
     <>
       <Tabs defaultValue="crypto" value={selectedTab} className="px-1 pb-3">
         <TabsList className="w-full">
-          {props.tabs.map(({ value, title, to }) => {
+          {props.tabs.map(({ value, titleKey, to }) => {
             return (
               <TabsTrigger key={value} value={value} className="flex-1" asChild>
                 <Link prefetch="viewport" to={to}>
-                  {title}
+                  {t(titleKey)}
                 </Link>
               </TabsTrigger>
             )
