@@ -180,9 +180,9 @@ export default function Swap() {
     }
   }, [calculateAmoutTransfer, state.wallets, currentTab, selectCurrency, amountCurrent])
 
-  const onSubmit = (values: SwapFormData) => {
+  const onSubmit = async (values: SwapFormData) => {
     const isBuy = currentTab === 'buy'
-    postTransfer(
+    await postTransfer(
       {
         amount: values.amount.replace(/,/g, ''),
         currency: selectCurrency as Crypto,
