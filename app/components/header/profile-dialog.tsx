@@ -2,7 +2,13 @@ import { useEffect, useMemo, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
-import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '~/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '~/components/ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
 import { TwitterIcon, GlobalIcon } from '~/components/color-icons'
@@ -73,6 +79,7 @@ const ProfileDialog: React.FC = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader className="relative flex aspect-[343/130] w-full flex-col items-center justify-center bg-colorLinear-orange">
+          <DialogTitle />
           <img src="/images/long-wave.png" alt="profile" className="absolute inset-0 top-3" />
           <img
             src="/images/header/profile.png"

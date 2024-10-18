@@ -231,7 +231,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   }
 
   return (
-    <div className="relative rounded-xl bg-[#333] pt-5 text-xs font-ultra">
+    <div
+      className={cn('relative rounded-xl bg-[#333] text-xs font-ultra', isLimited ? 'pt-5' : '')}
+    >
       {isLimited && (
         <div className="absolute -left-[0.5px] -top-[0.5px] flex h-5 w-20 items-center space-x-1 rounded-br-lg rounded-tl-lg bg-gradient-to-b from-[#FF8C8C] to-[#FF0E03] px-3 py-1">
           <ClockIcon className="w-3" />

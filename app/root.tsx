@@ -1,5 +1,6 @@
 import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from '@remix-run/react'
 import type { LinksFunction } from '@remix-run/node'
+import { useTranslation } from 'react-i18next'
 import { Toaster } from 'react-hot-toast'
 import MainNav from '~/components/main-nav'
 import Header from '~/components/header/index'
@@ -14,6 +15,7 @@ import { useSafePaddingClass } from '~/hooks/useSafePaddingClass'
 import useRouteGuard from '~/hooks/useRouteGuard'
 import { cn } from '~/lib/utils'
 import { iconsLinks, prefetchAssetsLinks } from '~/consts/prefetch'
+import { fallbackLng } from '~/consts/i18n'
 
 import './tailwind.css'
 
@@ -22,8 +24,10 @@ export const links: LinksFunction = () => {
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { i18n } = useTranslation()
+
   return (
-    <html lang="en">
+    <html lang={i18n.language || fallbackLng}>
       <head>
         <meta charSet="utf-8" />
         <meta
