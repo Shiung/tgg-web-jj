@@ -96,7 +96,7 @@ export default function Crypto() {
             )
           })}
         </TabsList>
-        <TabsContent value={currentTab.value} className="mt-0 flex flex-1">
+        <TabsContent value={currentTab.value} className="mt-0 flex flex-1 flex-col items-stretch">
           <div className="flex flex-1 flex-col space-y-3 bg-black p-4">
             <PlayerCard.Title type="crypto" rewardLock={!dataLs.isReward} />
             {dataLs.others.map(({ customerName, reward, rewardType, ranking, validBetGold }) => {

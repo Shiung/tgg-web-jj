@@ -87,15 +87,21 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger>
         <div className="relative flex items-center">
-          <button onClick={handleToggle}>
-            <motion.div animate={controls}>
-              <img
-                src="/images/header/treasure.png"
-                alt="Treasure"
-                className={cn('h-8 w-8 object-cover', className)}
-              />
-            </motion.div>
-          </button>
+          <Button
+            variant="icon"
+            size="icon"
+            className="h-10 w-10 opacity-100"
+            onClick={handleToggle}
+          >
+            <motion.img
+              animate={controls}
+              src="/images/header/treasure.png"
+              alt="Treasure"
+              className={cn('h-9 w-9 object-contain', className)}
+              style={{ willChange: 'transform', backfaceVisibility: 'hidden' }}
+              loading="eager"
+            />
+          </Button>
           {categorizedTreasures.unlocking.length > 0 && (
             <div className="absolute right-0 top-0 rounded-full bg-red-500 px-1 text-xs text-white">
               {categorizedTreasures.unlocking.length}

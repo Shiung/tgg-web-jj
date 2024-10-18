@@ -1,4 +1,4 @@
-import { Links, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react'
+import { Links, Meta, Outlet, Scripts, ScrollRestoration, useRouteError } from '@remix-run/react'
 import type { LinksFunction } from '@remix-run/node'
 import { Toaster } from 'react-hot-toast'
 import MainNav from '~/components/main-nav'
@@ -36,6 +36,29 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="dark bg-background font-sans antialiased">
         {children}
         <ScrollRestoration />
+        <Scripts />
+      </body>
+    </html>
+  )
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError()
+  console.error(error)
+  return (
+    <html lang="en">
+      <head>
+        <title>Oh no!</title>
+        <meta charSet="utf-8" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+        />
+        <Meta />
+        <Links />
+      </head>
+      <body className="dark bg-background font-sans antialiased">
+        Somethings went wrong !
         <Scripts />
       </body>
     </html>

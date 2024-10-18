@@ -1,16 +1,21 @@
 import { useRef, useMemo, useCallback } from 'react'
-import { cn } from '~/lib/utils'
+import {
+  type ValueAnimationTransition,
+  animate,
+  useInView,
+  useIsomorphicLayoutEffect,
+} from 'framer-motion'
 import { BigNumber } from 'bignumber.js'
+
+import { cn } from '~/lib/utils'
 import { cryptoRules, isValidCrypto } from '~/consts/crypto'
 import { formatKM } from '~/lib/amount'
-
-import { KeyframeOptions, animate, useInView, useIsomorphicLayoutEffect } from 'framer-motion'
 
 type AnimatedCounterProps = {
   from: number
   to: number
   crypto?: string
-  animationOptions?: KeyframeOptions
+  animationOptions?: ValueAnimationTransition<number>
   className?: string
   customMaxInt?: number
   customMaxDec?: number
@@ -39,7 +44,7 @@ const AnimatedCounter = ({
   crypto,
   customMaxInt,
   customMaxDec,
-  useKM,
+  useKM = false,
   removeTrailingZeros = true,
 }: AnimatedCounterProps) => {
   // 數字動畫處理
@@ -58,7 +63,7 @@ const AnimatedCounter = ({
       return
     }
     const controls = animate(from, to, {
-      duration: 10,
+      duration: animationOptions?.duration ?? 10,
       ease: 'easeOut',
       ...animationOptions,
       onUpdate(value) {
@@ -73,39 +78,35 @@ const AnimatedCounter = ({
     return () => {
       controls.stop()
     }
-  }, [ref, inView, from, to])
+  }, [inView, from, to])
 
   const decimalPlaces = useMemo(() => getDecimalPlaces(from - to), [to, from])
 
   // 金額顯示規則
-  const isValid = useMemo(() => isValidCrypto(crypto), [crypto])
   const { maxInt, maxDec } = useMemo(() => {
+    const isValid = isValidCrypto(crypto)
     const rules =
       crypto && isValid
         ? cryptoRules[crypto as keyof typeof cryptoRules]
         : { maxInt: undefined, maxDec: undefined }
+
     return {
       maxInt: customMaxInt ?? rules.maxInt ?? defaultMaxInt,
       maxDec: customMaxDec ?? rules.maxDec ?? defaultMaxDec,
     }
-  }, [crypto, customMaxInt, customMaxDec, isValid])
+  }, [crypto, customMaxInt, customMaxDec])
 
   // 數字格式化
   const formattedValue = useCallback(
     (to: number) => {
       const _value = new BigNumber(to || 0)
-
       if (useKM) return formatKM(_value.toNumber())
-
       const formatted =
         removeTrailingZeros && maxDec > 0
-          ? _value.decimalPlaces(maxDec).toString() // 去除尾部 0
-          : _value.toFixed(maxDec) // 保留所有小数位
-
-      // eslint-disable-next-line prefer-const
-      let [intPart, decPart] = formatted.split('.')
+          ? _value.decimalPlaces(maxDec).toString()
+          : _value.toFixed(maxDec)
+      const [intPart, decPart] = formatted.split('.')
       const truncatedIntPart = intPart.length > maxInt ? intPart.slice(0, maxInt) : intPart
-
       return decPart ? `${truncatedIntPart}.${decPart}` : truncatedIntPart
     },
     [useKM, removeTrailingZeros, maxDec, maxInt]

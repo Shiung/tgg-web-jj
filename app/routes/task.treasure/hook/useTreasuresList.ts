@@ -72,6 +72,7 @@ export function useTreasuresList() {
   // 首頁右上角 寶箱變化
   const baseTreasure = useStore(state => state.baseTreasure)
   const setBaseTreasure = useStore(state => state.setBaseTreasure)
+
   useEffect(() => {
     // 非登入狀態清空
     if (!isLoggedIn) {
@@ -110,7 +111,7 @@ export function useTreasuresList() {
     setIsClaimingAll(true)
 
     const claimBatch = async (treasures: Treasure[]) => {
-      const results = await Promise.all(
+      const results = await Promise.allSettled(
         treasures.map(treasure => {
           if (!treasure?.id) {
             console.error('treasure id is null', treasure)
@@ -119,6 +120,11 @@ export function useTreasuresList() {
           return claimBonusMutation.mutateAsync(treasure.id)
         })
       )
+      results.forEach(result => {
+        if (result.status === 'rejected') {
+          console.error('Failed to claim bonus:', result.reason)
+        }
+      })
       return results
     }
 

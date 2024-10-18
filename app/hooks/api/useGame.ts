@@ -40,7 +40,7 @@ const useGetGameUrl = () => {
     onError: (error: AxiosError<{ message?: string }>) => {
       errorToast(error.response?.data.message || 'Unknown error')
       navigate('/')
-      console.error('[ERROR] gamesEnterCreate 失敗 ', error)
+      console.error('[ERROR] enter game occur error', error)
       setGameUrl(null)
       mutation.reset()
     },
@@ -50,7 +50,7 @@ const useGetGameUrl = () => {
     mutateRef.current = mutation.mutate
   }, [mutation.mutate])
 
-  const getUrl = useCallback((gameID: string, currency: GameCurrency): void => {
+  const getUrl = useCallback((gameID: string, currency: GameCurrency) => {
     if (mutateRef.current) {
       setGameUrl(null)
       mutateRef.current({ gameID, currency })
