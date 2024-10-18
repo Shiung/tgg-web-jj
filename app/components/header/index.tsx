@@ -2,7 +2,7 @@ import { Link } from '@remix-run/react'
 import useStore from '~/stores/useStore'
 import TelegramLoginButton from '~/components/telegram-login-button/index'
 import ProfileDialog from './profile-dialog'
-import TreasurePopOver from './treasure-popover'
+// import TreasurePopOver from './treasure-popover'
 import WalletPopOver from './wallet-popover'
 
 const UserActions: React.FC = () => {
@@ -16,7 +16,7 @@ const UserActions: React.FC = () => {
       {/* User Profile (Avatar) */}
       <ProfileDialog />
       {/* Treasure */}
-      <TreasurePopOver className="ml-2" />
+      {/* <TreasurePopOver className="ml-2" /> */}
     </div>
   )
 }
