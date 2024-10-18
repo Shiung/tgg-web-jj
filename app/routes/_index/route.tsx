@@ -164,7 +164,7 @@ export default function Index() {
         </div>
       </div>
       {/* New release carousel */}
-      <div className="bg-black px-4 pb-6">
+      <div className="bg-black px-4 pb-4">
         <Carousel className="aspect-[346/144] w-full">
           <div className="mb-3 flex items-center justify-between">
             <h1 className="text-base font-ultra">NEW RELEASE</h1>
@@ -207,8 +207,8 @@ export default function Index() {
           )}
         </Carousel>
       </div>
-      {/* footer */}
-      <Footer />
+      {/* footer 暫停開發隱藏 */}
+      {/* <Footer /> */}
 
       {/* 紅包 */}
       <Link
