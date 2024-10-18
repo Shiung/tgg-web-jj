@@ -1,11 +1,11 @@
 import { useCallback } from 'react'
 import { apis } from '~/api/index'
 import { useMutation } from '@tanstack/react-query'
+import Lottie from 'lottie-react'
 
 // 元件
 import { Dialog, DialogContent } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
-import LottieAnimation from '../smash-egg/lottie-animation'
 
 // lottie
 import LVto2 from './lottie/levelup1to2.json'
@@ -45,10 +45,10 @@ const LevelupDialog: React.FC<LevelupDialogProps> = ({ isOpen, onClose, finalCla
         <div className="relative flex flex-col items-center justify-center text-center text-lg font-ultra">
           <div>Congratulations,</div>
           <div>Your team has upgraded!</div>
-          <LottieAnimation
+          <Lottie
             className="w-full"
             animationData={levelAnimations[finalClass as keyof typeof levelAnimations]}
-          ></LottieAnimation>
+          ></Lottie>
           <Button
             className="absolute bottom-0 flex w-full items-center justify-center"
             onClick={handleOK}

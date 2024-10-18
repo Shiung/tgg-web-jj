@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link, useLocation } from '@remix-run/react'
+import Lottie from 'lottie-react'
 import { useTreasuresList, type Treasure } from '~/routes/task.treasure/hook/useTreasuresList'
 import { useGenerateRuleList } from '~/routes/task.treasure/hook/useGenerateRuleList'
 import { cn } from '~/lib/utils'
@@ -14,7 +15,6 @@ import { CurrencyIcon } from '~/components/currency-icon'
 import Amount from '~/components/amount'
 import Empty from './empty'
 import { errorToast, successToast } from '~/lib/toast'
-import LottieAnimation from '~/routes/smash-egg/lottie-animation'
 import AnimatedCounter from '~/components/animated-counter'
 
 const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
@@ -137,7 +137,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                       <div className="flex flex-1 items-center space-x-2 py-1 pl-3 pr-2">
                         <div key={treasure.id} className="relative">
                           {changedTreasure?.id ? (
-                            <LottieAnimation
+                            <Lottie
                               className="h-20 w-20"
                               animationData={catboxLottieFile}
                               loop={false}

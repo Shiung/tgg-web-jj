@@ -1,11 +1,11 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { Link } from '@remix-run/react'
-import { LottieRefCurrentProps } from 'lottie-react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import Lottie, { type LottieRefCurrentProps } from 'lottie-react'
 import useStore from '~/stores/useStore'
 import AppLoading from '~/components/app-loading'
 import { Button } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { apis } from '~/api'
 import { errorToast } from '~/lib/toast'
 
@@ -14,7 +14,6 @@ import StandbyCard from './standby-card'
 import RulesDialog from './rules-dialog'
 import CardTemplate from './card-template'
 import AlertDialog from './alert-dialog'
-import LottieAnimation from './lottie-animation'
 import { Status, EggRecord, EggMarquee, PrizePool } from './types'
 import { hammerFile, standbyArr, goldArr, silverArr, copperArr, changeArr } from './animation-data'
 import { Trans, useTranslation } from 'react-i18next'
@@ -413,7 +412,7 @@ export default function SmashEgg() {
       className={`container relative flex flex-1 flex-col rounded-xl bg-[url('/images/smash-egg/bg-main.png')] bg-cover bg-no-repeat px-4 pt-3`}
     >
       {status === Status.Init && <AppLoading />}
-      <LottieAnimation
+      <Lottie
         key={HAMMER_CANVAS_ID}
         lottieRef={hammerRefs}
         className="absolute -top-3.5 left-2 z-[35] aspect-[41/51] w-[60px]"
@@ -483,7 +482,7 @@ export default function SmashEgg() {
           <div
             className={`${status === Status.Standby || status === Status.Playing ? 'block' : 'hidden'}`}
           >
-            <LottieAnimation
+            <Lottie
               id={`${EGG_AREA_CANVAS_ID}}`}
               lottieRef={lottieRefs}
               className={cn(
