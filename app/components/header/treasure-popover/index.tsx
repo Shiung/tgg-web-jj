@@ -20,7 +20,7 @@ import AnimatedCounter from '~/components/animated-counter'
 const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
   const [isOpen, setIsOpen] = useState(true)
   const location = useLocation()
-  const { categorizedTreasures, claimAllBonuses, refetch } = useTreasuresList()
+  const { categorizedTreasures, claimAllBonuses, isClaimingAll, refetch } = useTreasuresList()
   const generateRuleList = useGenerateRuleList()
 
   // 導頁行為關閉popover
@@ -195,7 +195,12 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                   Check all treasure
                 </Button>
               </Link>
-              <Button className="flex-1" catEars onClick={handleClaimAllBonuses}>
+              <Button
+                className="flex-1"
+                catEars
+                onClick={handleClaimAllBonuses}
+                loading={isClaimingAll}
+              >
                 Claim
               </Button>
             </div>

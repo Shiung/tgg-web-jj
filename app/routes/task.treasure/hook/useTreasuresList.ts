@@ -111,7 +111,7 @@ export function useTreasuresList() {
     setIsClaimingAll(true)
 
     const claimBatch = async (treasures: Treasure[]) => {
-      const results = await Promise.allSettled(
+      const results = await Promise.all(
         treasures.map(treasure => {
           if (!treasure?.id) {
             console.error('treasure id is null', treasure)
@@ -120,11 +120,6 @@ export function useTreasuresList() {
           return claimBonusMutation.mutateAsync(treasure.id)
         })
       )
-      results.forEach(result => {
-        if (result.status === 'rejected') {
-          console.error('Failed to claim bonus:', result.reason)
-        }
-      })
       return results
     }
 
