@@ -7,6 +7,7 @@ import { Crypto, cryptoDetails } from '~/consts/crypto'
 
 import type { BCRankInfoResponse, ShareRankInfoResponse } from '~/api/codegen/data-contracts'
 import Rules from './rules'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   theme?: 'crypto' | 'share'
@@ -90,6 +91,7 @@ const BoardConf: UnitBoardProps[] = [
 ] as const
 
 const Board: FC<Props> = ({ theme = 'crypto', dataLs, rewardLock = false }) => {
+  const { t } = useTranslation()
   const ls = useMemo(() => {
     return BoardConf.map(b => {
       const findData = dataLs.find(({ ranking }) => ranking === b.ranking)
@@ -124,7 +126,7 @@ const Board: FC<Props> = ({ theme = 'crypto', dataLs, rewardLock = false }) => {
           className="absolute right-4 top-4 z-[1] space-x-1 px-2 py-1"
         >
           <Icons.HelpIcon className="h-4 w-4" />
-          <span className="text-xs">Rule</span>
+          <span className="text-xs">{t('rule')}</span>
         </Button>
       </Rules>
 

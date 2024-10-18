@@ -4,6 +4,7 @@ import Icons from '~/icons'
 import { cn } from '~/lib/utils'
 
 import Amount from '~/components/amount'
+import { Trans, useTranslation } from 'react-i18next'
 
 type Props = {
   type: 'crypto' | 'share'
@@ -89,15 +90,26 @@ const classForMessageStyle =
   "before:content-[''] before:absolute before:bg-white before:w-[15px] before:h-[7px] before:rotate-[38deg] before:bottom-[-5px] before:right-[23px] before:rounded-[50%]"
 
 const Title: React.FC<Pick<Props, 'rewardLock' | 'type'>> = ({ rewardLock = false, type }) => {
+  const { t } = useTranslation()
   return (
     <Layout
-      slot_first={<span className="text-xs font-normal text-white/70">Rank</span>}
+      slot_first={<span className="text-xs font-normal text-white/70">{t('rank')}</span>}
       slot_second={
         <span className="text-xs font-normal text-white/70">
-          {type === 'crypto' ? 'Player & Bet' : 'Player & Valid Friends'}
+          {t(
+            type === 'crypto'
+              ? 'rank.playerCard.table.title.playBet'
+              : 'rank.playerCard.table.title.playShare'
+          )}
         </span>
       }
-      slot_third={!rewardLock && <span className="text-xs font-normal text-white/70">Reward</span>}
+      slot_third={
+        !rewardLock && (
+          <span className="text-xs font-normal text-white/70">
+            {t('rank.playerCard.table.title.reward')}
+          </span>
+        )
+      }
       isTitle
     />
   )
@@ -113,7 +125,7 @@ const PlayerCard: React.FC<Props> & {
       slot_first={
         <>
           <img src="/images/rank/rank-medal.png" alt="background-board" className="h-9 w-9" />
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 font-ultra">
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-xs font-ultra">
             {rank > 999 ? '999+' : rank}
           </div>
         </>
@@ -137,8 +149,7 @@ const PlayerCard: React.FC<Props> & {
                 classForMessageStyle
               )}
             >
-              <div>TRUST ME!</div>
-              <div>YOU CAN DO BETTER</div>
+              <Trans i18nKey="rank.playerCard.trustMe" components={{ Comp: <div /> }} />
             </div>
             <img src="/images/rank/rank-self-tip.png" alt="background-board" className="w-[72px]" />
           </div>
