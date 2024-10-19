@@ -1,7 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import { type SettingResponse } from '~/api/codegen/data-contracts'
 import useStore from '~/stores/useStore'
-import { useTranslation } from 'react-i18next'
-
 import {
   Sheet,
   SheetContent,
@@ -20,6 +19,8 @@ import {
   TableRow,
 } from '~/components/ui/table'
 import Amount from '~/components/amount'
+import { formatAmount } from '~/lib/amount'
+import { Crypto } from '~/consts/crypto'
 
 interface TableData {
   headers: string[]
@@ -145,6 +146,7 @@ const useFormatClassSetting = (classSetting: SettingResponse['classSetting']) =>
 interface RuleSheetProps {
   teamSettingList: SettingResponse
 }
+
 const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
   const classSettingTable = useFormatClassSetting(teamSettingList.classSetting)
   const commissionSettingTable = formatCommissionSetting(teamSettingList.commissionSetting)
@@ -199,7 +201,9 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
             <div className="text-base font-ultra text-white">{t('referralTeam')}</div>
             <img src="/images/share/referralDiagram.png" alt="progress-1" className="w-full" />
             <div>
-              {t('rule.referralTeam.Description', { value: teamSettingList.activeSetting || '-' })}
+              {t('rule.referralTeam.Description', {
+                value: formatAmount(teamSettingList.activeSetting, { crypto: Crypto.KOKON }) || '-',
+              })}
             </div>
           </div>
           {/* Team Rating System section */}

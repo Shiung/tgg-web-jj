@@ -5,13 +5,13 @@ import { CheckIcon, WaitingIcon, UsdtIcon, KokonIcon } from '~/components/color-
 import Amount from '~/components/amount'
 
 interface CommissionItem {
-  betAmount: string
-  commissionAmount: string
-  createTime: string
-  displayName: string
-  level: number
-  memberId: number
-  sendStatus: number
+  betAmount?: string
+  commissionAmount?: string
+  createTime?: string
+  displayName?: string
+  level?: number
+  memberId?: number
+  sendStatus?: number
 }
 
 interface CommissionTableListProps {
@@ -33,7 +33,7 @@ const CommissionTableList: React.FC<CommissionTableListProps> = ({ data }) => {
   const groupedData = useMemo(() => {
     const groups: { [key: string]: CommissionItem[] } = {}
     data.forEach(item => {
-      const date = format(new Date(item.createTime), 'yyyy-MM-dd')
+      const date = item?.createTime ? format(new Date(item.createTime), 'yyyy-MM-dd') : ''
       if (!groups[date]) {
         groups[date] = []
       }
@@ -43,10 +43,6 @@ const CommissionTableList: React.FC<CommissionTableListProps> = ({ data }) => {
       .sort(([dateA], [dateB]) => parseISO(dateB).getTime() - parseISO(dateA).getTime())
       .map(([date, rows]) => ({ date, rows }))
   }, [data])
-
-  const truncateName = (name: string, maxLength: number = 9) => {
-    return name.length > maxLength ? name.slice(0, maxLength) + '...' : name
-  }
 
   return (
     <div className="mt-2 flex flex-1 flex-col bg-black text-xs text-white">
@@ -75,7 +71,7 @@ const CommissionTableList: React.FC<CommissionTableListProps> = ({ data }) => {
                 </tr>
                 <tr className="h-[1px]">
                   <td colSpan={5} className="p-0">
-                    <div className="h-[1px] bg-[#FFFFFF33]"></div>
+                    <div className="h-[1px] bg-white/20"></div>
                   </td>
                 </tr>
               </thead>
@@ -83,7 +79,7 @@ const CommissionTableList: React.FC<CommissionTableListProps> = ({ data }) => {
                 {dayData.rows.map((row, rowIndex) => (
                   <tr key={rowIndex} className="">
                     <td className="w-[65px] max-w-[65px] truncate">
-                      <span title={row.displayName}>{truncateName(row.displayName)}</span>
+                      <span title={row.displayName}>{row.displayName}</span>
                     </td>
                     <td className="text-right">{row.level}</td>
                     <td className="text-right">

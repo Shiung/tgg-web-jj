@@ -1,13 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from '@remix-run/react'
-
+import { useQuery } from '@tanstack/react-query'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+
 import Commission from './commission'
 import TeamMember from './team-member'
+import { apis } from '~/api'
 
 const ShareTeam: React.FC = () => {
   const params = useParams()
   const [activeTab, setActiveTab] = useState('Commission')
+
+  // 取得用戶的團隊資訊
+  const { data: customerTeamInfo, isLoading: customerTeamInfoLoading } = useQuery({
+    queryKey: ['customerTeamInfoList'],
+    queryFn: () => apis.customer.customerTeamInfoList(),
+  })
+
+  // 取得各分級設定
+  const { data: teamSettingList, isLoading: teamSettingListLoading } = useQuery({
+    queryKey: ['teamSettingList'],
+    queryFn: () => apis.team.teamSettingList(),
+  })
+
   useEffect(() => {
     if (params?.tab) {
       setActiveTab(params.tab)
@@ -48,8 +63,20 @@ const ShareTeam: React.FC = () => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value={activeTab} className="mt-0 flex flex-1 bg-black">
-            {activeTab === 'Commission' && <Commission />}
-            {activeTab === 'TeamMember' && <TeamMember />}
+            {activeTab === 'Commission' && (
+              <Commission
+                customerTeamInfo={customerTeamInfo?.data}
+                teamSettingList={teamSettingList?.data}
+                loading={customerTeamInfoLoading || teamSettingListLoading}
+              />
+            )}
+            {activeTab === 'TeamMember' && (
+              <TeamMember
+                customerTeamInfo={customerTeamInfo?.data}
+                teamSettingList={teamSettingList?.data}
+                loading={customerTeamInfoLoading || teamSettingListLoading}
+              />
+            )}
           </TabsContent>
         </Tabs>
       </div>

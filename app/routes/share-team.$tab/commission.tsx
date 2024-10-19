@@ -1,16 +1,17 @@
 import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
-import { apis } from '~/api'
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
-import { parseAmount } from '~/lib/amount'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { endOfDay, format, formatRFC3339, startOfDay, subDays } from 'date-fns'
 import { z } from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 
 // NOTICE: For test
 // import { getMockCommissionData } from './fake-commisssionData'
 
+import { apis } from '~/api'
+import type { SettingResponse, TeamInfoResponse } from '~/api/codegen/data-contracts'
+import { parseAmount } from '~/lib/amount'
+import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 import useIntersectionObserver from '~/hooks/useIntersectionObserver'
 import CatEarsCard from '~/components/cat-ears-card'
 import { UsdtIcon, KokonIcon } from '~/components/color-icons'
@@ -48,28 +49,22 @@ const formSchema = z.object({
   }),
 })
 
-const Commission: React.FC = () => {
+interface CommissionProps {
+  customerTeamInfo?: TeamInfoResponse
+  teamSettingList?: SettingResponse
+  loading?: boolean
+}
+
+const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingList, loading }) => {
   const maxWidth = useAppMaxWidth()
-
-  // 取得用戶的團隊資訊
-  const { data: customerTeamInfo, isLoading: customerTeamInfoLoading } = useQuery({
-    queryKey: ['customerTeamInfoList'],
-    queryFn: () => apis.customer.customerTeamInfoList(),
-  })
-
-  // 取得各分級設定
-  const { data: teamSettingList, isLoading: teamSettingListLoading } = useQuery({
-    queryKey: ['teamSettingList'],
-    queryFn: () => apis.team.teamSettingList(),
-  })
 
   // 用戶所屬 teamLevel 的 佣金設定
   const activeCommissionSetting = useMemo(() => {
-    if (!teamSettingList?.data?.commissionSetting) {
+    if (!teamSettingList?.commissionSetting) {
       return null
     }
-    const _currentSetting = teamSettingList.data.commissionSetting.find(
-      setting => setting.class === customerTeamInfo?.data?.class
+    const _currentSetting = teamSettingList?.commissionSetting.find(
+      setting => setting.class === customerTeamInfo?.class
     )
 
     if (!_currentSetting) {
@@ -82,7 +77,7 @@ const Commission: React.FC = () => {
         level: key,
         commission: value,
       }))
-  }, [teamSettingList, customerTeamInfo])
+  }, [customerTeamInfo?.class, teamSettingList?.commissionSetting])
 
   // 控制 search 的展開與收合
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
@@ -201,7 +196,7 @@ const Commission: React.FC = () => {
   // 回到顶部
   const [topRef, istopflagVisible, scrollToTop] = useIntersectionObserver<HTMLDivElement>()
 
-  if (customerTeamInfoLoading || teamSettingListLoading) {
+  if (loading) {
     return <ShareTeamSkeleton />
   }
 
@@ -214,10 +209,10 @@ const Commission: React.FC = () => {
           className="flex items-center justify-between rounded-t-[12px] bg-[#333333] px-6 py-2"
         >
           <span className="font-ultra text-primary">
-            My Team Rating: {customerTeamInfo?.data?.class || 0}
+            My Team Rating: {customerTeamInfo?.class || 0}
           </span>
           <div className="flex space-x-1">
-            {Array.from({ length: customerTeamInfo?.data?.class || 0 }).map((el, index) => (
+            {Array.from({ length: customerTeamInfo?.class || 0 }).map((el, index) => (
               <img
                 key={`teamRating-${index}`}
                 className="h-4 w-4"
@@ -257,7 +252,7 @@ const Commission: React.FC = () => {
                 <div className="flex items-center space-x-1 text-sm text-white">
                   <UsdtIcon className="h-4 w-4" />
                   <Amount
-                    value={parseAmount(customerTeamInfo?.data?.totalBets)}
+                    value={parseAmount(customerTeamInfo?.totalBets)}
                     customMaxInt={7}
                     customMaxDec={6}
                     crypto={Crypto.USDT}
@@ -269,7 +264,7 @@ const Commission: React.FC = () => {
                 <div className="flex items-center space-x-1 text-sm text-white">
                   <KokonIcon className="h-4 w-4" />
                   <Amount
-                    value={parseAmount(customerTeamInfo?.data?.totalCommission)}
+                    value={parseAmount(customerTeamInfo?.totalCommission)}
                     crypto={Crypto.KOKON}
                     useKM
                   />

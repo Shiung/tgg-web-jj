@@ -1,12 +1,13 @@
 import React, { useState, useMemo } from 'react'
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
 
 //NOTICE: For test
 // import fetchTeamData from './fake-memberData'
 
 import { apis } from '~/api'
-import { parseAmount } from '~/lib/amount'
+import type { SettingResponse, TeamInfoResponse } from '~/api/codegen/data-contracts'
+import { formatAmount, parseAmount } from '~/lib/amount'
 import useIntersectionObserver from '~/hooks/useIntersectionObserver'
 import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 import { UsdtIcon } from '~/components/color-icons'
@@ -98,13 +99,14 @@ const sortOptions = [
   },
 ]
 
-const TeamMember: React.FC = () => {
+interface TeamMemberProps {
+  customerTeamInfo?: TeamInfoResponse
+  teamSettingList?: SettingResponse
+  loading?: boolean
+}
+
+const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingList, loading }) => {
   const maxWidth = useAppMaxWidth()
-  // 取得用戶的團隊資訊
-  const { data: customerTeamInfo, isLoading: customerTeamInfoLoading } = useQuery({
-    queryKey: ['customerTeamInfoList'],
-    queryFn: () => apis.customer.customerTeamInfoList(),
-  })
 
   // 控制 search 的展開與收合
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
@@ -204,7 +206,7 @@ const TeamMember: React.FC = () => {
   // 回到顶部
   const [topRef, istopflagVisible, scrollToTop] = useIntersectionObserver<HTMLDivElement>()
 
-  if (customerTeamInfoLoading) {
+  if (loading) {
     return <ShareTeamSkeleton />
   }
 
@@ -217,10 +219,10 @@ const TeamMember: React.FC = () => {
           className="flex items-center justify-between rounded-t-[12px] bg-[#333333] px-6 py-2"
         >
           <span className="font-ultra text-primary">
-            My Team Rating: {customerTeamInfo?.data?.class || 0}
+            My Team Rating: {customerTeamInfo?.class || 0}
           </span>
           <div className="flex space-x-1">
-            {Array.from({ length: customerTeamInfo?.data?.class || 0 }).map((_, index) => (
+            {Array.from({ length: customerTeamInfo?.class || 0 }).map((_, index) => (
               <img
                 key={`teamRating-${index}`}
                 className="h-4 w-4"
@@ -235,7 +237,7 @@ const TeamMember: React.FC = () => {
             <div className="flex min-h-[60px] flex-1 flex-col items-center justify-center text-center">
               <div className="flex flex-1 items-center text-[#999999]">Total Member</div>
               <div className="flex items-center space-x-1 text-sm text-white">
-                <div>{customerTeamInfo?.data?.teamSize}</div>
+                <div>{customerTeamInfo?.teamSize}</div>
               </div>
             </div>
             <div className="flex min-h-[60px] flex-1 flex-col items-center justify-between">
@@ -250,7 +252,7 @@ const TeamMember: React.FC = () => {
               <div className="flex items-center space-x-1 text-sm text-white">
                 <UsdtIcon className="h-4 w-4" />
                 <Amount
-                  value={parseAmount(customerTeamInfo?.data?.totalBets)}
+                  value={parseAmount(customerTeamInfo?.totalBets)}
                   customMaxInt={7}
                   customMaxDec={2}
                   crypto={Crypto.USDT}
@@ -262,7 +264,7 @@ const TeamMember: React.FC = () => {
               <div className="flex items-center space-x-1 text-sm text-white">
                 <UsdtIcon className="h-4 w-4" />
                 <Amount
-                  value={parseAmount(customerTeamInfo?.data?.totalDeposit)}
+                  value={parseAmount(customerTeamInfo?.totalDeposit)}
                   customMaxInt={7}
                   customMaxDec={2}
                   crypto={Crypto.USDT}
@@ -276,8 +278,10 @@ const TeamMember: React.FC = () => {
       {/* All Members Section */}
       <div className="flex flex-1 flex-col">
         <div className="mt-6 flex items-center space-x-1 font-ultra text-white">
-          <div>All Members</div>
-          <InfoTooltip content="Only when your friends registered and owned over 100 KOKON in their wallet are counted valid member." />
+          <span>All Members</span>
+          <InfoTooltip
+            content={`Only when your friends registered and owned over ${formatAmount(teamSettingList?.activeSetting, { crypto: Crypto.KOKON })} KOKON in their wallet are counted valid member.`}
+          />
         </div>
         {/* Search Section */}
         <div className="flex w-full flex-wrap text-xs font-ultra">

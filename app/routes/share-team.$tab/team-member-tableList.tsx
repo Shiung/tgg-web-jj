@@ -4,11 +4,10 @@ import Amount from '~/components/amount'
 import { Crypto } from '~/consts/crypto'
 
 interface TeamMember {
-  anchorPoint: number
-  lv: number
-  name: string
-  totalBets: string
-  totalDeposits: string
+  lv?: number
+  name?: string
+  totalBets?: string
+  totalDeposits?: string
 }
 
 interface TeamMemberTableListProps {
@@ -16,10 +15,6 @@ interface TeamMemberTableListProps {
 }
 
 const TeamMemberTableList: React.FC<TeamMemberTableListProps> = ({ data }) => {
-  const truncateName = (name: string, maxLength: number = 9) => {
-    return name.length > maxLength ? name.slice(0, maxLength) + '...' : name
-  }
-
   return (
     <div className="mt-2 flex flex-1 flex-col bg-black text-xs text-white">
       <div className="mb-2 overflow-hidden rounded-lg bg-[#1C1C1C]">
@@ -52,7 +47,7 @@ const TeamMemberTableList: React.FC<TeamMemberTableListProps> = ({ data }) => {
               {data.map((row, rowIndex) => (
                 <tr key={rowIndex} className="">
                   <td className="w-[65px] max-w-[65px] truncate">
-                    <span title={row.name}>{truncateName(row.name)}</span>
+                    <span title={row.name}>{row.name}</span>
                   </td>
                   <td className="text-right">{row.lv}</td>
                   <td className="text-right">
