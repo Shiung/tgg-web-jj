@@ -151,7 +151,7 @@ const TeamMember: React.FC = () => {
   // live use =>   queryFn: ({ pageParam = 0 }) => apis.customer.customerTeamPerformanceList({ ...queryParams, anchorPoint: pageParam }),
 
   const {
-    data: TeamPerformanceListData,
+    data: teamPerformanceListData,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
@@ -179,20 +179,27 @@ const TeamMember: React.FC = () => {
   })
 
   const flattenedData = useMemo(() => {
-    return TeamPerformanceListData?.pages.flatMap(page => page.data?.data).filter(d => !!d) || []
-  }, [TeamPerformanceListData])
+    return teamPerformanceListData?.pages.flatMap(page => page.data?.data).filter(d => !!d) || []
+  }, [teamPerformanceListData])
 
   // 獲取最新的匯總數據
   const latestSummary = useMemo(() => {
-    if (!TeamPerformanceListData?.pages) return null
-    for (let i = TeamPerformanceListData.pages.length - 1; i >= 0; i--) {
-      const page = TeamPerformanceListData.pages[i].data
+    if (
+      !selectedDisplayName &&
+      !selectedSort.sortOrder &&
+      !selectedSort.sortField &&
+      !Number(selectedLevel)
+    )
+      return null
+    if (!teamPerformanceListData?.pages) return null
+    for (let i = teamPerformanceListData.pages.length - 1; i >= 0; i--) {
+      const page = teamPerformanceListData.pages[i].data
       if (page.data && Array.isArray(page.data) && page.data.length > 0) {
         return page.summary
       }
     }
     return null
-  }, [TeamPerformanceListData])
+  }, [teamPerformanceListData?.pages, selectedDisplayName, selectedLevel, selectedSort])
 
   // 回到顶部
   const [topRef, istopflagVisible, scrollToTop] = useIntersectionObserver<HTMLDivElement>()
