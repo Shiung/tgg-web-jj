@@ -556,7 +556,7 @@ export default function SmashEgg() {
                   {t('smash')} x{prizePoolItem?.hammerSpent || 0}
                 </Button>
                 <Button catEars variant="gray" className="flex-1" onClick={handleGiveUpButtonClick}>
-                  {t('giveupEgg')}
+                  {t('giveUpEgg')}
                 </Button>
               </div>
             </>

@@ -176,7 +176,7 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
           {/* Refer And Earn */}
           <div className="mb-6 flex flex-col space-y-2 text-sm">
             <div className="text-base font-ultra text-white">{t('referAndEarn')}</div>
-            <div>{t('referAndEarnDescription')}</div>
+            <div>{t('referAndEarn.description')}</div>
             <div className="flex h-32 items-center justify-center rounded-lg bg-gradient-to-b from-[#92EE6D] to-[#007E36] p-4">
               <div className="flex flex-col items-center">
                 <img src="/images/share/step-1.png" alt="step-1" className="h-[72px] w-[100px]" />
@@ -193,15 +193,15 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
                 <span className="mt-1 text-xs text-white">{t('earn')}</span>
               </div>
             </div>
-            <div>{t('referAndEarn.Description2')}</div>
-            <div>{t('referAndEarn.Description3')}</div>
+            <div>{t('referAndEarn.description2')}</div>
+            <div>{t('referAndEarn.description3')}</div>
           </div>
           {/* Referral Team section */}
           <div className="mb-6 flex flex-col space-y-2 text-sm">
             <div className="text-base font-ultra text-white">{t('referralTeam')}</div>
             <img src="/images/share/referralDiagram.png" alt="progress-1" className="w-full" />
             <div>
-              {t('rule.referralTeam.Description', {
+              {t('rule.referralTeam.description', {
                 value: formatAmount(teamSettingList.activeSetting, { crypto: Crypto.KOKON }) || '-',
               })}
             </div>
@@ -209,7 +209,7 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
           {/* Team Rating System section */}
           <div className="mb-6 flex flex-col space-y-2 text-sm">
             <div className="text-base font-ultra text-white">{t('teamRatingSystem')}</div>
-            <div>{t('teamRatingSystemDescription')}</div>
+            <div>{t('teamRatingSystem.description')}</div>
             <div className="text-base font-ultra text-white">{t('commissionRatio')}</div>
             <TableDemo tableData={commissionSettingTable} />
             <div className="text-base font-ultra text-white">{t('upgradeRequirement')}</div>
