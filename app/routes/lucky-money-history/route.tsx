@@ -5,18 +5,21 @@ import qs from 'qs'
 
 import useStore from '~/stores/useStore'
 import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
+import LoadingIcon from '~/icons/loading.svg?react'
 import X from '~/icons/x.svg?react'
 import LuckyMoneyItem from '~/routes/lucky-money.list/lucky-money-item'
 import { apis } from '~/api'
 import { Button } from '~/components/ui/button'
+import InfiniteScroll from '~/components/ui/infinite-scroll'
 
 import { ListSkeleton } from './skeleton'
+import { EmptyList } from '../lucky-money.list/route'
 
 const QUERY_STATE = [2, 3]
 
 const LuckyMoneyHistory = () => {
   const setNavVisibility = useStore(state => state.setNavVisibility)
-  const { data, isLoading } = useInfiniteQuery({
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useInfiniteQuery({
     queryKey: ['packetsList', QUERY_STATE],
     queryFn: ({ pageParam = 1 }) =>
       apis.packets
@@ -58,23 +61,41 @@ const LuckyMoneyHistory = () => {
       <div className="flex h-14 items-center justify-between p-4">
         <Button variant="icon" size="icon">
           <Link prefetch="viewport" to="/lucky-money/list">
-            <ArrowLineLeftIcon className="h-6 w-6 text-[#FFFFFFB2]" />
+            <ArrowLineLeftIcon className="h-6 w-6 text-white/70" />
           </Link>
         </Button>
         <div className="text-lg font-ultra">History</div>
         <Button variant="icon" size="icon">
           <Link to="/">
-            <X className="h-6 w-6 text-[#FFFFFFB2]" />
+            <X className="h-6 w-6 text-white/70" />
           </Link>
         </Button>
       </div>
 
       {/* History List */}
-      <div className="flex-1 space-y-3 overflow-y-auto p-4">
-        {isLoading && <ListSkeleton />}
-        {list.map((item, index) => (
-          <LuckyMoneyItem key={index} {...item} />
-        ))}
+      <div className="flex flex-1 flex-col space-y-3 overflow-y-auto p-4">
+        {isLoading ? (
+          <ListSkeleton />
+        ) : list.length > 0 ? (
+          <>
+            {list.map((item, index) => (
+              <LuckyMoneyItem key={index} {...item} />
+            ))}
+            <InfiniteScroll
+              hasMore={!!hasNextPage}
+              isLoading={!!isFetchingNextPage}
+              next={fetchNextPage}
+            >
+              {hasNextPage && (
+                <div>
+                  <LoadingIcon className="m-auto h-6 w-6 animate-spin" />
+                </div>
+              )}
+            </InfiniteScroll>
+          </>
+        ) : (
+          <EmptyList />
+        )}
       </div>
     </div>
   )

@@ -68,7 +68,7 @@ const LuckyMoneyDetail = () => {
           },
         })),
     getNextPageParam: (lastPage, allPages) => {
-      if (lastPage.pagination?.totalPage || 0 > allPages.length) {
+      if ((lastPage.pagination?.totalPage || 0) > allPages.length) {
         return allPages.length + 1
       }
       return undefined
@@ -299,7 +299,7 @@ const LuckyMoneyDetail = () => {
           </div>
 
           {/* 用户列表 */}
-          <div className="mt-4 flex flex-1 flex-col space-y-3 overflow-y-auto px-4">
+          <div className="mt-4 flex flex-1 flex-col space-y-3 px-4">
             {detailData.receiver?.length ? (
               <>
                 {detailData.receiver.map((receiverItem, index) => (

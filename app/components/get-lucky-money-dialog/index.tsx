@@ -128,9 +128,9 @@ const GetLuckyMoneyDialog: React.FC = () => {
                 {showPotential && (
                   <div className="absolute bottom-[9%] flex w-full flex-col items-center space-y-1 font-ultra">
                     <span className="text-base text-white">Potential Gain</span>
-                    <span className="flex text-sm">
+                    <span className="flex items-center justify-center text-sm">
                       <KokonIcon className="h-5 w-5" />
-                      <span className="flex items-center justify-center space-x-1 text-primary">
+                      <span className="ml-[2px] flex items-center justify-center space-x-1 text-primary">
                         <Amount value={minValue} crypto={Crypto.KOKON} />
                         <span className="mx-1">~</span>
                         <Amount value={maxValue} crypto={Crypto.KOKON} />

@@ -187,6 +187,7 @@ const Commission: React.FC = () => {
   }, [commissionListData])
 
   const latestSummary = useMemo(() => {
+    if (!displayName && !Number(selectedLevel)) return null
     if (!commissionListData?.pages) return null
     for (let i = commissionListData.pages.length - 1; i >= 0; i--) {
       const page = commissionListData.pages[i].data
@@ -195,7 +196,7 @@ const Commission: React.FC = () => {
       }
     }
     return null
-  }, [commissionListData])
+  }, [commissionListData?.pages, displayName, selectedLevel])
 
   // 回到顶部
   const [topRef, istopflagVisible, scrollToTop] = useIntersectionObserver<HTMLDivElement>()
@@ -304,7 +305,7 @@ const Commission: React.FC = () => {
                   <input
                     type="text"
                     disabled={!isSearchExpanded}
-                    className={`w-full bg-transparent py-2 pl-2 pr-8 text-white outline-none transition-all duration-300 ease-in-out ${
+                    className={`w-full bg-transparent py-2 pl-3 pr-8 text-white outline-none transition-all duration-300 ease-in-out ${
                       isSearchExpanded ? 'ml-2 opacity-100' : 'h-0 w-0 opacity-0'
                     }`}
                     placeholder="Search..."
@@ -423,7 +424,7 @@ const Commission: React.FC = () => {
       )}
       {latestSummary && (
         <div
-          className="fixed bottom-[88px] flex h-14 w-full items-center rounded-b-xl bg-black"
+          className="fixed bottom-[88px] flex h-14 w-full items-center rounded-b-xl border-t-[0.5px] border-white/20 bg-black"
           style={{ maxWidth, left: `calc((100vw - ${maxWidth}) / 2)` }}
         >
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
