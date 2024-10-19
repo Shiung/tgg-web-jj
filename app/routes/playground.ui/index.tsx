@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Controller, useForm, SubmitHandler } from 'react-hook-form'
+import { MiddleTruncate, Truncate } from '@re-dev/react-truncate'
 import Amount from '~/components/amount'
 import DatePickerSheet from '~/components/date-picker-sheet/index'
 import { DropdownSheet, DropdownOption } from '~/components/dropdown-sheet'
@@ -285,11 +286,23 @@ export default function Ui() {
           {`1234567890 ->`} <Amount value={'1234567890'} useKM crypto="KOKON" />
         </p>
         <p>
+          {`1234 ->`} <Amount value={'1234'} useKM crypto="KOKON" /> <br />
+          {`12345 ->`} <Amount value={'12345'} useKM crypto="KOKON" /> <br />
           {`123456789 ->`} <Amount value={'123456789'} useKM crypto="KOKON" />
         </p>
         <p>
           {`123456789012345678 ->`} <Amount value={'123456789012345678'} crypto="KOKON" />
         </p>
+      </div>
+      {/* Truncate */}
+      <h1 className="mt-4 text-xl font-bold">Truncate</h1>
+      <div className="flex flex-col space-y-1">
+        <div className="w-[120px]">
+          {/* 根據容器寬度截斷文字: */}
+          <Truncate>longNameNameNameNameName</Truncate>
+        </div>
+        UQCwfpt6psuE8A34YGP3dpqOrreD9DYEFmvBufcVkZ56doLu:{' '}
+        <MiddleTruncate end={4}>UQCwfpt6psuE8A34YGP3dpqOrreD9DYEFmvBufcVkZ56doLu</MiddleTruncate>
       </div>
     </div>
   )
