@@ -13,9 +13,17 @@ import { Button } from '~/components/ui/button'
 import InfiniteScroll from '~/components/ui/infinite-scroll'
 
 import { ListSkeleton } from './skeleton'
-import { EmptyList } from '../lucky-money.list/route'
 
 const QUERY_STATE = [2, 3]
+
+export const EmptyList = () => {
+  return (
+    <div className="m-auto flex flex-col items-center justify-center space-y-2 text-xs font-semibold text-white/70">
+      <img className="w-32 self-center" src="/images/system-no-data.png" alt="No data" />
+      <p className="self-center text-xs font-semibold text-white/70">No data available</p>
+    </div>
+  )
+}
 
 const LuckyMoneyHistory = () => {
   const setNavVisibility = useStore(state => state.setNavVisibility)

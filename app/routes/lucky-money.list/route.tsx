@@ -17,7 +17,7 @@ const QUERY_STATE = [1]
 export const EmptyList = () => {
   return (
     <div className="m-auto flex flex-col items-center justify-center text-xs font-semibold text-white/70">
-      <img src="/images/list-empty.png" className="mb-2 h-32 w-32" alt="list-empty" />
+      <img src="/images/system-error.png" className="mb-2 h-32 w-32" alt="list-empty" />
       <div>Empty. </div>
       <div>Share New Bags to invite friends to join KOKON!</div>
     </div>
