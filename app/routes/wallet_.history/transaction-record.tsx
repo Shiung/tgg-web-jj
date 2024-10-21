@@ -53,7 +53,6 @@ interface FormValues {
 }
 
 const typeOptions = [
-  { value: '0', label: 'All' },
   { value: 'Deposit', label: 'Deposit' }, // 充值
   { value: 'Withdraw', label: 'Withdraw' }, // 提款
   { value: 'Swap(sell)', label: 'Swap(Sell)' }, // 兑换
@@ -69,13 +68,11 @@ const typeOptions = [
 ]
 
 const balanceOptions = [
-  { value: '0', label: 'All' },
   { value: 'Income', label: 'Income' },
   { value: 'Expense', label: 'Expense' },
 ]
 
 const currencyOptions = [
-  { value: '0', label: 'All' },
   {
     value: 'USDT',
     label: (
@@ -245,9 +242,15 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                     placeholder="Currency"
                     value={field.value}
                     onConfirm={field.onChange}
+                    onReset={() => field.onChange('0')}
                     customTrigger={({ selectedLabel, placeholder }) => {
                       return (
-                        <div className="flex flex-1 cursor-pointer items-center justify-between rounded-full border-[0.5px] border-white/20 px-3">
+                        <div
+                          className={cn(
+                            'flex flex-1 cursor-pointer items-center justify-between rounded-full border-[0.5px] border-white/20 px-3',
+                            selectedLabel ? 'text-white' : 'text-white/50'
+                          )}
+                        >
                           {selectedLabel || placeholder}
                           <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
                         </div>
@@ -279,6 +282,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                     placeholder="Type"
                     value={field.value}
                     onConfirm={field.onChange}
+                    onReset={() => field.onChange('0')}
                   >
                     {typeOptions.map(option => (
                       <DropdownOption
@@ -305,6 +309,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                     placeholder="Balance"
                     value={field.value}
                     onConfirm={field.onChange}
+                    onReset={() => field.onChange('0')}
                   >
                     {balanceOptions.map(option => (
                       <DropdownOption

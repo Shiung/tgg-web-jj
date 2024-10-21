@@ -237,10 +237,11 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
                   <DropdownSheet
                     id="game-list-dropdown"
                     title="Game List"
+                    placeholder="Game"
                     value={field.value}
                     onConfirm={field.onChange}
+                    onReset={() => field.onChange('0')}
                   >
-                    <DropdownOption value="0" label="All" />
                     {bcGameOptions?.map(data => (
                       <DropdownOption
                         key={data.id}

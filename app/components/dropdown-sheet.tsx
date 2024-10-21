@@ -5,6 +5,7 @@ import {
   ReactNode,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react'
 import {
@@ -17,6 +18,7 @@ import {
 } from '~/components/ui/sheet'
 import { Button } from '~/components/ui/button'
 import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
+import XIcon from '~/icons/x.svg?react'
 import { cn } from '~/lib/utils'
 
 interface DropdownBottomSheetContextType {
@@ -37,6 +39,7 @@ interface DropdownBottomSheetProps {
     isOpen: boolean
   }) => ReactNode
   onConfirm?: (value: string | object) => void
+  onReset?(): void
   children: ReactNode
 }
 
@@ -47,6 +50,7 @@ const DropdownSheet = ({
   placeholder,
   customTrigger,
   onConfirm,
+  onReset,
   children,
 }: DropdownBottomSheetProps) => {
   const [open, setOpen] = useState(false)
@@ -70,7 +74,12 @@ const DropdownSheet = ({
           foundLabel = child.props.label
         }
       })
-      setSelectedOption({ value, label: foundLabel || JSON.stringify(value) })
+
+      if (foundLabel) {
+        setSelectedOption({ value, label: foundLabel || JSON.stringify(value) })
+      } else {
+        setSelectedOption(undefined)
+      }
     } else {
       setSelectedOption(undefined)
     }
@@ -90,18 +99,45 @@ const DropdownSheet = ({
     setOpen(false)
   }
 
-  const triggerContent = customTrigger ? (
-    customTrigger({
-      selectedLabel: selectedOption?.label,
-      placeholder,
-      isOpen: open,
-    })
-  ) : (
-    <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
-      <span className="overflow-hidden text-ellipsis">{selectedOption?.label || placeholder}</span>
-      <ArrowLineDownIcon className="h-4 w-4 flex-shrink-0 text-white/70" />
-    </Button>
-  )
+  const triggerContent = useMemo(() => {
+    return customTrigger ? (
+      customTrigger({
+        selectedLabel: selectedOption?.label,
+        placeholder,
+        isOpen: open,
+      })
+    ) : (
+      <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
+        <span
+          className={cn(
+            'overflow-hidden text-ellipsis',
+            selectedOption?.label ? 'tex-white' : 'text-white/50'
+          )}
+        >
+          {selectedOption?.label || placeholder}
+        </span>
+        {selectedOption?.label ? (
+          <Button
+            type="button"
+            variant="icon"
+            size="icon"
+            onClick={e => {
+              e.stopPropagation()
+              setSelectedOption(undefined)
+              setInnerSelectedOption(undefined)
+              if (onReset) {
+                onReset()
+              }
+            }}
+          >
+            <XIcon className="h-4 w-4 text-white" />
+          </Button>
+        ) : (
+          <ArrowLineDownIcon className="h-4 w-4 flex-shrink-0 text-white/70" />
+        )}
+      </Button>
+    )
+  }, [customTrigger, id, onReset, open, placeholder, selectedOption?.label])
 
   return (
     <DropdownBottomSheetContext.Provider value={{ innerSelectedOption, setInnerSelectedOption }}>
