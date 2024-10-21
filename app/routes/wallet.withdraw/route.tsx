@@ -436,7 +436,7 @@ export default function Withdraw() {
                   <span className="pr-1 text-white">
                     {currentSetting?.feeType === 'fixed' && currentSetting?.feeSettingValue}
                     {currentSetting?.feeType === 'percentage' &&
-                      `${watch('amount') || 0} x ${currentSetting?.feeSettingValue}`}
+                      `${watch('amount') || 0} x ${(parseFloat(currentSetting?.feeSettingValue) / 100).toFixed(2)}`}
                   </span>
                   <ActiveIcon currency={currentSetting?.currency} className="h-3 w-3" />
                 </div>
