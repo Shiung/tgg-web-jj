@@ -1199,7 +1199,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -5530,6 +5530,26 @@
         "tags": [
           "(*DepositController)"
         ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "currency": {
+                  "description": "申請的幣種 TON USDT. Allowed Enum",
+                  "type": "string",
+                  "enum": [
+                    "TON",
+                    "USDT"
+                  ]
+                }
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -5686,7 +5706,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -6785,6 +6805,19 @@
           "type": "integer",
           "format": "int64",
           "minimum": 2
+        }
+      }
+    },
+    "DepositRequest": {
+      "type": "object",
+      "properties": {
+        "currency": {
+          "description": "申請的幣種 TON USDT. Allowed Enum",
+          "type": "string",
+          "enum": [
+            "TON",
+            "USDT"
+          ]
         }
       }
     },

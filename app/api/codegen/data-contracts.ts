@@ -350,6 +350,11 @@ export interface DeleteUpgradeAnimationRequest {
   finalClass?: number;
 }
 
+export interface DepositRequest {
+  /** 申請的幣種 TON USDT. Allowed Enum */
+  currency?: "TON" | "USDT";
+}
+
 export interface DepositResponse {
   /** ton交易的備註欄位，必填 */
   comment: string;
@@ -2225,7 +2230,7 @@ export interface CustomerTeamPerformanceListParams {
    */
   page: number;
   /**
-   * 分頁筆數 (Minimum: 20, Required)
+   * 分頁筆數 (Required, Minimum: 20)
    * @format int64
    * @min 20
    */
@@ -2408,6 +2413,11 @@ export interface TeamCommissionListListParams {
   pageSize: number;
 }
 
+export interface WalletDepositCreatePayload {
+  /** 申請的幣種 TON USDT. Allowed Enum */
+  currency?: "TON" | "USDT";
+}
+
 export interface WalletHistoryListListParams {
   /**
    * 帳變時間(起日) (Required when TransactionTimeTo is present)
@@ -2445,7 +2455,7 @@ export interface WalletHistoryListListParams {
    */
   page: number;
   /**
-   * 分頁筆數 (Minimum: 20, Required)
+   * 分頁筆數 (Required, Minimum: 20)
    * @format int64
    * @min 20
    */

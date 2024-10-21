@@ -10,6 +10,7 @@
  */
 
 import {
+  WalletDepositCreatePayload,
   WalletHistoryListListParams,
   WalletTransferCreatePayload,
   WalletWithdrawCreatePayload,
@@ -30,7 +31,7 @@ export class Wallet<SecurityDataType = unknown> {
    * @name WalletDepositCreate
    * @request POST:/ajax/wallet/deposit
    */
-  walletDepositCreate = (params: RequestParams = {}) =>
+  walletDepositCreate = (body: WalletDepositCreatePayload, params: RequestParams = {}) =>
     this.http.request<
       {
         /** ton交易的備註欄位，必填 */
@@ -42,6 +43,8 @@ export class Wallet<SecurityDataType = unknown> {
     >({
       path: `/ajax/wallet/deposit`,
       method: "POST",
+      body: body,
+      type: ContentType.Json,
       ...params,
     });
   /**
