@@ -8,12 +8,12 @@ import { apis } from '~/api/index'
 export function useShare() {
   const inTelegram = useStore(state => state.inTelegram)
   const telegramConfig = useStore(state => state.telegramConfig)
-  const { referralCode } = useStore(state => state.userInfo)
+  const { referralCode: userReferralCode } = useStore(state => state.userInfo)
   const utils = useUtils()
 
   // 邀請連結打點
-  const { mutate: shareGA, isPending } = useMutation({
-    mutationFn: () => apis.customer.customerShareCreate({ referralCode }),
+  const { mutate: shareAction, isPending } = useMutation({
+    mutationFn: apis.customer.customerShareCreate,
     onError: error => {
       console.error('[ERROR] shareGA error', error)
     },
@@ -28,9 +28,9 @@ export function useShare() {
    * 分享連結 (Telegram 內使用 Telegram 的分享方法)
    */
   const share = useCallback(
-    async (url: string, text?: string) => {
-      if (referralCode) {
-        await shareGA()
+    async (url: string, text?: string, referralCode?: string) => {
+      if (referralCode || userReferralCode) {
+        await shareAction({ referralCode: referralCode || userReferralCode })
       } else {
         console.warn('[WARN] referralCode is not found')
       }
@@ -53,7 +53,7 @@ export function useShare() {
         }
       }
     },
-    [inTelegram, utils, shareGA, referralCode]
+    [inTelegram, utils, shareAction, userReferralCode]
   )
 
   return {

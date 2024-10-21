@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { SubmitHandler, useFormContext } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
+import { useCopyToClipboard } from 'react-use'
 
 import {
   Sheet,
@@ -14,18 +15,22 @@ import { Button } from '~/components/ui/button'
 import SvgCopy from '~/icons/copy.svg?react'
 import { apis } from '~/api'
 import { CreateRequest } from '~/api/codegen/data-contracts'
-
-import type { FormData } from './route'
 import { Input } from '~/components/ui/input'
-import { useCopyToClipboard } from 'react-use'
 import { errorToast, successToast } from '~/lib/toast'
 import { useShare } from '~/hooks/useShare'
+
+import type { FormData } from './route'
 
 const ShareSheet: React.FC = () => {
   const { share, tDotMeBaseShareUrl } = useShare()
   const [state, copyToClipboard] = useCopyToClipboard()
   const [open, setOpen] = useState(false)
-  const [shareUrlLink, setShareUrlLink] = useState('')
+  const [shareReferralCode, setShareReferralCode] = useState('')
+
+  const shareUrlLink = useMemo(() => {
+    if (!tDotMeBaseShareUrl || !shareReferralCode) return ''
+    return `${tDotMeBaseShareUrl}/?startapp=${shareReferralCode}`
+  }, [shareReferralCode, tDotMeBaseShareUrl])
 
   const {
     handleSubmit,
@@ -60,17 +65,17 @@ const ShareSheet: React.FC = () => {
       const res = await createPacket.mutateAsync(shareData)
       if (res.data.referralCode) {
         successToast('Share successful')
-        setShareUrlLink(`${tDotMeBaseShareUrl}/?startapp=${res.data.referralCode}`)
+        setShareReferralCode(res.data.referralCode)
         setOpen(true)
       } else {
-        setShareUrlLink('')
+        setShareReferralCode('')
         setOpen(false)
       }
       console.log('packetCreate res:', res)
     } catch (error) {
       console.error('packetCreate failed:', error)
       errorToast('Share failed')
-      setShareUrlLink('')
+      setShareReferralCode('')
       setOpen(false)
     }
   }
@@ -78,9 +83,10 @@ const ShareSheet: React.FC = () => {
   const handleShareURL = useCallback(() => {
     share(
       shareUrlLink,
-      'I am sharing the LIMITED lucky money bags with friends. Click here to get one!'
+      'I am sharing the LIMITED lucky money bags with friends. Click here to get one!',
+      shareReferralCode
     )
-  }, [share, shareUrlLink])
+  }, [share, shareReferralCode, shareUrlLink])
 
   const handleSheetChange = (isOpen: boolean) => {
     setOpen(isOpen)

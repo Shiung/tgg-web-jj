@@ -92,8 +92,12 @@ const LuckyMoneyDetail = () => {
   }, [detailData.referralCode, tDotMeBaseShareUrl])
 
   const handleShareURL = useCallback(() => {
-    share(shareUrlLink, 'I am sending limited lucky bags. Click here to get one!')
-  }, [share, shareUrlLink])
+    share(
+      shareUrlLink,
+      'I am sending limited lucky bags. Click here to get one!',
+      detailData.referralCode
+    )
+  }, [detailData.referralCode, share, shareUrlLink])
 
   const handleTerminateSuccess = useCallback(() => {
     navigate('/lucky-money/list')
