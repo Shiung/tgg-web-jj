@@ -1,6 +1,7 @@
 import React from 'react'
+import { Link, useNavigate } from '@remix-run/react'
 import { Button } from '~/components/ui/button'
-import { Link } from '@remix-run/react'
+import useStore from '~/stores/useStore'
 
 interface NoDataViewProps {
   showButton?: boolean
@@ -13,6 +14,14 @@ const NoDataView: React.FC<NoDataViewProps> = ({
   buttonText = 'Go',
   message = 'There is no treasure to unlock.',
 }) => {
+  const isLoggedIn = useStore(state => state.isLoggedIn)
+  const openNeedLoginDialog = useStore(state => state.openNeedLoginDialog)
+  const navigate = useNavigate()
+
+  const handleGo = () => {
+    if (isLoggedIn) navigate('/task/subtask')
+    else openNeedLoginDialog()
+  }
   return (
     <div className="absolute left-1/2 top-1/2 flex w-full -translate-x-1/2 -translate-y-1/2 transform flex-col items-center justify-center px-3">
       <img className="w-32" src="/images/system-error.png" alt="No data" />
@@ -21,11 +30,9 @@ const NoDataView: React.FC<NoDataViewProps> = ({
         Get the treasure from the reward of task.
       </p>
       {showButton && (
-        <Link to="/task/subtask" className="w-full">
-          <Button catEars className="mt-3 w-full">
-            {buttonText}
-          </Button>
-        </Link>
+        <Button catEars className="mt-3 w-full" onClick={handleGo}>
+          {buttonText}
+        </Button>
       )}
     </div>
   )
