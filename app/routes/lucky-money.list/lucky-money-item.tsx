@@ -8,7 +8,6 @@ import Amount from '~/components/amount'
 import { Crypto } from '~/consts/crypto'
 import { useMemo } from 'react'
 import { cn } from '~/lib/utils'
-import { parseAmount } from '~/lib/amount'
 
 type LuckyMoneyItemProps = NonNullable<PacketsResponse['list']>[number]
 
@@ -76,12 +75,7 @@ const LuckyMoneyItem: React.FC<LuckyMoneyItemProps> = ({
           <div className="flex flex-col items-end">
             <div className="flex items-center space-y-1 text-sm font-ultra">
               <KokonIcon className="h-4 w-4" />
-              <Amount
-                crypto={Crypto.KOKON}
-                value={parseAmount(distributedAmount) + parseAmount(remainingAmount)}
-                useKM
-                className="ml-1"
-              />
+              <Amount crypto={Crypto.KOKON} value={distributedAmount} useKM className="ml-1" />
             </div>
             {state === 1 && (
               <div className="text-xs font-normal text-white/70">
