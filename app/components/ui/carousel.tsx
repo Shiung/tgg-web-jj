@@ -228,11 +228,11 @@ const CarouselNext = React.forwardRef<HTMLButtonElement, React.ComponentProps<ty
 CarouselNext.displayName = 'CarouselNext'
 
 const CarouselDots = () => {
-  const { selectedIndex, scrollSnaps, api } = useCarousel()
+  const { selectedIndex, api } = useCarousel()
 
   return (
     <div className="flex justify-center space-x-1 pt-2">
-      {scrollSnaps.map((_, index: number) => (
+      {(api?.scrollSnapList() || []).map((_, index: number) => (
         <button
           key={index}
           className={cn(

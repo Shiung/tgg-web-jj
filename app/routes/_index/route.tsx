@@ -17,31 +17,15 @@ import { GameCode, getGameRoute, VenueType } from '~/consts/game'
 import useStore from '~/stores/useStore'
 import { buildResourceImageUrl } from '~/lib/utils'
 
+import { useBanner, useBannerRedirect } from './useBanner'
 import GameImg from './game-img'
 import { GameEntranceSkeleton, NewReleaseCarouselContentSkeleton } from './skeleton'
-import Footer from './footer'
+// import Footer from './footer'
 import CurrencyConversionDialog from './currency-conversion-dialog'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'KOKON' }, { name: 'description', content: 'Welcome to KOKON!' }]
 }
-
-const bannerSlides = [
-  {
-    id: 1,
-    title: 'WELCOME TO KOKON',
-    content: 'Play with neko, earn KOKON!',
-    imgSrc: '/images/home/carousel/banner-cat.png',
-    imgAlt: 'banner-cat',
-  },
-  {
-    id: 2,
-    title: 'SMASH EGG',
-    content: 'Play with neko, earn KOKON!',
-    imgSrc: '/images/home/carousel/banner-egg.png',
-    imgAlt: 'banner-egg',
-  },
-]
 
 /* Home */
 export default function Index() {
@@ -49,6 +33,9 @@ export default function Index() {
   const activeGameList = useStore(state => state.activeGameList)
   const isActiveGameListFetching = useStore(state => state.isActiveGameListFetching)
   const navigate = useNavigate()
+
+  const { banners } = useBanner()
+  const bannerRedirect = useBannerRedirect()
 
   // Crypto類型遊戲 先顯示貨幣轉換對話框
   const [isCurrencyConversionDialogOpen, setIsCurrencyConversionDialogOpen] = useState(false)
@@ -71,18 +58,23 @@ export default function Index() {
         </div>
         <Carousel className="w-full py-3" plugins={[Autoplay({ delay: 3000 })]}>
           <CarouselContent className="ml-0">
-            {bannerSlides.map(slide => (
+            {banners.map(banner => (
               <CarouselItem
-                key={slide.id}
-                className="relative flex aspect-[343/140] justify-between"
+                key={banner.id}
+                className="relative flex aspect-[343/140] cursor-pointer justify-between"
+                onClick={() => {
+                  bannerRedirect(banner.redirectType || '', banner.redirectConfig || '')
+                }}
               >
                 <div className="absolute inset-y-3 left-4 flex w-[43%] flex-col justify-center break-words">
-                  <h1 className="text-2xl font-ultra">{slide.title}</h1>
-                  <p className="mt-1 text-xs font-normal text-primary">{slide.content}</p>
+                  <h1 className="text-2xl font-ultra">{banner.currentLangNames?.title}</h1>
+                  <p className="mt-1 text-xs font-normal text-primary">
+                    {banner.currentLangNames?.subTitle}
+                  </p>
                 </div>
                 <img
-                  src={slide.imgSrc}
-                  alt={slide.imgAlt}
+                  src={buildResourceImageUrl(banner.image)}
+                  alt={banner.name}
                   className="absolute inset-0 object-contain"
                 />
               </CarouselItem>

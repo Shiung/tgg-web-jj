@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react'
+import React, { useState, useRef, useCallback, useEffect } from 'react'
 import { cn } from '~/lib/utils'
 import { type TaskQueryResponse } from '~/api/codegen/data-contracts'
 import { type TaskType, useTaskTypeDisplayMap } from './type'
@@ -9,9 +9,13 @@ import { Button } from '~/components/ui/button'
 import TaskCard from './task-card'
 import TaskSubtaskSkeleton from './task-subtask-seleton'
 import styles from './index.module.scss'
+import { useSearchParams } from '@remix-run/react'
 
 const TaskSubtask: React.FC = () => {
   const { t } = useTranslation()
+  const [searchParams] = useSearchParams()
+  const searchTaskType = searchParams.get('type')
+
   const taskTypeDisplayMap = useTaskTypeDisplayMap()
   const { tasks, isTasksLoading } = useGetTask()
 
@@ -29,6 +33,20 @@ const TaskSubtask: React.FC = () => {
       targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }
   }, [])
+
+  useEffect(() => {
+    // 資料未取得前不執行
+    if (isTasksLoading || !tasks) return
+    // url 有指定 taskType
+    if (searchTaskType) {
+      console.log('params.type', searchTaskType)
+
+      const type = searchTaskType as TaskType
+      if (taskRefs.current[type]) {
+        handleTaskTypeClick(type)
+      }
+    }
+  }, [handleTaskTypeClick, isTasksLoading, searchTaskType, tasks])
 
   if (isTasksLoading || !tasks) {
     return <TaskSubtaskSkeleton />

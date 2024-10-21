@@ -19,6 +19,7 @@ type GameCurrency = 'usd' | 'K9'
 interface BaseGameInfo {
   currency: GameCurrency
   name: string
+  gameType: VenueType
   fallbackImgSrc: string
 }
 
@@ -26,21 +27,25 @@ const baseGameInfos: Record<GameCode, BaseGameInfo> = {
   [GameCode.Mines]: {
     currency: 'usd',
     name: 'Mines',
+    gameType: VenueType.Crypto,
     fallbackImgSrc: '/images/home/carousel/mines.png',
   },
   [GameCode.Crash]: {
     currency: 'usd',
     name: 'Crash',
+    gameType: VenueType.Crypto,
     fallbackImgSrc: '/images/home/carousel/crash.png',
   },
   [GameCode.CatRussia]: {
     currency: 'K9',
     name: 'Cat Russia',
+    gameType: VenueType.Casual,
     fallbackImgSrc: '/images/home/carousel/cat-russia.png',
   },
   [GameCode.GoDown100Floors]: {
     currency: 'usd',
     name: 'Go Down 100 Floors',
+    gameType: VenueType.Casual,
     fallbackImgSrc: '/images/home/carousel/go-down-100-floors.png',
   },
 }
