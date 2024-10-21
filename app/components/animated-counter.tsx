@@ -5,7 +5,7 @@ import {
   useInView,
   useIsomorphicLayoutEffect,
 } from 'framer-motion'
-import { BigNumber } from 'bignumber.js'
+import Decimal, { BigNumber } from 'bignumber.js'
 
 import { cn } from '~/lib/utils'
 import { cryptoRules, isValidCrypto } from '~/consts/crypto'
@@ -27,13 +27,10 @@ const defaultMaxInt = 10 // 默认最大整数位数
 const defaultMaxDec = 2 // 默认最大小数位数
 
 // 判斷幾位小數
-function getDecimalPlaces(value: number): number {
-  const valueString = value.toString()
-  const decimalIndex = valueString.indexOf('.')
-  if (decimalIndex === -1) {
-    return 0 // 没有小数部分
-  }
-  return valueString.length - decimalIndex - 1
+function getDecimalPlaces(value: number | string): number {
+  const decimalValue = new Decimal(value)
+  const places = decimalValue.decimalPlaces?.() ?? 0
+  return places > 4 ? 4 : places
 }
 
 const AnimatedCounter = ({
@@ -50,6 +47,9 @@ const AnimatedCounter = ({
   // 數字動畫處理
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true })
+
+  // 根據傳進來數字決定顯示動畫要用幾位數去跑
+  const decimalPlaces = useMemo(() => getDecimalPlaces(from - to), [to, from])
 
   useIsomorphicLayoutEffect(() => {
     const element = ref.current
@@ -79,8 +79,6 @@ const AnimatedCounter = ({
       controls.stop()
     }
   }, [inView, from, to])
-
-  const decimalPlaces = useMemo(() => getDecimalPlaces(from - to), [to, from])
 
   // 金額顯示規則
   const { maxInt, maxDec } = useMemo(() => {

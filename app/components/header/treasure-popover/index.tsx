@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { Link, useLocation } from '@remix-run/react'
 import Lottie from 'lottie-react'
-import { useTreasuresList, type Treasure } from '~/routes/task.treasure/hook/useTreasuresList'
+import { useTreasuresList } from '~/routes/task.treasure/hook/useTreasuresList'
 import { useGenerateRuleList } from '~/routes/task.treasure/hook/useGenerateRuleList'
 import { cn } from '~/lib/utils'
 import useStore from '~/stores/useStore'
@@ -17,6 +17,11 @@ import Empty from './empty'
 import { errorToast, successToast } from '~/lib/toast'
 import AnimatedCounter from '~/components/animated-counter'
 
+interface readyToShowChangeTreasureType {
+  id: number
+  remainingClaimAmount: string
+}
+
 const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
   const [isOpen, setIsOpen] = useState(true)
   const location = useLocation()
@@ -28,26 +33,46 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
     setIsOpen(false)
   }, [location.pathname])
 
+  // 是否有可以領的寶箱
+  const treasureNotice = useMemo(() => {
+    return categorizedTreasures.unlocking.filter(
+      treasure => Number(treasure.remainingClaimAmount) > 0
+    )
+  }, [categorizedTreasures.unlocking])
   // 有可領取的寶箱動畫
   const controls = useAnimationControls()
 
   useEffect(() => {
-    if (categorizedTreasures.unlocking.length > 0) {
-      const animate = async () => {
-        while (categorizedTreasures.unlocking.length > 0) {
-          await controls.start({
+    let animationFrameId: number
+    let isAnimating = true
+
+    const animate = () => {
+      if (treasureNotice.length > 0 && isAnimating) {
+        controls
+          .start({
             scaleY: [1, 1.2, 1],
             transition: { duration: 0.5 },
           })
-          await controls.start({
-            rotate: [-5, 5, -5, 5, -5, 0],
-            transition: { duration: 1 },
+          .then(() => {
+            return controls.start({
+              rotate: [-5, 5, -5, 5, -5, 0],
+              transition: { duration: 1 },
+            })
           })
-        }
+          .then(() => {
+            animationFrameId = requestAnimationFrame(animate)
+          })
       }
-      animate()
     }
-  }, [categorizedTreasures, controls])
+
+    animate()
+
+    return () => {
+      isAnimating = false
+      cancelAnimationFrame(animationFrameId)
+      controls.stop()
+    }
+  }, [treasureNotice, controls])
 
   // 開關popover
   const handleToggle = () => setIsOpen(prev => !prev)
@@ -66,18 +91,31 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
   // categorizedTreasures 與 store.baseTreasure 比較 哪一個寶箱金額有變化
   const baseTreasure = useStore(state => state.baseTreasure)
   const setBaseTreasure = useStore(state => state.setBaseTreasure)
-  const [changedTreasures, setChangedTreasures] = useState<Treasure[] | []>([])
+  const [readyToShowChangeTreasure, setReadyToShowChangeTreasure] = useState<
+    readyToShowChangeTreasureType[]
+  >([])
   useEffect(() => {
     const fetchData = async () => {
       if (isOpen && baseTreasure) {
         const { data: freshData } = await refetch()
-        const _changedTreasures =
-          freshData?.data?.list?.filter(treasure => {
-            if (!treasure) return false
-            const baseTreasureItem = baseTreasure ? baseTreasure[treasure.id] : null // 處理 null 情況
-            return baseTreasureItem && baseTreasureItem !== treasure.remainingClaimAmount.toString() // 比較金額
-          }) || []
-        setChangedTreasures(_changedTreasures)
+        const _changedTreasures: readyToShowChangeTreasureType[] = []
+        freshData?.data?.list?.forEach(treasure => {
+          if (!treasure?.id) return
+          // 只有 UNLOCKING 會有寶箱解鎖金額差異
+          if (treasure?.status !== 'UNLOCKING') return
+          // store treasure id 有沒有記到 前一次 未查看動畫的寶箱
+          if (!(treasure?.id in baseTreasure)) return
+          // 與紀錄的金額 相同
+          if (baseTreasure[treasure.id] === treasure.remainingClaimAmount.toString()) return
+
+          // 放入待展示
+          _changedTreasures.push({
+            id: treasure.id,
+            remainingClaimAmount: baseTreasure[treasure.id],
+          })
+        })
+
+        setReadyToShowChangeTreasure(_changedTreasures)
       }
     }
     fetchData() // 調用非同步函式
@@ -102,9 +140,9 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
               loading="eager"
             />
           </Button>
-          {categorizedTreasures.unlocking.length > 0 && (
+          {treasureNotice.length > 0 && (
             <div className="absolute right-0 top-0 rounded-full bg-red-500 px-1 text-xs text-white">
-              {categorizedTreasures.unlocking.length}
+              {treasureNotice.length}
             </div>
           )}
         </div>
@@ -120,7 +158,10 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
           <>
             <div className="flex-1 space-y-2 overflow-y-auto">
               {categorizedTreasures.unlocking.map(treasure => {
-                const changedTreasure = changedTreasures.find(t => t?.id === treasure.id)
+                let _changedTreasure = null
+                if (readyToShowChangeTreasure.length > 0) {
+                  _changedTreasure = readyToShowChangeTreasure.find(t => t?.id === treasure.id)
+                }
                 return (
                   <div key={treasure.id} className="flex flex-col rounded-xl bg-[#1c1c1c]">
                     <ul className="list-disc rounded-t-xl bg-[#333] py-2 pl-6 pr-3 text-white">
@@ -136,13 +177,13 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                     <div className="flex items-stretch rounded-b-xl">
                       <div className="flex flex-1 items-center space-x-2 py-1 pl-3 pr-2">
                         <div key={treasure.id} className="relative">
-                          {changedTreasure?.id ? (
+                          {_changedTreasure?.id ? (
                             <Lottie
                               className="h-20 w-20"
                               animationData={catboxLottieFile}
                               loop={false}
                               onComplete={() => {
-                                setChangedTreasures([])
+                                setReadyToShowChangeTreasure([])
                                 setBaseTreasure(null)
                               }}
                             />
@@ -171,17 +212,18 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                       </div>
                       <div className="flex flex-[0_0_33%] flex-col items-center justify-center border-l border-dashed border-white/20 px-2 py-1">
                         <AnimatedCounter
-                          from={parseAmount(treasure.remainingClaimAmount)}
-                          to={
-                            parseAmount(changedTreasure?.remainingUnlockAmount) ||
-                            parseAmount(treasure.remainingClaimAmount)
+                          from={
+                            _changedTreasure?.remainingClaimAmount !== undefined
+                              ? parseAmount(_changedTreasure.remainingClaimAmount)
+                              : parseAmount(treasure.remainingClaimAmount)
                           }
+                          to={parseAmount(treasure.remainingClaimAmount)}
                           crypto={treasure.rewardType}
                           useKM={treasure?.rewardType === 'KOKON'}
                           animationOptions={{ duration: 1 }}
                           className="text-base font-ultra text-app-green"
                         />
-                        <p className="text-xs text-white/70">Ready for claim</p>
+                        <p className="text-xs text-white/70">Ready for claim </p>
                       </div>
                     </div>
                   </div>

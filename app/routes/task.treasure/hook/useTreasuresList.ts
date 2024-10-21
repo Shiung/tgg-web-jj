@@ -90,7 +90,6 @@ export function useTreasuresList() {
         },
         {}
       )
-
       setBaseTreasure(_result)
     }
   }, [isLoggedIn, baseTreasure, setBaseTreasure, categorizedTreasures])
@@ -111,7 +110,7 @@ export function useTreasuresList() {
     setIsClaimingAll(true)
 
     const claimBatch = async (treasures: Treasure[]) => {
-      const results = await Promise.all(
+      const results = await Promise.allSettled(
         treasures.map(treasure => {
           if (!treasure?.id) {
             console.error('treasure id is null', treasure)
@@ -126,21 +125,33 @@ export function useTreasuresList() {
     const batchSize = 5
     let claimedCount = 0
     const totalTreasures = categorizedTreasures.unlocking.length
+    const failedClaims: number[] = []
 
     try {
       while (claimedCount < totalTreasures) {
         const batch = categorizedTreasures.unlocking.slice(claimedCount, claimedCount + batchSize)
-        await claimBatch(batch)
+        const results = await claimBatch(batch)
+
+        results.forEach((result, index) => {
+          if (result.status === 'rejected') {
+            failedClaims.push(batch[index].id)
+          }
+        })
+
         claimedCount += batch.length
         await new Promise(resolve => setTimeout(resolve, 1000)) // 添加 1 秒延遲
       }
-      await refetch()
     } catch (error) {
       console.error('Claim bonuses failed:', error)
       throw error
     } finally {
       queryClient.invalidateQueries({ queryKey: ['campaignTreasuresList'] })
+      setBaseTreasure(null)
       setIsClaimingAll(false)
+
+      if (failedClaims.length > 0) {
+        console.error('Some claims failed:', failedClaims)
+      }
     }
   }
 
