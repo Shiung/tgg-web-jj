@@ -81,11 +81,20 @@ const ProfileDialog: React.FC = () => {
         <DialogHeader className="relative flex aspect-[343/130] w-full flex-col items-center justify-center bg-colorLinear-orange">
           <DialogTitle />
           <img src="/images/long-wave.png" alt="profile" className="absolute inset-0 top-3" />
-          <img
-            src="/images/header/profile.png"
-            alt="profile"
-            className="h-20 w-20 object-contain"
-          />
+          <div className="relative h-20 w-20">
+            <img
+              src="/images/header/profile.png"
+              alt="profile"
+              className="h-full w-full object-contain"
+            />
+            {telegramUserData?.photoUrl && (
+              <img
+                className="absolute left-1/2 top-1/2 h-12 w-12 -translate-x-1/2 -translate-y-1/2 transform rounded-full border-[2px] border-primary"
+                src={telegramUserData?.photoUrl}
+                alt="avatar"
+              />
+            )}
+          </div>
           <span className="mt-1 text-base font-ultra">{`${telegramUserData?.firstName || ''} ${telegramUserData?.lastName || ''}`}</span>
         </DialogHeader>
         <div className="flex flex-col space-y-4 p-3 text-sm text-white/70">
