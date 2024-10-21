@@ -74,17 +74,6 @@ export default function Deposit() {
   const [tonConnectUI] = useTonConnectUI()
   const [isConnected, setIsConnected] = useState(tonConnectUI.connected)
 
-  /* 獲取充值設定 */
-  const { data: depositSettingRaw, isLoading: settingLoading } = useQuery({
-    queryKey: ['getDepositSetting'],
-    queryFn: apis.wallet.walletDepositSettingList,
-  })
-  /* 獲取充值資訊 */
-  const { data: depositCreateData } = useQuery({
-    queryKey: ['walletDepositCreate'],
-    queryFn: apis.wallet.walletDepositCreate,
-  })
-
   const {
     control,
     handleSubmit,
@@ -99,6 +88,19 @@ export default function Deposit() {
   })
 
   const selectedCurrency = watch('currency')
+
+  /* 獲取充值設定 */
+  const { data: depositSettingRaw, isLoading: settingLoading } = useQuery({
+    queryKey: ['getDepositSetting'],
+    queryFn: apis.wallet.walletDepositSettingList,
+  })
+  /* 獲取充值資訊 */
+  const { data: depositCreateData } = useQuery({
+    queryKey: ['walletDepositCreate', { currency: selectedCurrency }],
+    queryFn: () =>
+      apis.wallet.walletDepositCreate({ currency: selectedCurrency as 'TON' | 'USDT' }),
+    enabled: isValidCrypto(selectedCurrency),
+  })
 
   const { currencies, availableCurrencySettings } = useMemo(() => {
     if (!depositSettingRaw?.data?.settings) return { currencies: [], availableCurrencySetting: [] }
@@ -312,7 +314,10 @@ export default function Deposit() {
                   setFocus('amount')
                 }}
               >
-                <Amount value={amount} crypto={selectedCurrency} />
+                <Amount
+                  value={amount}
+                  crypto={isValidCrypto(selectedCurrency) ? selectedCurrency : undefined}
+                />
               </Button>
             ))}
           </div>
