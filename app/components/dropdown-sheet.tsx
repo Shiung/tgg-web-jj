@@ -39,7 +39,7 @@ interface DropdownBottomSheetProps {
     isOpen: boolean
   }) => ReactNode
   onConfirm?: (value: string | object) => void
-  onReset?(): void
+  onReset: () => void
   children: ReactNode
 }
 
@@ -99,6 +99,15 @@ const DropdownSheet = ({
     setOpen(false)
   }
 
+  const handleClear = () => {
+    if (onReset) {
+      onReset()
+    }
+    setOpen(false)
+    setSelectedOption(undefined)
+    setInnerSelectedOption(undefined)
+  }
+
   const triggerContent = useMemo(() => {
     return customTrigger ? (
       customTrigger({
@@ -149,7 +158,10 @@ const DropdownSheet = ({
           </SheetHeader>
           <div className="space-y-2 p-4">{children}</div>
           <SheetFooter className="px-4 pb-4">
-            <Button variant="default" onClick={handleConfirm} className="flex-1">
+            <Button variant="gray" catEars onClick={handleClear} className="flex-1">
+              Clear
+            </Button>
+            <Button variant="default" catEars onClick={handleConfirm} className="flex-1">
               Confirm
             </Button>
           </SheetFooter>

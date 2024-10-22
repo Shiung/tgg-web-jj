@@ -1,9 +1,10 @@
-import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { endOfDay, format, formatRFC3339, startOfDay, subDays } from 'date-fns'
 import { z } from 'zod'
+import { cn } from '~/lib/utils'
 
 // NOTICE: For test
 // import { getMockCommissionData } from './fake-commisssionData'
@@ -26,6 +27,7 @@ import ArrowLineUpIcon from '~/icons/arrow-line-up.svg?react'
 import XIcon from '~/icons/x.svg?react'
 import LoadingIcon from '~/icons/loading.svg?react'
 import { Crypto } from '~/consts/crypto'
+import InfiniteScroll from '~/components/ui/infinite-scroll'
 
 import CommissionEmpty from './commission-empty'
 import CommissionTableList from './commission-tableList'
@@ -34,7 +36,6 @@ import ShareTeamSkeleton from './share-team-skeleton'
 const PAGE_SIZE = 20
 
 const levelOptions = [
-  { value: '0', label: 'LV: all' },
   { value: '1', label: 'LV: 1' },
   { value: '2', label: 'LV: 2' },
 ]
@@ -145,37 +146,6 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
     initialPageParam: 1,
     enabled: !!selectedLevel && !!dateTimeRange.from && !!dateTimeRange.to && !errors.dateTimeRange,
   })
-
-  // 滾動加載
-  const loadMoreRef = useRef<HTMLDivElement>(null)
-  const loadMoreData = useCallback(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage()
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
-
-  useEffect(() => {
-    const currentLoadMoreRef = loadMoreRef.current
-
-    const observer = new IntersectionObserver(
-      entries => {
-        if (entries[0].isIntersecting) {
-          loadMoreData()
-        }
-      },
-      { threshold: 1.0 }
-    )
-
-    if (currentLoadMoreRef) {
-      observer.observe(currentLoadMoreRef)
-    }
-
-    return () => {
-      if (currentLoadMoreRef) {
-        observer.unobserve(currentLoadMoreRef)
-      }
-    }
-  }, [loadMoreData])
 
   const flattenedCommissionList = useMemo(() => {
     return commissionListData?.pages.flatMap(page => page.data?.list ?? []) || []
@@ -337,10 +307,31 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
               <DropdownSheet
                 id="game-list-dropdown"
                 title="LV"
+                placeholder="LV"
+                onReset={() => {
+                  field.onChange('0')
+                }}
                 customTrigger={({ selectedLabel, placeholder }) => (
-                  <div className="mr-1 mt-2 flex min-w-[120px] flex-1 cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-1000 ease-in-out">
+                  <div
+                    className={cn(
+                      'mr-1 mt-2 flex min-w-[120px] flex-1 cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-1000 ease-in-out',
+                      selectedLabel ? 'tex-white' : 'text-white/50'
+                    )}
+                  >
                     <div>{selectedLabel || placeholder}</div>
-                    <ArrowLineDownIcon className="h-4 w-4" />
+                    {!selectedLabel ? (
+                      <ArrowLineDownIcon className="h-4 w-4" />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={e => {
+                          e.stopPropagation()
+                          field.onChange('0')
+                        }}
+                      >
+                        <XIcon className="h-4 w-4 text-[#FFFFFFB2]" />
+                      </button>
+                    )}
                   </div>
                 )}
                 value={field.value}
@@ -395,14 +386,18 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
         ) : flattenedCommissionList.length > 0 ? (
           <>
             <CommissionTableList data={flattenedCommissionList} />
-            <div ref={loadMoreRef} className="h-20">
-              {isFetchingNextPage && (
+            <InfiniteScroll
+              hasMore={!!hasNextPage}
+              isLoading={isFetchingNextPage}
+              next={fetchNextPage}
+              threshold={1}
+            >
+              {hasNextPage && (
                 <div className="mt-2 flex w-full items-center justify-center">
                   <LoadingIcon className="h-6 w-6 animate-spin" />
                 </div>
               )}
-              {!hasNextPage && <div className="mt-2 text-center">--- end ---</div>}
-            </div>
+            </InfiniteScroll>
           </>
         ) : (
           <CommissionEmpty />

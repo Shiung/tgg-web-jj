@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
+import { cn } from '~/lib/utils'
 
 //NOTICE: For test
 // import fetchTeamData from './fake-memberData'
@@ -33,16 +34,11 @@ import ShareTeamSkeleton from './share-team-skeleton'
 const PAGE_SIZE = 20
 
 const levelOptions = [
-  { value: '0', label: 'LV: all' },
   { value: '1', label: 'LV: 1' },
   { value: '2', label: 'LV: 2' },
 ]
 
 const sortOptions = [
-  {
-    value: { sortOrder: '', sortField: '' },
-    label: <div>Default</div>,
-  },
   {
     value: { sortOrder: 'asc', sortField: 'level' },
     label: (
@@ -340,8 +336,12 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
               <DropdownSheet
                 id="game-list-dropdown"
                 title="Sort"
+                placeholder=""
+                onReset={() => {
+                  field.onChange({ sortOrder: '', sortField: '' })
+                }}
                 customTrigger={({ selectedLabel, placeholder }) => {
-                  return (selectedLabel as React.ReactElement)?.props?.children === 'Default' ? (
+                  return !selectedLabel ? (
                     <div className="mr-1 mt-2 flex cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] p-[6px]">
                       <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
                     </div>
@@ -382,10 +382,31 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
               <DropdownSheet
                 id="game-list-dropdown"
                 title="LV"
+                placeholder="LV"
+                onReset={() => {
+                  field.onChange('0')
+                }}
                 customTrigger={({ selectedLabel, placeholder }) => (
-                  <div className="mr-1 mt-2 flex min-w-[120px] flex-1 cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-1000 ease-in-out">
+                  <div
+                    className={cn(
+                      'mr-1 mt-2 flex min-w-[120px] flex-1 cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-1000 ease-in-out',
+                      selectedLabel ? 'tex-white' : 'text-white/50'
+                    )}
+                  >
                     <div>{selectedLabel || placeholder}</div>
-                    <ArrowLineDownIcon className="h-4 w-4" />
+                    {!selectedLabel ? (
+                      <ArrowLineDownIcon className="h-4 w-4" />
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={e => {
+                          e.stopPropagation()
+                          field.onChange('0')
+                        }}
+                      >
+                        <XIcon className="h-4 w-4 text-[#FFFFFFB2]" />
+                      </button>
+                    )}
                   </div>
                 )}
                 placeholder="LV"
