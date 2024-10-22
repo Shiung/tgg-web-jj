@@ -119,7 +119,7 @@ const DropdownSheet = ({
       <Button id={id} variant="select" className="flex items-center justify-between space-x-2">
         <span
           className={cn(
-            'overflow-hidden text-ellipsis',
+            'overflow-hidden text-ellipsis text-xs font-ultra',
             selectedOption?.label ? 'tex-white' : 'text-white/50'
           )}
         >
@@ -156,7 +156,9 @@ const DropdownSheet = ({
           <SheetHeader>
             <SheetTitle>{title}</SheetTitle>
           </SheetHeader>
-          <div className="space-y-2 p-4">{children}</div>
+          <div className="flex max-h-[calc(100vh_-_48px-_44px-_60px)] flex-col items-stretch space-y-2 overflow-y-auto p-4">
+            {children}
+          </div>
           <SheetFooter className="px-4 pb-4">
             <Button variant="gray" catEars onClick={handleClear} className="flex-1">
               Clear
@@ -199,7 +201,7 @@ const DropdownOption: React.FC<DropdownOptionProps> = ({ value, label, suffix, c
       variant="menu"
       isSelected={isSelected}
       onClick={() => setInnerSelectedOption({ value, label })}
-      className={cn('flex w-full items-center justify-between space-x-2', className)}
+      className={cn('flex w-full flex-shrink-0 items-center justify-between space-x-2', className)}
     >
       {typeof label === 'string' ? <span>{label}</span> : label}
       {suffix && <span>{suffix}</span>}

@@ -13,7 +13,7 @@ const SkeletonBox = ({ isInit }: { isInit?: boolean }) => {
       <Skeleton className="aspect-[375/270] w-full rounded-bl-xl" />
       <div className="flex flex-1 flex-col space-y-4 rounded-t-xl bg-black p-4">
         {Array.from({ length: 5 }, (_, idx) => {
-          return <Skeleton key={idx} className="flex-1" />
+          return <Skeleton key={idx} className="flex-1 flex-shrink-0" />
         })}
       </div>
     </div>
