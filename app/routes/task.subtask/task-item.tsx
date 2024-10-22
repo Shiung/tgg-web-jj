@@ -27,6 +27,8 @@ import styles from './index.module.scss'
 import { errorToast } from '~/lib/toast'
 import RewardDialog from './reward-dialog'
 
+import { emitter } from '~/lib/emitter'
+
 type TaskActionType = NonNullable<TaskQueryResponse['dailyList']>[number]['actionType']
 
 /**
@@ -55,20 +57,38 @@ const TaskNameFormat = (task: NonNullable<TaskQueryResponse['dailyList']>[number
   }
 }
 
+type DescMapFnProps = Pick<
+  NonNullable<TaskQueryResponse['dailyList']>[number],
+  'inviteFriendsCondition' | 'teamRechargeCondition' | 'rechargeCondition'
+>
 /**
  * 特定類型要顯示的 desc
  * @interface
  */
-const DescMap: Record<TaskActionType, string | null> = {
+const DescMap: Record<TaskActionType, null | ((p: DescMapFnProps) => string | null)> = {
   LOGIN: null,
-  RECHARGE: 'The deposit amount will be calculated based on the current exchange rate of USDT.',
-  INVITE_FRIENDS:
-    'Only when your friends registered and owned over 100 KOKON in their wallet are counted valid member.',
+  RECHARGE: p => {
+    return ['RECHARGE_AMOUNT', 'RECHARGE_COUNT'].some(
+      key => p.rechargeCondition?.parameterType === key
+    )
+      ? 'The deposit amount will be calculated based on the current exchange rate of USDT.'
+      : null
+  },
+  INVITE_FRIENDS: p => {
+    return p.inviteFriendsCondition?.parameterValue === 'INVITE_VALID_USER'
+      ? 'Only when your friends registered and owned over 100 KOKON in their wallet are counted valid member.'
+      : null
+  },
   TEAM_CLASS_ACHIEVEMENT: null,
   PLAY_GAMES: null,
   OPEN_LINK: null,
-  TEAM_RECHARGE:
-    'The deposit amount will be calculated based on the current exchange rate of USDT.',
+  TEAM_RECHARGE: p => {
+    return ['TEAM_RECHARGE_AMOUNT', 'DIRECT_SUBORDINATE_RECHARGE_AMOUNT'].some(
+      key => p.teamRechargeCondition?.parameterType === key
+    )
+      ? 'The deposit amount will be calculated based on the current exchange rate of USDT.'
+      : null
+  },
 }
 
 // 限量時間格式化
@@ -94,20 +114,68 @@ export const TaskIcon: React.FC<{
   type: RewardType
   treasureType?: 'RANDOM' | 'FIXED'
   className?: string
-}> = ({ type, treasureType, className }) => {
+  imgIcon?: boolean
+}> = ({ type, treasureType, className, imgIcon }) => {
   switch (type) {
     case 'USDT':
+      if (imgIcon)
+        return (
+          <img
+            className={cn('h-[100px] w-[100px]', className)}
+            src="/images/task/reward-usdt.png"
+            alt="taskIcon"
+          />
+        )
       return <UsdtIcon className={cn('h-[18px] w-[18px]', className)} />
     case 'TON':
+      if (imgIcon)
+        return (
+          <img
+            className={cn('h-[100px] w-[100px]', className)}
+            src="/images/task/reward-ton.png"
+            alt="taskIcon"
+          />
+        )
       return <TonIcon className={cn('h-[18px] w-[18px]', className)} />
     case 'KOKON':
+      if (imgIcon)
+        return (
+          <img
+            className={cn('h-[100px] w-[100px]', className)}
+            src="/images/task/reward-kokon.png"
+            alt="taskIcon"
+          />
+        )
       return <KokonIcon className={cn('h-[18px] w-[18px]', className)} />
     case 'TREASURE':
+      if (imgIcon)
+        return treasureType === 'RANDOM' ? (
+          <img
+            className={cn('h-[100px] w-[100px]', className)}
+            src="/images/task/treasure-award.png"
+            alt="taskIcon"
+          />
+        ) : (
+          <img
+            className={cn('h-[100px] w-[100px]', className)}
+            src="/images/task/reward-treasure.png"
+            alt="taskIcon"
+          />
+        )
+
       if (treasureType === 'RANDOM') {
         return <TreasureRandomIcon className={cn('h-[18px] w-[18px]', className)} />
       }
       return <TreasureIcon className={cn('h-[18px] w-[18px]', className)} />
     case 'HAMMER':
+      if (imgIcon)
+        return (
+          <img
+            className={cn('h-[100px] w-[100px]', className)}
+            src="/images/task/reward-hammer.png"
+            alt="taskIcon"
+          />
+        )
       return <SmashEggIcon className={cn('h-[18px] w-[18px]', className)} />
   }
 }
@@ -173,6 +241,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
     mutationFn: (id: string) => apis.task.taskClaimRewardIdCreate(id),
     onSuccess: () => {
       setBtnStatus('CLAIMED')
+      emitter.emit('refetchTaskList', true)
     },
   })
   const handleClaim = async (
@@ -229,6 +298,8 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
       console.error('[ERROR] Open Link Failed ', error)
     }
   }
+
+  const showDesc = useMemo(() => DescMap[task.actionType]?.(task), [task])
 
   return (
     <div
@@ -313,7 +384,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
               </div>
             )}
           </div>
-          {(DescMap[task.actionType] || isLimited) && (
+          {(!!showDesc || isLimited) && (
             <Button
               variant="icon"
               className="-mt-0.5 flex h-6 items-center justify-between space-x-2"
@@ -333,7 +404,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
           }`}
         >
           <div className="pt-3 text-xs font-normal text-white/70">
-            <p>{DescMap[task.actionType]}</p>
+            <p>{showDesc}</p>
             <div className="mt-1 text-xs text-app-red">
               {task.endTime && (
                 <p>

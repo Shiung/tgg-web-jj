@@ -41,6 +41,7 @@ const RewardDialog: React.FC<RewardDialogProps> = ({
             type={rewardType}
             treasureType={treasureSetting?.distributionMethod}
             className="mb-3 h-28 w-28"
+            imgIcon
           />
           <div>
             <p className="text-center text-sm font-normal leading-[18px] text-white">You got</p>
