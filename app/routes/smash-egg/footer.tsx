@@ -1,9 +1,8 @@
 import styles from './index.module.scss'
 import { useMemo } from 'react'
 import type { FooterProps } from './types'
-import { Trans, useTranslation } from 'react-i18next'
-import Amount from '~/components/amount'
-import { s } from 'node_modules/vite/dist/node/types.d-aGj9QkWt'
+import { useTranslation } from 'react-i18next'
+import { formatAmount } from '~/lib/amount'
 
 const eggName = (string: string): string => {
   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
@@ -35,25 +34,16 @@ export default function Footer({ marqueeList }: FooterProps) {
         <div className={styles['marquee-container']}>
           <div className={styles.marquee}>
             {repeatedMarqueeList.map((item, index) => (
-              <p key={`${item.customerName}-${index}`}>
-                <Trans
-                  i18nKey="eggMarquee"
-                  values={{
-                    user: item.customerName,
-                    eggName: t(`eggName.${item.eggLevel.toLocaleLowerCase()}`),
-                  }}
-                  components={{
-                    egg: <span className="text-[#FFF200]" />, // 添加自定義樣式
-                    amount1: (
-                      <Amount
-                        value={item.reward}
-                        crypto="USDT"
-                        className="text-4 px-1 font-ultra text-primary"
-                      />
-                    ),
-                  }}
-                ></Trans>
-              </p>
+              <p
+                key={`${item.customerName}-${index}`}
+                dangerouslySetInnerHTML={{
+                  __html: t('eggMarquee', {
+                    user: `<span> ${item.customerName}</span>`,
+                    eggName: `<span class="text-[#FFF200]"> ${t(`eggName.${item.eggLevel.toLocaleLowerCase()}`)}</span>`,
+                    amount: `<span class="text-4 px-1 font-ultra text-white"> ${formatAmount(item.reward, { crypto: 'USDT' })}</span>`,
+                  }),
+                }}
+              ></p>
             ))}
           </div>
         </div>

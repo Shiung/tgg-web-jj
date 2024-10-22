@@ -9,8 +9,8 @@ import {
   DialogTrigger,
 } from '~/components/ui/dialog'
 import type { RulesDialogProps } from './types'
-import { useTranslation, Trans } from 'react-i18next'
-import Amount from '~/components/amount'
+import { useTranslation } from 'react-i18next'
+import { formatAmount } from '~/lib/amount'
 
 const RulesDialog: React.FC<RulesDialogProps> = ({ prizePools }) => {
   const { t } = useTranslation()
@@ -48,27 +48,16 @@ const RulesDialog: React.FC<RulesDialogProps> = ({ prizePools }) => {
                     </p>
                   </div>
                 </div>
-                <p className="text-xs">
-                  <Trans
-                    i18nKey="eggRule.hint"
-                    components={{
-                      amount1: (
-                        <Amount
-                          value={item.displayUsdtPrizeMin}
-                          crypto="USDT"
-                          className="text-white"
-                        />
-                      ),
-                      amount2: (
-                        <Amount
-                          value={item.displayUsdtPrizeMax}
-                          crypto="USDT"
-                          className="text-white"
-                        />
-                      ),
-                    }}
-                  ></Trans>
-                </p>
+                <p
+                  className="text-xs"
+                  dangerouslySetInnerHTML={{
+                    __html: t('eggRule.hint', {
+                      amount: `<span class="text-white">
+                              ${formatAmount(item.displayUsdtPrizeMin, { crypto: 'USDT' })}-${formatAmount(item.displayUsdtPrizeMax, { crypto: 'USDT' })}
+                            </span>`,
+                    }),
+                  }}
+                />
               </div>
             ))}
           </div>

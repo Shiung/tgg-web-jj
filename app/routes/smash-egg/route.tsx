@@ -16,8 +16,9 @@ import CardTemplate from './card-template'
 import AlertDialog from './alert-dialog'
 import { Status, EggRecord, EggMarquee, PrizePool } from './types'
 import { hammerFile, standbyArr, goldArr, silverArr, copperArr, changeArr } from './animation-data'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import Amount from '~/components/amount'
+import { formatAmount } from '~/lib/amount'
 
 // 配合 useMatches 聲明需要登录才能访问
 export const handle = {
@@ -563,14 +564,15 @@ export default function SmashEgg() {
           ) : (
             <>
               <div className="pb-2 text-center text-[24px] font-[1000]">
-                <p>
-                  <Trans
-                    i18nKey="eggClaimMsg"
-                    components={{
-                      amount1: <Amount value={reward} crypto="USDT" className="text-primary" />,
-                    }}
-                  ></Trans>
-                </p>
+                <p
+                  dangerouslySetInnerHTML={{
+                    __html: t('eggClaimMsg', {
+                      amount: `<span class="text-primary">
+                            ${formatAmount(reward, { crypto: 'USDT' })}
+                          </span>`,
+                    }),
+                  }}
+                ></p>
               </div>
 
               <div className="relative text-black">
