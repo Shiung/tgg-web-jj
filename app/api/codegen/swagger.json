@@ -1177,7 +1177,7 @@
               "asc"
             ],
             "type": "string",
-            "description": "排序欄位升降冪(asc,desc) (Allowed values: desc, asc, Required when SortField is present)",
+            "description": "排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc)",
             "name": "sortOrder",
             "in": "query"
           },
@@ -2547,6 +2547,11 @@
                         "description": "狀態 1:進行中 2:已終止(用戶提前中斷發放) 3:已完成(發放完畢)",
                         "type": "integer",
                         "format": "int64"
+                      },
+                      "withholdAmount": {
+                        "description": "總預算金額",
+                        "type": "string",
+                        "format": "decimal"
                       }
                     }
                   }
@@ -8264,6 +8269,11 @@
                 "description": "狀態 1:進行中 2:已終止(用戶提前中斷發放) 3:已完成(發放完畢)",
                 "type": "integer",
                 "format": "int64"
+              },
+              "withholdAmount": {
+                "description": "總預算金額",
+                "type": "string",
+                "format": "decimal"
               }
             }
           }

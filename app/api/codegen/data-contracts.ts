@@ -1166,6 +1166,11 @@ export interface PacketsResponse {
      * @format int64
      */
     state?: number;
+    /**
+     * 總預算金額
+     * @format decimal
+     */
+    withholdAmount?: string;
   }[];
   /** 分頁資訊 */
   pagination?: {
@@ -2219,7 +2224,7 @@ export interface CustomerShareCreatePayload {
 export interface CustomerTeamPerformanceListParams {
   /** 排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序 (Allowed values: level, bet, deposit) */
   sortField?: "level" | "bet" | "deposit";
-  /** 排序欄位升降冪(asc,desc) (Allowed values: desc, asc, Required when SortField is present) */
+  /** 排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc) */
   sortOrder?: "desc" | "asc";
   /** 團員名稱 */
   name?: string;

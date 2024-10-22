@@ -55,6 +55,11 @@ export class Packets<SecurityDataType = unknown> {
            * @format int64
            */
           state?: number;
+          /**
+           * 總預算金額
+           * @format decimal
+           */
+          withholdAmount?: string;
         }[];
         /** 分頁資訊 */
         pagination?: {
