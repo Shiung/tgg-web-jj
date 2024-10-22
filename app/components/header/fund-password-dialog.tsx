@@ -21,34 +21,43 @@ import { successToast, errorToast } from '~/lib/toast'
 import VerifyButton, { ValidCode, type VerifyButtonExpose } from '~/components/verify-button'
 
 import { useFundActions } from './hooks'
+import { useTranslation } from 'react-i18next'
 
 interface FundPasswordDialog {
   infoRefetch: () => void
 }
 
-const ToastConf = {
-  add: 'Fund Pin added',
-  update: 'Fund Pin updated',
-  error: 'Code is incorrect',
+const ToastI18nConf = {
+  add: 'FundPasswordAdded',
+  update: 'FundPasswordUpdate',
+  error: 'CodeIsIncorrect',
 } as const
+
+const ErrorMessageI18n = {
+  least6: 'InputLeast6Error',
+  invaildPsw: 'InputIvalidPasswordError',
+  verificationRequire: 'InputVerificationIsRequireError',
+  confirmNoMatch: 'InputPasswordConfirmNoMatchError',
+}
 
 const formSchema = z
   .object({
     password: z
       .string()
-      .min(6, 'At least 6 characters required')
-      .regex(/^[\w!@#$%^&*()-_+=]+$/, 'Invalid password format'),
+      .min(6, ErrorMessageI18n.least6)
+      .regex(/^[\w!@#$%^&*()-_+=]+$/, ErrorMessageI18n.invaildPsw),
     confirmPassword: z.string(),
-    verificationCode: z.string().min(1, 'Verification code is required'),
+    verificationCode: z.string().min(1, ErrorMessageI18n.verificationRequire),
   })
   .refine(data => data.password === data.confirmPassword, {
-    message: 'The password confirmation does not match',
+    message: ErrorMessageI18n.confirmNoMatch,
     path: ['confirmPassword'],
   })
 
 type FormValues = z.infer<typeof formSchema>
 
 const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
+  const { t } = useTranslation()
   const {
     userInfo: { pin: storePin },
   } = useStore(state => state)
@@ -85,10 +94,10 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
         setOpen(false)
         resetDialog()
 
-        successToast(!isChangePin ? ToastConf.add : ToastConf.update)
+        successToast(t(!isChangePin ? ToastI18nConf.add : ToastI18nConf.update))
       },
       () => {
-        errorToast(ToastConf.error)
+        errorToast(t(ToastI18nConf.error))
       }
     )
   }
@@ -115,26 +124,26 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isChangePin ? 'Change Your Password' : 'Set Your Password'}</DialogTitle>
+          <DialogTitle>{t(isChangePin ? 'ChangePassword' : 'SetPassword')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col space-y-2 px-3 pb-6 pt-4 text-sm text-white/70">
             {/* Fund Password */}
             <Input
               id="password"
-              label="Fund Password"
+              label={t('FundPassword')}
               type="password"
-              placeholder="Please enter"
-              error={errors.password?.message}
+              placeholder={t('PlaceholderEnter')}
+              error={errors.password?.message && t(errors.password?.message)}
               {...register('password')}
             />
 
             <Input
               id="confirm-password"
-              label="Confirm Password"
+              label={t('ConfirmPassword')}
               type="password"
-              placeholder="Please enter"
-              error={errors.confirmPassword?.message}
+              placeholder={t('PlaceholderEnter')}
+              error={errors.confirmPassword?.message && t(errors.confirmPassword?.message)}
               {...register('confirmPassword')}
             />
             {/* Verification Button */}
@@ -148,20 +157,20 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
             {/* Verification Code */}
             <Input
               id="verificationCode"
-              label="Verification Code"
-              placeholder="Please enter"
-              error={errors.verificationCode?.message}
+              label={t('VerificationCode')}
+              placeholder={t('PlaceholderEnter')}
+              error={errors.verificationCode?.message && t(errors.verificationCode?.message)}
               {...register('verificationCode')}
             />
           </div>
           <DialogFooter className="flex flex-row space-x-2 px-3 pb-4">
             <DialogClose asChild>
               <Button className="flex-1" variant="gray" catEars>
-                Cancel
+                {t('Cancel')}
               </Button>
             </DialogClose>
             <Button className="flex-1" catEars disabled={!isValid}>
-              Ok
+              {t('OK')}
             </Button>
           </DialogFooter>
         </form>

@@ -23,17 +23,26 @@ import { ValidCode, EmailBindStep } from './constants'
 import useStore from '~/stores/useStore'
 import VerifyButton, { type VerifyButtonExpose } from '~/components/verify-button'
 
+import { useTranslation } from 'react-i18next'
+
 interface EmailDialogProps {
   infoRefetch: () => void
 }
 
-const ToastConf = {
-  add: 'Email added',
-  update: 'Email updated',
-  error: 'Code is incorrect',
+const ToastI18nConf = {
+  addKey: 'EmailAdded',
+  updateKey: 'EmailUpdate',
+  errorKey: 'CodeIsIncorrect',
 } as const
 
+const ErrorMessageI18n = {
+  inputEmail: 'InputEmailError',
+  sameEmail: 'InputSameEmailError',
+  verificationRequire: 'InputVerificationIsRequireError',
+}
+
 const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
+  const { t } = useTranslation()
   const {
     userInfo: { email: storeEmail },
   } = useStore(state => state)
@@ -45,8 +54,8 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
   const formSchema = useMemo(() => {
     return z
       .object({
-        email: z.string().email({ message: 'Please enter email address' }),
-        verificationCode: z.string().min(1, 'Verification code is required'),
+        email: z.string().email({ message: ErrorMessageI18n.inputEmail }),
+        verificationCode: z.string().min(1, ErrorMessageI18n.verificationRequire),
       })
       .refine(
         data => {
@@ -55,7 +64,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
           return state
         },
         {
-          message: 'Please don’t enter the same email as current email',
+          message: ErrorMessageI18n.sameEmail,
           path: ['email'],
         }
       )
@@ -98,10 +107,10 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
       () => {
         setOpen(false)
         resetDialog()
-        successToast(!isEditEmail ? ToastConf.add : ToastConf.update)
+        successToast(t(!isEditEmail ? ToastI18nConf.addKey : ToastI18nConf.updateKey))
       },
       () => {
-        errorToast(ToastConf.error)
+        errorToast(t(ToastI18nConf.errorKey))
       }
     )
   }
@@ -124,10 +133,10 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
         reset()
       },
       () => {
-        errorToast(ToastConf.error)
+        errorToast(t(ToastI18nConf.errorKey))
       }
     )
-  }, [reset, isVerifyCurrentHandler, verifyCodeEmailHandler, getValues])
+  }, [reset, isVerifyCurrentHandler, verifyCodeEmailHandler, getValues, t])
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -144,7 +153,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{isEditEmail ? 'Edit Email' : 'Add Your Email'}</DialogTitle>
+          <DialogTitle>{t(isEditEmail ? 'EmailEdit' : 'EmailAdd')}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col px-3 pb-6 pt-4 text-sm text-white/70">
@@ -152,7 +161,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
             {isEditEmail && (
               <>
                 <div className="space-y-1">
-                  <Label>Current Email</Label>
+                  <Label>{t('EmailCurrent')}</Label>
                   <div className="ml-3 font-ultra text-white">{storeEmail}</div>
                 </div>
                 <hr className="my-[24px] border-white/20" />
@@ -163,11 +172,11 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
             ) && (
               <Input
                 id="email"
-                label={!isEditEmail ? 'Email' : 'Change Email'}
-                placeholder="Please enter"
+                label={t(!isEditEmail ? 'Email' : 'EmailChange')}
+                placeholder={t('PlaceholderEnter')}
                 clearable
                 onClear={() => setValue('email', '', { shouldValidate: true })}
-                error={errors.email?.message}
+                error={errors.email?.message && t(errors.email?.message)}
                 {...register('email')}
               />
             )}
@@ -189,21 +198,21 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
                   stepStatus === EmailBindStep.validOldEmail && setValue('email', storeEmail || ''),
                 [storeEmail, setValue, stepStatus]
               )}
-              errorCallBack={() => errorToast(ToastConf.error)}
+              errorCallBack={() => errorToast(t(ToastI18nConf.errorKey))}
             />
             {/* Verification Code */}
             <Input
               id="verificationCode"
-              label="Verification Code"
-              placeholder="Please enter"
-              error={errors.verificationCode?.message}
+              label={t('VerificationCode')}
+              placeholder={t('PlaceholderEnter')}
+              error={errors.verificationCode?.message && t(errors.verificationCode?.message)}
               {...register('verificationCode')}
             />
           </div>
           <DialogFooter className="flex flex-row space-x-2 px-3 pb-4">
             <DialogClose asChild>
               <Button className="flex-1" variant="gray" catEars>
-                Cancel
+                {t('Cancel')}
               </Button>
             </DialogClose>
             <Button
@@ -215,7 +224,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
                 onClick: vaildCheckOldEmailCallBack,
               })}
             >
-              Ok
+              {t('OK')}
             </Button>
           </DialogFooter>
         </form>

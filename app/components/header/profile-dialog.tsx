@@ -44,7 +44,7 @@ const empty: UserSlice['userInfo'] = {}
 const ProfileDialog: React.FC = () => {
   const [state, copyToClipboard] = useCopyToClipboard()
   const [open, setIsOpen] = useState(false)
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
   const { inTelegram, isLoggedIn, telegramUserData, setUserInfo, logout } = useStore(state => state)
   const { data, refetch } = useQuery({
     queryKey: ['customerInfo'],
@@ -66,8 +66,8 @@ const ProfileDialog: React.FC = () => {
 
   useEffect(() => {
     if (!state.value) return
-    successToast('Copied')
-  }, [state])
+    successToast(t('Copied'))
+  }, [state, t])
 
   return (
     <Dialog open={open} onOpenChange={o => setIsOpen(o)}>
@@ -100,7 +100,7 @@ const ProfileDialog: React.FC = () => {
         <div className="flex flex-col space-y-4 p-3 text-sm text-white/70">
           {/* Player ID */}
           <div className="flex items-center justify-between">
-            <span>Player ID</span>
+            <span>{t('PlayerId')}</span>
             <div className="flex items-center space-x-2">
               <span className="font-ultra text-white">{userData.customerId}</span>
               <Button
@@ -115,7 +115,7 @@ const ProfileDialog: React.FC = () => {
           </div>
           {/* Email */}
           <div className="flex items-center justify-between">
-            <span>Email</span>
+            <span>{t('Email')}</span>
             <div className="flex items-center justify-end space-x-2">
               {userData.email && (
                 <div className="w-5/6 truncate font-ultra text-white">{userData.email}</div>
@@ -125,7 +125,7 @@ const ProfileDialog: React.FC = () => {
           </div>
           {/* Fund Password */}
           <div className="flex items-center justify-between">
-            <span>Fund Password</span>
+            <span>{t('FundPassword')}</span>
             <div className="flex items-center justify-end space-x-2">
               {userData.pin && (
                 <div className="w-5/6 truncate font-ultra text-white">{userData.pin}</div>
@@ -135,7 +135,7 @@ const ProfileDialog: React.FC = () => {
           </div>
           {/* Language */}
           <div className="flex items-center justify-between">
-            <span>Language</span>
+            <span>{t('Language')}</span>
             <div className="flex items-center space-x-2">
               {useMemo(() => {
                 const getLang = languages.find(({ value }) => value === i18n.language)
@@ -155,7 +155,7 @@ const ProfileDialog: React.FC = () => {
 
           {/* Support */}
           <div className="flex items-center justify-between">
-            <span>{links.support.title}</span>
+            <span>{t('Support')}</span>
             <a href={links.support.value} className="font-ultra text-app-blue">
               {links.support.text}
             </a>
@@ -163,7 +163,7 @@ const ProfileDialog: React.FC = () => {
 
           {/* Official Links */}
           <div className="flex items-center justify-between">
-            <span>Official Links</span>
+            <span>{t('OfficialLinks')}</span>
             <div className="flex space-x-2">
               {links.officialLinks.value.map((link, index) => (
                 <a key={index} href={link.url}>
@@ -178,7 +178,7 @@ const ProfileDialog: React.FC = () => {
             <>
               <hr className="border-white/20" />
               <div className="flex items-center justify-between">
-                <span>Log out</span>
+                <span>{t('LogOut')}</span>
                 <Button variant="icon" size="icon" onClick={logout}>
                   <LogoutIcon className="h-4 w-4" />
                 </Button>
