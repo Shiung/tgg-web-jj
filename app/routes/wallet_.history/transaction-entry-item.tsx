@@ -14,7 +14,7 @@ const TransactionEntryItem = ({ record }: { record: TransactionEntry }) => {
           parseFloat(record.amount) < 0 ? 'text-app-red' : 'text-white'
         }`}
       >
-        <Amount value={record.amount} thousandSeparator crypto="USDT" />
+        <Amount value={record.amount} thousandSeparator crypto={record.currency} />
       </p>
       {record.currency === 'USDT' ? (
         <UsdtIcon className="my-auto h-3 w-3" />

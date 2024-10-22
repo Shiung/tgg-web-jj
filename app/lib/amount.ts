@@ -31,7 +31,7 @@ export interface FormatAmountOptions {
    * - `Crypto.KOKON`
    * @see {@link ~/consts/crypto.Crypto
    */
-  crypto?: keyof typeof Crypto
+  crypto?: string | keyof typeof Crypto
   /** 是否使用 K/M 格式 */
   useKM?: boolean
   /** 是否去除小数点后的 0, 預設 true */
@@ -82,8 +82,8 @@ export const formatAmount = (
 
   const formatted =
     removeTrailingZeros && maxDec > 0
-      ? _value.decimalPlaces(maxDec).toString() // 去除尾部 0
-      : _value.toFixed(maxDec) // 保留所有小数位
+      ? _value.decimalPlaces(maxDec, BigNumber.ROUND_DOWN).toString() // 使用 ROUND_DOWN 來避免四捨五入
+      : _value.toFixed(maxDec, BigNumber.ROUND_DOWN) // 保留所有小數位且不進行四捨五入
 
   const [intPart, decPart] = formatted.split('.')
   const truncatedIntPart = intPart.length > maxInt ? intPart.slice(0, maxInt) : intPart
