@@ -51,7 +51,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-1 flex-col space-y-1">
         {label && (
-          <Label className="ml-3" htmlFor={id}>
+          <Label className="ml-3 text-xs" htmlFor={id}>
             {label}
           </Label>
         )}

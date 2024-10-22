@@ -23,8 +23,8 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
       <div className="flex flex-col rounded-xl bg-[#1c1c1c] p-3">
         <div className="flex items-stretch rounded-b-xl">
           <div className="flex flex-1 items-center space-x-2">
-            <div className="relative">
-              <img src="/images/header/treasure.png" alt="" className="h-20 w-20" />
+            <div className="relative shrink-0">
+              <img src="/images/header/treasure.png" alt="" className="h-20 w-20 object-contain" />
               <div className="absolute -right-2 bottom-1 flex items-center space-x-1 rounded-full border-[0.5px] border-solid border-[#FFF200] bg-black px-1">
                 <CurrencyIcon currency={treasure?.rewardType} className="h-3 w-3" />
                 <Amount

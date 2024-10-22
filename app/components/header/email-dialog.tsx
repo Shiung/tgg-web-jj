@@ -161,7 +161,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
             {isEditEmail && (
               <>
                 <div className="space-y-1">
-                  <Label>{t('EmailCurrent')}</Label>
+                  <Label className="ml-3">{t('EmailCurrent')}</Label>
                   <div className="ml-3 font-ultra text-white">{storeEmail}</div>
                 </div>
                 <hr className="my-[24px] border-white/20" />
