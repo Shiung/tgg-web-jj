@@ -154,9 +154,9 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
         pageSize: 20,
         transactionTimeFrom: formatRFC3339(formValues.dateTimeRange.from),
         transactionTimeTo: formatRFC3339(formValues.dateTimeRange.to),
-        currency: formValues.currency == '0' ? '' : formValues.currency,
-        type: formValues.type == '0' ? '' : formValues.type,
-        balance: formValues.balance == '0' ? '' : formValues.balance,
+        currency: formValues.currency,
+        type: formValues.type,
+        balance: formValues.balance,
       }
       const res = await apis.wallet.walletHistoryListList(queryString)
       // const res = await fakeData(queryString)
@@ -246,7 +246,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                     placeholder={t('currency')}
                     value={field.value}
                     onConfirm={field.onChange}
-                    onReset={() => field.onChange('0')}
+                    onReset={() => field.onChange('')}
                     customTrigger={({ selectedLabel, placeholder }) => {
                       return (
                         <div
@@ -263,7 +263,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                               size="icon"
                               onClick={e => {
                                 e.stopPropagation()
-                                field.onChange('0')
+                                field.onChange('')
                               }}
                             >
                               <XIcon className="h-4 w-4 text-white" />
@@ -300,7 +300,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                     placeholder={t('type')}
                     value={field.value}
                     onConfirm={field.onChange}
-                    onReset={() => field.onChange('0')}
+                    onReset={() => field.onChange('')}
                   >
                     {typeOptions.map(option => (
                       <DropdownOption
@@ -327,7 +327,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                     placeholder={t('balance')}
                     value={field.value}
                     onConfirm={field.onChange}
-                    onReset={() => field.onChange('0')}
+                    onReset={() => field.onChange('')}
                   >
                     {balanceOptions.map(option => (
                       <DropdownOption
