@@ -14,7 +14,7 @@ import { useState, useCallback } from 'react'
 import { languages } from './constants'
 
 const LanguageDialog: React.FC = () => {
-  const { i18n } = useTranslation()
+  const { i18n, t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language)
 
@@ -44,7 +44,7 @@ const LanguageDialog: React.FC = () => {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Language</DialogTitle>
+          <DialogTitle>{t('Language')}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col space-y-2 px-3 pb-6 pt-4 text-sm text-white">
           {languages.map(language => (
@@ -63,11 +63,11 @@ const LanguageDialog: React.FC = () => {
         <DialogFooter className="flex flex-row space-x-2 px-3 pb-4">
           <DialogClose asChild>
             <Button className="flex-1" variant="gray" catEars>
-              Cancel
+              {t('Cancel')}
             </Button>
           </DialogClose>
           <Button className="flex-1" onClick={handleConfirm} catEars>
-            Ok
+            {t('OK')}
           </Button>
         </DialogFooter>
       </DialogContent>

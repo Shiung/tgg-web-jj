@@ -7,6 +7,7 @@ import CountDown, { type Ref } from './count-down'
 import { ValidCode } from './constants'
 import { useActions } from './hooks'
 import { errorToast } from '~/lib/toast'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   kind: ValidCode
@@ -35,6 +36,7 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
     },
     ref
   ) => {
+    const { t } = useTranslation()
     const {
       userInfo: { email: storeEmail },
       verificationTs,
@@ -49,7 +51,7 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
       // send Verify request
       const sendEmail = email || storeEmail
       if (!sendEmail) {
-        errorToast('Email not set !')
+        errorToast(t('EmailNotSet'))
         return
       }
       setVerificationTs(Date.now() + 60 * 1000)
@@ -63,6 +65,7 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
       successCallBack,
       errorCallBack,
       setVerificationTs,
+      t,
     ])
 
     useImperativeHandle(ref, () => ({
@@ -89,7 +92,7 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
         onClick={handleSendCode}
         disabled={isCount || disabled}
       >
-        Send Verification Code
+        {t('SendVerificationCode')}
         <CountDown
           ref={countRef}
           timeEnd={useCallback(() => setIsCount(false), [])}
