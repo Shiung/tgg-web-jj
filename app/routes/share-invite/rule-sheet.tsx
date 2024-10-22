@@ -123,7 +123,7 @@ const useFormatClassSetting = (classSetting: SettingResponse['classSetting']) =>
       }
     }
     // 添加 header
-    acc.headers.push(`${el.class} → ${el.class + 1}`)
+    acc.headers.push(`${el.class - 1} → ${el.class}`)
 
     // 後端的值名稱跟表格的名稱不一樣 所以先寫死
     acc.rows[0].values.push(el.activeMember.toString() || '')
