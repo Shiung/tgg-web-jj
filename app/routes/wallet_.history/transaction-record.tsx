@@ -85,18 +85,18 @@ const fakeData = async (params: TransactionRecordRequest): Promise<any> => {
 export default function TransactionRecord({ currentTab }: { currentTab: string }) {
   const { t } = useTranslation()
   const typeOptions = [
-    { value: 'Deposit', label: t('deposit') }, // 充值
-    { value: 'Withdraw', label: t('withdraw') }, // 提款
-    { value: 'Swap(sell)', label: t('swapSell') }, // 兑换
-    { value: 'Swap(buy)', label: t('swapBuy') }, // 兑换
-    { value: 'Commission', label: t('commission') }, // 佣金
-    { value: 'Game', label: t('game') }, // 游戏
-    { value: 'Task', label: t('task') }, // 任務
-    { value: 'Treasure', label: t('treasure') }, // 宝箱
-    { value: 'Rank', label: t('rank') }, // 排行榜
-    { value: 'LucykMoney', label: t('luckyMoney') }, // 红包
-    { value: 'SmashEgg', label: t('smashEgg') }, // 砸金蛋
-    { value: 'Adjustment', label: t('adjustment') }, // 人工调整
+    { value: 'Deposit', label: t('transaction.type.deposit') }, // 充值
+    { value: 'Withdraw', label: t('transaction.type.withdraw') }, // 提款
+    { value: 'Swap(sell)', label: t('transaction.type.swap(sell)') }, // 兑换
+    { value: 'Swap(buy)', label: t('transaction.type.swap(buy)') }, // 兑换
+    { value: 'Commission', label: t('transaction.type.commission') }, // 佣金
+    { value: 'Game', label: t('transaction.type.game') }, // 游戏
+    { value: 'Task', label: t('transaction.type.task') }, // 任務
+    { value: 'Treasure', label: t('transaction.type.treasure') }, // 宝箱
+    { value: 'Rank', label: t('transaction.type.rank') }, // 排行榜
+    { value: 'LuckyMoney', label: t('transaction.type.luckyMoney') }, // 红包
+    { value: 'SmashEgg', label: t('transaction.type.smashEgg') }, // 砸金蛋
+    { value: 'Adjustment', label: t('transaction.type.adjustment') }, // 人工调整
   ]
 
   const balanceOptions = [
@@ -154,9 +154,9 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
         pageSize: 20,
         transactionTimeFrom: formatRFC3339(formValues.dateTimeRange.from),
         transactionTimeTo: formatRFC3339(formValues.dateTimeRange.to),
-        currency: formValues.currency,
-        type: formValues.type,
-        balance: formValues.balance,
+        currency: formValues.currency == '0' ? '' : formValues.currency,
+        type: formValues.type == '0' ? '' : formValues.type,
+        balance: formValues.balance == '0' ? '' : formValues.balance,
       }
       const res = await apis.wallet.walletHistoryListList(queryString)
       // const res = await fakeData(queryString)

@@ -40,7 +40,7 @@ export default function Footer({ marqueeList }: FooterProps) {
                   i18nKey="eggMarquee"
                   values={{
                     user: item.customerName,
-                    eggName: t(`eggName.${item.eggLevel}`),
+                    eggName: t(`eggName.${item.eggLevel.toLocaleLowerCase()}`),
                   }}
                   components={{
                     egg: <span className="text-[#FFF200]" />, // 添加自定義樣式
