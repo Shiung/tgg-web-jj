@@ -17,6 +17,8 @@ import NoDataView from './no-data-view'
 import styles from './index.module.scss'
 import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import { KokonIcon, TonIcon, UsdtIcon } from '~/components/color-icons'
+import XIcon from '~/icons/x.svg?react'
+import { Button } from '~/components/ui/button'
 interface TransactionRecordRequest {
   page: number
   pageSize: number
@@ -62,7 +64,7 @@ const typeOptions = [
   { value: 'Task', label: 'Task' }, // 任務
   { value: 'Treasure', label: 'Treasure' }, // 宝箱
   { value: 'Rank', label: 'Rank' }, // 排行榜
-  { value: 'LuckMoney', label: 'Lucky money' }, // 红包
+  { value: 'LuckyMoney', label: 'Lucky money' }, // 红包
   { value: 'SmashEgg', label: 'Smash egg' }, // 砸金蛋
   { value: 'Adjustment', label: 'Adjustment' }, // 人工调整
 ]
@@ -252,7 +254,21 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                           )}
                         >
                           {selectedLabel || placeholder}
-                          <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
+                          {selectedLabel ? (
+                            <Button
+                              type="button"
+                              variant="icon"
+                              size="icon"
+                              onClick={e => {
+                                e.stopPropagation()
+                                field.onChange('0')
+                              }}
+                            >
+                              <XIcon className="h-4 w-4 text-white" />
+                            </Button>
+                          ) : (
+                            <ArrowLineDownIcon className="h-4 w-4 text-white/70" />
+                          )}
                         </div>
                       )
                     }}
