@@ -242,6 +242,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                 catEars
                 onClick={handleClaimAllBonuses}
                 loading={isClaimingAll}
+                disabled={treasureNotice.length === 0}
               >
                 Claim
               </Button>
