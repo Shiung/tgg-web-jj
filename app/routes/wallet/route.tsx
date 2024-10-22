@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import Amount from '~/components/amount'
 import { useGetWalletList, UserWallet } from '~/hooks/api/useWallet'
 import HistoryIcon from '~/icons/history.svg?react'
+import RefreshIcon from '~/icons/refresh.svg?react'
 import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import { cryptoDetails, CryptoUnion } from '~/consts/crypto'
 
@@ -28,13 +29,14 @@ type UserWalletItem = UserWallet & {
 }
 
 export default function Wallet() {
-  const { data, isLoading, refetch } = useGetWalletList()
+  const { data, isLoading, isFetching, refetch } = useGetWalletList()
   const location = useLocation()
   const navigate = useNavigate()
   const [currentTab, setCurrentTab] = useState(DEFAULT_TAB)
   const previousTab = usePrevious(currentTab)
   const [isExpanded, setIsExpanded] = useState(true)
   const [hasUserToggled, setHasUserToggled] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
 
   const wallets = useMemo(
     () =>
@@ -48,6 +50,21 @@ export default function Wallet() {
   const handleToggleExpand = () => {
     setIsExpanded(val => !val)
     setHasUserToggled(true)
+  }
+
+  const handleRefresh = async () => {
+    if (isRefreshing || isFetching) return
+
+    setIsRefreshing(true)
+    const delayMs = 1500
+    const start = Date.now()
+    await refetch()
+    const duration = Date.now() - start
+    const delay = duration < delayMs ? delayMs - duration : 0
+
+    setTimeout(() => {
+      setIsRefreshing(false)
+    }, delay)
   }
 
   useEffect(() => {
@@ -89,14 +106,34 @@ export default function Wallet() {
                 customMaxDec={2}
               />
               <Button
-                className={`h-4 w-4 transform bg-white/50 opacity-100 transition-transform ${
-                  isExpanded ? 'rotate-180' : 'rotate-0'
-                }`}
                 variant="icon"
                 size="icon"
+                className="text-primary opacity-100"
+                onClick={handleRefresh}
+              >
+                <RefreshIcon
+                  className={cn(
+                    'h-4 w-4 transition-transform duration-500',
+                    isRefreshing ? 'animate-spin' : ''
+                  )}
+                />
+              </Button>
+            </div>
+            <div className="mt-[2px]">
+              <Button
+                variant="link"
+                size="icon"
+                className="h-4 justify-start px-0 py-0"
                 onClick={handleToggleExpand}
               >
-                <ArrowLineDownIcon className="h-2 w-2 text-white" />
+                <div className="flex items-center justify-center space-x-1 text-xs font-normal text-white">
+                  <span>Detail</span>
+                  <ArrowLineDownIcon
+                    className={`h-2 w-2 transform text-white opacity-100 transition-transform ${
+                      isExpanded ? 'rotate-180' : 'rotate-0'
+                    }`}
+                  />
+                </div>
               </Button>
             </div>
           </div>
