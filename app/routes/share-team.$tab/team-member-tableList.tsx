@@ -1,7 +1,9 @@
 import React from 'react'
+import { Crypto } from '~/consts/crypto'
+import { useTranslation } from 'react-i18next'
+
 import { UsdtIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
-import { Crypto } from '~/consts/crypto'
 
 interface TeamMember {
   lv?: number
@@ -15,6 +17,7 @@ interface TeamMemberTableListProps {
 }
 
 const TeamMemberTableList: React.FC<TeamMemberTableListProps> = ({ data }) => {
+  const { t } = useTranslation()
   return (
     <div className="mt-2 flex flex-1 flex-col bg-black text-xs text-white">
       <div className="mb-2 overflow-hidden rounded-lg bg-[#1C1C1C]">
@@ -22,18 +25,18 @@ const TeamMemberTableList: React.FC<TeamMemberTableListProps> = ({ data }) => {
           <table className="w-full border-separate border-spacing-y-[10px]">
             <thead>
               <tr className="text-left text-[#999999]">
-                <th className="w-[65px] max-w-[65px]">Name</th>
+                <th className="w-[65px] max-w-[65px]">{t('Name')}</th>
                 <th className="text-right">LV</th>
                 <th className="text-right">
                   <div className="flex items-center justify-end">
                     <UsdtIcon className="mr-1 h-3 w-3" />
-                    <div>Total Bets</div>
+                    <div>{t('TotalBets')}</div>
                   </div>
                 </th>
                 <th className="text-right">
                   <div className="flex items-center justify-end">
                     <UsdtIcon className="mr-1 h-3 w-3" />
-                    <div>Total Deposit</div>
+                    <div>{t('TotalDeposit')}</div>
                   </div>
                 </th>
               </tr>

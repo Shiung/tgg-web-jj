@@ -11,7 +11,7 @@ interface NoDataViewProps {
 export default function NoDataView({
   showButton = false,
   buttonText = 'playGame',
-  message = 'noDataMsg',
+  message = 'NoDataAvailable',
 }: NoDataViewProps) {
   const { t } = useTranslation()
   return (

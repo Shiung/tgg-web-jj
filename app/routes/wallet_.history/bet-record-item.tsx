@@ -32,7 +32,7 @@ export default function BetRecordItem({
       <div className="flex flex-col space-y-2 px-3 py-2">
         <div className="relative flex flex-col space-y-1 pb-2 before:absolute before:bottom-0 before:left-0 before:right-0 before:h-[0.5px] before:bg-white/20 before:content-['']">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-white/70">{t('betAmount')}</span>
+            <span className="text-xs text-white/70">{t('BetAmount')}</span>
             <div className="flex space-x-1">
               <span className="text-xs text-white">
                 {currency === Crypto.USDT ? (

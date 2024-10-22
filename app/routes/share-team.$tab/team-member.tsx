@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
 import { cn } from '~/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 //NOTICE: For test
 // import fetchTeamData from './fake-memberData'
@@ -38,63 +39,6 @@ const levelOptions = [
   { value: '2', label: 'LV: 2' },
 ]
 
-const sortOptions = [
-  {
-    value: { sortOrder: 'asc', sortField: 'level' },
-    label: (
-      <div className="flex items-center space-x-1">
-        <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
-        <div>LV</div>
-      </div>
-    ),
-  },
-  {
-    value: { sortOrder: 'desc', sortField: 'level' },
-    label: (
-      <div className="flex items-center space-x-1">
-        <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
-        <div>LV</div>
-      </div>
-    ),
-  },
-  {
-    value: { sortOrder: 'asc', sortField: 'bet' },
-    label: (
-      <div className="flex items-center space-x-1">
-        <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
-        <div>Total Bets</div>
-      </div>
-    ),
-  },
-  {
-    value: { sortOrder: 'desc', sortField: 'bet' },
-    label: (
-      <div className="flex items-center space-x-1">
-        <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
-        <div>Total Bets</div>
-      </div>
-    ),
-  },
-  {
-    value: { sortOrder: 'asc', sortField: 'deposit' },
-    label: (
-      <div className="flex items-center space-x-1">
-        <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
-        <div>Total Deposit</div>
-      </div>
-    ),
-  },
-  {
-    value: { sortOrder: 'desc', sortField: 'deposit' },
-    label: (
-      <div className="flex items-center space-x-1">
-        <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
-        <div>Total Deposit</div>
-      </div>
-    ),
-  },
-]
-
 interface TeamMemberProps {
   customerTeamInfo?: TeamInfoResponse
   teamSettingList?: SettingResponse
@@ -102,7 +46,68 @@ interface TeamMemberProps {
 }
 
 const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingList, loading }) => {
+  const { t } = useTranslation()
   const maxWidth = useAppMaxWidth()
+
+  const sortOptions = useMemo(
+    () => [
+      {
+        value: { sortOrder: 'asc', sortField: 'level' },
+        label: (
+          <div className="flex items-center space-x-1">
+            <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
+            <div>LV</div>
+          </div>
+        ),
+      },
+      {
+        value: { sortOrder: 'desc', sortField: 'level' },
+        label: (
+          <div className="flex items-center space-x-1">
+            <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
+            <div>LV</div>
+          </div>
+        ),
+      },
+      {
+        value: { sortOrder: 'asc', sortField: 'bet' },
+        label: (
+          <div className="flex items-center space-x-1">
+            <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
+            <div>{t('TotalBets')}</div>
+          </div>
+        ),
+      },
+      {
+        value: { sortOrder: 'desc', sortField: 'bet' },
+        label: (
+          <div className="flex items-center space-x-1">
+            <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
+            <div>{t('TotalBets')}</div>
+          </div>
+        ),
+      },
+      {
+        value: { sortOrder: 'asc', sortField: 'deposit' },
+        label: (
+          <div className="flex items-center space-x-1">
+            <SortAscIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
+            <div>{t('TotalDeposit')}</div>
+          </div>
+        ),
+      },
+      {
+        value: { sortOrder: 'desc', sortField: 'deposit' },
+        label: (
+          <div className="flex items-center space-x-1">
+            <SortDescIcon className="h-6 w-6 flex-shrink-0 text-[#FFFFFFB2]" />
+            <div>{t('TotalDeposit')}</div>
+          </div>
+        ),
+      },
+    ],
+    [t]
+  )
 
   // 控制 search 的展開與收合
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
@@ -215,7 +220,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
           className="flex items-center justify-between rounded-t-[12px] bg-[#333333] px-6 py-2"
         >
           <span className="font-ultra text-primary">
-            My Team Rating: {customerTeamInfo?.class || 0}
+            {t('MyTeamRating')}: {customerTeamInfo?.class || 0}
           </span>
           <div className="flex space-x-1">
             {Array.from({ length: customerTeamInfo?.class || 0 }).map((_, index) => (
@@ -231,19 +236,15 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
         <div className="flex flex-col items-center p-3">
           <div className="flex w-full space-x-2 rounded-lg bg-[#333333] px-3 py-2 text-xs font-ultra">
             <div className="flex min-h-[60px] flex-1 flex-col items-center justify-center text-center">
-              <div className="flex flex-1 items-center text-[#999999]">Total Member</div>
+              <div className="flex flex-1 items-center text-[#999999]">{t('TotalMember')}</div>
               <div className="flex items-center space-x-1 text-sm text-white">
                 <div>{customerTeamInfo?.teamSize}</div>
               </div>
             </div>
             <div className="flex min-h-[60px] flex-1 flex-col items-center justify-between">
               <div className="flex flex-1 items-center text-[#999999]">
-                <span className="mr-1">Total Bets</span>
-                <InfoTooltip
-                  content="Bet amount are defined as valid bets in crypto games (Mines, Crash).Valid bets will only
-                  be calculated for bets that have been settled and produced a win or loss result. Any
-                  games played, tied, or canceled will not be counted in valid bets."
-                />
+                <span className="mr-1">{t('TotalBets')}</span>
+                <InfoTooltip content={t('TotalBets.Description')} />
               </div>
               <div className="flex items-center space-x-1 text-sm text-white">
                 <UsdtIcon className="h-4 w-4" />
@@ -256,7 +257,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
               </div>
             </div>
             <div className="flex min-h-[60px] flex-1 flex-col items-center justify-between">
-              <div className="flex flex-1 items-center text-[#999999]">Total Deposit</div>
+              <div className="flex flex-1 items-center text-[#999999]">{t('TotalDeposit')}</div>
               <div className="flex items-center space-x-1 text-sm text-white">
                 <UsdtIcon className="h-4 w-4" />
                 <Amount
@@ -274,9 +275,11 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
       {/* All Members Section */}
       <div className="flex flex-1 flex-col">
         <div className="mt-6 flex items-center space-x-1 font-ultra text-white">
-          <span>All Members</span>
+          <span>{t('AllMembers')}</span>
           <InfoTooltip
-            content={`Only when your friends registered and owned over ${formatAmount(teamSettingList?.activeSetting, { crypto: Crypto.KOKON })} KOKON in their wallet are counted valid member.`}
+            content={t('AllMembers.Description', {
+              value: formatAmount(teamSettingList?.activeSetting, { crypto: Crypto.KOKON }),
+            })}
           />
         </div>
         {/* Search Section */}
@@ -302,7 +305,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
                     className={`w-full bg-transparent py-2 pl-2 pr-8 text-white outline-none transition-all duration-300 ease-in-out ${
                       isSearchExpanded ? 'ml-2 opacity-100' : 'h-0 w-0 opacity-0'
                     }`}
-                    placeholder="Search..."
+                    placeholder={t('Search')}
                     onClick={e => e.stopPropagation()}
                     value={localDisplayName}
                     onChange={e => setLocalDisplayName(e.target.value)}
@@ -461,11 +464,11 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
             style={{ maxWidth }}
           >
             <div className="flex flex-1 flex-col items-center justify-center space-y-1">
-              <div className="text-xs text-[#FFFFFFB2]">Member</div>
+              <div className="text-xs text-[#FFFFFFB2]">{t('Member')}</div>
               <div className="text-xs font-ultra">{latestSummary.teamSize}</div>
             </div>
             <div className="flex flex-1 flex-col items-center justify-center space-y-1">
-              <div className="text-xs text-[#FFFFFFB2]">Bets</div>
+              <div className="text-xs text-[#FFFFFFB2]">{t('Bets')}</div>
               <div className="flex items-center space-x-1">
                 <UsdtIcon className="h-3 w-3" />
                 <Amount
@@ -478,7 +481,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
               </div>
             </div>
             <div className="flex flex-1 flex-col items-center justify-center space-y-1">
-              <div className="text-xs text-[#FFFFFFB2]">Deposit</div>
+              <div className="text-xs text-[#FFFFFFB2]">{t('Deposit')}</div>
               <div className="flex items-center space-x-1">
                 <UsdtIcon className="h-3 w-3" />
                 <Amount

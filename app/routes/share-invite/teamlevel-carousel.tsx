@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
 import Fade from 'embla-carousel-fade'
 import { cn } from '~/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 import ArrowLeftIcon from '~/icons/arrow-left.svg?react'
 import ArrowRightIcon from '~/icons/arrow-right.svg?react'
@@ -17,6 +18,7 @@ const TeamLevelCarousel: React.FC<TeamLevelCarouselProps> = ({
   teamLevel,
   onTeamLevelChange,
 }) => {
+  const { t } = useTranslation()
   const [emblaRef, emblaApi] = useEmblaCarousel(
     {
       loop: true,
@@ -67,7 +69,7 @@ const TeamLevelCarousel: React.FC<TeamLevelCarouselProps> = ({
                 />
               ))}
             </span>
-            <span className="">{selectedIndex + 1} Star Team</span>
+            <span className="">{t('StarTeam', { count: selectedIndex + 1 })}</span>
           </span>
         </div>
       </div>

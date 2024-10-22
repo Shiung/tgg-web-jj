@@ -553,7 +553,7 @@ export default function SmashEgg() {
                   onClick={handleSmashButtonClick}
                   loading={isSmashing}
                 >
-                  {t('smash')} x{prizePoolItem?.hammerSpent || 0}
+                  {t('Smash')} x{prizePoolItem?.hammerSpent || 0}
                 </Button>
                 <Button catEars variant="gray" className="flex-1" onClick={handleGiveUpButtonClick}>
                   {t('giveUpEgg')}
@@ -575,7 +575,7 @@ export default function SmashEgg() {
 
               <div className="relative text-black">
                 <Button catEars className="w-full" onClick={handleClaim} loading={isClaiming}>
-                  {t('claim')}
+                  {t('Claim')}
                 </Button>
               </div>
             </>

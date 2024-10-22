@@ -1,11 +1,13 @@
 import { useCallback, useMemo } from 'react'
 import { useUtils } from '@telegram-apps/sdk-react'
 import { useMutation } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 
 import useStore from '~/stores/useStore'
 import { apis } from '~/api/index'
 
 export function useShare() {
+  const { t } = useTranslation()
   const inTelegram = useStore(state => state.inTelegram)
   const telegramConfig = useStore(state => state.telegramConfig)
   const { referralCode: userReferralCode } = useStore(state => state.userInfo)
@@ -44,7 +46,7 @@ export function useShare() {
           navigator
             .share({
               url: url,
-              title: text || 'Share',
+              title: text || t('Share'),
             })
             .catch(error => console.log('Error sharing:', error))
         } else {
@@ -53,7 +55,7 @@ export function useShare() {
         }
       }
     },
-    [inTelegram, utils, shareAction, userReferralCode]
+    [inTelegram, utils, shareAction, userReferralCode, t]
   )
 
   return {

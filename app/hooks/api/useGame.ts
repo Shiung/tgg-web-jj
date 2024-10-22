@@ -16,6 +16,7 @@ interface MutationVariables {
 }
 
 const useGetGameUrl = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [gameUrl, setGameUrl] = useState<string | null>(null)
   const mutateRef = useRef<(variables: MutationVariables) => void>()
@@ -32,7 +33,7 @@ const useGetGameUrl = () => {
       if (url) {
         setGameUrl(url)
       } else {
-        errorToast('Game URL not found')
+        errorToast(t('GameURLNotFound'))
         navigate('/')
         console.error('[ERROR] gameUrl URL 不存在')
       }

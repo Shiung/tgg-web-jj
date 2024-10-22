@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { SubmitHandler, useFormContext } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import { useCopyToClipboard } from 'react-use'
+import { useTranslation } from 'react-i18next'
 
 import {
   Sheet,
@@ -23,6 +24,7 @@ import type { FormData } from './route'
 
 const ShareSheet: React.FC = () => {
   const { share, tDotMeBaseShareUrl } = useShare()
+  const { t } = useTranslation()
   const [state, copyToClipboard] = useCopyToClipboard()
   const [open, setOpen] = useState(false)
   const [shareReferralCode, setShareReferralCode] = useState('')
@@ -64,7 +66,7 @@ const ShareSheet: React.FC = () => {
     try {
       const res = await createPacket.mutateAsync(shareData)
       if (res.data.referralCode) {
-        successToast('Share successful')
+        successToast(t('ShareSuccessful'))
         setShareReferralCode(res.data.referralCode)
         setOpen(true)
       } else {
@@ -74,7 +76,7 @@ const ShareSheet: React.FC = () => {
       console.log('packetCreate res:', res)
     } catch (error) {
       console.error('packetCreate failed:', error)
-      errorToast('Share failed')
+      errorToast(t('ShareFailed'))
       setShareReferralCode('')
       setOpen(false)
     }
