@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useNavigate, useParams } from '@remix-run/react'
 import useStore from '~/stores/useStore'
 import { useGetGameUrl } from '~/hooks/api/useGame'
-import AppLoading from '~/components/app-loading'
+import AppLoading from '~/components/app-loading/index'
 
 import BuyEnergyDialog from './buy-energy-dialog'
 

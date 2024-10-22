@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useCallback } from 'react'
 import { useNavigate, useParams } from '@remix-run/react'
 import useStore from '~/stores/useStore'
 import { useGetGameUrl } from '~/hooks/api/useGame'
-import AppLoading from '~/components/app-loading'
+import AppLoading from '~/components/app-loading/index'
 
 // 配合 useMatches 聲明需要登录才能访问
 export const handle = {

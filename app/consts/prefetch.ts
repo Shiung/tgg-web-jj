@@ -42,14 +42,46 @@ export const iconsLinks: LinkDescriptor[] = [
 
 export const prefetchAssetsLinks: LinkDescriptor[] = [
   // images
+  /* 紅包彈窗 */
   {
     rel: 'preload',
-    href: '/images/loading.png',
+    href: '/lucky-money/open-lucky-bag.png',
+    as: 'image',
+  },
+  /* 紅包 lottie */
+  {
+    rel: 'preload',
+    href: '/images/lucky-money/lottie/lucky-bag/images/cat_sad_2.png',
     as: 'image',
   },
   {
     rel: 'preload',
-    href: '/images/system-bg.png',
+    href: '/images/lucky-money/lottie/lucky-bag/images/cat-rank-yello2_1.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/lucky-money/lottie/lucky-bag/images/shine__f0007__1_.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/lucky-money/lottie/lucky-bag/images/luckybagb.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/lucky-money/lottie/lucky-bag/images/luckybagf.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/lucky-money/lottie/lucky-bag/images/luckybags.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/lucky-money/lottie/lucky-bag/images/luckybagy.png',
     as: 'image',
   },
 ]

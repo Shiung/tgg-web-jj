@@ -2,6 +2,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { useMemo } from 'react'
 import { cn } from '~/lib/utils'
 import useStore from '~/stores/useStore'
+import { systemBgImgBase64, systemLoadingImgBase64 } from './base64-imgs'
 
 const appLoadingVariants = cva(
   'mx-auto z-50 flex flex-col items-center justify-center overflow-hidden rounded-xl',
@@ -27,7 +28,7 @@ export default function AppLoading({ className, variant = 'blur' }: AppLoadingPr
   const systemStyle = useMemo(() => {
     return variant === 'system'
       ? {
-          backgroundImage: `url('/images/system-bg.png')`,
+          backgroundImage: `url(${systemBgImgBase64})`,
           backgroundSize: '100% auto',
           maxWidth: maxWidth,
         }
@@ -39,7 +40,7 @@ export default function AppLoading({ className, variant = 'blur' }: AppLoadingPr
       <img
         width={128}
         height={128}
-        src="/images/loading.png"
+        src={systemLoadingImgBase64}
         alt="loading"
         className="animate-spin-with-pause"
       />
