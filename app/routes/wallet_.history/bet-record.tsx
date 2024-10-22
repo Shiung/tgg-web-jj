@@ -20,6 +20,7 @@ import BetSkeleton from './bet-skeleton'
 import NoDataView from './no-data-view'
 import Amount from '~/components/amount'
 import { KokonIcon, UsdtIcon } from '~/components/color-icons'
+import { useTranslation } from 'react-i18next'
 
 interface FormValues {
   gameList: string
@@ -63,7 +64,7 @@ interface GameTransactionResponse {
 }
 
 const defaultValues = {
-  gameList: '0',
+  gameList: '',
   dateTimeRange: { from: startOfDay(subDays(new Date(), 30)), to: endOfDay(new Date()) },
 }
 
@@ -91,6 +92,7 @@ const SummaryItem = ({
 export default function BetRecord({ currentTab }: { currentTab: string }) {
   const [currency, setCurrency] = useState<Crypto.USDT | Crypto.KOKON>(Crypto.KOKON)
   const [isFirstLoading, setIsFirstLoading] = useState(true)
+  const { t } = useTranslation()
 
   const { control, watch } = useForm<FormValues>({
     mode: 'onChange',
@@ -128,7 +130,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
         pageSize: 20,
         startTime: formatRFC3339(formValues.dateTimeRange.from),
         endTime: formatRFC3339(formValues.dateTimeRange.to),
-        gameId: parseInt(formValues.gameList),
+        gameId: parseInt(formValues.gameList ? formValues.gameList : '0'),
       }
 
       const res = await apis.game.gameTransactionsList(queryString)
@@ -213,7 +215,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
               <div className={cn('h-full w-full', styles['date-picker'])}>
                 <DatePickerSheet
                   id="datetime-range-picker"
-                  title="Select Date"
+                  title={t('selectDate')}
                   value={field.value}
                   onChange={field.onChange}
                   range
@@ -236,8 +238,8 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
                 <div className="flex h-full w-full flex-col">
                   <DropdownSheet
                     id="game-list-dropdown"
-                    title="Game List"
-                    placeholder="Game"
+                    title={t('gameList')}
+                    placeholder={t('gameList')}
                     value={field.value}
                     onConfirm={field.onChange}
                     onReset={() => field.onChange('0')}
@@ -303,9 +305,9 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
               records.length > 0 && summary ? 'flex' : 'hidden'
             )}
           >
-            <SummaryItem label="Number" value={data?.pages[0].pagination.totalRecord} />
+            <SummaryItem label={t('number')} value={data?.pages[0].pagination.totalRecord} />
             <SummaryItem
-              label="Bets"
+              label={t('bets')}
               value={
                 <Amount
                   value={
@@ -324,7 +326,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
               }
             />
             <SummaryItem
-              label="Win/Loss"
+              label={t('winLoss')}
               value={
                 <Amount
                   value={

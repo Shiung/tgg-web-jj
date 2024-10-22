@@ -19,12 +19,13 @@ import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import { KokonIcon, TonIcon, UsdtIcon } from '~/components/color-icons'
 import XIcon from '~/icons/x.svg?react'
 import { Button } from '~/components/ui/button'
+import { useTranslation } from 'react-i18next'
 interface TransactionRecordRequest {
   page: number
   pageSize: number
   transactionTimeFrom?: string
   transactionTimeTo?: string
-  currency?: string
+  currency?: string | undefined
   type?: string
   balance?: string
 }
@@ -54,56 +55,6 @@ interface FormValues {
   dateTimeRange: { from: Date; to: Date }
 }
 
-const typeOptions = [
-  { value: 'Deposit', label: 'Deposit' }, // 充值
-  { value: 'Withdraw', label: 'Withdraw' }, // 提款
-  { value: 'Swap(sell)', label: 'Swap(Sell)' }, // 兑换
-  { value: 'Swap(buy)', label: 'Swap(Buy)' }, // 兑换
-  { value: 'Commission', label: 'Commission' }, // 佣金
-  { value: 'Game', label: 'Game' }, // 游戏
-  { value: 'Task', label: 'Task' }, // 任務
-  { value: 'Treasure', label: 'Treasure' }, // 宝箱
-  { value: 'Rank', label: 'Rank' }, // 排行榜
-  { value: 'LuckyMoney', label: 'Lucky money' }, // 红包
-  { value: 'SmashEgg', label: 'Smash egg' }, // 砸金蛋
-  { value: 'Adjustment', label: 'Adjustment' }, // 人工调整
-]
-
-const balanceOptions = [
-  { value: 'Income', label: 'Income' },
-  { value: 'Expense', label: 'Expense' },
-]
-
-const currencyOptions = [
-  {
-    value: 'USDT',
-    label: (
-      <div className="flex items-center space-x-1">
-        <UsdtIcon className="h-6 w-6 flex-shrink-0" />
-        <div>USDT</div>
-      </div>
-    ),
-  },
-  {
-    value: 'TON',
-    label: (
-      <div className="flex items-center space-x-1">
-        <TonIcon className="h-6 w-6 flex-shrink-0" />
-        <div>TON</div>
-      </div>
-    ),
-  },
-  {
-    value: 'KOKON',
-    label: (
-      <div className="flex items-center space-x-1">
-        <KokonIcon className="h-6 w-6 flex-shrink-0" />
-        <div>KOKON</div>
-      </div>
-    ),
-  },
-]
-
 const fakeData = async (params: TransactionRecordRequest): Promise<any> => {
   return new Promise(resolve => {
     setTimeout(() => {
@@ -132,12 +83,63 @@ const fakeData = async (params: TransactionRecordRequest): Promise<any> => {
 }
 
 export default function TransactionRecord({ currentTab }: { currentTab: string }) {
+  const { t } = useTranslation()
+  const typeOptions = [
+    { value: 'Deposit', label: t('transaction.type.deposit') }, // 充值
+    { value: 'Withdraw', label: t('transaction.type.withdraw') }, // 提款
+    { value: 'Swap(sell)', label: t('transaction.type.swap(sell)') }, // 兑换
+    { value: 'Swap(buy)', label: t('transaction.type.swap(buy)') }, // 兑换
+    { value: 'Commission', label: t('transaction.type.commission') }, // 佣金
+    { value: 'Game', label: t('transaction.type.game') }, // 游戏
+    { value: 'Task', label: t('transaction.type.task') }, // 任務
+    { value: 'Treasure', label: t('transaction.type.treasure') }, // 宝箱
+    { value: 'Rank', label: t('transaction.type.rank') }, // 排行榜
+    { value: 'LuckyMoney', label: t('transaction.type.luckyMoney') }, // 红包
+    { value: 'SmashEgg', label: t('transaction.type.smashEgg') }, // 砸金蛋
+    { value: 'Adjustment', label: t('transaction.type.adjustment') }, // 人工调整
+  ]
+
+  const balanceOptions = [
+    { value: 'Income', label: t('income') },
+    { value: 'Expense', label: t('expense') },
+  ]
+
+  const currencyOptions = [
+    {
+      value: 'USDT',
+      label: (
+        <div className="flex items-center space-x-1">
+          <UsdtIcon className="h-6 w-6 flex-shrink-0" />
+          <div>USDT</div>
+        </div>
+      ),
+    },
+    {
+      value: 'TON',
+      label: (
+        <div className="flex items-center space-x-1">
+          <TonIcon className="h-6 w-6 flex-shrink-0" />
+          <div>TON</div>
+        </div>
+      ),
+    },
+    {
+      value: 'KOKON',
+      label: (
+        <div className="flex items-center space-x-1">
+          <KokonIcon className="h-6 w-6 flex-shrink-0" />
+          <div>KOKON</div>
+        </div>
+      ),
+    },
+  ]
+
   const { control, watch } = useForm<FormValues>({
     mode: 'onChange',
     defaultValues: {
-      currency: '0',
-      type: '0',
-      balance: '0',
+      currency: '',
+      type: '',
+      balance: '',
       dateTimeRange: { from: startOfDay(subDays(new Date(), 30)), to: endOfDay(new Date()) },
     },
   })
@@ -152,9 +154,9 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
         pageSize: 20,
         transactionTimeFrom: formatRFC3339(formValues.dateTimeRange.from),
         transactionTimeTo: formatRFC3339(formValues.dateTimeRange.to),
-        currency: formValues.currency === '0' ? '' : formValues.currency,
-        type: formValues.type === '0' ? '' : formValues.type,
-        balance: formValues.balance === '0' ? '' : formValues.balance,
+        currency: formValues.currency,
+        type: formValues.type,
+        balance: formValues.balance,
       }
       const res = await apis.wallet.walletHistoryListList(queryString)
       // const res = await fakeData(queryString)
@@ -217,7 +219,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
               <div className={cn('h-full w-full', styles['date-picker'])}>
                 <DatePickerSheet
                   id="datetime-range-picker"
-                  title="Select Date"
+                  title={t('selectDate')}
                   value={field.value}
                   onChange={field.onChange}
                   range
@@ -240,11 +242,11 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                 <div className="flex h-full w-full min-w-0 flex-col text-white">
                   <DropdownSheet
                     id="currency-dropdown"
-                    title="Currency"
-                    placeholder="Currency"
+                    title={t('currency')}
+                    placeholder={t('currency')}
                     value={field.value}
                     onConfirm={field.onChange}
-                    onReset={() => field.onChange('0')}
+                    onReset={() => field.onChange('')}
                     customTrigger={({ selectedLabel, placeholder }) => {
                       return (
                         <div
@@ -261,7 +263,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                               size="icon"
                               onClick={e => {
                                 e.stopPropagation()
-                                field.onChange('0')
+                                field.onChange('')
                               }}
                             >
                               <XIcon className="h-4 w-4 text-white" />
@@ -294,11 +296,11 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                 <div className="flex h-full w-full min-w-0 flex-col">
                   <DropdownSheet
                     id="type-dropdown"
-                    title="Type"
-                    placeholder="Type"
+                    title={t('type')}
+                    placeholder={t('type')}
                     value={field.value}
                     onConfirm={field.onChange}
-                    onReset={() => field.onChange('0')}
+                    onReset={() => field.onChange('')}
                   >
                     {typeOptions.map(option => (
                       <DropdownOption
@@ -321,11 +323,11 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                 <div className="flex h-full w-full min-w-0 flex-col">
                   <DropdownSheet
                     id="balance-dropdown"
-                    title="Balance"
-                    placeholder="Balance"
+                    title={t('balance')}
+                    placeholder={t('balance')}
                     value={field.value}
                     onConfirm={field.onChange}
-                    onReset={() => field.onChange('0')}
+                    onReset={() => field.onChange('')}
                   >
                     {balanceOptions.map(option => (
                       <DropdownOption
@@ -355,10 +357,10 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
               styles['list-header']
             )}
           >
-            <p className="w-9">Date</p>
-            <p className="w-9">Time</p>
-            <p className="flex-1">Type</p>
-            <p className="flex-1 text-right">Amount</p>
+            <p className="w-9">{t('date')}</p>
+            <p className="w-9">{t('time')}</p>
+            <p className="flex-1">{t('type')}</p>
+            <p className="flex-1 text-right">{t('amount')}</p>
           </div>
           <div className="absolute bottom-3 left-3 right-3 top-9 mt-2 overflow-y-auto">
             <div>

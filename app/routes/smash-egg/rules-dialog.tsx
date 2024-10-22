@@ -37,7 +37,7 @@ const RulesDialog: React.FC<RulesDialogProps> = ({ prizePools }) => {
                 <div className="rounded-[6px] bg-[#ffffff33]">
                   <div className="flex items-center justify-between px-2">
                     <p className="text-sm font-ultra text-white">
-                      {item.eggLevel.charAt(0).toUpperCase() + item.eggLevel.slice(1).toLowerCase()}
+                      {t(`eggRule.eggName.${item.eggLevel.toLocaleLowerCase()}`)}
                     </p>
                     <p>
                       <i className="relative top-0.5 inline-block h-4 w-[13.6px] bg-[url('/images/smash-egg/hammer.png')] bg-contain bg-no-repeat" />

@@ -5,10 +5,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import TransactionRecord from './transaction-record'
 import BetRecord from './bet-record'
 import { cn } from '~/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 const DEFAULT_TAB = 'transaction'
 
 export default function History() {
+  const { t } = useTranslation()
   const [currentTab, setCurrentTab] = useState(DEFAULT_TAB)
 
   const setNavVisibility = useStore(
@@ -33,7 +35,9 @@ export default function History() {
           className="absolute left-0 top-0 h-6 w-6 cursor-pointer"
           onClick={() => window.history.back()}
         />
-        <div className="flex h-6 w-full justify-center text-lg font-ultra leading-6">History</div>
+        <div className="flex h-6 w-full justify-center text-lg font-ultra leading-6">
+          {t('history')}
+        </div>
       </div>
 
       <div className="relative z-10 flex flex-1 cursor-pointer flex-col rounded-t-xl">
@@ -46,11 +50,11 @@ export default function History() {
           <TabsList variant="cardTab" className="w-full overflow-x-auto">
             <TabsTrigger variant="cardTab" value="transaction" className="flex-1" asChild>
               {/* <Link to="deposit">Deposit</Link> */}
-              <span className="text-sm font-ultra">Transaction</span>
+              <span className="text-sm font-ultra">{t('transaction')}</span>
             </TabsTrigger>
             <TabsTrigger variant="cardTab" value="bet" className="flex-1" asChild>
               {/* <Link to="withdraw">Withdraw</Link> */}
-              <span className="text-sm font-ultra">Bet</span>
+              <span className="text-sm font-ultra">{t('bet')}</span>
             </TabsTrigger>
           </TabsList>
           <TabsContent
