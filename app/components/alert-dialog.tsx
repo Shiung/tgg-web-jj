@@ -29,7 +29,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   onRightButtonClick,
   onLeftButtonClick,
   leftButtonText = 'Cancel',
-  rightButtonText = 'OK',
+  rightButtonText = 'Ok',
 }) => {
   const imageSrc = useMemo(
     () => (variant === 'notice' ? '/images/system-notice.png' : '/images/system-success.png'),

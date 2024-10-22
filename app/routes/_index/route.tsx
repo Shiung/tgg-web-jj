@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { MetaFunction } from '@remix-run/node'
 import { Link, useNavigate } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
 import Autoplay from 'embla-carousel-autoplay'
 // import { Button } from '~/components/ui/button'
 import {
@@ -15,7 +16,7 @@ import SvgEnterByFloating from '~/components/color-icons/enter-by-floating'
 import ProtectedLink from '~/components/protected-link'
 import { GameCode, getGameRoute, VenueType } from '~/consts/game'
 import useStore from '~/stores/useStore'
-import { buildResourceImageUrl } from '~/lib/utils'
+import { buildResourceImageUrl, cn } from '~/lib/utils'
 
 import { useBanner, useBannerRedirect } from './useBanner'
 import GameImg from './game-img'
@@ -29,6 +30,7 @@ export const meta: MetaFunction = () => {
 
 /* Home */
 export default function Index() {
+  const { t } = useTranslation()
   const maxWidth = useStore(state => state.maxWidth)
   const activeGameList = useStore(state => state.activeGameList)
   const isActiveGameListFetching = useStore(state => state.isActiveGameListFetching)
@@ -95,8 +97,8 @@ export default function Index() {
           </Button>
         </div> */}
         <div className="flex aspect-[343/344] w-full flex-row space-x-2">
-          <div className="flex flex-1 flex-col space-y-2 text-lg font-ultra">
-            {[GameCode.GoDown100Floors, GameCode.Crash].map(code => {
+          <div className="flex flex-1 flex-col text-lg font-ultra">
+            {[GameCode.GoDown100Floors, GameCode.Crash].map((code, index) => {
               if (isActiveGameListFetching) return <GameEntranceSkeleton key={`game-${code}`} />
 
               const currentGameInfo = activeGameList.find(game => game.gameCode === code)
@@ -110,7 +112,10 @@ export default function Index() {
                     handleGameClick(code, currentGameInfo.gameType)
                   }}
                   to={getGameRoute(code, currentGameInfo.gameType)}
-                  className="relative flex-1 overflow-hidden rounded-2xl"
+                  className={cn(
+                    'relative flex-1 overflow-hidden rounded-2xl',
+                    index !== 0 && 'mt-2'
+                  )}
                 >
                   <p className="absolute inset-x-3 top-[14px]">{currentGameInfo.gameName}</p>
                   <GameImg
@@ -132,9 +137,9 @@ export default function Index() {
               className="relative flex-1 rounded-xl bg-colorLinear-orange"
             >
               <div className="absolute inset-3 flex flex-col text-start text-lg font-ultra">
-                <span>SMASH EGG</span>
+                <span>{t('SmashEgg')}</span>
                 <span className="text-sm font-normal">
-                  Up to <span className="font-ultra text-primary">1000</span> KOKON
+                  {t('UpTo')} <span className="font-ultra text-primary">1000</span> KOKON
                 </span>
               </div>
               <img
@@ -159,7 +164,7 @@ export default function Index() {
       <div className="bg-black px-4 pb-4">
         <Carousel className="aspect-[346/144] w-full">
           <div className="mb-3 flex items-center justify-between">
-            <h1 className="text-base font-ultra">NEW RELEASE</h1>
+            <h1 className="text-base font-ultra">{t('NewRelease')}</h1>
             {activeGameList.length > 3 && (
               <div className="relative flex items-center space-x-[2px]">
                 <CarouselPrevious />

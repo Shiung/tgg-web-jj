@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { Link, useNavigate } from '@remix-run/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import qs from 'qs'
 
 import { apis } from '~/api'
@@ -15,16 +16,17 @@ import { ListSkeleton } from './skeleton'
 const QUERY_STATE = [1]
 
 export const EmptyList = () => {
+  const { t } = useTranslation()
   return (
     <div className="m-auto flex flex-col items-center justify-center text-xs font-semibold text-white/70">
       <img src="/images/system-error.png" className="mb-2 h-32 w-32" alt="list-empty" />
-      <div>Empty. </div>
-      <div>Share New Bags to invite friends to join KOKON!</div>
+      <div className="whitespace-pre-wrap text-center">{t('LuckyMoneyListEmpty')}</div>
     </div>
   )
 }
 
 export default function LuckyMoneyList() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } =
     useInfiniteQuery({
@@ -93,7 +95,7 @@ export default function LuckyMoneyList() {
       <div className="mt-6">
         <Link prefetch="viewport" to="/lucky-money-history">
           <Button className="w-full" catEars>
-            History
+            {t('History')}
           </Button>
         </Link>
       </div>

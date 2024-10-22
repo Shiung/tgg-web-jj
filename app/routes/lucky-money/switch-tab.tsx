@@ -1,14 +1,16 @@
 import { Link, useLocation } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
 
 const tabs = [
-  { label: 'My share', path: '/lucky-money/list' },
-  { label: 'Share New Bags', path: '/lucky-money/share' },
+  { label: 'MyShare', path: '/lucky-money/list' },
+  { label: 'ShareNewBags', path: '/lucky-money/share' },
 ]
 
 /* 上方兩顆切換按鈕 */
 const SwitchTab = () => {
+  const { t } = useTranslation()
   const location = useLocation()
 
   return (
@@ -23,7 +25,7 @@ const SwitchTab = () => {
             )}
             isSelected={location.pathname === tab.path}
           >
-            {tab.label}
+            {t(tab.label)}
           </Button>
         </Link>
       ))}

@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Controller, useFormContext } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
@@ -18,6 +19,7 @@ interface LuckBagProps {
 }
 
 const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
+  const { t } = useTranslation()
   const {
     control,
     setValue,
@@ -90,8 +92,8 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 inputMode="decimal"
                 pattern="[0-9]*"
                 id="quota"
-                label="Amount of total bag"
-                placeholder="Please enter"
+                label={t('AmountOfTotalBag')}
+                placeholder={t('PleaseEnter')}
                 onValueChange={({ floatValue }) => onChange(floatValue)}
                 className="h-9"
                 fieldSuffix={Crypto.KOKON}
@@ -123,7 +125,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
 
       {/* Amount range of each bag */}
       <div className="space-y-3 rounded-lg bg-[#1C1C1C] p-3">
-        <p className="px-3 text-white/70">Amount range of each bag</p>
+        <p className="px-3 text-white/70">{t('AmountRangeOfEachBag')}</p>
         <Controller
           name="minValue"
           control={control}
@@ -146,8 +148,8 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 id="minValue"
                 label={
                   <div className="flex w-full justify-between pr-3">
-                    <span>Minimum</span>
-                    <span>{`(no under ${minValue})`}</span>
+                    <span>{t('Minimum')}</span>
+                    <span>{t('NoUnderValue', { value: minValue })}</span>
                   </div>
                 }
                 onValueChange={({ floatValue }) => {
@@ -180,7 +182,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 inputMode="decimal"
                 pattern="[0-9]*"
                 id="maxValue"
-                label="Maximum"
+                label={t('Maximum')}
                 onValueChange={({ floatValue }) => {
                   onChange(floatValue)
                 }}

@@ -67,7 +67,7 @@ const LanguageDialog: React.FC = () => {
             </Button>
           </DialogClose>
           <Button className="flex-1" onClick={handleConfirm} catEars>
-            {t('OK')}
+            {t('Ok')}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -107,9 +107,12 @@ const GetLuckyMoneyDialog: React.FC = () => {
               transition={{ duration: 0.5 }}
               className="flex flex-col items-center justify-center text-lg font-ultra text-white"
             >
-              <div>You got chance to earn a</div>
-              <div>{`a ${showPotential ? 'Luck Battle Bag' : 'Normal Bag'} from`}</div>
-              <div>{`${giverName}`}</div>
+              <div className="whitespace-pre-wrap text-center">
+                {t('getLuckyMoneyDialogDesc1', {
+                  bag: showPotential ? t('LuckBattleBag') : t('NormalBag'),
+                  giverName,
+                })}
+              </div>
               <div
                 className="relative flex aspect-[270/336] w-[74.4%] cursor-pointer items-center justify-center"
                 onClick={handleOpenClick}
@@ -123,11 +126,11 @@ const GetLuckyMoneyDialog: React.FC = () => {
                   alt="open-lucky-bag"
                 />
                 <div className="absolute bottom-[36%] flex aspect-square w-[32.25%] items-center justify-center text-center text-lg font-ultra text-[#FE8C02]">
-                  {isPending ? <Loader2 className="h-8 w-8 animate-spin" /> : 'OPEN'}
+                  {isPending ? <Loader2 className="h-8 w-8 animate-spin" /> : t('OPEN')}
                 </div>
                 {showPotential && (
                   <div className="absolute bottom-[9%] flex w-full flex-col items-center space-y-1 font-ultra">
-                    <span className="text-base text-white">Potential Gain</span>
+                    <span className="text-base text-white">{t('PotentialGain')}</span>
                     <span className="flex items-center justify-center text-sm">
                       <KokonIcon className="h-5 w-5" />
                       <span className="ml-[2px] flex items-center justify-center space-x-1 text-primary">
@@ -159,7 +162,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
             </motion.div>
           )}
 
-          {status === 'result' /* && drawResult */ && (
+          {status === 'result' && drawResult && (
             <motion.div
               key="result-screen"
               // layout
@@ -171,13 +174,15 @@ const GetLuckyMoneyDialog: React.FC = () => {
             >
               {drawResult?.isWinned ? (
                 <>
-                  <div className="text-center">
-                    <p>You got a Luck Battle Bag from</p>
-                    <p>{giverName}</p>
-                  </div>
+                  <p className="whitespace-pre-wrap text-center">
+                    {t('getLuckyMoneyDialogDesc1', {
+                      bag: showPotential ? t('LuckBattleBag') : t('NormalBag'),
+                      giverName,
+                    })}
+                  </p>
                   <div className="flex items-center self-center">
                     <KokonIcon className="h-8 w-8" />
-                    <div className="ml-1 text-primary">
+                    <div className="ml-1 text-3xl text-primary">
                       <Amount value={drawResult?.amount} crypto={Crypto.KOKON} />
                     </div>
                   </div>
@@ -199,7 +204,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
                     setStatus('initial')
                   }}
                 >
-                  Got it
+                  {t('GotIt')}
                 </Button>
               </div>
             </motion.div>

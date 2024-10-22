@@ -2,6 +2,8 @@ import { useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Controller, useFormContext } from 'react-hook-form'
 import { NumericFormat } from 'react-number-format'
+import { useTranslation } from 'react-i18next'
+
 import { Crypto, cryptoRules } from '~/consts/crypto'
 import AddIcon from '~/icons/add.svg?react'
 import MinusIcon from '~/icons/minus.svg?react'
@@ -21,6 +23,7 @@ interface NormalBagProps {
 }
 
 const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
+  const { t } = useTranslation()
   const minValue = useMemo(
     () => parseFloat(packetSetting?.minValue || '0'),
     [packetSetting?.minValue]
@@ -79,7 +82,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 inputMode="decimal"
                 pattern="[0-9]*"
                 id="distributedEachAmount"
-                label="Amount of each bag"
+                label={t('AmountRangeOfEachBag')}
                 placeholder="Please enter"
                 onValueChange={({ floatValue }) => onChange(floatValue)}
                 className="h-9"
@@ -132,7 +135,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 pattern="[0-9]*"
                 decimalScale={0}
                 id="quantity"
-                label="Quantity"
+                label={t('Quantity')}
                 isAllowed={values => {
                   const { value, floatValue } = values
                   return value === '' || !!(floatValue && floatValue > 0)
@@ -145,7 +148,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                   onChange(floatValue)
                 }}
                 className="h-9 flex-1"
-                fieldSuffix="Bags"
+                fieldSuffix={t('Bags')}
               />
             )
           }}
@@ -200,12 +203,12 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
               crypto={Crypto.KOKON}
             />
           </div>
-          <span>Each bag</span>
+          <span>{t('EachBag')}</span>
         </div>
         <div className="flex-shrink-0">X</div>
         <div className="flex flex-[1_1_0] flex-col items-center space-y-1">
           <span className="text-sm font-ultra text-white">{quantity}</span>
-          <span>Quantity</span>
+          <span>{t('Quantity')}</span>
         </div>
         <div className="flex-shrink-0">=</div>
         <div className="flex flex-[1_1_0] flex-col items-center space-y-1">
@@ -217,7 +220,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
               crypto={Crypto.KOKON}
             />
           </div>
-          <div>Total Amount</div>
+          <div>{t('TotalAmount')}</div>
         </div>
       </div>
     </motion.div>

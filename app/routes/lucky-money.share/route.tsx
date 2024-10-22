@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { Link } from '@remix-run/react'
 import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { FormProvider, useForm } from 'react-hook-form'
 import { cn } from '~/lib/utils'
 import InfoIcon from '~/icons/info.svg?react'
@@ -10,8 +11,6 @@ import { Crypto } from '~/consts/crypto'
 import { parseAmount } from '~/lib/amount'
 import { Button } from '~/components/ui/button'
 import { useGetCryptoWallet } from '~/hooks/api/useWallet'
-
-import GetLuckyMoneyDialog from '~/components/get-lucky-money-dialog/index'
 
 import NormalBag from './normal-bag'
 import LuckBag from './luck-bag'
@@ -52,6 +51,7 @@ const distributeKindOptions = [
 ] as const
 
 export default function LuckyMoneyShare() {
+  const { t } = useTranslation()
   const { data: packetSettingRaw } = useQuery({
     queryKey: ['packetSettingList'],
     queryFn: apis.packetSetting.packetSettingList,
@@ -86,7 +86,7 @@ export default function LuckyMoneyShare() {
       const distributedAmount = (fixedValue || 0) * (quantity || 0)
       methods.setValue(
         'errorMessage',
-        distributedAmount > kokonBalance ? 'Insufficient balance in wallet' : ''
+        distributedAmount > kokonBalance ? t('InsufficientBalanceInWallet') : ''
       )
     } else {
       // 隨機紅包
@@ -100,9 +100,15 @@ export default function LuckyMoneyShare() {
 
       methods.setValue(
         'errorMessage',
-        _quota > kokonBalance ? 'Insufficient balance in wallet' : ''
+        _quota > kokonBalance ? t('InsufficientBalanceInWallet') : ''
       )
-      methods.setValue('hintMessage', `Potential referrals: ${minReferrals}~${maxReferrals} people`)
+      methods.setValue(
+        'hintMessage',
+        t('PotentialReferrals', {
+          minReferrals,
+          maxReferrals,
+        })
+      )
     }
   }, [
     distributeKind,
@@ -113,6 +119,7 @@ export default function LuckyMoneyShare() {
     methods,
     quantity,
     quota,
+    t,
   ])
 
   return (
@@ -122,7 +129,7 @@ export default function LuckyMoneyShare() {
           {/* Tab */}
           <SwitchTab />
           {/* Title */}
-          <span className="mb-3 mt-6 text-base font-ultra">Share my lucky money</span>
+          <span className="mb-3 mt-6 text-base font-ultra">{t('ShareMyLuckyMoney')}</span>
           {/* Type */}
           <div className="flex items-center justify-center space-x-2">
             {distributeKindOptions.map(option => (
@@ -181,8 +188,6 @@ export default function LuckyMoneyShare() {
         ) : (
           <ShareSheet />
         )}
-
-        {/* <GetLuckyMoneyDialog /> */}
       </form>
     </FormProvider>
   )

@@ -113,11 +113,11 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {isChangePin ? (
-          <Button variant="icon" size="icon" className="h-4 w-4 text-white">
+          <Button variant="icon" size="icon" className="h-4 w-4 flex-shrink-0 text-white">
             <EditIcon className="h-full w-full" />
           </Button>
         ) : (
-          <Button variant="icon" size="icon" className="h-4 w-4 text-white">
+          <Button variant="icon" size="icon" className="h-4 w-4 flex-shrink-0 text-white">
             <AddIcon className="h-full w-full" />
           </Button>
         )}
@@ -170,7 +170,7 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
               </Button>
             </DialogClose>
             <Button className="flex-1" catEars disabled={!isValid}>
-              {t('OK')}
+              {t('Ok')}
             </Button>
           </DialogFooter>
         </form>

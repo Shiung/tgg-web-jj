@@ -1,4 +1,5 @@
 import { Link } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
 
 import ArrowLineRight from '~/icons/arrow-line-right.svg?react'
 import { KokonIcon } from '~/components/color-icons'
@@ -12,6 +13,7 @@ import { cn } from '~/lib/utils'
 type LuckyMoneyItemProps = NonNullable<PacketsResponse['list']>[number]
 
 const State = ({ state }: { state: NonNullable<PacketsResponse['list']>[number]['state'] }) => {
+  const { t } = useTranslation()
   const stateInfo = useMemo(() => {
     const info = {
       className: '',
@@ -33,7 +35,7 @@ const State = ({ state }: { state: NonNullable<PacketsResponse['list']>[number][
   return (
     <div className="-mb-3 -mr-3 mt-3 h-5 rounded-br-lg rounded-tl-lg bg-[#333333] px-2 py-1">
       <div className={cn('text-[10px] font-ultra leading-3 text-app-green', stateInfo.className)}>
-        {stateInfo.text}
+        {t(stateInfo.text)}
       </div>
     </div>
   )
@@ -47,6 +49,8 @@ const LuckyMoneyItem: React.FC<LuckyMoneyItemProps> = ({
   withholdAmount,
   remainingAmount,
 }) => {
+  const { t } = useTranslation()
+
   return (
     <Link
       to={{
@@ -63,7 +67,7 @@ const LuckyMoneyItem: React.FC<LuckyMoneyItemProps> = ({
         />
         <div className="ml-2 flex flex-col items-start justify-center">
           <div className="text-sm font-ultra">
-            {distributeKind === 'FIXED' ? 'Normal' : 'Luck Battle'}
+            {t(distributeKind === 'FIXED' ? 'Normal' : 'LuckBattle')}
           </div>
           <div className="mt-1 text-xs font-normal text-[#FFFFFFB2]">
             {formatDate(createdAt, 'yyyy-MM-dd')}
@@ -79,7 +83,7 @@ const LuckyMoneyItem: React.FC<LuckyMoneyItemProps> = ({
             </div>
             {state === 1 && (
               <div className="text-xs font-normal text-white/70">
-                <Amount crypto={Crypto.KOKON} value={remainingAmount} useKM /> remaining
+                <Amount crypto={Crypto.KOKON} value={remainingAmount} useKM /> {t('remaining')}
               </div>
             )}
           </div>

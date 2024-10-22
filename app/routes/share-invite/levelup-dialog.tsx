@@ -56,7 +56,7 @@ const LevelupDialog: React.FC<LevelupDialogProps> = ({ isOpen, onClose, finalCla
             onClick={handleOK}
             catEars
           >
-            <span className="text-sm font-ultra">{t('OK')}</span>
+            <span className="text-sm font-ultra">{t('Ok')}</span>
           </Button>
         </div>
       </DialogContent>

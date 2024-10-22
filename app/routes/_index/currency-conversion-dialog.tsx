@@ -100,7 +100,7 @@ const CurrencyConversionDialog: React.FC<CurrencyConversionDialogProps> = ({
             disabled={gameWalletLoading}
             catEars
           >
-            <span className="text-sm font-ultra">{t('OK')}</span>
+            <span className="text-sm font-ultra">{t('Ok')}</span>
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -3,6 +3,7 @@ import { Link, useSearchParams, useNavigate } from '@remix-run/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { motion } from 'framer-motion'
 import { useCopyToClipboard } from 'react-use'
+import { useTranslation } from 'react-i18next'
 import { formatDate } from 'date-fns'
 
 import useStore from '~/stores/useStore'
@@ -39,6 +40,7 @@ const STATE = {
 }
 
 const LuckyMoneyDetail = () => {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const id = searchParams.get('id') || ''
@@ -119,17 +121,6 @@ const LuckyMoneyDetail = () => {
       targetColors.endColor = '#EB0070'
     }
 
-    // const targetColors =
-    //   detailData.distributeKind === 'FIXED'
-    //     ? {
-    //         startColor: '#FDCB04',
-    //         endColor: '#FF4D00',
-    //       }
-    //     : {
-    //         startColor: '#FF90C2',
-    //         endColor: '#EB0070',
-    //       }
-
     // 动画变体
     const variants = {
       hidden: {
@@ -159,8 +150,8 @@ const LuckyMoneyDetail = () => {
 
   useEffect(() => {
     if (!copyState.value) return
-    successToast('Copied')
-  }, [copyState])
+    successToast(t('Copied'))
+  }, [copyState, t])
 
   const setNavVisibility = useStore(state => state.setNavVisibility)
   useEffect(() => {
@@ -188,7 +179,7 @@ const LuckyMoneyDetail = () => {
           <Button variant="icon" size="icon" onClick={() => navigate(-1)}>
             <ArrowLineLeftIcon className="h-6 w-6 text-white" />
           </Button>
-          <h1 className="text-lg font-ultra">{kind === 'FIXED' ? 'Normal' : 'Luck Battle'}</h1>
+          <h1 className="text-lg font-ultra">{t(kind === 'FIXED' ? 'Normal' : 'LuckBattle')}</h1>
           <Button variant="icon" size="icon">
             <Link to="/">
               <X className="h-6 w-6 text-white" />
@@ -202,17 +193,17 @@ const LuckyMoneyDetail = () => {
             </span>
             {state === STATE.terminated && (
               <div className="rounded-full bg-[#333333] px-2 py-1 text-[10px] font-ultra text-app-red">
-                Terminated
+                {t('Terminated')}
               </div>
             )}
             {state === STATE.completed && (
               <div className="rounded-full bg-[#333333] px-2 py-1 text-[10px] font-ultra text-app-green">
-                Completed
+                {t('Completed')}
               </div>
             )}
           </div>
           <div className="flex items-center justify-between font-ultra">
-            <p className="text-base">Total amount</p>
+            <p className="text-base">{t('TotalAmount')}</p>
             <div className="flex items-center justify-center space-x-1 text-lg text-primary">
               <KokonIcon className="h-4 w-4" />
               <Amount
@@ -226,7 +217,7 @@ const LuckyMoneyDetail = () => {
             </div>
           </div>
           <div className="flex justify-between font-ultra">
-            <p className="text-base">Remaining</p>
+            <p className="text-base">{t('Remaining')}</p>
             <div className="flex items-center justify-center space-x-1 text-lg text-primary">
               <KokonIcon className="h-4 w-4" />
               <Amount crypto={Crypto.KOKON} value={detailData.remainingAmount} useKM />
@@ -235,7 +226,7 @@ const LuckyMoneyDetail = () => {
         </div>
         <div className="mt-4 flex items-center justify-between border-t border-white/30 pt-4">
           <div className="flex items-center justify-center">
-            <p className="text-xs font-normal text-white/70">Each bag amount</p>
+            <p className="text-xs font-normal text-white/70">{t('EachBagAmount')}</p>
             <div className="ml-2 flex items-center justify-center space-x-1">
               <KokonIcon className="h-4 w-4" />
               {detailData.distributeKind === 'FIXED' ? (
@@ -262,7 +253,7 @@ const LuckyMoneyDetail = () => {
             </div>
           </div>
           <div className="flex items-center justify-center text-xs font-normal">
-            <div className="text-white/70">Quantity</div>
+            <div className="text-white/70">{t('Quantity')}</div>
             <span className="ml-2 flex items-center justify-center space-x-1">
               <span className="font-ultra">{detailData.distributedQuantity}</span>
               {detailData.distributeKind === 'FIXED' && (
@@ -298,7 +289,7 @@ const LuckyMoneyDetail = () => {
               </Button>
             </div>
             <Button className="w-[120px] flex-shrink-0" catEars onClick={handleShareURL}>
-              Share
+              {t('Share')}
             </Button>
           </div>
 
