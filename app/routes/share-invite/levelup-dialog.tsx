@@ -2,6 +2,7 @@ import { useCallback } from 'react'
 import { apis } from '~/api/index'
 import { useMutation } from '@tanstack/react-query'
 import Lottie from 'lottie-react'
+import { useTranslation } from 'react-i18next'
 
 // 元件
 import { Dialog, DialogContent } from '~/components/ui/dialog'
@@ -27,6 +28,7 @@ interface LevelupDialogProps {
 }
 
 const LevelupDialog: React.FC<LevelupDialogProps> = ({ isOpen, onClose, finalClass }) => {
+  const { t } = useTranslation()
   const { mutate } = useMutation({
     mutationFn: (finalClass: number) =>
       apis.customer.customerUpgradeAnimationDelete({ finalClass }),
@@ -43,8 +45,8 @@ const LevelupDialog: React.FC<LevelupDialogProps> = ({ isOpen, onClose, finalCla
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent defaultClose={false} className="bg-transparent">
         <div className="relative flex flex-col items-center justify-center text-center text-lg font-ultra">
-          <div>Congratulations,</div>
-          <div>Your team has upgraded!</div>
+          <div>{t('Congratulations')},</div>
+          <div>{t('YourTeamHasUpgraded')}</div>
           <Lottie
             className="w-full"
             animationData={levelAnimations[finalClass as keyof typeof levelAnimations]}
@@ -54,7 +56,7 @@ const LevelupDialog: React.FC<LevelupDialogProps> = ({ isOpen, onClose, finalCla
             onClick={handleOK}
             catEars
           >
-            <span className="text-sm font-ultra">OK</span>
+            <span className="text-sm font-ultra">{t('OK')}</span>
           </Button>
         </div>
       </DialogContent>

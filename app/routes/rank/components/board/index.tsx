@@ -126,7 +126,7 @@ const Board: FC<Props> = ({ theme = 'crypto', dataLs, rewardLock = false }) => {
           className="absolute right-4 top-4 z-[1] space-x-1 px-2 py-1"
         >
           <Icons.HelpIcon className="h-4 w-4" />
-          <span className="text-xs">{t('rule')}</span>
+          <span className="text-xs">{t('Rule')}</span>
         </Button>
       </Rules>
 

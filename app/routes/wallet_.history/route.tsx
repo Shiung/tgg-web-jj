@@ -36,7 +36,7 @@ export default function History() {
           onClick={() => window.history.back()}
         />
         <div className="flex h-6 w-full justify-center text-lg font-ultra leading-6">
-          {t('history')}
+          {t('History')}
         </div>
       </div>
 
@@ -54,7 +54,7 @@ export default function History() {
             </TabsTrigger>
             <TabsTrigger variant="cardTab" value="bet" className="flex-1" asChild>
               {/* <Link to="withdraw">Withdraw</Link> */}
-              <span className="text-sm font-ultra">{t('bet')}</span>
+              <span className="text-sm font-ultra">{t('Bet')}</span>
             </TabsTrigger>
           </TabsList>
           <TabsContent

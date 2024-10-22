@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, Link } from '@remix-run/react'
 import { useQuery } from '@tanstack/react-query'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
-
-import Commission from './commission'
-import TeamMember from './team-member'
+import { useTranslation } from 'react-i18next'
 import { apis } from '~/api'
 
+// components
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import Commission from './commission'
+import TeamMember from './team-member'
+
 const ShareTeam: React.FC = () => {
+  const { t } = useTranslation()
   const params = useParams()
   const [activeTab, setActiveTab] = useState('Commission')
 
@@ -36,12 +39,12 @@ const ShareTeam: React.FC = () => {
         <TabsList className="w-full">
           <TabsTrigger value="Invite" className="flex-1" asChild>
             <Link prefetch="viewport" to="/share-invite">
-              Invite
+              {t('Invite')}
             </Link>
           </TabsTrigger>
           <TabsTrigger value="My Team" className="flex-1" asChild>
             <Link prefetch="viewport" to="/share-team/Commission">
-              My Team
+              {t('MyTeam')}
             </Link>
           </TabsTrigger>
         </TabsList>
@@ -53,12 +56,12 @@ const ShareTeam: React.FC = () => {
           <TabsList variant="cardTab" className="w-full overflow-x-auto">
             <TabsTrigger variant="cardTab" value="Commission" className="flex-1" asChild>
               <Link prefetch="viewport" to="/share-team/Commission">
-                Team Commission
+                {t('TeamCommission')}
               </Link>
             </TabsTrigger>
             <TabsTrigger variant="cardTab" value="TeamMember" className="flex-1" asChild>
               <Link prefetch="viewport" to="/share-team/TeamMember">
-                Team Member
+                {t('TeamMember')}
               </Link>
             </TabsTrigger>
           </TabsList>

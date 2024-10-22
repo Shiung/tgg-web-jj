@@ -168,29 +168,29 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
       >
         <SheetHeader className="my-0 bg-transparent p-0">
           <SheetTitle className="mt-12 h-10 rounded-t-xl bg-[#1C1C1C] text-lg font-ultra leading-10">
-            {t('rule')}
+            {t('Rule')}
           </SheetTitle>
         </SheetHeader>
         <SheetClose className="top-[54px]"></SheetClose>
         <div className="flex flex-1 flex-col bg-black p-4 text-[#FFFFFFB2]">
           {/* Refer And Earn */}
           <div className="mb-6 flex flex-col space-y-2 text-sm">
-            <div className="text-base font-ultra text-white">{t('referAndEarn')}</div>
+            <div className="text-base font-ultra text-white">{t('ReferAndEarn')}</div>
             <div>{t('referAndEarn.description')}</div>
             <div className="flex h-32 items-center justify-center rounded-lg bg-gradient-to-b from-[#92EE6D] to-[#007E36] p-4">
               <div className="flex flex-col items-center">
                 <img src="/images/share/step-1.png" alt="step-1" className="h-[72px] w-[100px]" />
-                <span className="mt-1 text-xs text-white">{t('invite')}</span>
+                <span className="mt-1 text-xs text-white">{t('Invite')}</span>
               </div>
               <div className="mx-1 flex-1 border-t border-dashed border-black"></div>
               <div className="flex flex-col items-center">
                 <img src="/images/share/step-2.png" alt="step-2" className="h-[72px] w-[100px]" />
-                <span className="mt-1 text-center text-xs text-white">{t('makeThemPlay')}</span>
+                <span className="mt-1 text-center text-xs text-white">{t('MakeThemPlay')}</span>
               </div>
               <div className="mx-1 flex-1 border-t border-dashed border-black"></div>
               <div className="flex flex-col items-center">
                 <img src="/images/share/step-3.png" alt="step-3" className="h-[72px] w-[100px]" />
-                <span className="mt-1 text-xs text-white">{t('earn')}</span>
+                <span className="mt-1 text-xs text-white">{t('Earn')}</span>
               </div>
             </div>
             <div>{t('referAndEarn.description2')}</div>
@@ -198,7 +198,7 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
           </div>
           {/* Referral Team section */}
           <div className="mb-6 flex flex-col space-y-2 text-sm">
-            <div className="text-base font-ultra text-white">{t('referralTeam')}</div>
+            <div className="text-base font-ultra text-white">{t('ReferralTeam')}</div>
             <img src="/images/share/referralDiagram.png" alt="progress-1" className="w-full" />
             <div>
               {t('rule.referralTeam.description', {
@@ -208,11 +208,11 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
           </div>
           {/* Team Rating System section */}
           <div className="mb-6 flex flex-col space-y-2 text-sm">
-            <div className="text-base font-ultra text-white">{t('teamRatingSystem')}</div>
+            <div className="text-base font-ultra text-white">{t('TeamRatingSystem')}</div>
             <div>{t('teamRatingSystem.description')}</div>
-            <div className="text-base font-ultra text-white">{t('commissionRatio')}</div>
+            <div className="text-base font-ultra text-white">{t('CommissionRatio')}</div>
             <TableDemo tableData={commissionSettingTable} />
-            <div className="text-base font-ultra text-white">{t('upgradeRequirement')}</div>
+            <div className="text-base font-ultra text-white">{t('UpgradeRequirement')}</div>
             <TableDemo tableData={classSettingTable} isAlternateHorizontal={false} />
           </div>
         </div>

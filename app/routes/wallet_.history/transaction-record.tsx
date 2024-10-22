@@ -100,8 +100,8 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
   ]
 
   const balanceOptions = [
-    { value: 'Income', label: t('income') },
-    { value: 'Expense', label: t('expense') },
+    { value: 'Income', label: t('Income') },
+    { value: 'Expense', label: t('Expense') },
   ]
 
   const currencyOptions = [
@@ -219,7 +219,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
               <div className={cn('h-full w-full', styles['date-picker'])}>
                 <DatePickerSheet
                   id="datetime-range-picker"
-                  title={t('selectDate')}
+                  title={t('SelectDate')}
                   value={field.value}
                   onChange={field.onChange}
                   range
@@ -242,8 +242,8 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                 <div className="flex h-full w-full min-w-0 flex-col text-white">
                   <DropdownSheet
                     id="currency-dropdown"
-                    title={t('currency')}
-                    placeholder={t('currency')}
+                    title={t('Currency')}
+                    placeholder={t('Currency')}
                     value={field.value}
                     onConfirm={field.onChange}
                     onReset={() => field.onChange('')}
@@ -296,8 +296,8 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                 <div className="flex h-full w-full min-w-0 flex-col">
                   <DropdownSheet
                     id="type-dropdown"
-                    title={t('type')}
-                    placeholder={t('type')}
+                    title={t('Type')}
+                    placeholder={t('Type')}
                     value={field.value}
                     onConfirm={field.onChange}
                     onReset={() => field.onChange('')}
@@ -323,8 +323,8 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                 <div className="flex h-full w-full min-w-0 flex-col">
                   <DropdownSheet
                     id="balance-dropdown"
-                    title={t('balance')}
-                    placeholder={t('balance')}
+                    title={t('Balance')}
+                    placeholder={t('Balance')}
                     value={field.value}
                     onConfirm={field.onChange}
                     onReset={() => field.onChange('')}
@@ -357,10 +357,10 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
               styles['list-header']
             )}
           >
-            <p className="w-9">{t('date')}</p>
-            <p className="w-9">{t('time')}</p>
-            <p className="flex-1">{t('type')}</p>
-            <p className="flex-1 text-right">{t('amount')}</p>
+            <p className="w-9">{t('Date')}</p>
+            <p className="w-9">{t('Time')}</p>
+            <p className="flex-1">{t('Type')}</p>
+            <p className="flex-1 text-right">{t('Amount')}</p>
           </div>
           <div className="absolute bottom-3 left-3 right-3 top-9 mt-2 overflow-y-auto">
             <div>

@@ -215,7 +215,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
               <div className={cn('h-full w-full', styles['date-picker'])}>
                 <DatePickerSheet
                   id="datetime-range-picker"
-                  title={t('selectDate')}
+                  title={t('SelectDate')}
                   value={field.value}
                   onChange={field.onChange}
                   range
@@ -238,8 +238,8 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
                 <div className="flex h-full w-full flex-col">
                   <DropdownSheet
                     id="game-list-dropdown"
-                    title={t('gameList')}
-                    placeholder={t('gameList')}
+                    title={t('GameList')}
+                    placeholder={t('GameList')}
                     value={field.value}
                     onConfirm={field.onChange}
                     onReset={() => field.onChange('0')}
@@ -305,9 +305,9 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
               records.length > 0 && summary ? 'flex' : 'hidden'
             )}
           >
-            <SummaryItem label={t('number')} value={data?.pages[0].pagination.totalRecord} />
+            <SummaryItem label={t('Number')} value={data?.pages[0].pagination.totalRecord} />
             <SummaryItem
-              label={t('bets')}
+              label={t('Bets')}
               value={
                 <Amount
                   value={

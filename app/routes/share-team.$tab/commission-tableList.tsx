@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { format, parseISO } from 'date-fns'
-
+import { useTranslation } from 'react-i18next'
 import { CheckIcon, WaitingIcon, UsdtIcon, KokonIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
 
@@ -30,6 +30,8 @@ const SendStatusIcon = ({ sendStatus }: { sendStatus?: number }) => {
 }
 
 const CommissionTableList: React.FC<CommissionTableListProps> = ({ data }) => {
+  const { t } = useTranslation()
+
   const groupedData = useMemo(() => {
     const groups: { [key: string]: CommissionItem[] } = {}
     data.forEach(item => {
@@ -53,18 +55,18 @@ const CommissionTableList: React.FC<CommissionTableListProps> = ({ data }) => {
             <table className="w-full border-separate border-spacing-y-[10px]">
               <thead>
                 <tr className="text-left text-[#999999]">
-                  <th className="w-[65px] max-w-[65px]">Name</th>
+                  <th className="w-[65px] max-w-[65px]">{t('Name')}</th>
                   <th className="text-right">LV</th>
                   <th className="text-right">
                     <div className="flex items-center justify-end">
                       <UsdtIcon className="mr-1 h-3 w-3" />
-                      <div>Bet Amount</div>
+                      <div>{t('BetAmount')}</div>
                     </div>
                   </th>
                   <th className="text-right">
                     <div className="flex items-center justify-end">
                       <KokonIcon className="mr-1 h-3 w-3" />
-                      <div>Commission</div>
+                      <div>{t('Commission')}</div>
                     </div>
                   </th>
                   <th className=""></th>

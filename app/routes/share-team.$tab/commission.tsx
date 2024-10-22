@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { endOfDay, format, formatRFC3339, startOfDay, subDays } from 'date-fns'
 import { z } from 'zod'
 import { cn } from '~/lib/utils'
+import { useTranslation } from 'react-i18next'
 
 // NOTICE: For test
 // import { getMockCommissionData } from './fake-commisssionData'
@@ -58,6 +59,7 @@ interface CommissionProps {
 
 const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingList, loading }) => {
   const maxWidth = useAppMaxWidth()
+  const { t } = useTranslation()
 
   // 用戶所屬 teamLevel 的 佣金設定
   const activeCommissionSetting = useMemo(() => {
@@ -179,7 +181,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
           className="flex items-center justify-between rounded-t-[12px] bg-[#333333] px-6 py-2"
         >
           <span className="font-ultra text-primary">
-            My Team Rating: {customerTeamInfo?.class || 0}
+            {t('MyTeamRating')}: {customerTeamInfo?.class || 0}
           </span>
           <div className="flex space-x-1">
             {Array.from({ length: customerTeamInfo?.class || 0 }).map((el, index) => (
@@ -195,7 +197,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
         <div className="flex flex-col items-center space-y-2 p-3">
           <div className="flex w-full flex-col space-y-2 rounded-lg bg-[#333333] px-3 py-2 text-xs font-ultra">
             <div className="border-b-[0.5px] border-[#FFFFFF33] pb-2 text-white">
-              Team Commission Ratio
+              {t('TeamCommissionRatio')}
             </div>
             <div className="flex space-x-2">
               {activeCommissionSetting &&
@@ -208,16 +210,14 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
             </div>
           </div>
           <div className="flex w-full flex-col space-y-2 rounded-lg bg-[#333333] px-3 py-2 text-xs font-ultra">
-            <div className="border-b-[0.5px] border-[#FFFFFF33] pb-2 text-white">Summary</div>
+            <div className="border-b-[0.5px] border-[#FFFFFF33] pb-2 text-white">
+              {t('Summary')}
+            </div>
             <div className="flex space-x-2">
               <div className="flex flex-1 flex-col items-center space-y-1">
                 <div className="flex space-x-1">
-                  <div>Total Bets</div>
-                  <InfoTooltip
-                    content="Bet amount are defined as valid bets in crypto games (Mines, Crash).Valid bets will only
-                  be calculated for bets that have been settled and produced a win or loss result. Any
-                  games played, tied, or canceled will not be counted in valid bets."
-                  />
+                  <div>{t('TotalBets')}</div>
+                  <InfoTooltip content={t('TotalBets.Description')} />
                 </div>
                 <div className="flex items-center space-x-1 text-sm text-white">
                   <UsdtIcon className="h-4 w-4" />
@@ -230,7 +230,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
                 </div>
               </div>
               <div className="flex flex-1 flex-col items-center space-y-1">
-                <div>Total Commissions</div>
+                <div>{t('TotalCommissions')}</div>
                 <div className="flex items-center space-x-1 text-sm text-white">
                   <KokonIcon className="h-4 w-4" />
                   <Amount
@@ -247,8 +247,8 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
       {/* Commission Details Section */}
       <div className="flex flex-1 flex-col">
         <div className="mt-6 flex items-center space-x-1 font-ultra text-white">
-          <div>Commission Details</div>
-          <InfoTooltip content="Only the past 30 days are displayed. Commissions are automatically credited to your wallet every hour." />
+          <div>{t('CommissionDetails')}</div>
+          <InfoTooltip content={t('CommissionDetails.Description')} />
         </div>
         {/* Search Section */}
         <div className="flex w-full flex-wrap text-xs font-ultra">
@@ -358,7 +358,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
                   const displayText =
                     from && to
                       ? `${format(from, 'MM-dd')} - ${format(to, 'MM-dd')}`
-                      : displayTriggerDate || '选择日期'
+                      : displayTriggerDate || t('SelectDate')
                   return (
                     <div className="mt-2 flex min-w-[120px] flex-1 cursor-pointer items-center justify-between rounded-full bg-[#FFFFFF33] px-3 py-2 transition-all duration-300 ease-in-out">
                       <div className="truncate text-[#FFFFFFB2]">{displayText}</div>
@@ -418,11 +418,11 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
           style={{ maxWidth, left: `calc((100vw - ${maxWidth}) / 2)` }}
         >
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
-            <div className="text-xs text-[#FFFFFFB2]">Total </div>
+            <div className="text-xs text-[#FFFFFFB2]">{t('Total')}</div>
             <div className="text-xs font-ultra">{latestSummary.totalCount}</div>
           </div>
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
-            <div className="text-xs text-[#FFFFFFB2]">Bets</div>
+            <div className="text-xs text-[#FFFFFFB2]">{t('Bets')}</div>
             <div className="flex items-center space-x-1">
               <UsdtIcon className="h-3 w-3" />
               <Amount
@@ -433,7 +433,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
             </div>
           </div>
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
-            <div className="text-xs text-[#FFFFFFB2]">Commissions</div>
+            <div className="text-xs text-[#FFFFFFB2]">{t('Commissions')}</div>
             <div className="flex items-center space-x-1">
               <KokonIcon className="h-3 w-3" />
               <Amount

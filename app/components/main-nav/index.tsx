@@ -15,12 +15,12 @@ import ProtectedLink from '../protected-link'
 import classes from './index.module.scss'
 
 export const links = [
-  { href: '/', i18n: 'game', SvgComponent: NavGame, comp: Link },
-  { href: '/rank', i18n: 'rank', SvgComponent: NavRank, comp: Link },
-  { href: '/task', i18n: 'task', SvgComponent: NavTask, comp: Link },
+  { href: '/', i18n: 'Game', SvgComponent: NavGame, comp: Link },
+  { href: '/rank', i18n: 'Rank', SvgComponent: NavRank, comp: Link },
+  { href: '/task', i18n: 'Task', SvgComponent: NavTask, comp: Link },
   {
     href: '/share-invite',
-    i18n: 'share',
+    i18n: 'Share',
     SvgComponent: NavShare,
     comp: ProtectedLink,
   },
