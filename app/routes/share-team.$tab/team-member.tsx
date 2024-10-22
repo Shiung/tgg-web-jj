@@ -409,7 +409,6 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
                     )}
                   </div>
                 )}
-                placeholder="LV"
                 value={field.value}
                 onConfirm={(selectedValue: string | object) => {
                   field.onChange(selectedValue)
