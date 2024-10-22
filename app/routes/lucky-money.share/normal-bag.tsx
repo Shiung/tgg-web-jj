@@ -133,6 +133,10 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 decimalScale={0}
                 id="quantity"
                 label="Quantity"
+                isAllowed={values => {
+                  const { value, floatValue } = values
+                  return value === '' || !!(floatValue && floatValue > 0)
+                }}
                 onValueChange={({ floatValue }) => {
                   if (floatValue === 0) {
                     onChange(1)
