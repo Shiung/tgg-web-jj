@@ -7,7 +7,7 @@ import CatEarIcon from '~/icons/cat-ear.svg?react'
 import { cn } from '~/lib/utils'
 
 const buttonVariants = cva(
-  'group relative inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium font-ultra transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed transition-transform transform active:scale-95',
+  'group relative inline-flex items-center justify-center whitespace-nowrap rounded-full text-sm font-medium font-ultra transition duration-150 ease-in-out motion-reduce:transition-none focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed transform active:scale-95',
   {
     variants: {
       variant: {
@@ -16,7 +16,7 @@ const buttonVariants = cva(
         danger: 'bg-app-red text-white hover:bg-[#FF716D]',
         outline: 'border border-primary text-primary hover:border-[#FFF871] hover:text-[#FFF871]',
         outlineSoft: 'border border-primary text-primary hover:bg-[#FFF871]/30',
-        menu: 'bg-[#1C1C1C] rounded-xl border border-transparent text-white hover:border-primary hover:text-primary hover:bg-[#FFF871]/30',
+        menu: 'bg-[#1C1C1C] rounded-xl border border-transparent text-white hover:border-primary hover:text-primary transform-none active:scale-100',
         select: 'bg-[#333] border-[0.5px] border-white/20 text-white',
         icon: 'opacity-70 transition-opacity hover:opacity-100',
         link: '',
