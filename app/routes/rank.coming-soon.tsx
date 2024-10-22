@@ -5,7 +5,7 @@ export default function ComingSoon() {
   return (
     <div className="flex flex-1 items-center justify-center rounded-xl bg-black bg-[url('/images/system-bg.png')] bg-[length:100%_auto] bg-no-repeat">
       <div className="flex flex-col items-center">
-        <img src="/images/coming-soon.png" alt="coming-soon" />
+        <img src="/images/system-comingSoon.png" alt="coming-soon" />
         <div className="text-[24px] font-ultra">{t('rank.comingSoon')}</div>
       </div>
     </div>

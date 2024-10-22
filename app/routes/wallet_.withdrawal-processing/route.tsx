@@ -41,7 +41,7 @@ export default function WithdrawalProcessing() {
       )}
       {!isLoading && !ls.length && (
         <div className="flex flex-1 flex-col items-center justify-center">
-          <img src="/images/share/cat-laptop.png" alt="progress" className="h-32 w-32" />
+          <img src="/images/system-no-data.png" alt="progress" className="h-32 w-32" />
           <div className="mt-2 text-xs text-[#FFFFFFB2]">No data available</div>
         </div>
       )}

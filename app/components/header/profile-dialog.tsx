@@ -11,7 +11,7 @@ import {
 } from '~/components/ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
-import { TwitterIcon, GlobalIcon } from '~/components/color-icons'
+import { TwitterIcon } from '~/components/color-icons'
 import CopyIcon from '~/icons/copy.svg?react'
 import LogoutIcon from '~/icons/logout.svg?react'
 import EmailDialog from './email-dialog'
@@ -34,7 +34,7 @@ const links = {
     title: 'Official Links',
     value: [
       { icon: TwitterIcon, url: '' },
-      { icon: GlobalIcon, url: '' },
+      // { icon: GlobalIcon, url: '' },
     ],
   },
 }
