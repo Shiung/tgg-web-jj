@@ -856,10 +856,10 @@ export interface HomeCarouselListResponse {
     }[];
     /** 廣告暱稱 */
     name?: string;
-    /** 跳轉參數 */
+    /** 跳轉參數(redirectType=URL: 網址; redirectType=GAME: gameCode; redirectType=RANK: allianceRanking=联盟排行榜 bcRanking=BC排行榜; redirectType=TASK: taskEveryDay=每日任务 taskOneTime=单次任务 taskSpecial=特殊任务; redirectType=LEAGUE: x; redirectType=WALLET: deposit=充值 withdrawCash=提现 platformCurrencyTrade=平台币交易) */
     redirectConfig?: string;
-    /** 跳轉類型 */
-    redirectType?: string;
+    /** 跳轉類型. Allowed Enum */
+    redirectType?: "URL" | "GAME" | "RANK" | "TASK" | "LEAGUE" | "WALLET";
   } | null)[];
 }
 
@@ -1051,7 +1051,7 @@ export interface PacketResponse {
   /** 紅包種類. Allowed Enum */
   distributeKind?: "FIXED" | "RANDOM";
   /**
-   * 發放總金額
+   * 已發放金額
    * @format decimal
    */
   distributedAmount?: string;
@@ -1115,6 +1115,11 @@ export interface PacketResponse {
    * @format int64
    */
   remainingQuantity?: number;
+  /**
+   * 總預算金額
+   * @format decimal
+   */
+  withholdAmount?: string;
 }
 
 export interface PacketsRequest {
@@ -1145,7 +1150,7 @@ export interface PacketsResponse {
     /** 紅包種類. Allowed Enum */
     distributeKind?: "FIXED" | "RANDOM";
     /**
-     * 發放總金額
+     * 已發放金額
      * @format decimal
      */
     distributedAmount?: string;
@@ -2214,7 +2219,7 @@ export interface CustomerShareCreatePayload {
 export interface CustomerTeamPerformanceListParams {
   /** 排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序 (Allowed values: level, bet, deposit) */
   sortField?: "level" | "bet" | "deposit";
-  /** 排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc) */
+  /** 排序欄位升降冪(asc,desc) (Allowed values: desc, asc, Required when SortField is present) */
   sortOrder?: "desc" | "asc";
   /** 團員名稱 */
   name?: string;

@@ -50,10 +50,10 @@ export class Public<SecurityDataType = unknown> {
           }[];
           /** 廣告暱稱 */
           name?: string;
-          /** 跳轉參數 */
+          /** 跳轉參數(redirectType=URL: 網址; redirectType=GAME: gameCode; redirectType=RANK: allianceRanking=联盟排行榜 bcRanking=BC排行榜; redirectType=TASK: taskEveryDay=每日任务 taskOneTime=单次任务 taskSpecial=特殊任务; redirectType=LEAGUE: x; redirectType=WALLET: deposit=充值 withdrawCash=提现 platformCurrencyTrade=平台币交易) */
           redirectConfig?: string;
-          /** 跳轉類型 */
-          redirectType?: string;
+          /** 跳轉類型. Allowed Enum */
+          redirectType?: "URL" | "GAME" | "RANK" | "TASK" | "LEAGUE" | "WALLET";
         } | null)[];
       },
       any

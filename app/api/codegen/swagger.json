@@ -249,12 +249,20 @@
                         "type": "string"
                       },
                       "redirectConfig": {
-                        "description": "跳轉參數",
+                        "description": "跳轉參數(redirectType=URL: 網址; redirectType=GAME: gameCode; redirectType=RANK: allianceRanking=联盟排行榜 bcRanking=BC排行榜; redirectType=TASK: taskEveryDay=每日任务 taskOneTime=单次任务 taskSpecial=特殊任务; redirectType=LEAGUE: x; redirectType=WALLET: deposit=充值 withdrawCash=提现 platformCurrencyTrade=平台币交易)",
                         "type": "string"
                       },
                       "redirectType": {
-                        "description": "跳轉類型",
-                        "type": "string"
+                        "description": "跳轉類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "URL",
+                          "GAME",
+                          "RANK",
+                          "TASK",
+                          "LEAGUE",
+                          "WALLET"
+                        ]
                       }
                     }
                   }
@@ -1169,7 +1177,7 @@
               "asc"
             ],
             "type": "string",
-            "description": "排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc)",
+            "description": "排序欄位升降冪(asc,desc) (Allowed values: desc, asc, Required when SortField is present)",
             "name": "sortOrder",
             "in": "query"
           },
@@ -2321,7 +2329,7 @@
                   ]
                 },
                 "distributedAmount": {
-                  "description": "發放總金額",
+                  "description": "已發放金額",
                   "type": "string",
                   "format": "decimal"
                 },
@@ -2408,6 +2416,11 @@
                   "description": "未發放個數",
                   "type": "integer",
                   "format": "int64"
+                },
+                "withholdAmount": {
+                  "description": "總預算金額",
+                  "type": "string",
+                  "format": "decimal"
                 }
               }
             }
@@ -2517,7 +2530,7 @@
                         ]
                       },
                       "distributedAmount": {
-                        "description": "發放總金額",
+                        "description": "已發放金額",
                         "type": "string",
                         "format": "decimal"
                       },
@@ -2642,12 +2655,20 @@
                         "type": "string"
                       },
                       "redirectConfig": {
-                        "description": "跳轉參數",
+                        "description": "跳轉參數(redirectType=URL: 網址; redirectType=GAME: gameCode; redirectType=RANK: allianceRanking=联盟排行榜 bcRanking=BC排行榜; redirectType=TASK: taskEveryDay=每日任务 taskOneTime=单次任务 taskSpecial=特殊任务; redirectType=LEAGUE: x; redirectType=WALLET: deposit=充值 withdrawCash=提现 platformCurrencyTrade=平台币交易)",
                         "type": "string"
                       },
                       "redirectType": {
-                        "description": "跳轉類型",
-                        "type": "string"
+                        "description": "跳轉類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "URL",
+                          "GAME",
+                          "RANK",
+                          "TASK",
+                          "LEAGUE",
+                          "WALLET"
+                        ]
                       }
                     }
                   }
@@ -7729,12 +7750,20 @@
                 "type": "string"
               },
               "redirectConfig": {
-                "description": "跳轉參數",
+                "description": "跳轉參數(redirectType=URL: 網址; redirectType=GAME: gameCode; redirectType=RANK: allianceRanking=联盟排行榜 bcRanking=BC排行榜; redirectType=TASK: taskEveryDay=每日任务 taskOneTime=单次任务 taskSpecial=特殊任务; redirectType=LEAGUE: x; redirectType=WALLET: deposit=充值 withdrawCash=提现 platformCurrencyTrade=平台币交易)",
                 "type": "string"
               },
               "redirectType": {
-                "description": "跳轉類型",
-                "type": "string"
+                "description": "跳轉類型. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "URL",
+                  "GAME",
+                  "RANK",
+                  "TASK",
+                  "LEAGUE",
+                  "WALLET"
+                ]
               }
             }
           }
@@ -8066,7 +8095,7 @@
           ]
         },
         "distributedAmount": {
-          "description": "發放總金額",
+          "description": "已發放金額",
           "type": "string",
           "format": "decimal"
         },
@@ -8153,6 +8182,11 @@
           "description": "未發放個數",
           "type": "integer",
           "format": "int64"
+        },
+        "withholdAmount": {
+          "description": "總預算金額",
+          "type": "string",
+          "format": "decimal"
         }
       }
     },
@@ -8213,7 +8247,7 @@
                 ]
               },
               "distributedAmount": {
-                "description": "發放總金額",
+                "description": "已發放金額",
                 "type": "string",
                 "format": "decimal"
               },

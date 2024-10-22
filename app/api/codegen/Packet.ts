@@ -58,7 +58,7 @@ export class Packet<SecurityDataType = unknown> {
         /** 紅包種類. Allowed Enum */
         distributeKind?: "FIXED" | "RANDOM";
         /**
-         * 發放總金額
+         * 已發放金額
          * @format decimal
          */
         distributedAmount?: string;
@@ -122,6 +122,11 @@ export class Packet<SecurityDataType = unknown> {
          * @format int64
          */
         remainingQuantity?: number;
+        /**
+         * 總預算金額
+         * @format decimal
+         */
+        withholdAmount?: string;
       },
       any
     >({

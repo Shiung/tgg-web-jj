@@ -39,7 +39,7 @@ export class Packets<SecurityDataType = unknown> {
           /** 紅包種類. Allowed Enum */
           distributeKind?: "FIXED" | "RANDOM";
           /**
-           * 發放總金額
+           * 已發放金額
            * @format decimal
            */
           distributedAmount?: string;
