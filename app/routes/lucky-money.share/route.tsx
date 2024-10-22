@@ -45,7 +45,7 @@ const distributeKindOptions = [
   },
   {
     label: 'Luck battle',
-    desc: 'radom',
+    desc: 'random',
     value: 'RANDOM',
     img: '/images/lucky-money/planBtnBg-Luck.png',
   },
