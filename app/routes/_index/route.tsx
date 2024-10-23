@@ -32,9 +32,11 @@ export const meta: MetaFunction = () => {
 const GameMainTenance = ({
   maintainStartAt,
   maintainEndAt,
+  className,
 }: {
   maintainStartAt?: string
   maintainEndAt?: string
+  className?: string
 }) => {
   const { t } = useTranslation()
   const [isMaintenance, setIsMaintenance] = useState(false)
@@ -54,7 +56,10 @@ const GameMainTenance = ({
   if (!isMaintenance) return null
   return (
     <div
-      className="pointer-events-auto absolute inset-0 flex flex-col items-stretch justify-center space-y-1 bg-black/70 text-base font-ultra"
+      className={cn(
+        'pointer-events-auto absolute inset-0 z-10 flex flex-col items-stretch justify-center space-y-1 bg-black/70 px-4 text-base font-ultra',
+        className
+      )}
       onClick={e => e.stopPropagation()}
       onKeyDown={e => e.stopPropagation()}
       role="button"
@@ -64,7 +69,7 @@ const GameMainTenance = ({
       <p className="self-center whitespace-pre-wrap text-center text-primary">
         {t('UnderMainTenance')}
       </p>
-      <p className="self-center px-6 text-center text-white">
+      <p className="self-center text-center text-white">
         {maintainEndAt && format(addHours(new Date(maintainEndAt), 8), 'MM-dd HH:mm') + ' (UTC+8)'}
       </p>
     </div>
@@ -253,6 +258,7 @@ export default function Index() {
                       className="h-full w-full rounded-lg object-contain"
                     />
                     <GameMainTenance
+                      className="text-sm"
                       maintainStartAt={game.maintainStartAt}
                       maintainEndAt={game.maintainEndAt}
                     />

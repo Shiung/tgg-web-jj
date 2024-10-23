@@ -15,9 +15,10 @@ const getWalletListQueryKey = 'getWalletList'
  */
 const useGetHeaderWallet = () => {
   const isLoggedIn = useStore(state => state.isLoggedIn)
+  const customerId = useStore(state => state.userInfo?.customerId)
 
   return useQuery({
-    queryKey: [getHeaderWalletQueryKey],
+    queryKey: [getHeaderWalletQueryKey, isLoggedIn, customerId],
     queryFn: () => apis.header.headerWalletList(),
     enabled: !!isLoggedIn,
     staleTime: 30 * 1000, // 緩存 30 秒

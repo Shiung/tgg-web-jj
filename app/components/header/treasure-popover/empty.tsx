@@ -10,7 +10,7 @@ const Empty: React.FC = () => {
       <p className="mt-2 text-xs text-[#FFFFFFB2]">
         There is no treasure to unlock. Go get the treasure from the reward of task.
       </p>
-      <Link to="/task/subtask" className="w-full">
+      <Link to="/task/subtask" prefetch="viewport" className="w-full">
         <Button catEars className="mt-6 w-full">
           <span className="text-sm">Go</span>
         </Button>

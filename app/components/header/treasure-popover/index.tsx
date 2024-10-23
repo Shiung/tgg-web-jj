@@ -232,7 +232,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
             </div>
             {/* action */}
             <div className="mt-6 flex shrink-0 flex-row space-x-2">
-              <Link to="/task/treasure" className="flex-1">
+              <Link to="/task/treasure" prefetch="viewport" className="flex-1">
                 <Button variant="gray" catEars>
                   Check all treasure
                 </Button>

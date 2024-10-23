@@ -138,13 +138,12 @@ export default function Wallet() {
             </div>
           </div>
           {/* History */}
-          <Button
-            className="flex h-6 items-center justify-center space-x-1 px-3"
-            onClick={() => navigate('history')}
-          >
-            <HistoryIcon className="h-4 w-4" />
-            <span className="text-xs font-extrabold">History</span>
-          </Button>
+          <Link to="history" prefetch="viewport">
+            <Button className="flex h-6 items-center justify-center space-x-1 px-3">
+              <HistoryIcon className="h-4 w-4" />
+              <span className="text-xs font-extrabold">History</span>
+            </Button>
+          </Link>
         </div>
 
         {/* Wallets List */}
