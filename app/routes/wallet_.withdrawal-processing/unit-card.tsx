@@ -3,6 +3,7 @@ import type { WPunitCard } from './types'
 import Amount from '~/components/amount'
 import { Skeleton } from '~/components/ui/skeleton'
 import { format } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 
 const Layout: React.FC<{
   header: React.ReactNode
@@ -10,6 +11,7 @@ const Layout: React.FC<{
   contentAddress: React.ReactNode
   contentMemo: React.ReactNode
 }> = ({ header, contentSubmissionTime, contentAddress, contentMemo }) => {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-col overflow-hidden rounded-xl bg-[#1C1C1C]">
       <div className="flex items-center justify-start space-x-1 bg-[#333] px-3 py-2 font-ultra">
@@ -17,19 +19,19 @@ const Layout: React.FC<{
       </div>
       <div className="space-y-2 p-[12px]">
         <div className="flex items-start justify-between text-[12px]">
-          <div className="text-white/70">Submission time:</div>
+          <div className="text-white/70">{t('SubmissionTime')}:</div>
           <div className="ml-5 flex-1 break-all text-right font-ultra text-white">
             {contentSubmissionTime}
           </div>
         </div>
         <div className="flex items-start justify-between text-[12px]">
-          <div className="text-white/70">Address:</div>
+          <div className="text-white/70">{t('Address')}:</div>
           <div className="ml-5 flex-1 break-all text-right font-ultra text-white">
             {contentAddress}
           </div>
         </div>
         <div className="flex items-start justify-between text-[12px]">
-          <div className="text-white/70">memo:</div>
+          <div className="text-white/70">{t('Memo')}:</div>
           <div className="ml-5 flex-1 break-all text-right font-ultra text-white">
             {contentMemo}
           </div>

@@ -6,11 +6,14 @@ import AlertDialog from '~/components/alert-dialog'
 import { Button } from '~/components/ui/button'
 import UnlinkIcon from '~/icons/unlink.svg?react'
 import { Label } from '~/components/ui/label'
+import { useTranslation } from 'react-i18next'
 
 const DepositAddress: React.FC = () => {
   const [tonConnectUI] = useTonConnectUI()
   const userFriendlyAddress = useTonAddress()
   const [isAlertOpen, setIsAlertOpen] = useState(false)
+
+  const { t } = useTranslation()
 
   const openDialog = () => setIsAlertOpen(true)
   const closeDialog = () => setIsAlertOpen(false)
@@ -30,7 +33,7 @@ const DepositAddress: React.FC = () => {
     <>
       {tonConnectUI.connected && (
         <>
-          <Label className="ml-3">Deposit address</Label>
+          <Label className="ml-3">{t('DepositAddress')}</Label>
           <div className="relative flex h-9 w-full items-center justify-between rounded-full border-[0.5px] border-white/20 bg-[#333] px-3 py-2 text-sm font-ultra">
             <div className="flex-1">
               <MiddleTruncate end={4}>{userFriendlyAddress}</MiddleTruncate>
@@ -50,8 +53,8 @@ const DepositAddress: React.FC = () => {
       <AlertDialog
         isOpen={isAlertOpen}
         onClose={closeDialog}
-        title="Notice"
-        message="Are you sure you want to disconnect this address?"
+        title={t('Notice')}
+        message={t('AreYouSureYouWantToDisconnectThisAddress')}
         onRightButtonClick={handleOk}
         onLeftButtonClick={closeDialog}
       />

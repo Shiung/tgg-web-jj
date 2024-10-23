@@ -224,7 +224,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
                 onClick: vaildCheckOldEmailCallBack,
               })}
             >
-              {t('OK')}
+              {t('Ok')}
             </Button>
           </DialogFooter>
         </form>

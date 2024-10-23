@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from '@remix-run/react'
 import AlertDialog from '~/components/alert-dialog'
+import { useTranslation } from 'react-i18next'
 
 interface WithdrawSuccessDialogProps {
   isOpen: boolean
@@ -9,24 +10,22 @@ interface WithdrawSuccessDialogProps {
 
 const WithdrawSuccessDialog: React.FC<WithdrawSuccessDialogProps> = ({ isOpen, onClose }) => {
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   return (
     <AlertDialog
       variant="success"
       isOpen={isOpen}
       onClose={onClose}
-      title="Success"
+      title={t('Success')}
       message={
         <div className="space-y-2">
-          <p className="text-base font-ultra text-white">Submitted Successfully</p>
-          <p>
-            It may takes some time to process your withdrawal. You can go to History to check the
-            status.
-          </p>
+          <p className="text-base font-ultra text-white">{t('SubmittedSuccessfully')}</p>
+          <p>{t('SubmittedSuccessfullyContent')}</p>
         </div>
       }
-      leftButtonText="Check Status"
-      rightButtonText="Ok"
+      leftButtonText={t('CheckStatus')}
+      rightButtonText={t('Ok')}
       onRightButtonClick={onClose}
       onLeftButtonClick={() => navigate('/wallet/withdrawal-processing')}
     />

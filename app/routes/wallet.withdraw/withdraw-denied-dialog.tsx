@@ -4,11 +4,13 @@ import { useNavigate } from '@remix-run/react'
 import AlertDialog from '~/components/alert-dialog'
 
 import { emitter } from '~/lib/emitter'
+import { useTranslation } from 'react-i18next'
 
 const WithdrawDeniedDialog: React.FC = () => {
   const { pin } = useStore(state => state.userInfo)
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const onClose = () => {
     navigate(-1)
@@ -26,8 +28,8 @@ const WithdrawDeniedDialog: React.FC = () => {
     <AlertDialog
       isOpen={isOpen}
       onClose={onClose}
-      title="Notice"
-      message="You have to enter your fund password for withdrawal. Please go to add your email and set your fund password."
+      title={t('Notice')}
+      message={t('WithdrawDeniedMessage')}
       onRightButtonClick={onNextStep}
       onLeftButtonClick={() => {}}
     />

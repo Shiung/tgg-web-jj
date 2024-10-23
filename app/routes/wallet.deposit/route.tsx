@@ -4,7 +4,8 @@ import { Address, beginCell, JettonMaster, toNano } from '@ton/ton'
 import { useQuery } from '@tanstack/react-query'
 import { NumericFormat } from 'react-number-format'
 import { Controller, useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
+import toast, { type Toast } from 'react-hot-toast'
+import { cn } from '~/lib/utils'
 
 import { apis } from '~/api'
 import { Button } from '~/components/ui/button'
@@ -23,43 +24,45 @@ import DepositViaAddressDialog from './deposit-via-address-sheet'
 import SystemMaintenance from './system-maintenance'
 import { JettonWallet } from './JettonWallet'
 import { calculateUsdtAmount } from './helper'
+import { useTranslation } from 'react-i18next'
+
+const ToastSuccess = ({ props }: { props: Toast }) => {
+  const { t } = useTranslation()
+  return (
+    <div
+      className={cn(
+        'pointer-events-auto relative mx-3 mt-[calc(100vh_/_2_-_172px)] flex w-full max-w-md rounded-lg bg-black shadow-lg ring-1 ring-app-green',
+        props.visible ? 'animate-toast-enter' : 'animate-toast-leave'
+      )}
+    >
+      <div className="flex flex-1 items-center justify-between space-x-2 p-3">
+        <img
+          className="h-12 w-12 flex-shrink-0 object-contain"
+          src="/images/wallet/deposit/confirm.png"
+          alt=""
+        />
+        <div className="flex-1">
+          <p className="text-base font-ultra text-white">{t('DepositedSuccessfully')}</p>
+          <p className="text-xs text-white/70">{t('DepositedSuccessfullyContent')}</p>
+        </div>
+      </div>
+      <Button
+        variant="icon"
+        size="icon"
+        onClick={() => toast.remove(props.id)}
+        className="absolute right-1 top-1"
+      >
+        <CloseIcon className="h-4 w-4 text-white/70" />
+      </Button>
+    </div>
+  )
+}
 
 // 充值提交成功通知
 export const successNotify = () =>
-  toast.custom(
-    t => (
-      <div
-        className={`${
-          t.visible ? 'animate-toast-enter' : 'animate-toast-leave'
-        } pointer-events-auto relative mx-3 mt-[calc(100vh_/_2_-_172px)] flex w-full max-w-md rounded-lg bg-black shadow-lg ring-1 ring-app-green`}
-      >
-        <div className="flex flex-1 items-center justify-between space-x-2 p-3">
-          <img
-            className="h-12 w-12 flex-shrink-0 object-contain"
-            src="/images/wallet/deposit/confirm.png"
-            alt=""
-          />
-          <div className="flex-1">
-            <p className="text-base font-ultra text-white">Deposited successfully</p>
-            <p className="text-xs text-white/70">
-              It may takes a few minutes to effect on your account.
-            </p>
-          </div>
-        </div>
-        <Button
-          variant="icon"
-          size="icon"
-          onClick={() => toast.remove(t.id)}
-          className="absolute right-1 top-1"
-        >
-          <CloseIcon className="h-4 w-4 text-white/70" />
-        </Button>
-      </div>
-    ),
-    {
-      duration: 5000,
-    }
-  )
+  toast.custom(t => <ToastSuccess props={t} />, {
+    duration: 5000,
+  })
 
 interface DepositFormData {
   currency: string // 幣種
@@ -73,6 +76,7 @@ export default function Deposit() {
   const { sender, walletAddress, tonClient } = useTonConnect()
   const [tonConnectUI] = useTonConnectUI()
   const [isConnected, setIsConnected] = useState(tonConnectUI.connected)
+  const { t } = useTranslation()
 
   const {
     control,
@@ -186,7 +190,7 @@ export default function Deposit() {
         successNotify()
       }
     } catch (error) {
-      errorToast('Deposited unsuccessfully')
+      errorToast(t('DepositedUnsuccessfully'))
       console.error('交易失敗:', error)
     }
   }
@@ -238,7 +242,7 @@ export default function Deposit() {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Choose currency */}
         <div className="flex flex-col justify-between space-y-2 rounded-xl bg-[#1C1C1C] p-3">
-          <p className="pl-3 text-xs text-white/70">Choose currency</p>
+          <p className="pl-3 text-xs text-white/70">{t('ChooseCurrency')}</p>
           <div className="flex justify-between space-x-2">
             {currencies.map((currency, index) => (
               <Button
@@ -287,8 +291,8 @@ export default function Deposit() {
                   inputMode="decimal"
                   pattern="[0-9.]*"
                   id="amount"
-                  label="Amount"
-                  placeholder="Please enter"
+                  label={t('Amount')}
+                  placeholder={t('PlaceholderEnter')}
                   onValueChange={values => {
                     field.onChange(values.value)
                   }}
@@ -326,7 +330,7 @@ export default function Deposit() {
         <div className="mt-6 flex flex-col items-stretch space-y-3">
           {isConnected ? (
             <Button type="submit" disabled={!isValid} loading={isSubmitting}>
-              Deposit
+              {t('Deposit')}
             </Button>
           ) : (
             <TonConnectButton />
