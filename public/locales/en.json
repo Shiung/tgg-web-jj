@@ -339,5 +339,7 @@
   "luckyMoneyKindFixed": "The amount in each bag and total bag quantity is <Comp>fixed</Comp>.",
   "luckyMoneyKindRandom": "The amount in each bag and total bag quantity is <Comp>random</Comp>.",
   "luckyMoneyHint": "Only unregistered friends can get the lucky money and become your potential referral member.",
-  "CheckAllTreasure": "Check all treasure"
+  "CheckAllTreasure": "Check all treasure",
+  "MaintenanceDescription": "KOKON is temporarily unavailable due to system maintenance. We will be restoring regular service as soon as possible. We apologize for any inconvenience.",
+  "Loading": "Loading"
 }

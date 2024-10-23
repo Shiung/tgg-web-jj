@@ -19,7 +19,7 @@
   "Invite": "초대",
   "MakeThemPlay": "플레이하게 만들기",
   "Earn": "적립",
-  "referAndEarn.description2": "레벨 1에서 레벨 2에 해당하는 모든 팀원의 베팅에 대한 수수료를 받습니다.",
+  "referAndEarn.description2": "레벨 1에서 레벨 2에 해당하는 모든 팀원으로부터 베팅에 대한 수수료를 받습니다.",
   "referAndEarn.description3": "베팅 금액은 암호화폐 게임(광산, 크래시)에서 유효한 베팅으로 정의되며, 유효한 베팅은 정산되고 승패 결과가 발생한 베팅에 대해서만 계산됩니다. 플레이, 동점 또는 취소된 게임은 유효한 베팅에 포함되지 않습니다.",
   "TeamMemberNumbers": "팀원 번호",
   "TeamMemberBettingAmount": "팀원 베팅 금액",
@@ -327,7 +327,7 @@
   "task.depositDescription": "입금액은 현재 USDT 환율을 기준으로 계산됩니다.",
   "task.inviteFriendsDescription": "친구의 지갑에 100개 이상의 코콘을 등록하고 소유한 경우에만 유효한 회원으로 인정됩니다.",
   "BuyEnergy": "에너지 구매",
-  "BuyEnergyDescription": "게임당 에너지 1개를 소모합니다.에너지가 다 떨어졌습니다.",
+  "BuyEnergyDescription": "게임당 에너지 1개를 소모합니다.에너지가 부족합니다.",
   "BuyEnergyDescription2": "게임을 플레이할 에너지를 한 번 더 얻고 싶으신가요?",
   "PAY": "PAY",
   "FOR": "FOR",
@@ -337,7 +337,9 @@
   "BuyKOKON": "KOKON 구매하기",
   "NoGameURLProvided": "제공된 게임 URL 없음",
   "luckyMoneyKindFixed": "각 가방의 금액과 총 가방 수량은 <Comp>고정되어</Comp> 있습니다.",
-  "luckyMoneyKindRandom": "각 가방의 수량과 총 가방 수량은 <Comp>무작위입니다</Comp>.",
+  "luckyMoneyKindRandom": "각 가방의 양과 총 가방 수량은 <Comp>무작위입니다</Comp>.",
   "luckyMoneyHint": "등록하지 않은 친구만 행운의 상금을 받을 수 있으며 잠재적인 추천 회원이 될 수 있습니다.",
-  "CheckAllTreasure": "모든 보물 확인"
+  "CheckAllTreasure": "모든 보물 확인",
+  "MaintenanceDescription": "시스템 점검으로 인해 일시적으로 KOKON을 이용할 수 없습니다. 최대한 빠른 시일 내에 정상 서비스를 복구할 예정입니다. 불편을 드려 죄송합니다.",
+  "Loading": "로드 중"
 }

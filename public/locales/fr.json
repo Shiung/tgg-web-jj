@@ -27,7 +27,7 @@
   "ReferralTeam": "Équipe d'orientation",
   "rule.referralTeam.description": "Seuls les amis inscrits et possédant plus de {{value}} KOKON dans leur portefeuille sont considérés comme des membres valides. Les membres de votre équipe peuvent créer une équipe de référence de niveau 1 à 2 pour vous. Plus ils amènent de membres dans votre équipe, plus votre revenu sera élevé.",
   "TeamRatingSystem": "Système d'évaluation des équipes",
-  "teamRatingSystem.description": "Il existe cinq niveaux d'évaluation, de 1 étoile à 5 étoiles. Chaque équipe de parrainage commence avec 1 étoile, et vous pouvez améliorer la note de votre équipe en accomplissant des missions. Plus votre équipe est bien notée, plus elle reçoit de récompenses.",
+  "teamRatingSystem.description": "Il existe cinq niveaux d'évaluation, de 1 étoile à 5 étoiles. Chaque équipe de parrainage commence à 1 étoile, et vous pouvez améliorer la note de votre équipe en accomplissant des missions. Plus votre équipe est bien notée, plus elle reçoit de récompenses.",
   "CommissionRatio": "Ratio de commission",
   "UpgradeRequirement": "Exigence de mise à niveau",
   "subTaskCardDescription": "Un petit effort",
@@ -236,7 +236,7 @@
   "InsufficientBalanceInWallet": "Insuffisance du solde du portefeuille",
   "AmountRangeOfEachBag": "Fourchette de quantité de chaque sac",
   "Bags": "Sacs",
-  "EachBag": "Chaque sac",
+  "EachBag": "Chaque sachet",
   "getLuckyMoneyDialogDesc1": "Vous avez la possibilité de gagner un \n{{bag}} de \n{{giverName}}",
   "getLuckyMoneyDialogDesc2": "Vous avez reçu un \n{{bag}} de \n{{giverName}}",
   "PotentialGain": "Gain potentiel",
@@ -339,5 +339,7 @@
   "luckyMoneyKindFixed": "La quantité contenue dans chaque sac et la quantité totale du sac sont <Comp>fixes</Comp>.",
   "luckyMoneyKindRandom": "La quantité contenue dans chaque sac et la quantité totale du sac sont <Comp>aléatoires</Comp>.",
   "luckyMoneyHint": "Seuls les amis non inscrits peuvent recevoir l'argent de la chance et devenir vos membres référents potentiels.",
-  "CheckAllTreasure": "Vérifier tous les trésors"
+  "CheckAllTreasure": "Vérifier tous les trésors",
+  "MaintenanceDescription": "KOKON est temporairement indisponible en raison d'une maintenance du système. Nous rétablirons le service normal dès que possible. Nous nous excusons pour la gêne occasionnée.",
+  "Loading": "Chargement"
 }

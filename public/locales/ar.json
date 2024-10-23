@@ -5,7 +5,7 @@
   "errorMessage.not.valid.kind": "النوع غير صالح",
   "errorMessage.under.maintenance": "تحت الصيانة",
   "errorMessage.packet.been.sent.out": "آسف,\n تم إرسال جميع الحقائب!",
-  "errorMessage.packet.claimer.not.qualified": "آسف,\n أنت غير مؤهل.",
+  "errorMessage.packet.claimer.not.qualified": "أنا آسف,\n أنت غير مؤهل.",
   "Game": "اللعبة",
   "Rank": "الرتبة",
   "Task": "المهمة",
@@ -339,5 +339,7 @@
   "luckyMoneyKindFixed": "الكمية في كل كيس وكمية الكيس الإجمالية <Comp>ثابتة</Comp>.",
   "luckyMoneyKindRandom": "الكمية في كل كيس وكمية الكيس الإجمالية <Comp>عشوائية</Comp>.",
   "luckyMoneyHint": "الأصدقاء غير المسجلين فقط هم من يمكنهم الحصول على أموال الحظ ويصبحوا أعضاء الإحالة المحتملين.",
-  "CheckAllTreasure": "تحقق من كل الكنز"
+  "CheckAllTreasure": "تحقق من كل الكنز",
+  "MaintenanceDescription": "KOKON غير متاح مؤقتًا بسبب صيانة النظام. سنقوم باستعادة الخدمة المنتظمة في أقرب وقت ممكن. نعتذر عن أي إزعاج.",
+  "Loading": "التحميل"
 }

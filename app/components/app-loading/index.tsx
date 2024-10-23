@@ -1,5 +1,6 @@
-import { cva, type VariantProps } from 'class-variance-authority'
 import { useMemo } from 'react'
+import { cva, type VariantProps } from 'class-variance-authority'
+import { useTranslation } from 'react-i18next'
 import { cn } from '~/lib/utils'
 import useStore from '~/stores/useStore'
 import { systemBgImgBase64, systemLoadingImgBase64 } from './base64-imgs'
@@ -24,6 +25,7 @@ export interface AppLoadingProps extends VariantProps<typeof appLoadingVariants>
 }
 
 export default function AppLoading({ className, variant = 'blur' }: AppLoadingProps) {
+  const { t } = useTranslation()
   const maxWidth = useStore(state => state.maxWidth)
   const systemStyle = useMemo(() => {
     return variant === 'system'
@@ -44,7 +46,7 @@ export default function AppLoading({ className, variant = 'blur' }: AppLoadingPr
         alt="loading"
         className="animate-spin-with-pause"
       />
-      <span className="mt-10 text-2xl font-ultra">Loading</span>
+      <span className="mt-10 text-2xl font-ultra">{t('Loading')}</span>
     </div>
   )
 }

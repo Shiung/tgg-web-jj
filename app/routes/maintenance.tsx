@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 import useStore from '~/stores/useStore'
 
 export default function Maintenance() {
+  const { t } = useTranslation()
   const setHeaderVisibility = useStore(state => state.setHeaderVisibility)
   const setNavVisibility = useStore(state => state.setNavVisibility)
 
@@ -25,13 +27,12 @@ export default function Maintenance() {
         className="self-center"
       />
       <span className="self-center text-2xl font-ultra text-white">System Maintenance</span>
-      <span className="self-center px-4 text-center text-sm font-normal text-white/70">
-        KOKON is temporarily unavailable due to system maintenance. We will be restoring regular
-        service as soon as possible. We apologize for any inconvenience.
+      <span className="self-center whitespace-pre-wrap px-4 text-center text-sm font-normal text-white/70">
+        {t('MaintenanceDescription')}
       </span>
       <div className="px-4">
         <Button className="w-full" catEars>
-          Contact Support
+          {t('ContactSupport')}
         </Button>
       </div>
     </div>
