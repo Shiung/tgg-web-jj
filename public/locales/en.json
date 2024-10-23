@@ -260,5 +260,15 @@
   "LimitedTime": "Limited Time",
   "LimitedQuantity": "Limited quantity",
   "task.depositDescription": "The deposit amount will be calculated based on the current exchange rate of USDT.",
-  "task.inviteFriendsDescription": "Only when your friends registered and owned over 100 KOKON in their wallet are counted valid member."
+  "task.inviteFriendsDescription": "Only when your friends registered and owned over 100 KOKON in their wallet are counted valid member.",
+  "BuyEnergy": "Buy Energy",
+  "BuyEnergyDescription": "Consume 1 energy for each game.You have ran out of Energy.",
+  "BuyEnergyDescription2": "Would you like to get one more energy to play the game?",
+  "PAY": "PAY",
+  "FOR": "FOR",
+  "GotoRecharge": "Go to Recharge",
+  "Payment": "Payment",
+  "GoToRechargeDescription": "Insufficient balance in your KOKON wallet. Go to get more KOKON.",
+  "BuyKOKON": "Buy KOKON",
+  "NoGameURLProvided": "No game URL provided"
 }
