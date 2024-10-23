@@ -2,6 +2,7 @@ import React from 'react'
 import { GetTreasuresResponse } from '../../api/codegen/data-contracts'
 import { useGenerateRuleList } from './hook/useGenerateRuleList'
 import { useTranslation } from 'react-i18next'
+import { cn } from '~/lib/utils'
 
 import InfoTooltip from '~/components/info-tooltip'
 import Amount from '~/components/amount'
@@ -42,7 +43,10 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
                 <>
                   <Amount
                     crypto={treasure?.rewardType}
-                    className="break-all text-xl font-ultra text-primary"
+                    className={cn(
+                      'break-all text-xl font-ultra text-primary',
+                      treasure?.remainingUnlockAmount.length > 10 && 'text-sm'
+                    )}
                     value={treasure?.remainingUnlockAmount}
                     useKM={treasure?.rewardType === 'KOKON'}
                   />
