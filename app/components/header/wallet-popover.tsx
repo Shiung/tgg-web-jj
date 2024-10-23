@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react'
+import { Link } from '@remix-run/react'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
 import { Button } from '~/components/ui/button'
 import Amount from '~/components/amount'
 import RefreshIcon from '~/icons/refresh.svg?react'
 import { KokonIcon } from '~/components/color-icons'
 import { Skeleton } from '~/components/ui/skeleton'
-import ProtectedLink from '~/components/protected-link'
 import { cn } from '~/lib/utils'
 import { parseAmount } from '~/lib/amount'
 import { useGetHeaderWallet, UserWallet } from '~/hooks/api/useWallet'
@@ -107,7 +107,7 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
             </div>
           ))}
         </div>
-        <ProtectedLink
+        <Link
           to="/wallet/deposit"
           prefetch="viewport"
           onClick={() => {
@@ -117,7 +117,7 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
           <Button className="mt-6 w-full" catEars>
             Deposit
           </Button>
-        </ProtectedLink>
+        </Link>
       </PopoverContent>
     </Popover>
   )
