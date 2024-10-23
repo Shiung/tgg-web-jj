@@ -126,7 +126,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
                   alt="open-lucky-bag"
                 />
                 <div className="absolute bottom-[36%] flex aspect-square w-[32.25%] items-center justify-center text-center text-lg font-ultra text-[#FE8C02]">
-                  {isPending ? <Loader2 className="h-8 w-8 animate-spin" /> : t('OPEN')}
+                  {isPending ? <Loader2 className="h-8 w-8 animate-spin" /> : t('Open')}
                 </div>
                 {showPotential && (
                   <div className="absolute bottom-[9%] flex w-full flex-col items-center space-y-1 font-ultra">

@@ -26,7 +26,7 @@ export const links = [
   },
   {
     href: '/wallet',
-    i18n: 'wallet',
+    i18n: 'Wallet',
     SvgComponent: NavWallet,
     comp: ProtectedLink,
   },

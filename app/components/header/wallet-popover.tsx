@@ -117,7 +117,7 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
           }}
         >
           <Button className="mt-6 w-full" catEars>
-            Deposit
+            {t('Deposit')}
           </Button>
         </Link>
       </PopoverContent>

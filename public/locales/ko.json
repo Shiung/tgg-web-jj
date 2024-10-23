@@ -338,5 +338,6 @@
   "NoGameURLProvided": "제공된 게임 URL 없음",
   "luckyMoneyKindFixed": "각 가방의 금액과 총 가방 수량은 <Comp>고정되어</Comp> 있습니다.",
   "luckyMoneyKindRandom": "각 가방의 수량과 총 가방 수량은 <Comp>무작위입니다</Comp>.",
-  "luckyMoneyHint": "등록하지 않은 친구만 행운의 상금을 받을 수 있으며 잠재적인 추천 회원이 될 수 있습니다."
+  "luckyMoneyHint": "등록하지 않은 친구만 행운의 상금을 받을 수 있으며 잠재적인 추천 회원이 될 수 있습니다.",
+  "CheckAllTreasure": "모든 보물 확인"
 }

@@ -338,5 +338,6 @@
   "NoGameURLProvided": "No game URL provided",
   "luckyMoneyKindFixed": "The amount in each bag and total bag quantity is <Comp>fixed</Comp>.",
   "luckyMoneyKindRandom": "The amount in each bag and total bag quantity is <Comp>random</Comp>.",
-  "luckyMoneyHint": "Only unregistered friends can get the lucky money and become your potential referral member."
+  "luckyMoneyHint": "Only unregistered friends can get the lucky money and become your potential referral member.",
+  "CheckAllTreasure": "Check all treasure"
 }

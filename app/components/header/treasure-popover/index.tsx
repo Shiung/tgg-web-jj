@@ -1,21 +1,23 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { Link, useLocation } from '@remix-run/react'
+import { motion, useAnimationControls } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import Lottie from 'lottie-react'
+
 import { useTreasuresList } from '~/routes/task.treasure/hook/useTreasuresList'
 import { useGenerateRuleList } from '~/routes/task.treasure/hook/useGenerateRuleList'
 import { cn } from '~/lib/utils'
-import useStore from '~/stores/useStore'
-import catboxLottieFile from './lottie/catbox.json'
 import { parseAmount } from '~/lib/amount'
-
+import { errorToast, successToast } from '~/lib/toast'
+import useStore from '~/stores/useStore'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
-import { motion, useAnimationControls } from 'framer-motion'
 import { Button } from '~/components/ui/button'
 import { CurrencyIcon } from '~/components/currency-icon'
 import Amount from '~/components/amount'
-import Empty from './empty'
-import { errorToast, successToast } from '~/lib/toast'
 import AnimatedCounter from '~/components/animated-counter'
+
+import catboxLottieFile from './lottie/catbox.json'
+import Empty from './empty'
 
 interface readyToShowChangeTreasureType {
   id: number
@@ -23,6 +25,7 @@ interface readyToShowChangeTreasureType {
 }
 
 const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
+  const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(true)
   const location = useLocation()
   const { categorizedTreasures, claimAllBonuses, isClaimingAll, refetch } = useTreasuresList()
@@ -207,7 +210,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                             useKM={treasure?.rewardType === 'KOKON'}
                             className="text-xl font-ultra text-primary"
                           />
-                          <p className="text-xs text-white/70">Waiting for unlock</p>
+                          <p className="text-xs text-white/70">{t('WaitingForUnlock')}</p>
                         </div>
                       </div>
                       <div className="flex flex-[0_0_33%] flex-col items-center justify-center border-l border-dashed border-white/20 px-2 py-1">
@@ -223,7 +226,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                           animationOptions={{ duration: 1 }}
                           className="text-base font-ultra text-app-green"
                         />
-                        <p className="text-xs text-white/70">Ready for claim </p>
+                        <p className="text-xs text-white/70">{t('ReadyForClaim')}</p>
                       </div>
                     </div>
                   </div>
@@ -234,7 +237,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
             <div className="mt-6 flex shrink-0 flex-row space-x-2">
               <Link to="/task/treasure" prefetch="viewport" className="flex-1">
                 <Button variant="gray" catEars>
-                  Check all treasure
+                  {t('CheckAllTreasure')}
                 </Button>
               </Link>
               <Button
@@ -244,7 +247,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                 loading={isClaimingAll}
                 disabled={treasureNotice.length === 0}
               >
-                Claim
+                {t('Claim')}
               </Button>
             </div>
           </>

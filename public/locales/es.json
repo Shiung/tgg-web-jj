@@ -79,7 +79,7 @@
   "rank.rules.crypto.content1.subTitle": "Apuesta válida",
   "rank.rules.crypto.content1.content": "La clasificación se basa en cuánto ha apostado en criptojuegos (Minas, Crash). Las apuestas válidas sólo se calcularán para las apuestas que se hayan liquidado y hayan producido un resultado de victoria o derrota. Las partidas jugadas, empatadas o canceladas no se contabilizarán en las apuestas válidas.",
   "rank.rules.crypto.content2.subTitle": "Tiempo de actualización",
-  "rank.rules.crypto.content2.content": "La lista de clasificación se actualiza cada hora.",
+  "rank.rules.crypto.content2.content": "La lista de clasificación se actualiza una vez por hora.",
   "rank.rules.crypto.content3.subTitle": "Hora de finalización",
   "rank.rules.crypto.content4.subTitle": "Diario",
   "rank.rules.crypto.content4.content": "Todos los días 13:00（UTC+8）",
@@ -93,7 +93,7 @@
   "rank.rules.share.content1.subTitle": "Amigos válidos",
   "rank.rules.share.content1.content": "Share Rank es una competición para ver quién invita a más amigos a unirse a KOKON. El ranking depende de cuántos amigos invites a convertirse en miembros válidos. Una vez que tus amigos tengan más de 100 KOKON en su monedero, serán amigos válidos.",
   "rank.rules.share.content2.subTitle": "Tiempo de actualización",
-  "rank.rules.share.content2.content": "La lista de clasificación se actualiza cada hora.",
+  "rank.rules.share.content2.content": "La lista de clasificación se actualiza una vez por hora.",
   "rank.rules.share.content3.subTitle": "Hora de finalización",
   "rank.rules.share.content4.subTitle": "Diario",
   "rank.rules.share.content4.content": "Viernes 13:00 (UTC+8)",
@@ -279,7 +279,7 @@
   "ConnectWallet": "Billetera Connect",
   "ConnectedSuccessfully": "Conectado correctamente",
   "ConnectedUnsuccessfully": "Conectado sin éxito",
-  "DepositViaAddress": "Depósito a través de la dirección",
+  "DepositViaAddress": "Depósito por dirección",
   "CommentRequired": "Comentario (obligatorio)",
   "DepositAddressHint": "Asegúrese de introducir la \n<Comp>dirección correcta</Comp> y\n<Comp>Comentario</Comp> al realizar el ingreso. Actualmente sólo\n<Comp>TON</Comp> y\n<Comp>USDT</Comp> en formato\n<Comp>TON</Comp> en formato<Comp>blockchain</Comp>.",
   "Done": "Hecho",
@@ -338,5 +338,6 @@
   "NoGameURLProvided": "No se proporciona la URL del juego",
   "luckyMoneyKindFixed": "La cantidad de cada bolsa y la cantidad total de bolsas son <Comp>fijas</Comp>.",
   "luckyMoneyKindRandom": "La cantidad en cada bolsa y la cantidad total de bolsas es <Comp>aleatoria</Comp>.",
-  "luckyMoneyHint": "Sólo los amigos no registrados pueden conseguir el dinero de la suerte y convertirse en tus miembros potenciales de referencia."
+  "luckyMoneyHint": "Sólo los amigos no registrados pueden conseguir el dinero de la suerte y convertirse en tus miembros potenciales de referencia.",
+  "CheckAllTreasure": "Comprobar todos los tesoros"
 }
