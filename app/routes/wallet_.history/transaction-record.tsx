@@ -140,7 +140,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
       currency: '',
       type: '',
       balance: '',
-      dateTimeRange: { from: startOfDay(subDays(new Date(), 30)), to: endOfDay(new Date()) },
+      dateTimeRange: { from: startOfDay(subDays(new Date(), 29)), to: endOfDay(new Date()) },
     },
   })
   const [isFirstLoading, setIsFirstLoading] = useState(true)
@@ -225,7 +225,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
                   range
                   showTimePicker
                   rangeLimits={{
-                    minDate: startOfDay(subDays(new Date(), 30)),
+                    minDate: startOfDay(subDays(new Date(), 29)),
                     maxDate: endOfDay(new Date()),
                   }}
                 />

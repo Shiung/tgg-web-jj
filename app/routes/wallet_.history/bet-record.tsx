@@ -65,7 +65,7 @@ interface GameTransactionResponse {
 
 const defaultValues = {
   gameList: '',
-  dateTimeRange: { from: startOfDay(subDays(new Date(), 30)), to: endOfDay(new Date()) },
+  dateTimeRange: { from: startOfDay(subDays(new Date(), 29)), to: endOfDay(new Date()) },
 }
 
 const calculateDifference = (win: number | undefined, bet: number | undefined) =>
@@ -221,7 +221,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
                   range
                   showTimePicker
                   rangeLimits={{
-                    minDate: startOfDay(subDays(new Date(), 30)),
+                    minDate: startOfDay(subDays(new Date(), 29)),
                     maxDate: endOfDay(new Date()),
                   }}
                 />

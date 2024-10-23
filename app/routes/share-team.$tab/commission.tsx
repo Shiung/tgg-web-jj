@@ -373,7 +373,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
                 }}
                 range
                 rangeLimits={{
-                  minDate: startOfDay(subDays(new Date(), 30)),
+                  minDate: startOfDay(subDays(new Date(), 29)),
                   maxDate: endOfDay(new Date()),
                 }}
               />
