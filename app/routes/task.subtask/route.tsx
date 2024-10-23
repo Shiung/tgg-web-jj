@@ -4,17 +4,24 @@ import { type TaskQueryResponse } from '~/api/codegen/data-contracts'
 import { type TaskType, useTaskTypeDisplayMap } from './type'
 import { useGetTask } from './hook/useGetTask'
 import { useTranslation } from 'react-i18next'
+import useIntersectionObserver from '~/hooks/useIntersectionObserver'
+import { useSearchParams } from '@remix-run/react'
+import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 
 import { Button } from '~/components/ui/button'
 import TaskCard from './task-card'
 import TaskSubtaskSkeleton from './task-subtask-seleton'
 import styles from './index.module.scss'
-import { useSearchParams } from '@remix-run/react'
+import ArrowLineUpIcon from '~/icons/arrow-line-up.svg?react'
 
 const TaskSubtask: React.FC = () => {
   const { t } = useTranslation()
+  const maxWidth = useAppMaxWidth()
   const [searchParams] = useSearchParams()
   const searchTaskType = searchParams.get('type')
+
+  // 回到顶部
+  const [topRef, istopflagVisible, scrollToTop] = useIntersectionObserver<HTMLDivElement>()
 
   const taskTypeDisplayMap = useTaskTypeDisplayMap()
   const { tasks, isTasksLoading } = useGetTask()
@@ -54,9 +61,9 @@ const TaskSubtask: React.FC = () => {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className={cn(styles.header)}>
-        <p>{t('subtask.cardDescription')}</p>
-        <p className="pl-1">{t('subtask.cardDescription2')}</p>
+      <div ref={topRef} className={cn(styles.header)}>
+        <p>{t('subTaskCardDescription')}</p>
+        <p className="pl-1">{t('subtaskCardDescription2')}</p>
       </div>
       <div className="relative -top-4 flex flex-1 flex-col overflow-y-hidden rounded-xl bg-black px-3 py-4">
         <div className="mb-5 flex space-x-2">
@@ -79,15 +86,26 @@ const TaskSubtask: React.FC = () => {
               <div key={index} ref={taskRefs.current[taskType as TaskType]}>
                 <TaskCard
                   cardTitle={
-                    taskTypeDisplayMap[taskType as TaskType] + ' Task' || taskType + ' Task'
+                    taskTypeDisplayMap[taskType as TaskType] + ' ' + t('Task') ||
+                    taskType + ' ' + t('Task')
                   }
-                  updateTimeString={taskType === 'dailyList' ? t('subtask.updateTimeString') : ''}
+                  updateTimeString={taskType === 'dailyList' ? t('subTaskUpdateTimeString') : ''}
                   list={tasks?.data?.[taskType as keyof TaskQueryResponse]}
                 />
               </div>
             ))}
         </div>
       </div>
+      {!istopflagVisible && (
+        <button
+          onClick={scrollToTop}
+          aria-label="Scroll to Top"
+          className="fixed bottom-28 flex h-7 w-7 items-center justify-center rounded-full border-[0.5px] border-primary bg-[#FFF2004D]"
+          style={{ maxWidth, right: `calc((100vw - ${maxWidth}) / 2 + 10px)` }}
+        >
+          <ArrowLineUpIcon className="h-4 w-4 text-primary" />
+        </button>
+      )}
     </div>
   )
 }
