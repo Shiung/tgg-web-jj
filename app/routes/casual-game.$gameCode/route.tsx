@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { useNavigate, useParams } from '@remix-run/react'
 import useStore from '~/stores/useStore'
 import { useGetGameUrl } from '~/hooks/api/useGame'
-import AppLoading from '~/components/app-loading/index'
+import { useTranslation } from 'react-i18next'
 
+import AppLoading from '~/components/app-loading/index'
 import BuyEnergyDialog from './buy-energy-dialog'
 
 // 配合 useMatches 聲明需要登录才能访问
@@ -12,6 +13,7 @@ export const handle = {
 }
 
 const CasualGame: React.FC = () => {
+  const { t } = useTranslation()
   const params = useParams()
   const navigate = useNavigate()
   const activeGameList = useStore(state => state.activeGameList)
@@ -92,7 +94,7 @@ const CasualGame: React.FC = () => {
           className="absolute inset-0 h-full w-full rounded-xl border-none bg-black object-contain"
         />
       ) : (
-        <p className="text-center text-white">No game URL provided</p>
+        <p className="text-center text-white">{t('NoGameURLProvided')}</p>
       )}
 
       <BuyEnergyDialog isOpen={isBuyEnergyDialogOpen} onClose={handleCloseBuyEnergyDialog} />

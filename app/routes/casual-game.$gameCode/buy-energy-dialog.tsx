@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { apis } from '~/api/index'
+import { useTranslation } from 'react-i18next'
 
 import { Skeleton } from '~/components/ui/skeleton'
 import {
@@ -20,6 +21,7 @@ interface BuyEnergyDialogProps {
 }
 
 const BuyEnergyDialog: React.FC<BuyEnergyDialogProps> = ({ isOpen, onClose }) => {
+  const { t } = useTranslation()
   // 充值彈窗
   const [isRechargeDialogOpen, setIsRechargeDialogOpen] = useState(false)
   const handleCloseRechargeDialog = () => {
@@ -71,7 +73,7 @@ const BuyEnergyDialog: React.FC<BuyEnergyDialogProps> = ({ isOpen, onClose }) =>
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Buy Energy</DialogTitle>
+          <DialogTitle>{t('BuyEnergy')}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center justify-center px-3 py-4 text-center text-[#FFFFFFB2]">
           <div className="flex space-x-2">
@@ -82,8 +84,8 @@ const BuyEnergyDialog: React.FC<BuyEnergyDialogProps> = ({ isOpen, onClose }) =>
               <div className="text-lg font-ultra text-white">X {currentEnergy}</div>
             )}
           </div>
-          <div>Consume 1 energy for each game.You have ran out of Energy.</div>
-          <div>Would you like to get one more energy to play the game?</div>
+          <div>{t('BuyEnergyDescription')}</div>
+          <div>{t('BuyEnergyDescription2')}</div>
         </div>
         <DialogFooter className="w-full px-3 py-4 text-sm font-ultra">
           <Button
@@ -96,10 +98,12 @@ const BuyEnergyDialog: React.FC<BuyEnergyDialogProps> = ({ isOpen, onClose }) =>
             {gameSettingLoading ? (
               <Skeleton className="h-4 w-10" />
             ) : (
-              <div>PAY {gameSetting?.costPerGame}</div>
+              <div>
+                {t('PAY')} {gameSetting?.costPerGame}
+              </div>
             )}
             <KokonIcon className="ml-1 h-4 w-4" />
-            <div className="ml-2">FOR</div>
+            <div className="ml-2">{t('FOR')}</div>
             <img src="/images/energy.png" alt="energy" className="ml-1 h-6 w-6" />
           </Button>
         </DialogFooter>
