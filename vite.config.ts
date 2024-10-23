@@ -31,13 +31,13 @@ function updateTonConnectManifest(domain: string, manifestFilePath: string) {
 /**
  * 自定义 Vite 插件，确保在构建结束时更新 manifest
  */
-function tonConnectManifestPlugin(): PluginOption {
+function generateTonConnectManifestPlugin(): PluginOption {
   return {
     name: 'update-tonconnect-manifest',
     apply: 'build', // 仅在构建过程中应用
     enforce: 'pre', // 在其他插件之后执行
-    closeBundle() {
-      const domain = process.env.VITE_APP_DOMAIN || 'https://default-domain.com'
+    config() {
+      const domain = process.env.VITE_APP_DOMAIN || ''
       const manifestPath = path.resolve(__dirname, 'public/tonconnect-manifest.json')
       updateTonConnectManifest(domain, manifestPath)
     },
@@ -56,6 +56,7 @@ export default defineConfig(({ mode }) => {
       },
     },
     plugins: [
+      generateTonConnectManifestPlugin(),
       remix({
         ssr: false,
         future: {
@@ -77,7 +78,6 @@ export default defineConfig(({ mode }) => {
         },
       }),
       nodePolyfills({ include: ['buffer'] }),
-      tonConnectManifestPlugin(),
     ],
     ssr: {
       noExternal: ['react-use'],

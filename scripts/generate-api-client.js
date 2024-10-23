@@ -1,3 +1,6 @@
+/**
+ * 根據 swagger/api.json 自動生成 TypeScript 类型安全的 API 客户端腳本
+ */
 import fs from 'fs/promises'
 import axios from 'axios'
 // import { exec } from 'child_process'
