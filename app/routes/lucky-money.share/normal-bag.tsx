@@ -83,7 +83,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 pattern="[0-9]*"
                 id="distributedEachAmount"
                 label={t('AmountRangeOfEachBag')}
-                placeholder="Please enter"
+                placeholder={t('PleaseEnter')}
                 onValueChange={({ floatValue }) => onChange(floatValue)}
                 className="h-9"
                 fieldSuffix={Crypto.KOKON}

@@ -74,7 +74,7 @@ const config = {
         },
       },
       height: {
-        header: 'calc(var(--top-header-safe-padding) - 12px)',
+        header: 'var(--top-header-safe-padding)',
         nav: 'var(--bottom-nav-safe-padding)',
       },
       padding: {

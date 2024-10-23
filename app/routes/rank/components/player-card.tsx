@@ -93,7 +93,7 @@ const Title: React.FC<Pick<Props, 'rewardLock' | 'type'>> = ({ rewardLock = fals
   const { t } = useTranslation()
   return (
     <Layout
-      slot_first={<span className="text-xs font-normal text-white/70">{t('rank')}</span>}
+      slot_first={<span className="text-xs font-normal text-white/70">{t('Rank')}</span>}
       slot_second={
         <span className="text-xs font-normal text-white/70">
           {t(

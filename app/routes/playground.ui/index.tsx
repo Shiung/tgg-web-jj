@@ -12,7 +12,7 @@ import { Label } from '~/components/ui/label'
 import SvgHistory from '~/icons/history.svg?react'
 import WarningIcon from '~/icons/warning.svg?react'
 import { errorToast, successToast } from '~/lib/toast'
-import { successNotify } from '~/routes/wallet.deposit/route'
+import { depositSuccessNotify } from '~/routes/wallet.deposit/route'
 
 import AlertDialogDemo from './alert-dialog-demo'
 
@@ -120,7 +120,7 @@ export default function Ui() {
       {/* Tooltip / Toast */}
       <h1 className="mt-4 text-xl font-bold">Info Tooltip / Toast</h1>
       <div className="mt-2 grid grid-cols-2 gap-2">
-        <Button variant="outline" className="ml-2" onClick={() => successNotify()}>
+        <Button variant="outline" className="ml-2" onClick={() => depositSuccessNotify()}>
           Show Success Deposit Toast
         </Button>
         <Button variant="outline" className="ml-2" onClick={() => successToast('info')}>

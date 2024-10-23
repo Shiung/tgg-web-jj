@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
 import { Popover, PopoverContent, PopoverTrigger } from '~/components/ui/popover'
 import { Button } from '~/components/ui/button'
 import Amount from '~/components/amount'
@@ -16,6 +17,7 @@ type UserWalletItem = UserWallet & {
 }
 
 const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const { data, isLoading, isFetching, refetch } = useGetHeaderWallet()
@@ -71,8 +73,8 @@ const WalletPopOver: React.FC<{ className: string }> = ({ className }) => {
       <PopoverContent className="primary-gradient-border-rounded flex w-auto min-w-[260px] flex-col p-3 text-white">
         <div className="flex items-center justify-between space-x-2">
           <div className="flex flex-col text-sm font-ultra">
-            Total balance
-            <span className="text-xs text-white/70">Display all in USDT</span>
+            {t('TotalBalance')}
+            <span className="text-xs text-white/70">{t('DisplayAllInUSDT')}</span>
           </div>
           <Amount
             className="text-xl font-ultra text-primary"

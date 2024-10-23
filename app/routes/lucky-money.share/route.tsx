@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { AnimatePresence } from 'framer-motion'
 import { Link } from '@remix-run/react'
 import { useQuery } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { FormProvider, useForm } from 'react-hook-form'
 import { cn } from '~/lib/utils'
 import InfoIcon from '~/icons/info.svg?react'
@@ -38,13 +38,13 @@ export type FormData = {
 const distributeKindOptions = [
   {
     label: 'Normal',
-    desc: 'fixed',
+    desc: 'luckyMoneyKindFixed',
     value: 'FIXED',
     img: '/images/lucky-money/planBtnBg-normal.png',
   },
   {
-    label: 'Luck battle',
-    desc: 'random',
+    label: 'LuckBattle',
+    desc: 'luckyMoneyKindRandom',
     value: 'RANDOM',
     img: '/images/lucky-money/planBtnBg-Luck.png',
   },
@@ -146,7 +146,7 @@ export default function LuckyMoneyShare() {
                 )}
               >
                 <div className="relative flex max-h-8 items-center border-b border-primary/30 px-3 py-2">
-                  <span className="text-xs font-ultra">{option.label}</span>
+                  <span className="text-xs font-ultra">{t(option.label)}</span>
                   <img
                     src={option.img}
                     alt="planBtnBg normal"
@@ -157,8 +157,12 @@ export default function LuckyMoneyShare() {
                   />
                 </div>
                 <div className="p-3 text-xs font-normal text-white/70">
-                  The amount in each bag and total bag quantity is{' '}
-                  <span className="font-ultra text-white">{option.desc}</span>.
+                  <Trans
+                    i18nKey={option.desc}
+                    components={{ Comp: <span className="font-ultra text-white" /> }}
+                  />
+                  {/* The amount in each bag and total bag quantity is{' '}
+                  <span className="font-ultra text-white">{option.desc}</span>. */}
                 </div>
               </div>
             ))}
@@ -172,17 +176,14 @@ export default function LuckyMoneyShare() {
         {/* Hint */}
         <div className="mt-3 flex items-start rounded-lg bg-[#1C1C1C] p-2 text-[#FFFFFFB2]">
           <InfoIcon className="h-4 min-h-4 w-4 min-w-4" />
-          <div className="ml-1 text-xs font-normal">
-            Only unregistered friends can get the lucky money and become your potential referral
-            member.
-          </div>
+          <div className="ml-1 text-xs font-normal">{t('luckyMoneyHint')}</div>
         </div>
 
         {/* Operation */}
         {errorMessage ? (
           <Link className="mt-6" to="/wallet/deposit">
             <Button className="w-full" catEars>
-              Deposit
+              {t('Deposit')}
             </Button>
           </Link>
         ) : (

@@ -4,15 +4,14 @@ import { Address, beginCell, JettonMaster, toNano } from '@ton/ton'
 import { useQuery } from '@tanstack/react-query'
 import { NumericFormat } from 'react-number-format'
 import { Controller, useForm } from 'react-hook-form'
-import toast, { type Toast } from 'react-hot-toast'
-import { cn } from '~/lib/utils'
+import { useTranslation } from 'react-i18next'
+import toast from 'react-hot-toast'
 
 import { apis } from '~/api'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import Amount from '~/components/amount'
 import { cryptoDetails, cryptoRules, isValidCrypto, Crypto } from '~/consts/crypto'
-import CloseIcon from '~/icons/x.svg?react'
 import { errorToast } from '~/lib/toast'
 import { useTonConnect } from '~/hooks/useTonConnect'
 
@@ -24,43 +23,11 @@ import DepositViaAddressDialog from './deposit-via-address-sheet'
 import SystemMaintenance from './system-maintenance'
 import { JettonWallet } from './JettonWallet'
 import { calculateUsdtAmount } from './helper'
-import { useTranslation } from 'react-i18next'
-
-const ToastSuccess = ({ props }: { props: Toast }) => {
-  const { t } = useTranslation()
-  return (
-    <div
-      className={cn(
-        'pointer-events-auto relative mx-3 mt-[calc(100vh_/_2_-_172px)] flex w-full max-w-md rounded-lg bg-black shadow-lg ring-1 ring-app-green',
-        props.visible ? 'animate-toast-enter' : 'animate-toast-leave'
-      )}
-    >
-      <div className="flex flex-1 items-center justify-between space-x-2 p-3">
-        <img
-          className="h-12 w-12 flex-shrink-0 object-contain"
-          src="/images/wallet/deposit/confirm.png"
-          alt=""
-        />
-        <div className="flex-1">
-          <p className="text-base font-ultra text-white">{t('DepositedSuccessfully')}</p>
-          <p className="text-xs text-white/70">{t('DepositedSuccessfullyContent')}</p>
-        </div>
-      </div>
-      <Button
-        variant="icon"
-        size="icon"
-        onClick={() => toast.remove(props.id)}
-        className="absolute right-1 top-1"
-      >
-        <CloseIcon className="h-4 w-4 text-white/70" />
-      </Button>
-    </div>
-  )
-}
+import DepositSuccessToast from './deposit-success-toast'
 
 // 充值提交成功通知
-export const successNotify = () =>
-  toast.custom(t => <ToastSuccess props={t} />, {
+export const depositSuccessNotify = () =>
+  toast.custom(t => <DepositSuccessToast props={t} />, {
     duration: 5000,
   })
 
@@ -166,7 +133,7 @@ export default function Deposit() {
 
         const result = await tonConnectUI.sendTransaction(transaction)
         console.log('TON transaction success', result)
-        successNotify()
+        depositSuccessNotify()
       } else if (data.currency === Crypto.USDT) {
         // 處理 USDT 交易
         console.log('USDT')
@@ -187,7 +154,7 @@ export default function Deposit() {
           value: JETTON_TRANSFER_GAS_FEES,
         })
         console.log('USDT transaction success')
-        successNotify()
+        depositSuccessNotify()
       }
     } catch (error) {
       errorToast(t('DepositedUnsuccessfully'))
