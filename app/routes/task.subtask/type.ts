@@ -9,9 +9,9 @@ export const useTaskTypeDisplayMap = () => {
 
   return useMemo(
     () => ({
-      dailyList: t('daily'),
-      specialList: t('special'),
-      oneTimeList: t('single'),
+      dailyList: t('Daily'),
+      specialList: t('Special'),
+      oneTimeList: t('Single'),
     }),
     [t]
   )

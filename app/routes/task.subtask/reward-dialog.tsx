@@ -2,6 +2,7 @@ import React from 'react'
 import { type RewardType } from './type'
 import { type TaskQueryResponse } from '~/api/codegen/data-contracts'
 import { parseAmount } from '~/lib/amount'
+import { useTranslation } from 'react-i18next'
 
 import {
   Dialog,
@@ -30,11 +31,12 @@ const RewardDialog: React.FC<RewardDialogProps> = ({
   rewardType,
   treasureSetting,
 }) => {
+  const { t } = useTranslation()
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Claim Success</DialogTitle>
+          <DialogTitle>{t('ClaimSuccess')}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-col items-center justify-center px-3 py-4 text-base text-white/70">
           <TaskIcon
@@ -44,7 +46,9 @@ const RewardDialog: React.FC<RewardDialogProps> = ({
             imgIcon
           />
           <div>
-            <p className="text-center text-sm font-normal leading-[18px] text-white">You got</p>
+            <p className="text-center text-sm font-normal leading-[18px] text-white">
+              {t('YouGot')}
+            </p>
             <div className="mt-1 flex items-center justify-center space-x-1 text-xl font-ultra leading-normal">
               <span className="text-white">{rewardType}</span>
               <span className="text-primary">x</span>
@@ -83,7 +87,7 @@ const RewardDialog: React.FC<RewardDialogProps> = ({
         </div>
         <DialogFooter className="px-3 pb-4 pt-2">
           <Button catEars className="w-full" onClick={() => onOpenChange(false)}>
-            Ok
+            {t('Ok')}
           </Button>
         </DialogFooter>
       </DialogContent>

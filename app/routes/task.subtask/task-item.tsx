@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query'
 import { apis } from '~/api/index'
 import { useUtils } from '@telegram-apps/sdk-react'
 import useStore from '~/stores/useStore'
+import { useTranslation } from 'react-i18next'
 
 import { Button } from '~/components/ui/button'
 import Amount from '~/components/amount'
@@ -57,7 +58,7 @@ const TaskNameFormat = (task: NonNullable<TaskQueryResponse['dailyList']>[number
   }
 }
 
-type DescMapFnProps = Pick<
+type Desci18nkeyMapFnProps = Pick<
   NonNullable<TaskQueryResponse['dailyList']>[number],
   'inviteFriendsCondition' | 'teamRechargeCondition' | 'rechargeCondition'
 >
@@ -65,31 +66,32 @@ type DescMapFnProps = Pick<
  * 特定類型要顯示的 desc
  * @interface
  */
-const DescMap: Record<TaskActionType, null | ((p: DescMapFnProps) => string | null)> = {
-  LOGIN: null,
-  RECHARGE: p => {
-    return ['RECHARGE_AMOUNT', 'RECHARGE_COUNT'].some(
-      key => p.rechargeCondition?.parameterType === key
-    )
-      ? 'The deposit amount will be calculated based on the current exchange rate of USDT.'
-      : null
-  },
-  INVITE_FRIENDS: p => {
-    return p.inviteFriendsCondition?.parameterValue === 'INVITE_VALID_USER'
-      ? 'Only when your friends registered and owned over 100 KOKON in their wallet are counted valid member.'
-      : null
-  },
-  TEAM_CLASS_ACHIEVEMENT: null,
-  PLAY_GAMES: null,
-  OPEN_LINK: null,
-  TEAM_RECHARGE: p => {
-    return ['TEAM_RECHARGE_AMOUNT', 'DIRECT_SUBORDINATE_RECHARGE_AMOUNT'].some(
-      key => p.teamRechargeCondition?.parameterType === key
-    )
-      ? 'The deposit amount will be calculated based on the current exchange rate of USDT.'
-      : null
-  },
-}
+const Desci18nkeyMap: Record<TaskActionType, null | ((p: Desci18nkeyMapFnProps) => string | null)> =
+  {
+    LOGIN: null,
+    RECHARGE: p => {
+      return ['RECHARGE_AMOUNT', 'RECHARGE_COUNT'].some(
+        key => p.rechargeCondition?.parameterType === key
+      )
+        ? 'task.depositDescription'
+        : null
+    },
+    INVITE_FRIENDS: p => {
+      return p.inviteFriendsCondition?.parameterValue === 'INVITE_VALID_USER'
+        ? 'task.inviteFriendsDescription'
+        : null
+    },
+    TEAM_CLASS_ACHIEVEMENT: null,
+    PLAY_GAMES: null,
+    OPEN_LINK: null,
+    TEAM_RECHARGE: p => {
+      return ['TEAM_RECHARGE_AMOUNT', 'DIRECT_SUBORDINATE_RECHARGE_AMOUNT'].some(
+        key => p.teamRechargeCondition?.parameterType === key
+      )
+        ? 'task.depositDescription'
+        : null
+    },
+  }
 
 // 限量時間格式化
 const limitTimeString = (
@@ -186,6 +188,7 @@ const useButtonState = (
   isAnimating: boolean,
   actionType: TaskActionType
 ) => {
+  const { t } = useTranslation()
   return useMemo(() => {
     switch (status) {
       case 'CLAIMED':
@@ -197,21 +200,23 @@ const useButtonState = (
       case 'WAITING_CLAIM':
         return {
           disabled: isAnimating,
-          text: isAnimating ? '^_^' : 'Claim',
+          text: isAnimating ? '^_^' : t('Claim'),
           variant: 'default' as const,
         }
       case 'INELIGIBLE':
         if (actionType === 'OPEN_LINK') {
-          return { disabled: false, text: 'Go', variant: 'default' as const }
+          return { disabled: false, text: t('Go'), variant: 'default' as const }
         }
-        return { disabled: true, text: 'Claim', variant: 'default' as const }
+        return { disabled: true, text: t('Claim'), variant: 'default' as const }
       default:
         return null
     }
-  }, [status, isAnimating, actionType])
+  }, [status, isAnimating, actionType, t])
 }
 
 const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
+  const { t } = useTranslation()
+
   // 獎勵彈窗邏輯
   const [isRewardDialogOpen, setIsRewardDialogOpen] = useState(false)
   const onRewardDialogChange = (type: boolean) => {
@@ -299,7 +304,9 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
     }
   }
 
-  const showDesc = useMemo(() => DescMap[task.actionType]?.(task), [task])
+  const showDesc = useMemo(() => {
+    return t(Desci18nkeyMap[task.actionType]?.(task) ?? '')
+  }, [task, t])
 
   return (
     <div
@@ -308,7 +315,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
       {isLimited && (
         <div className="absolute -left-[0.5px] -top-[0.5px] flex h-5 w-20 items-center space-x-1 rounded-br-lg rounded-tl-lg bg-gradient-to-b from-[#FF8C8C] to-[#FF0E03] px-3 py-1">
           <ClockIcon className="w-3" />
-          <span className="text-[10px] text-white">Limited</span>
+          <span className="text-[10px] text-white">{t('Limited')}</span>
         </div>
       )}
       <div className="flex items-center justify-between px-3 pt-2.5 text-white">
@@ -408,12 +415,12 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
             <div className="mt-1 text-xs text-app-red">
               {task.endTime && (
                 <p>
-                  Limited Time: <span>{limitTimeString(task.startTime, task.endTime)}</span>
+                  {t('LimitedTime')}: <span>{limitTimeString(task.startTime, task.endTime)}</span>
                 </p>
               )}
               {task.rewardAmountLimit && (
                 <p>
-                  Limited quantity:{' '}
+                  {t('LimitedQuantity')}:{' '}
                   <Amount
                     value={parseAmount(task.rewardAmountLimit)}
                     thousandSeparator

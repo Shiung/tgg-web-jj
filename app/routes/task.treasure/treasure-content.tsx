@@ -1,6 +1,7 @@
 import React from 'react'
 import { GetTreasuresResponse } from '../../api/codegen/data-contracts'
 import { useGenerateRuleList } from './hook/useGenerateRuleList'
+import { useTranslation } from 'react-i18next'
 
 import InfoTooltip from '~/components/info-tooltip'
 import Amount from '~/components/amount'
@@ -12,6 +13,7 @@ interface TreasureContentProps {
 
 const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
   const generateRuleList = useGenerateRuleList()
+  const { t } = useTranslation()
 
   const ruleList = generateRuleList({
     betRequirement: treasure?.betRequirement,
@@ -28,19 +30,19 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
               <div className="absolute -right-2 bottom-1 flex items-center space-x-1 rounded-full border-[0.5px] border-solid border-[#FFF200] bg-black px-1">
                 <CurrencyIcon currency={treasure?.rewardType} className="h-3 w-3" />
                 <Amount
-                  className="text-xs font-ultra -tracking-[1px]"
+                  className="break-all text-xs font-ultra -tracking-[1px]"
                   value={treasure?.rewardAmount}
                   crypto={treasure?.rewardType}
                   useKM={treasure?.rewardType === 'KOKON'}
                 />
               </div>
             </div>
-            <div className="flex-1 text-center">
+            <div className="flex flex-1 flex-col items-center justify-center text-center">
               {treasure?.remainingUnlockAmount && Number(treasure?.remainingUnlockAmount) > 0 ? (
                 <>
                   <Amount
                     crypto={treasure?.rewardType}
-                    className="text-xl font-ultra text-primary"
+                    className="break-all text-xl font-ultra text-primary"
                     value={treasure?.remainingUnlockAmount}
                     useKM={treasure?.rewardType === 'KOKON'}
                   />
@@ -48,7 +50,7 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
               ) : (
                 <span className="text-xl font-ultra text-primary"> - </span>
               )}
-              <p className="text-xs text-white/70">Waiting for unlock</p>
+              <p className="text-xs text-white/70">{t('WaitingForUnlock')}</p>
             </div>
           </div>
 
@@ -65,12 +67,12 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
             ) : (
               <span className="text-base font-ultra text-[#3AE45A]"> - </span>
             )}
-            <p className="text-xs text-white/70">Ready for claim</p>
+            <p className="text-xs text-white/70">{t('ReadyForClaim')}</p>
           </div>
         </div>
         <div className="mt-2 rounded-xl bg-[#333] p-3 text-sm font-ultra">
           <div className="flex items-center justify-between">
-            <h3 className="mb-1">Unlock Rule</h3>
+            <h3 className="mb-1">{t('UnlockRule')}</h3>
             <InfoTooltip content="Only valid bets in the crypto game（Mines, Crash） can unlock treasure. Valid bets will only be calculated for bets that have been settled and produced a win or loss result. Any games played, tied, or canceled will not be counted in valid bets." />
           </div>
           <ul className="list-disc pl-6 text-white/70">
