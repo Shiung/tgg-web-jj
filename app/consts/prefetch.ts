@@ -45,7 +45,7 @@ export const prefetchAssetsLinks: LinkDescriptor[] = [
   /* 紅包彈窗 */
   {
     rel: 'preload',
-    href: '/lucky-money/open-lucky-bag.png',
+    href: '/images/lucky-money/open-lucky-bag.png',
     as: 'image',
   },
   /* 紅包 lottie */
