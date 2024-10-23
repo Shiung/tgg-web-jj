@@ -15,7 +15,7 @@ import { Input } from '~/components/ui/input'
 
 import AddIcon from '~/icons/add.svg?react'
 import EditIcon from '~/icons/edit.svg?react'
-import { useState, useRef, useMemo } from 'react'
+import { useState, useRef, useMemo, useCallback } from 'react'
 import useStore from '~/stores/useStore'
 import { successToast, errorToast } from '~/lib/toast'
 import VerifyButton, { ValidCode, type VerifyButtonExpose } from '~/components/verify-button'
@@ -59,7 +59,7 @@ type FormValues = z.infer<typeof formSchema>
 const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
   const { t } = useTranslation()
   const {
-    userInfo: { pin: storePin },
+    userInfo: { pin: storePin, email: storeEmail },
   } = useStore(state => state)
   const {
     register,
@@ -109,18 +109,32 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
     setOpen(isOpen)
   }
 
+  const dialogHandler = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault()
+      if (!storeEmail) {
+        return errorToast(t('EmailSetFirst'))
+      }
+      setOpen(true)
+    },
+    [storeEmail, t]
+  )
+
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        {isChangePin ? (
-          <Button variant="icon" size="icon" className="h-4 w-4 flex-shrink-0 text-white">
+        <Button
+          variant="icon"
+          size="icon"
+          className="h-4 w-4 flex-shrink-0 text-white"
+          onClick={dialogHandler}
+        >
+          {isChangePin ? (
             <EditIcon className="h-full w-full" />
-          </Button>
-        ) : (
-          <Button variant="icon" size="icon" className="h-4 w-4 flex-shrink-0 text-white">
+          ) : (
             <AddIcon className="h-full w-full" />
-          </Button>
-        )}
+          )}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
