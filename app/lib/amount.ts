@@ -19,7 +19,15 @@ export const parseAmount = (
 }
 
 export function thousandSeparatorFunction(numStr: string): string {
-  return numStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  // 檢查是否為合法的數字字串（包含正負號、整數和小數點）
+  if (!/^[-+]?\d*\.?\d*$/.test(numStr)) {
+    console.error(`Invalid number string: ${numStr}`)
+    return numStr // 非數字字串直接返回原始輸入
+  }
+
+  const [intPart, decPart] = numStr.split('.')
+  const formattedIntPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return decPart ? `${formattedIntPart}.${decPart}` : formattedIntPart
 }
 
 export interface FormatAmountOptions {
@@ -78,8 +86,6 @@ export const formatAmount = (
 
   const _value = new BigNumber(value || 0)
 
-  if (useKM) return formatKM(_value.toNumber())
-
   const formatted =
     removeTrailingZeros && maxDec > 0
       ? _value.decimalPlaces(maxDec, BigNumber.ROUND_DOWN).toString() // 使用 ROUND_DOWN 來避免四捨五入
@@ -87,6 +93,10 @@ export const formatAmount = (
 
   const [intPart, decPart] = formatted.split('.')
   const truncatedIntPart = intPart.length > maxInt ? intPart.slice(0, maxInt) : intPart
+
+  if (useKM) {
+    return formatKM(new BigNumber(`${truncatedIntPart}.${decPart || ''}`).toNumber())
+  }
 
   const formattedIntPart = thousandSeparator
     ? thousandSeparatorFunction(truncatedIntPart)

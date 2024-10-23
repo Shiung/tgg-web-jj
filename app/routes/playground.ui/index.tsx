@@ -39,7 +39,7 @@ export default function Ui() {
     mode: 'onChange',
     defaultValues: {
       email: '',
-      level: 'all',
+      level: '',
       date: new Date(),
       dateRange: { from: new Date(), to: new Date() },
       dateTime: new Date(),
@@ -161,7 +161,8 @@ export default function Ui() {
                 id="level-dropdown"
                 title="LV"
                 value={field.value}
-                onConfirm={(selectedValue: string) => field.onChange(selectedValue)}
+                onConfirm={selectedValue => field.onChange(selectedValue)}
+                onReset={() => field.onChange('')}
               >
                 <DropdownOption
                   value="1"
