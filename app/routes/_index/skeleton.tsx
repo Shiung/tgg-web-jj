@@ -1,8 +1,9 @@
 import { CarouselContent, CarouselItem } from '~/components/ui/carousel'
 import { Skeleton } from '~/components/ui/skeleton'
+import { cn } from '~/lib/utils'
 
-const GameEntranceSkeleton = () => (
-  <Skeleton className="relative flex-1 overflow-hidden rounded-2xl" />
+const GameEntranceSkeleton = ({ className }: { className: string }) => (
+  <Skeleton className={cn('relative flex-1 overflow-hidden rounded-2xl', className)} />
 )
 
 const NewReleaseCarouselContentSkeleton = () => (

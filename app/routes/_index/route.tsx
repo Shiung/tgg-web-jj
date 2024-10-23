@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { MetaFunction } from '@remix-run/node'
 import { Link, useNavigate } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
@@ -23,18 +23,61 @@ import GameImg from './game-img'
 import { GameEntranceSkeleton, NewReleaseCarouselContentSkeleton } from './skeleton'
 // import Footer from './footer'
 import CurrencyConversionDialog from './currency-conversion-dialog'
+import { addHours, format } from 'date-fns'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'KOKON' }, { name: 'description', content: 'Welcome to KOKON!' }]
 }
 
+const GameMainTenance = ({
+  maintainStartAt,
+  maintainEndAt,
+}: {
+  maintainStartAt?: string
+  maintainEndAt?: string
+}) => {
+  const { t } = useTranslation()
+  const [isMaintenance, setIsMaintenance] = useState(false)
+
+  useEffect(() => {
+    if (!maintainStartAt || !maintainEndAt) {
+      return setIsMaintenance(false)
+    }
+
+    const start = new Date(maintainStartAt)
+    const end = new Date(maintainEndAt)
+    const now = new Date()
+
+    setIsMaintenance(now >= start && now <= end)
+  }, [maintainEndAt, maintainStartAt])
+
+  if (!isMaintenance) return null
+  return (
+    <div
+      className="pointer-events-auto absolute inset-0 flex flex-col items-stretch justify-center space-y-1 bg-black/70 text-base font-ultra"
+      onClick={e => e.stopPropagation()}
+      onKeyDown={e => e.stopPropagation()}
+      role="button"
+      tabIndex={0}
+    >
+      <img src="/images/home/traffic-cone.png" alt="maintenance" className="h-6 w-6 self-center" />
+      <p className="self-center whitespace-pre-wrap text-center text-primary">
+        {t('UnderMainTenance')}
+      </p>
+      <p className="self-center px-6 text-center text-white">
+        {maintainEndAt && format(addHours(new Date(maintainEndAt), 8), 'MM-dd HH:mm') + ' (UTC+8)'}
+      </p>
+    </div>
+  )
+}
+
 /* Home */
 export default function Index() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const maxWidth = useStore(state => state.maxWidth)
   const activeGameList = useStore(state => state.activeGameList)
   const isActiveGameListFetching = useStore(state => state.isActiveGameListFetching)
-  const navigate = useNavigate()
 
   const { banners } = useBanner()
   const bannerRedirect = useBannerRedirect()
@@ -99,7 +142,13 @@ export default function Index() {
         <div className="flex aspect-[343/344] w-full flex-row space-x-2">
           <div className="flex flex-1 flex-col text-lg font-ultra">
             {[GameCode.GoDown100Floors, GameCode.Crash].map((code, index) => {
-              if (isActiveGameListFetching) return <GameEntranceSkeleton key={`game-${code}`} />
+              if (isActiveGameListFetching)
+                return (
+                  <GameEntranceSkeleton
+                    key={`game-${code}`}
+                    className={index !== 0 ? 'mt-2' : ''}
+                  />
+                )
 
               const currentGameInfo = activeGameList.find(game => game.gameCode === code)
               if (!currentGameInfo) return null
@@ -126,11 +175,17 @@ export default function Index() {
                     alt={currentGameInfo.gameName}
                     className="h-full w-full object-cover"
                   />
+                  <GameMainTenance
+                    maintainStartAt={currentGameInfo.maintainStartAt}
+                    maintainEndAt={currentGameInfo.maintainEndAt}
+                  />
                 </ProtectedLink>
               )
             })}
           </div>
+
           <div className="flex flex-1 flex-col space-y-2">
+            {/* Smash Egg */}
             <ProtectedLink
               prefetch="viewport"
               to="/smash-egg"
@@ -196,6 +251,10 @@ export default function Index() {
                       srcList={[buildResourceImageUrl(game.gameLogo), game.fallbackImgSrc || '']}
                       alt={game.gameName}
                       className="h-full w-full rounded-lg object-contain"
+                    />
+                    <GameMainTenance
+                      maintainStartAt={game.maintainStartAt}
+                      maintainEndAt={game.maintainEndAt}
                     />
                   </ProtectedLink>
                 </CarouselItem>
