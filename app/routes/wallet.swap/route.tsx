@@ -3,7 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import Amount from '~/components/amount'
-import { parseAmount, formatKM } from '~/lib/amount'
+import { parseAmount, formatKM, formatAmount } from '~/lib/amount'
 import { successToast, errorToast } from '~/lib/toast'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import {
@@ -25,6 +25,7 @@ import { useActions } from './hooks'
 
 import SystemMaintenance from '~/routes/wallet/system-maintenance'
 import { useWalletContext } from '~/routes/wallet/provider'
+import { useTranslation } from 'react-i18next'
 
 const coins = depositCurrencies.map(crypto => ({
   name: cryptoDetails[crypto].name,
@@ -38,13 +39,20 @@ interface SwapFormData {
 }
 
 const ToastConf = {
-  done: 'Swapped successfully',
-  error: 'Swapped unsuccessfully',
+  done: 'SwapSuccess',
+  error: 'SwapError',
 } as const
+
+const ErrorMessage = {
+  required: 'required',
+  InsufficientBalance: 'InsufficientBalance',
+}
 
 export default function Swap() {
   const [currentTab, setCurrentTab] = useState('buy')
   const [selectCurrency, setSelectCurrency] = useState<string>('')
+
+  const { t } = useTranslation()
 
   const { state, actions } = useWalletContext()
   const { walletTransferRateData, postTransfer } = useActions()
@@ -73,14 +81,14 @@ export default function Swap() {
     if (!settingRule) {
       return z.object({
         currency: z.string(),
-        amount: z.string().min(1, 'required'),
+        amount: z.string().min(1, ErrorMessage.required),
       })
     } else {
       return z.object({
         currency: z.string(),
         amount: z
           .string()
-          .min(1, 'required')
+          .min(1, ErrorMessage.required)
           .refine(
             val => {
               const valNum = val.replace(/,/g, '')
@@ -88,7 +96,7 @@ export default function Swap() {
               return pAmount >= settingRule.min
             },
             {
-              message: 'Insufficient balance',
+              message: ErrorMessage.InsufficientBalance,
             }
           )
           .refine(
@@ -98,7 +106,7 @@ export default function Swap() {
               return pAmount <= settingRule.max
             },
             {
-              message: 'Insufficient balance',
+              message: ErrorMessage.InsufficientBalance,
             }
           ),
       })
@@ -191,10 +199,10 @@ export default function Swap() {
       () => {
         resetHandler()
         actions.refetch()
-        successToast(ToastConf.done)
+        successToast(t(ToastConf.done))
       },
       () => {
-        errorToast(ToastConf.error)
+        errorToast(t(ToastConf.error))
       }
     )
   }
@@ -214,14 +222,14 @@ export default function Swap() {
             className="flex-1 data-[state=active]:bg-app-blue data-[state=active]:text-white"
             onClick={() => setCurrentTab('buy')}
           >
-            BUY KOKON
+            {t('BuyKokon').toUpperCase()}
           </TabsTrigger>
           <TabsTrigger
             value="sell"
             className="flex-1 data-[state=active]:bg-app-blue data-[state=active]:text-white"
             onClick={() => setCurrentTab('sell')}
           >
-            SELL KOKON
+            {t('SellKokon').toUpperCase()}
           </TabsTrigger>
         </TabsList>
         <TabsContent value={currentTab} className="mt-0"></TabsContent>
@@ -256,8 +264,8 @@ export default function Swap() {
                     inputMode="decimal"
                     // pattern="[0-9.]*"
                     id="amount"
-                    label="Amount"
-                    placeholder="Please enter"
+                    label={t('Amount')}
+                    placeholder={t('PlaceholderEnter')}
                     onValueChange={values => {
                       // useForm reset 情境下會導致空值set兩次 第二次觸發validate
                       if (!values.value) return
@@ -265,7 +273,7 @@ export default function Swap() {
                     }}
                     className="h-9"
                     fieldSuffix={selectedCurrency}
-                    error={errors.amount?.message}
+                    error={errors.amount?.message && t(errors.amount?.message)}
                     clearable
                     onClear={() => setValue('amount', '', { shouldValidate: true })}
                   />
@@ -277,14 +285,18 @@ export default function Swap() {
                 <div className="flex items-center space-x-1">
                   <InfoIcon className="h-3 w-3" />
                   <p>
-                    Range: {formatKM(settingRule.min)} ~ {formatKM(settingRule.max)}
+                    {t('RangeRule', {
+                      minVal: formatKM(settingRule.min),
+                      maxVal: formatKM(settingRule.max),
+                    })}
                   </p>
                 </div>
-                {/* <p className="pl-4">Ratio: 1 USDT=1,000,000 KOKON</p> */}
                 <p className="pl-4">
-                  Ratio: 1 USDT=&nbsp;
-                  <Amount value={settingRule?.origin.usdt2KokonRate} crypto={Crypto.KOKON} />
-                  &nbsp;KOKON
+                  {t('RatioRule', {
+                    amount: formatAmount(settingRule?.origin.usdt2KokonRate, {
+                      crypto: Crypto.KOKON,
+                    }),
+                  })}
                 </p>
               </div>
             )}
@@ -310,7 +322,7 @@ export default function Swap() {
           </div>
 
           <div className="mt-3 flex flex-col space-y-2 rounded-xl bg-[#1C1C1C] p-3">
-            <p className="pl-3 text-xs text-white/70">Payment Method</p>
+            <p className="pl-3 text-xs text-white/70">{t('PaymentMethod')}</p>
             {coinsCompute.map(coin => (
               <Button
                 key={coin.name}
@@ -333,12 +345,12 @@ export default function Swap() {
             <div className="mt-3 flex justify-between rounded-xl bg-[#1C1C1C] px-3 py-2">
               <span className="flex items-center space-x-1 text-xs text-app-red">
                 <WarningIcon className="h-4 w-4" />
-                <span>Insufficient balance</span>
+                <span>{t('InsufficientBalance')}</span>
               </span>
               {currentTab === 'buy' && (
                 <Link to="/wallet/deposit">
                   <Button className="flex h-6 items-center justify-center px-3">
-                    Go to deposit
+                    {t('GoToDeposit')}
                   </Button>
                 </Link>
               )}
@@ -350,8 +362,7 @@ export default function Swap() {
           {calculateAmoutTransfer !== false && (
             <div className="flex items-center justify-between text-white/70">
               <p className="text-xs text-white/70">
-                You will &nbsp;
-                {currentTab === 'buy' ? 'pay' : 'receive'} :
+                {t(currentTab === 'buy' ? 'YouWillPay' : 'YouWillReceive')} :
               </p>
               <p className="text-base font-extrabold text-white">
                 <span className="pr-1">
@@ -368,7 +379,7 @@ export default function Swap() {
             disabled={!isValid || !isAmountSufficient}
             loading={isSubmitting}
           >
-            {currentTab === 'buy' ? 'Buy' : 'Sell'}
+            {t(currentTab === 'buy' ? 'Buy' : 'Sell')}
           </Button>
         </div>
       </form>

@@ -3,8 +3,10 @@ import { Link, useNavigate } from '@remix-run/react'
 
 import UnitCard from './unit-card'
 import { useActions } from './hooks'
+import { useTranslation } from 'react-i18next'
 
 export default function WithdrawalProcessing() {
+  const { t } = useTranslation()
   const { ls, isLoading } = useActions()
   const navigate = useNavigate()
   return (
@@ -21,7 +23,7 @@ export default function WithdrawalProcessing() {
         >
           <ArrowLineLeftIcon className="h-6 w-6 text-[#FFFFFFB2]" />
         </Link>
-        <div className="text-lg font-ultra">Processing Withdrawal</div>
+        <div className="text-lg font-ultra">{t('ProcessingWithdrawal')}</div>
         <div />
       </div>
       {isLoading && (
@@ -42,14 +44,14 @@ export default function WithdrawalProcessing() {
       {!isLoading && !ls.length && (
         <div className="flex flex-1 flex-col items-center justify-center">
           <img src="/images/system-no-data.png" alt="progress" className="h-32 w-32" />
-          <div className="mt-2 text-xs text-[#FFFFFFB2]">No data available</div>
+          <div className="mt-2 text-xs text-[#FFFFFFB2]">{t('NoDataAvailable')}</div>
         </div>
       )}
 
       <div className="sticky bottom-0 mb-4 text-center text-[12px] text-white/70">
-        Have question? Please contact our&nbsp;
+        {t('QuestionContact')}
         <Link className="font-ultra text-primary" to="/">
-          Support
+          {t('Support')}
         </Link>
       </div>
     </div>

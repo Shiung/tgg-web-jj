@@ -16,6 +16,7 @@ import { WalletsSkeleton } from './skeleton'
 import classes from './index.module.scss'
 
 import { useWalletProvider, emptyWallets } from './provider'
+import { useTranslation, Trans } from 'react-i18next'
 
 // 配合 useMatches 聲明需要登录才能访问
 export const handle = {
@@ -37,6 +38,8 @@ export default function Wallet() {
   const [isExpanded, setIsExpanded] = useState(true)
   const [hasUserToggled, setHasUserToggled] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
+
+  const { t } = useTranslation()
 
   const wallets = useMemo(
     () =>
@@ -95,8 +98,8 @@ export default function Wallet() {
           {/* Balance */}
           <div className="flex-1">
             <div>
-              <p className="text-sm font-ultra tracking-wide">Total Balance</p>
-              <p className="text-xs font-normal">Display all in USDT</p>
+              <p className="text-sm font-ultra tracking-wide">{t('TotalBalance')}</p>
+              <p className="text-xs font-normal">{t('DisplayAllInUSDT')}</p>
             </div>
             <div className="mt-3 flex items-center space-x-1">
               <Amount
@@ -127,7 +130,7 @@ export default function Wallet() {
                 onClick={handleToggleExpand}
               >
                 <div className="flex items-center justify-center space-x-1 text-xs font-normal text-white">
-                  <span>Detail</span>
+                  <span>{t('Detail')}</span>
                   <ArrowLineDownIcon
                     className={`h-2 w-2 transform text-white opacity-100 transition-transform ${
                       isExpanded ? 'rotate-180' : 'rotate-0'
@@ -141,7 +144,7 @@ export default function Wallet() {
           <Link to="history" prefetch="viewport">
             <Button className="flex h-6 items-center justify-center space-x-1 px-3">
               <HistoryIcon className="h-4 w-4" />
-              <span className="text-xs font-extrabold">History</span>
+              <span className="text-xs font-extrabold">{t('History')}</span>
             </Button>
           </Link>
         </div>
@@ -165,16 +168,17 @@ export default function Wallet() {
               {!!data?.data.withdrawingCount && (
                 <div className="cursor primary-gradient-border-rounded flex items-center justify-between rounded-lg bg-black px-3 py-2">
                   <span className="text-sm font-normal text-white/70">
-                    <span className="font-ultra text-white">
-                      {data?.data.withdrawingCount || 0} withdrawal
-                    </span>{' '}
-                    is under processing.
+                    <Trans
+                      i18nKey="WithdrawalIsUnderProcessing"
+                      values={{ count: data?.data.withdrawingCount || 0 }}
+                      components={{ span: <span className="font-ultra text-white" /> }}
+                    />
                   </span>
                   <Button
                     className="flex h-6 items-center justify-center px-3"
                     onClick={() => navigate('withdrawal-processing')}
                   >
-                    Check
+                    {t('Check')}
                   </Button>
                 </div>
               )}
@@ -217,17 +221,17 @@ export default function Wallet() {
           <TabsList variant="cardTab" className="w-full overflow-x-auto">
             <TabsTrigger variant="cardTab" value="deposit" className="flex-1" asChild>
               <Link prefetch="viewport" to="deposit">
-                Deposit
+                {t('Deposit')}
               </Link>
             </TabsTrigger>
             <TabsTrigger variant="cardTab" value="withdraw" className="flex-1" asChild>
               <Link prefetch="viewport" to="withdraw">
-                Withdraw
+                {t('Withdraw')}
               </Link>
             </TabsTrigger>
             <TabsTrigger variant="cardTab" value="swap" className="flex-1" asChild>
               <Link prefetch="viewport" to="swap">
-                Swap
+                {t('Swap')}
               </Link>
             </TabsTrigger>
           </TabsList>

@@ -19,6 +19,7 @@ import CopyIcon from '~/icons/copy.svg?react'
 import InfoIcon from '~/icons/info.svg?react'
 import { cryptoDetails, isValidCrypto } from '~/consts/crypto'
 import { successToast } from '~/lib/toast'
+import { useTranslation, Trans } from 'react-i18next'
 
 interface DepositViaAddressDialogProps {
   currency: string
@@ -31,6 +32,8 @@ interface DepositViaAddressDialogProps {
 const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ currency, info }) => {
   const [state, copyToClipboard] = useCopyToClipboard()
 
+  const { t } = useTranslation()
+
   useEffect(() => {
     if (!state.value) return
     successToast('Copied')
@@ -41,12 +44,12 @@ const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ curre
     <Sheet>
       <SheetTrigger asChild>
         <Button catEars variant="gray">
-          Deposit via Address
+          {t('DepositViaAddress')}
         </Button>
       </SheetTrigger>
       <SheetContent side="bottom" onOpenAutoFocus={e => e.preventDefault()}>
         <SheetHeader className="pr-12">
-          <SheetTitle>Deposit via address</SheetTitle>
+          <SheetTitle>{t('DepositViaAddress')}</SheetTitle>
         </SheetHeader>
         <SheetClose />
 
@@ -67,7 +70,7 @@ const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ curre
           {/* Deposit Address */}
           <div className="mt-6 w-full space-y-1">
             <Label htmlFor="address" className="text-xs">
-              Deposit Address
+              {t('DepositAddress')}
             </Label>
             <div className="relative flex h-auto w-full items-center justify-between rounded-full border-[0.5px] border-white/20 bg-[#333] px-3 py-2 text-sm font-ultra">
               <span className="flex-1 break-all">{info?.depositAddress || ''}</span>
@@ -84,7 +87,7 @@ const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ curre
           {/* Comment */}
           <div className="mt-3 w-full space-y-1">
             <Label htmlFor="comment" className="text-xs">
-              Comment (Required)
+              {t('CommentRequired')}
             </Label>
             <Input
               readOnly
@@ -107,19 +110,17 @@ const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ curre
           <div className="mt-2 flex space-x-1 rounded-lg bg-[#1C1C1C] p-2 text-white/70">
             <InfoIcon className="h-[14px] w-[14px] flex-shrink-0" />
             <span className="flex-1 text-xs font-normal">
-              Please be sure to enter the{' '}
-              <span className="font-ultra text-white">correct address</span> and{' '}
-              <span className="font-ultra text-white">Comment</span> when depositing. Currently only{' '}
-              <span className="font-ultra text-white">TON</span> and{' '}
-              <span className="font-ultra text-white">USDT</span> in{' '}
-              <span className="font-ultra text-white">TON blockchain</span> format are supported.
+              <Trans
+                i18nKey="DepositAddressHint"
+                components={{ Comp: <span className="font-ultra text-white" /> }}
+              />
             </span>
           </div>
         </div>
         <SheetFooter className="mt-6 px-4 pb-4">
           <SheetPrimitiveClose asChild>
             <Button type="submit" className="w-full">
-              Done
+              {t('Done')}
             </Button>
           </SheetPrimitiveClose>
         </SheetFooter>

@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
 
 const SystemMaintenance: React.FC = () => {
+  const { t } = useTranslation()
   return (
     <div className="flex aspect-square flex-col items-stretch justify-center space-y-2 p-4">
       <img
@@ -9,13 +11,10 @@ const SystemMaintenance: React.FC = () => {
         className="h-auto w-[128px] self-center object-contain"
       />
       <div className="space-y-1 text-center">
-        <p className="text-base font-ultra text-white">System Maintenance</p>
-        <p className="text-xs font-normal text-white/70">
-          KOKON is temporarily unavailable due to system maintenance. We will be restoring regular
-          service as soon as possible. We apologize for any inconvenience.
-        </p>
+        <p className="text-base font-ultra text-white">{t('SystemMaintenance')}</p>
+        <p className="text-xs font-normal text-white/70">{t('SystemMaintenanceContent')}</p>
       </div>
-      <Button catEars>Contact Support</Button>
+      <Button catEars>{t('ContactSupport')}</Button>
     </div>
   )
 }

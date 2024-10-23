@@ -24,6 +24,7 @@ import WithdrawSuccessDialog from './withdraw-success-dialog'
 import WithdrawDeniedDialog from './withdraw-denied-dialog'
 import WithdrewSkeleton from './withdrew-skeleton'
 import SystemMaintenance from './system-maintenance'
+import { useTranslation } from 'react-i18next'
 
 type FormData = {
   amount: string
@@ -38,6 +39,8 @@ type FormData = {
 export default function Withdraw() {
   // 當前選擇幣種
   const [selectedCurrency, setSelectedCurrency] = useState<'USDT' | 'TON'>('USDT')
+
+  const { t } = useTranslation()
 
   const selectedCurrencyRule = useMemo(() => {
     return isValidCrypto(selectedCurrency) ? cryptoRules[selectedCurrency] : null
@@ -93,16 +96,16 @@ export default function Withdraw() {
     return z.object({
       amount: z
         .string()
-        .min(1, 'Amount is required')
+        .min(1, t('AmountIsRequired'))
         .refine(val => !isNaN(parseAmount(val)), {
-          message: 'Must be a valid number',
+          message: t('MustBeAValidNumber'),
         })
         .refine(
           () => {
             return currentSetting?.appliedTimes < currentSetting?.dailyLimitTimes
           },
           {
-            message: 'You have reached the limit of daily withdrawal.',
+            message: t('YouHaveReachedTheLimitOfDailyWithdrawal'),
           }
         )
         .refine(
@@ -113,7 +116,7 @@ export default function Withdraw() {
             return usedAmount + amount <= dailyLimit
           },
           {
-            message: 'You have reached the limit of daily withdrawal.',
+            message: t('YouHaveReachedTheLimitOfDailyWithdrawal'),
           }
         )
         .refine(
@@ -123,7 +126,7 @@ export default function Withdraw() {
             return amount <= availableAmount
           },
           {
-            message: 'Available for withdraw is insufficient.',
+            message: t('AvailableForWithdrawIsInsufficient'),
           }
         )
         .refine(
@@ -133,7 +136,10 @@ export default function Withdraw() {
             return amount >= minAmount
           },
           {
-            message: `Range: ${parseAmount(currentSetting.minimumAmount)} ~ ${parseAmount(currentSetting.maximumAmount)}`,
+            message: t('RangeRule', {
+              minVal: parseAmount(currentSetting.minimumAmount),
+              maxVal: parseAmount(currentSetting.maximumAmount),
+            }),
           }
         )
         .refine(
@@ -143,15 +149,18 @@ export default function Withdraw() {
             return amount <= maxAmount
           },
           {
-            message: `Range: ${parseAmount(currentSetting.minimumAmount)} ~ ${parseAmount(currentSetting.maximumAmount)}`,
+            message: t('RangeRule', {
+              minVal: parseAmount(currentSetting.minimumAmount),
+              maxVal: parseAmount(currentSetting.maximumAmount),
+            }),
           }
         ),
-      address: z.string().min(1, 'Address is required'),
+      address: z.string().min(1, t('AddressIsRequired')),
       memo: z.string().optional(),
-      fundPassword: z.string().min(1, 'FundPassword is required'),
-      verificationCode: z.string().min(1, 'verificationCode is required'),
+      fundPassword: z.string().min(1, t('FundPasswordIsRequired')),
+      verificationCode: z.string().min(1, t('InputVerificationIsRequireError')),
     })
-  }, [currentSetting])
+  }, [currentSetting, t])
 
   const {
     control,
@@ -278,7 +287,7 @@ export default function Withdraw() {
     <div className="bg-black p-4">
       {/* Choose currency */}
       <div className="relative flex flex-col justify-between space-y-2 rounded-xl bg-[#1C1C1C] p-3">
-        <p className="pl-3 text-xs text-white/70">Choose currency</p>
+        <p className="pl-3 text-xs text-white/70">{t('ChooseCurrency')}</p>
         <div className="flex justify-between space-x-2">
           {coins?.length &&
             coins.map((coin, index) => (
@@ -297,18 +306,18 @@ export default function Withdraw() {
       </div>
 
       <div className="mt-3 flex h-[26px] w-[115px] items-center justify-center rounded-t-xl bg-app-blue px-3 py-1 text-sm">
-        Network: <span className="font-ultra">{currentSetting?.chainNet}</span>
+        {t('Network')}: <span className="font-ultra">{currentSetting?.chainNet}</span>
       </div>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-col space-y-3 rounded-r-xl rounded-bl-lg bg-[#1C1C1C] p-3">
           {/* Address */}
           <div className="space-y-1">
             <Label htmlFor="address" className="text-xs">
-              Address
+              {t('Address')}
             </Label>
             <Input
               className={`h-9`}
-              placeholder="Please enter"
+              placeholder={t('PlaceholderEnter')}
               {...register('address')}
               error={errors?.address?.message}
             />
@@ -316,17 +325,13 @@ export default function Withdraw() {
           {/* Memo */}
           <div className="space-y-1">
             <Label htmlFor="memo" className="text-xs">
-              Memo (optional)
+              {t('MemoOptional')}
             </Label>
-            <Input className="h-9" {...register('memo')} placeholder="Please enter" />
+            <Input className="h-9" {...register('memo')} placeholder={t('PlaceholderEnter')} />
           </div>
           <div className="flex space-x-2 rounded-lg bg-[#333] p-2 text-xs text-white/70">
             <InfoIcon className="h-4 w-4 flex-shrink-0" />
-            <p className="">
-              Most trading platforms require you to fill in plain text MEMO or digital or comment
-              for TON deposit before it can be credited. Failure to fill in or incorrect filling
-              will result in asset loss.
-            </p>
+            <p className="">{t('MemoOptionalHint')}</p>
           </div>
           {/* Amount 金額輸入框 */}
           <div className="space-y-1">
@@ -336,7 +341,7 @@ export default function Withdraw() {
               rules={{ required: true }}
               render={({ field }) => {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { ref, ...restField } = field
+                const { ref, onChange, ...restField } = field
                 return (
                   <NumericFormat
                     {...restField}
@@ -356,10 +361,10 @@ export default function Withdraw() {
                     inputMode="decimal"
                     pattern="[0-9.]*"
                     id="amount"
-                    label="Amount"
-                    placeholder="Please enter"
+                    label={t('Amount')}
+                    placeholder={t('PlaceholderEnter')}
                     onValueChange={values => {
-                      field.onChange(values.value)
+                      onChange(values.value)
                     }}
                     className="h-9"
                     fieldSuffix={selectedCurrency}
@@ -374,7 +379,10 @@ export default function Withdraw() {
               <p className="flex items-center space-x-1 pl-3 text-xs text-white/50">
                 <InfoIcon className="h-3 w-3" />
                 <span>
-                  Range: {currentSetting?.minimumAmount} ~ {currentSetting?.maximumAmount}
+                  {t('RangeRule', {
+                    minVal: currentSetting?.minimumAmount,
+                    maxVal: currentSetting?.maximumAmount,
+                  })}
                 </span>
               </p>
             )}
@@ -403,7 +411,7 @@ export default function Withdraw() {
                   setFocus('amount')
                 }}
               >
-                Max
+                {t('Max')}
               </Button>
             </div>
           )}
@@ -411,11 +419,11 @@ export default function Withdraw() {
           <div className="flex flex-col space-y-1 rounded-lg bg-[#333] px-3 py-2 text-xs text-white/70">
             <div className="flex justify-between">
               <div className="flex space-x-1">
-                <p>Available for withdraw</p>
+                <p>{t('AvailableForWithdraw')}</p>
                 <InfoTooltip
                   content={
                     <div className="flex w-72 items-center justify-between space-x-1 text-xs">
-                      <div className="text-[#FFFFFFB2]">Ｗager Requirement</div>
+                      <div className="text-[#FFFFFFB2]">{t('WagerRequirement')}</div>
                       <div className="flex items-center">
                         <span className="pr-1 text-white">{currentSetting?.wagerRequirement}</span>
                         <UsdtIcon className="h-3 w-3" />
@@ -431,7 +439,7 @@ export default function Withdraw() {
             </div>
             {currentSetting?.feeType && (
               <div className="flex justify-between">
-                <p>Fee</p>
+                <p>{t('Fee')}</p>
                 <div className="flex items-center">
                   <span className="pr-1 text-white">
                     {currentSetting?.feeType === 'fixed' && currentSetting?.feeSettingValue}
@@ -443,7 +451,7 @@ export default function Withdraw() {
               </div>
             )}
             <div className="flex justify-between">
-              <p>Daily limit (amount)</p>
+              <p>{t('DailyLimitAmount')}</p>
               <div className="flex items-center">
                 <span className="pr-1 text-white">
                   {currentSetting?.usedAmount}/{currentSetting?.dailyLimitAmount}
@@ -452,38 +460,38 @@ export default function Withdraw() {
               </div>
             </div>
             <div className="flex justify-between">
-              <p>Daily limit (times)</p>
+              <p>{t('DailyLimitTimes')}</p>
               <p>
                 <span className="pr-1 text-white">
                   {currentSetting?.appliedTimes}/{currentSetting?.dailyLimitTimes}
                 </span>
-                Times
+                {t('Times')}
               </p>
             </div>
           </div>
 
           <div className="space-y-1">
             <Label htmlFor="password" className="text-xs">
-              Fund password
+              {t('FundPassword')}
             </Label>
             <Input
               className="h-9"
               type="password"
               id="password"
               autoComplete="new-password"
-              placeholder="Please enter"
+              placeholder={t('PlaceholderEnter')}
               {...register('fundPassword')}
               error={errors?.fundPassword?.message}
             />
           </div>
           <div className="space-y-1">
             <Label htmlFor="verificationCode" className="text-xs">
-              Verification code
+              {t('VerificationCode')}
             </Label>
             <Input
               className="h-9"
               id="verificationCode"
-              placeholder="Please enter"
+              placeholder={t('PlaceholderEnter')}
               {...register('verificationCode')}
               error={errors?.verificationCode?.message}
             />
@@ -493,10 +501,7 @@ export default function Withdraw() {
             className="h-6 flex-1"
             ref={vbRef}
             kind={ValidCode.withdrawFundPin}
-            successCallBack={successToast.bind(
-              null,
-              'The verification code has sent, please check your mailbox.'
-            )}
+            successCallBack={successToast.bind(null, t('VerificationCheckMail'))}
             errorCallBack={() => {}}
           />
         </div>
@@ -516,7 +521,7 @@ export default function Withdraw() {
             className="w-full"
             type="submit"
           >
-            Withdraw
+            {t('Withdraw')}
           </Button>
         </div>
       </form>
