@@ -45,7 +45,7 @@ const Header: React.FC = () => {
           <Image
             srcList={[buildResourceImageUrl(logoData?.data.image), FALLBACK_LOGO]}
             alt="logo"
-            className="aspect-[90/24] h-full max-h-6 w-full object-cover"
+            className="aspect-[90/24] h-full max-h-6 w-auto object-cover"
             skeletonClassName="w-[90px] h-6"
             isFetching={isLoading}
           />
