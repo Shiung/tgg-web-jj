@@ -31,8 +31,11 @@ const useGetHeaderWallet = () => {
  * TODO: 確認使用內建快取機制避免而不是重複請求
  */
 const useGetCryptoWallet = (crypto: string) => {
+  const isLoggedIn = useStore(state => state.isLoggedIn)
+  const customerId = useStore(state => state.userInfo?.customerId)
+
   const { data } = useQuery({
-    queryKey: [getHeaderWalletQueryKey],
+    queryKey: [getHeaderWalletQueryKey, isLoggedIn, customerId],
     queryFn: () => apis.header.headerWalletList(),
     enabled: false,
   })
