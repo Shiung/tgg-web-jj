@@ -10,7 +10,7 @@ const TeamMemberEmpty: React.FC = () => {
       <img src="/images/share/dobule-cats.png" alt="progress" className="h-32 w-44" />
       <Link prefetch="viewport" to="/share-invite" className="w-full">
         <Button catEars className="mt-4 w-full">
-          <div className="text-sm font-ultra">{t('InviteFriendsToJoinKOKON')}</div>
+          <div className="text-sm font-ultra">{t('InviteFriendsToJoinKaton')}</div>
         </Button>
       </Link>
     </div>

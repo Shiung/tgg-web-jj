@@ -87,7 +87,7 @@ const GoRechargeDialog: React.FC<GoRechargeDialogProps> = ({ isOpen, onClose }) 
         <DialogFooter className="w-full px-3 py-4 text-sm font-ultra">
           <Link prefetch="viewport" className="w-full" to="/wallet/swap">
             <Button className="flex w-full items-center justify-center" catEars>
-              <span className="text-sm font-ultra">{t('BuyKOKON')}</span>
+              <span className="text-sm font-ultra">{t('BuyKATON')}</span>
             </Button>
           </Link>
         </DialogFooter>

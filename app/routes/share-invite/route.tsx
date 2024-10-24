@@ -64,7 +64,7 @@ const ShareInvite: React.FC = () => {
   }, [state, t])
 
   const handleShareURL = useCallback(() => {
-    share(shareUrlLink, t('JoinMyTeamToPlayTheGameAndEarnKOKONCoin'))
+    share(shareUrlLink, t('JoinMyTeamToPlayTheGameAndEarnKATONCoin'))
   }, [share, shareUrlLink, t])
 
   // 當前選擇的 teamLevel

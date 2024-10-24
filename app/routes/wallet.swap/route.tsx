@@ -222,14 +222,14 @@ export default function Swap() {
             className="flex-1 data-[state=active]:bg-app-blue data-[state=active]:text-white"
             onClick={() => setCurrentTab('buy')}
           >
-            {t('BuyKokon').toUpperCase()}
+            {t('BuyKATON').toUpperCase()}
           </TabsTrigger>
           <TabsTrigger
             value="sell"
             className="flex-1 data-[state=active]:bg-app-blue data-[state=active]:text-white"
             onClick={() => setCurrentTab('sell')}
           >
-            {t('SellKokon').toUpperCase()}
+            {t('SellKATON').toUpperCase()}
           </TabsTrigger>
         </TabsList>
         <TabsContent value={currentTab} className="mt-0"></TabsContent>
