@@ -29,12 +29,12 @@ interface FormValues {
 
 export interface GameTransaction {
   betGold: string
-  betGoldKokon: string
+  betGoldPCoin: string
   betTime: string
   subGameId: 0
   transactionId: string
   winGold: string
-  winGoldKokon: string
+  winGoldPCoin: string
   /* 前端轉換 */
   /* 遊戲名稱 */
   gameName: string
@@ -57,9 +57,9 @@ interface GameTransactionResponse {
   records: GameTransaction[]
   summary: {
     totalBetGold: string
-    totalBetGoldKokon: string
+    totalBetGoldPCoin: string
     totalWinGold: string
-    totalWinGoldKokon: string
+    totalWinGoldPCoin: string
   }
 }
 
@@ -311,7 +311,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
               value={
                 <Amount
                   value={
-                    currency === Crypto.USDT ? summary?.totalBetGold : summary?.totalBetGoldKokon
+                    currency === Crypto.USDT ? summary?.totalBetGold : summary?.totalBetGoldPCoin
                   }
                   crypto={currency}
                   defaultValue="0"
@@ -336,8 +336,8 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
                           Number(summary?.totalBetGold)
                         )
                       : calculateDifference(
-                          Number(summary?.totalWinGoldKokon),
-                          Number(summary?.totalBetGoldKokon)
+                          Number(summary?.totalWinGoldPCoin),
+                          Number(summary?.totalBetGoldPCoin)
                         )
                   }
                   crypto={currency}
