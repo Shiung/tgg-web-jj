@@ -59,19 +59,19 @@ export default function Swap() {
 
   const settingRule = useMemo(() => {
     if (
-      !walletTransferRateData?.depositKokonMaximum ||
-      !walletTransferRateData.depositKokonMinimum ||
-      !walletTransferRateData.withdrawKokonMaximum ||
-      !walletTransferRateData.withdrawKokonMinimum
+      !walletTransferRateData?.depositPCoinMaximum ||
+      !walletTransferRateData.depositPCoinMinimum ||
+      !walletTransferRateData.withdrawPCoinMaximum ||
+      !walletTransferRateData.withdrawPCoinMinimum
     )
       return false
 
     const isBuy = currentTab === 'buy'
 
     const max =
-      walletTransferRateData?.[isBuy ? 'depositKokonMaximum' : 'withdrawKokonMaximum'] ?? 0
+      walletTransferRateData?.[isBuy ? 'depositPCoinMaximum' : 'withdrawPCoinMaximum'] ?? 0
     const min =
-      walletTransferRateData?.[isBuy ? 'depositKokonMinimum' : 'withdrawKokonMinimum'] ?? 0
+      walletTransferRateData?.[isBuy ? 'depositPCoinMinimum' : 'withdrawPCoinMinimum'] ?? 0
     const buttons =
       walletTransferRateData?.[isBuy ? 'depositSpeedAmount' : 'withdrawSpeedAmount'] ?? []
     return { max, min, buttons, origin: walletTransferRateData }
@@ -155,21 +155,21 @@ export default function Swap() {
       /** buy */
       return selectCurrency === Crypto.USDT
         ? /** KATON to USDT */
-          BigNumber(inputAmount).div(BigNumber(settingRule.origin.usdt2KokonRate)).toNumber()
+          BigNumber(inputAmount).div(BigNumber(settingRule.origin.usdt2PCoinRate)).toNumber()
         : /** KATON to USDT to TON */
           BigNumber(inputAmount)
             .div(BigNumber(settingRule.origin.depositRate))
-            .div(BigNumber(settingRule.origin.usdt2KokonRate))
+            .div(BigNumber(settingRule.origin.usdt2PCoinRate))
             .toNumber()
     } else {
       /** sell */
       return selectCurrency === Crypto.USDT
         ? /** KATON to USDT */
-          BigNumber(inputAmount).div(BigNumber(settingRule.origin.usdt2KokonRate)).toNumber()
+          BigNumber(inputAmount).div(BigNumber(settingRule.origin.usdt2PCoinRate)).toNumber()
         : /** KATON to USDT to TON */
           BigNumber(inputAmount)
             .div(BigNumber(settingRule.origin.withdrawRate))
-            .div(BigNumber(settingRule.origin.usdt2KokonRate))
+            .div(BigNumber(settingRule.origin.usdt2PCoinRate))
             .toNumber()
     }
   }, [settingRule, amountCurrent, currentTab, selectCurrency])
@@ -293,7 +293,7 @@ export default function Swap() {
                 </div>
                 <p className="pl-4">
                   {t('RatioRule', {
-                    amount: formatAmount(settingRule?.origin.usdt2KokonRate, {
+                    amount: formatAmount(settingRule?.origin.usdt2PCoinRate, {
                       crypto: Crypto.KATON,
                     }),
                   })}
