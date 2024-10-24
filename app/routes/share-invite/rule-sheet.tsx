@@ -116,9 +116,9 @@ const useFormatClassSetting = (classSetting: SettingResponse['classSetting']) =>
       acc = {
         headers: [],
         rows: [
-          { label: t('teamMemberNumbers'), values: [] },
-          { label: t('teamMemberBettingAmount'), values: [] },
-          { label: t('teamMemberDepositAmount'), values: [] },
+          { label: t('TeamMemberNumbers'), values: [] },
+          { label: t('TeamMemberBettingAmount'), values: [] },
+          { label: t('TeamMemberDepositAmount'), values: [] },
         ],
       }
     }
