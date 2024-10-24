@@ -84,4 +84,274 @@ export const prefetchAssetsLinks: LinkDescriptor[] = [
     href: '/images/lucky-money/lottie/lucky-bag/images/luckybagy.png',
     as: 'image',
   },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/___1_4x.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/___2_4x.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/___3_4x.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/___4_4x.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/___5_4x.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/___6_4x.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/___7_4x.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/___8_4x.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/___9_4x.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/___10_4x.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/c00.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/c1.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/c01.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/c2.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/c02.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/c3.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/c03.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/c4.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/c04.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/c05.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/cb.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/cf.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/Ellipse_6525.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/Ellipse_6526.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/face_hit.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/face_normal.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/g00.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/g1.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/g01.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/g2.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/g02.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/g3.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/g03.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/g4.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/g04.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/g05.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/gb.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/gf.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/s00.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/s1.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/s01.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/s2.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/s02.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/s3.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/s03.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/s4.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/s04.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/s05.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/sb.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/sf.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/hammer.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/image_13928_1.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/lottie/image_13928.png',
+    as: 'image',
+  },
+  {
+    rel: 'preload',
+    href: '/images/smash-egg/bg-main.png',
+    as: 'image',
+  },
 ]

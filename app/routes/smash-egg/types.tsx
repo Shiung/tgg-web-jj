@@ -9,12 +9,6 @@ export enum Status {
   End,
 }
 
-// Cryptocurrency type
-export enum Crypto {
-  USDT = 'USDT',
-  KATON = 'KATON',
-}
-
 // Egg level
 export enum EggLevel {
   GOLD = 'GOLD',
