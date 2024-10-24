@@ -397,6 +397,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
                   <LoadingIcon className="h-6 w-6 animate-spin" />
                 </div>
               )}
+              <div className="h-10" />
             </InfiniteScroll>
           </>
         ) : (
@@ -419,7 +420,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
         >
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
             <div className="text-xs text-[#FFFFFFB2]">{t('Total')}</div>
-            <div className="text-xs font-ultra">{latestSummary.totalCount}</div>
+            <div className="text-xs font-ultra">{latestSummary?.totalCount || '-'}</div>
           </div>
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
             <div className="text-xs text-[#FFFFFFB2]">{t('Bets')}</div>
@@ -427,7 +428,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
               <UsdtIcon className="h-3 w-3" />
               <Amount
                 className="text-xs font-ultra"
-                value={parseAmount(latestSummary.totalBet)}
+                value={parseAmount(latestSummary?.totalBet)}
                 crypto="USDT"
               />
             </div>
@@ -438,7 +439,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
               <KokonIcon className="h-3 w-3" />
               <Amount
                 className="text-xs font-ultra"
-                value={parseAmount(latestSummary.totalCommission)}
+                value={parseAmount(latestSummary?.totalCommission)}
                 crypto="KOKON"
               />
             </div>
