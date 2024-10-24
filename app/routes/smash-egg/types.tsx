@@ -54,8 +54,8 @@ export interface GameTransactionResponse {
   summary: {
     totalWinGold: number
     totalBetGold: number
-    totalWinGoldKokon: number
-    totalBetGoldKokon: number
+    totalWinGoldPCoin: number
+    totalBetGoldPCoin: number
   }
   pagination: {
     totalRecord: number
