@@ -12,7 +12,7 @@ import {
 } from '~/components/ui/dialog'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
 import { Button } from '~/components/ui/button'
-import { TwitterIcon } from '~/components/color-icons'
+import { XIcon } from '~/components/color-icons'
 import CopyIcon from '~/icons/copy.svg?react'
 import LogoutIcon from '~/icons/logout.svg?react'
 import EmailDialog from './email-dialog'
@@ -34,7 +34,7 @@ const links = {
   officialLinks: {
     title: 'Official Links',
     value: [
-      { icon: TwitterIcon, url: 'https://x.com/katon_games' },
+      { icon: XIcon, url: 'https://x.com/katon_games' },
       // { icon: GlobalIcon, url: '' },
     ],
   },
