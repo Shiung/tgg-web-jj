@@ -1177,7 +1177,7 @@
               "asc"
             ],
             "type": "string",
-            "description": "排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc)",
+            "description": "排序欄位升降冪(asc,desc) (Allowed values: desc, asc, Required when SortField is present)",
             "name": "sortOrder",
             "in": "query"
           },
@@ -1604,7 +1604,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Minimum: 1, Required)",
+            "description": "分頁頁數 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -1613,7 +1613,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -5646,7 +5646,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Required, Minimum: 1)",
+            "description": "頁碼 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5888,17 +5888,27 @@
             "schema": {
               "type": "object",
               "required": [
-                "usdt2KokonRate",
+                "usdt2PCoinRate",
                 "depositRate",
                 "withdrawRate",
-                "deposit_p_coin_minimum",
-                "deposit_p_coin_maximum",
+                "depositPCoinMinimum",
+                "depositPCoinMaximum",
                 "depositSpeedAmount",
-                "withdraw_p_coin_minimum",
-                "withdraw_p_coin_maximum",
+                "withdrawPCoinMinimum",
+                "withdrawPCoinMaximum",
                 "withdrawSpeedAmount"
               ],
               "properties": {
+                "depositPCoinMaximum": {
+                  "description": "最大買入平台幣數量",
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "depositPCoinMinimum": {
+                  "description": "最小買入平台幣數量",
+                  "type": "integer",
+                  "format": "uint64"
+                },
                 "depositRate": {
                   "description": "轉USDT匯率",
                   "type": "string",
@@ -5912,20 +5922,20 @@
                     "format": "uint64"
                   }
                 },
-                "deposit_p_coin_maximum": {
-                  "description": "最大買入平台幣數量",
-                  "type": "integer",
-                  "format": "uint64"
-                },
-                "deposit_p_coin_minimum": {
-                  "description": "最小買入平台幣數量",
-                  "type": "integer",
-                  "format": "uint64"
-                },
-                "usdt2KokonRate": {
+                "usdt2PCoinRate": {
                   "description": "USDT轉KOKON匯率",
                   "type": "string",
                   "format": "decimal"
+                },
+                "withdrawPCoinMaximum": {
+                  "description": "最大賣出平台幣數量",
+                  "type": "integer",
+                  "format": "uint64"
+                },
+                "withdrawPCoinMinimum": {
+                  "description": "最小賣出平台幣數量",
+                  "type": "integer",
+                  "format": "uint64"
                 },
                 "withdrawRate": {
                   "description": "USDT轉換匯率",
@@ -5939,16 +5949,6 @@
                     "type": "integer",
                     "format": "uint64"
                   }
-                },
-                "withdraw_p_coin_maximum": {
-                  "description": "最大賣出平台幣數量",
-                  "type": "integer",
-                  "format": "uint64"
-                },
-                "withdraw_p_coin_minimum": {
-                  "description": "最小賣出平台幣數量",
-                  "type": "integer",
-                  "format": "uint64"
                 }
               }
             }
@@ -7174,17 +7174,27 @@
     "GetRateResponse": {
       "type": "object",
       "required": [
-        "usdt2KokonRate",
+        "usdt2PCoinRate",
         "depositRate",
         "withdrawRate",
-        "deposit_p_coin_minimum",
-        "deposit_p_coin_maximum",
+        "depositPCoinMinimum",
+        "depositPCoinMaximum",
         "depositSpeedAmount",
-        "withdraw_p_coin_minimum",
-        "withdraw_p_coin_maximum",
+        "withdrawPCoinMinimum",
+        "withdrawPCoinMaximum",
         "withdrawSpeedAmount"
       ],
       "properties": {
+        "depositPCoinMaximum": {
+          "description": "最大買入平台幣數量",
+          "type": "integer",
+          "format": "uint64"
+        },
+        "depositPCoinMinimum": {
+          "description": "最小買入平台幣數量",
+          "type": "integer",
+          "format": "uint64"
+        },
         "depositRate": {
           "description": "轉USDT匯率",
           "type": "string",
@@ -7198,20 +7208,20 @@
             "format": "uint64"
           }
         },
-        "deposit_p_coin_maximum": {
-          "description": "最大買入平台幣數量",
-          "type": "integer",
-          "format": "uint64"
-        },
-        "deposit_p_coin_minimum": {
-          "description": "最小買入平台幣數量",
-          "type": "integer",
-          "format": "uint64"
-        },
-        "usdt2KokonRate": {
+        "usdt2PCoinRate": {
           "description": "USDT轉KOKON匯率",
           "type": "string",
           "format": "decimal"
+        },
+        "withdrawPCoinMaximum": {
+          "description": "最大賣出平台幣數量",
+          "type": "integer",
+          "format": "uint64"
+        },
+        "withdrawPCoinMinimum": {
+          "description": "最小賣出平台幣數量",
+          "type": "integer",
+          "format": "uint64"
         },
         "withdrawRate": {
           "description": "USDT轉換匯率",
@@ -7225,16 +7235,6 @@
             "type": "integer",
             "format": "uint64"
           }
-        },
-        "withdraw_p_coin_maximum": {
-          "description": "最大賣出平台幣數量",
-          "type": "integer",
-          "format": "uint64"
-        },
-        "withdraw_p_coin_minimum": {
-          "description": "最小賣出平台幣數量",
-          "type": "integer",
-          "format": "uint64"
         }
       }
     },

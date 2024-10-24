@@ -581,6 +581,16 @@ export type GetPCoinWalletRequest = object;
 
 export interface GetRateResponse {
   /**
+   * 最大買入平台幣數量
+   * @format uint64
+   */
+  depositPCoinMaximum: number;
+  /**
+   * 最小買入平台幣數量
+   * @format uint64
+   */
+  depositPCoinMinimum: number;
+  /**
    * 轉USDT匯率
    * @format decimal
    */
@@ -588,20 +598,20 @@ export interface GetRateResponse {
   /** 買入快捷設定 */
   depositSpeedAmount: number[];
   /**
-   * 最大買入平台幣數量
-   * @format uint64
-   */
-  deposit_p_coin_maximum: number;
-  /**
-   * 最小買入平台幣數量
-   * @format uint64
-   */
-  deposit_p_coin_minimum: number;
-  /**
    * USDT轉KOKON匯率
    * @format decimal
    */
-  usdt2KokonRate: string;
+  usdt2PCoinRate: string;
+  /**
+   * 最大賣出平台幣數量
+   * @format uint64
+   */
+  withdrawPCoinMaximum: number;
+  /**
+   * 最小賣出平台幣數量
+   * @format uint64
+   */
+  withdrawPCoinMinimum: number;
   /**
    * USDT轉換匯率
    * @format decimal
@@ -609,16 +619,6 @@ export interface GetRateResponse {
   withdrawRate: string;
   /** 賣出快捷設定 */
   withdrawSpeedAmount: number[];
-  /**
-   * 最大賣出平台幣數量
-   * @format uint64
-   */
-  withdraw_p_coin_maximum: number;
-  /**
-   * 最小賣出平台幣數量
-   * @format uint64
-   */
-  withdraw_p_coin_minimum: number;
 }
 
 export type GetSettingRequest = object;
@@ -2224,7 +2224,7 @@ export interface CustomerShareCreatePayload {
 export interface CustomerTeamPerformanceListParams {
   /** 排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序 (Allowed values: level, bet, deposit) */
   sortField?: "level" | "bet" | "deposit";
-  /** 排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc) */
+  /** 排序欄位升降冪(asc,desc) (Allowed values: desc, asc, Required when SortField is present) */
   sortOrder?: "desc" | "asc";
   /** 團員名稱 */
   name?: string;
@@ -2294,13 +2294,13 @@ export interface GameTransactionsListParams {
   /** @format uint64 */
   gameId?: number;
   /**
-   * 分頁頁數 (Minimum: 1, Required)
+   * 分頁頁數 (Required, Minimum: 1)
    * @format int64
    * @min 1
    */
   page: number;
   /**
-   * 分頁筆數 (Minimum: 20, Required)
+   * 分頁筆數 (Required, Minimum: 20)
    * @format int64
    * @min 20
    */
@@ -2459,7 +2459,7 @@ export interface WalletHistoryListListParams {
   /** 收支 Income Expense (Allowed values: Income, Expense) */
   balance?: "Income" | "Expense";
   /**
-   * 頁碼 (Required, Minimum: 1)
+   * 頁碼 (Minimum: 1, Required)
    * @format int64
    * @min 1
    */

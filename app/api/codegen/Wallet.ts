@@ -218,6 +218,16 @@ export class Wallet<SecurityDataType = unknown> {
     this.http.request<
       {
         /**
+         * 最大買入平台幣數量
+         * @format uint64
+         */
+        depositPCoinMaximum: number;
+        /**
+         * 最小買入平台幣數量
+         * @format uint64
+         */
+        depositPCoinMinimum: number;
+        /**
          * 轉USDT匯率
          * @format decimal
          */
@@ -225,20 +235,20 @@ export class Wallet<SecurityDataType = unknown> {
         /** 買入快捷設定 */
         depositSpeedAmount: number[];
         /**
-         * 最大買入平台幣數量
-         * @format uint64
-         */
-        deposit_p_coin_maximum: number;
-        /**
-         * 最小買入平台幣數量
-         * @format uint64
-         */
-        deposit_p_coin_minimum: number;
-        /**
          * USDT轉KOKON匯率
          * @format decimal
          */
-        usdt2KokonRate: string;
+        usdt2PCoinRate: string;
+        /**
+         * 最大賣出平台幣數量
+         * @format uint64
+         */
+        withdrawPCoinMaximum: number;
+        /**
+         * 最小賣出平台幣數量
+         * @format uint64
+         */
+        withdrawPCoinMinimum: number;
         /**
          * USDT轉換匯率
          * @format decimal
@@ -246,16 +256,6 @@ export class Wallet<SecurityDataType = unknown> {
         withdrawRate: string;
         /** 賣出快捷設定 */
         withdrawSpeedAmount: number[];
-        /**
-         * 最大賣出平台幣數量
-         * @format uint64
-         */
-        withdraw_p_coin_maximum: number;
-        /**
-         * 最小賣出平台幣數量
-         * @format uint64
-         */
-        withdraw_p_coin_minimum: number;
       },
       any
     >({
