@@ -92,6 +92,7 @@ const CasualGame: React.FC = () => {
           src={gameUrl}
           title="Game"
           className="absolute inset-0 h-full w-full rounded-xl border-none bg-black object-contain"
+          allowFullScreen
         />
       ) : (
         <p className="text-center text-white">{t('NoGameURLProvided')}</p>
