@@ -249,8 +249,8 @@ export interface CreateResponse {
 export interface CustomerWalletChangeGetRequest {
   /** 收支 Income Expense. Allowed Enum */
   Balance?: "Income" | "Expense";
-  /** 幣種 TON USDT KOKON. Allowed Enum */
-  Currency?: "TON" | "USDT" | "KOKON";
+  /** 幣種 TON USDT 平台幣 */
+  Currency?: string;
   /**
    * 頁碼
    * @format int64
@@ -546,17 +546,6 @@ export interface GetGameSettingResponse {
   withdrawWaterRate: number;
 }
 
-export interface GetKokonWalletBalanceResponse {
-  /** 餘額 */
-  balance: string;
-  /** 幣種 */
-  currency: string;
-  /** KOKON餘額 */
-  kokonBalance: string;
-}
-
-export type GetKokonWalletRequest = object;
-
 export type GetLogoRequest = object;
 
 export interface GetLogoResponse {
@@ -579,17 +568,18 @@ export interface GetMaintenanceResponse {
   startTime?: string | null;
 }
 
+export interface GetPCoinWalletBalanceResponse {
+  /** 餘額 */
+  balance: string;
+  /** 幣種 */
+  currency: string;
+  /** 平台幣餘額 */
+  pCoinBalance: string;
+}
+
+export type GetPCoinWalletRequest = object;
+
 export interface GetRateResponse {
-  /**
-   * 最大買入KOKON數量
-   * @format uint64
-   */
-  depositKokonMaximum: number;
-  /**
-   * 最小買入KOKON數量
-   * @format uint64
-   */
-  depositKokonMinimum: number;
   /**
    * 轉USDT匯率
    * @format decimal
@@ -598,20 +588,20 @@ export interface GetRateResponse {
   /** 買入快捷設定 */
   depositSpeedAmount: number[];
   /**
+   * 最大買入平台幣數量
+   * @format uint64
+   */
+  deposit_p_coin_maximum: number;
+  /**
+   * 最小買入平台幣數量
+   * @format uint64
+   */
+  deposit_p_coin_minimum: number;
+  /**
    * USDT轉KOKON匯率
    * @format decimal
    */
   usdt2KokonRate: string;
-  /**
-   * 最大賣出KOKON數量
-   * @format uint64
-   */
-  withdrawKokonMaximum: number;
-  /**
-   * 最小賣出KOKON數量
-   * @format uint64
-   */
-  withdrawKokonMinimum: number;
   /**
    * USDT轉換匯率
    * @format decimal
@@ -619,6 +609,16 @@ export interface GetRateResponse {
   withdrawRate: string;
   /** 賣出快捷設定 */
   withdrawSpeedAmount: number[];
+  /**
+   * 最大賣出平台幣數量
+   * @format uint64
+   */
+  withdraw_p_coin_maximum: number;
+  /**
+   * 最小賣出平台幣數量
+   * @format uint64
+   */
+  withdraw_p_coin_minimum: number;
 }
 
 export type GetSettingRequest = object;
@@ -947,8 +947,8 @@ export interface ListGameTransactionResponse {
   records?: ({
     /** 投注金額 */
     betGold: string;
-    /** 投注金額(KOKON) */
-    betGoldKokon: string;
+    /** 投注金額(平台幣) */
+    betGoldPCoin: string;
     /**
      * 投注時間
      * @format date-time
@@ -963,19 +963,19 @@ export interface ListGameTransactionResponse {
     transactionId: string;
     /** 派彩金額 */
     winGold: string;
-    /** 派彩金額(KOKON) */
-    winGoldKokon: string;
+    /** 派彩金額(平台幣) */
+    winGoldPCoin: string;
   } | null)[];
   /** 統計 */
   summary?: {
     /** 總投注金額 */
     totalBetGold: string;
-    /** 總投注金額(KOKON) */
-    totalBetGoldKokon: string;
+    /** 總投注金額(平台幣) */
+    totalBetGoldPCoin: string;
     /** 總派彩金額 */
     totalWinGold: string;
-    /** 總派彩金額(KOKON) */
-    totalWinGoldKokon: string;
+    /** 總派彩金額(平台幣) */
+    totalWinGoldPCoin: string;
   };
 }
 
@@ -1393,8 +1393,8 @@ export interface TaskQueryResponse {
     rewardAmountLimit?: string | null;
     /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
     rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
-    /** 獎勵類型. Allowed Enum */
-    rewardType: "USDT" | "TON" | "KOKON" | "HAMMER" | "TREASURE";
+    /** 獎勵類型 */
+    rewardType: string;
     /**
      * 開始時間
      * @format date-time
@@ -1480,8 +1480,8 @@ export interface TaskQueryResponse {
        * @format decimal
        */
       minAmount?: string | null;
-      /** 獎勵類型. Allowed Enum */
-      rewardType: "USDT" | "TON" | "KOKON";
+      /** 獎勵類型 */
+      rewardType: string;
     };
   }[];
   /** 一次性任務列表 */
@@ -1565,8 +1565,8 @@ export interface TaskQueryResponse {
     rewardAmountLimit?: string | null;
     /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
     rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
-    /** 獎勵類型. Allowed Enum */
-    rewardType: "USDT" | "TON" | "KOKON" | "HAMMER" | "TREASURE";
+    /** 獎勵類型 */
+    rewardType: string;
     /**
      * 開始時間
      * @format date-time
@@ -1652,8 +1652,8 @@ export interface TaskQueryResponse {
        * @format decimal
        */
       minAmount?: string | null;
-      /** 獎勵類型. Allowed Enum */
-      rewardType: "USDT" | "TON" | "KOKON";
+      /** 獎勵類型 */
+      rewardType: string;
     };
   }[];
   /** 特殊任務列表 */
@@ -1737,8 +1737,8 @@ export interface TaskQueryResponse {
     rewardAmountLimit?: string | null;
     /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
     rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
-    /** 獎勵類型. Allowed Enum */
-    rewardType: "USDT" | "TON" | "KOKON" | "HAMMER" | "TREASURE";
+    /** 獎勵類型 */
+    rewardType: string;
     /**
      * 開始時間
      * @format date-time
@@ -1824,8 +1824,8 @@ export interface TaskQueryResponse {
        * @format decimal
        */
       minAmount?: string | null;
-      /** 獎勵類型. Allowed Enum */
-      rewardType: "USDT" | "TON" | "KOKON";
+      /** 獎勵類型 */
+      rewardType: string;
     };
   }[];
 }
@@ -1960,8 +1960,8 @@ export interface TransferBalanceRequest {
    * @format decimal
    */
   amount: string;
-  /** 轉帳幣別. Allowed Enum */
-  currency: "TON" | "USDT" | "KOKON";
+  /** 轉帳幣別 */
+  currency: string;
   /** 轉帳類型:IN:買入 OUT:賣出. Allowed Enum */
   type: "IN" | "OUT";
 }
@@ -2294,13 +2294,13 @@ export interface GameTransactionsListParams {
   /** @format uint64 */
   gameId?: number;
   /**
-   * 分頁頁數 (Required, Minimum: 1)
+   * 分頁頁數 (Minimum: 1, Required)
    * @format int64
    * @min 1
    */
   page: number;
   /**
-   * 分頁筆數 (Required, Minimum: 20)
+   * 分頁筆數 (Minimum: 20, Required)
    * @format int64
    * @min 20
    */
@@ -2439,8 +2439,8 @@ export interface WalletHistoryListListParams {
    * @format date-time
    */
   transactionTimeTo?: string;
-  /** 幣種 TON USDT KOKON (Allowed values: TON, USDT, KOKON) */
-  currency?: "TON" | "USDT" | "KOKON";
+  /** 幣種 TON USDT 平台幣 */
+  currency?: string;
   /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw (Allowed values: Adjustment, Bet, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw) */
   type?:
     | "Adjustment"
@@ -2478,8 +2478,8 @@ export interface WalletTransferCreatePayload {
    * @format decimal
    */
   amount: string;
-  /** 轉帳幣別. Allowed Enum */
-  currency: "TON" | "USDT" | "KOKON";
+  /** 轉帳幣別 */
+  currency: string;
   /** 轉帳類型:IN:買入 OUT:賣出. Allowed Enum */
   type: "IN" | "OUT";
 }

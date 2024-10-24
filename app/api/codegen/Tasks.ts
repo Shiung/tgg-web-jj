@@ -109,8 +109,8 @@ export class Tasks<SecurityDataType = unknown> {
           rewardAmountLimit?: string | null;
           /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
           rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
-          /** 獎勵類型. Allowed Enum */
-          rewardType: "USDT" | "TON" | "KOKON" | "HAMMER" | "TREASURE";
+          /** 獎勵類型 */
+          rewardType: string;
           /**
            * 開始時間
            * @format date-time
@@ -196,8 +196,8 @@ export class Tasks<SecurityDataType = unknown> {
              * @format decimal
              */
             minAmount?: string | null;
-            /** 獎勵類型. Allowed Enum */
-            rewardType: "USDT" | "TON" | "KOKON";
+            /** 獎勵類型 */
+            rewardType: string;
           };
         }[];
         /** 一次性任務列表 */
@@ -281,8 +281,8 @@ export class Tasks<SecurityDataType = unknown> {
           rewardAmountLimit?: string | null;
           /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
           rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
-          /** 獎勵類型. Allowed Enum */
-          rewardType: "USDT" | "TON" | "KOKON" | "HAMMER" | "TREASURE";
+          /** 獎勵類型 */
+          rewardType: string;
           /**
            * 開始時間
            * @format date-time
@@ -368,8 +368,8 @@ export class Tasks<SecurityDataType = unknown> {
              * @format decimal
              */
             minAmount?: string | null;
-            /** 獎勵類型. Allowed Enum */
-            rewardType: "USDT" | "TON" | "KOKON";
+            /** 獎勵類型 */
+            rewardType: string;
           };
         }[];
         /** 特殊任務列表 */
@@ -453,8 +453,8 @@ export class Tasks<SecurityDataType = unknown> {
           rewardAmountLimit?: string | null;
           /** 任務領取狀態, INELIGIBLE: 不符合領取條件, WAITING_CLAIM: 可領取, CLAIMED: 已領取. Allowed Enum */
           rewardClaimStatus: "INELIGIBLE" | "WAITING_CLAIM" | "CLAIMED";
-          /** 獎勵類型. Allowed Enum */
-          rewardType: "USDT" | "TON" | "KOKON" | "HAMMER" | "TREASURE";
+          /** 獎勵類型 */
+          rewardType: string;
           /**
            * 開始時間
            * @format date-time
@@ -540,8 +540,8 @@ export class Tasks<SecurityDataType = unknown> {
              * @format decimal
              */
             minAmount?: string | null;
-            /** 獎勵類型. Allowed Enum */
-            rewardType: "USDT" | "TON" | "KOKON";
+            /** 獎勵類型 */
+            rewardType: string;
           };
         }[];
       },

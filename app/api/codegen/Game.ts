@@ -128,8 +128,8 @@ export class Game<SecurityDataType = unknown> {
         records?: ({
           /** 投注金額 */
           betGold: string;
-          /** 投注金額(KOKON) */
-          betGoldKokon: string;
+          /** 投注金額(平台幣) */
+          betGoldPCoin: string;
           /**
            * 投注時間
            * @format date-time
@@ -144,19 +144,19 @@ export class Game<SecurityDataType = unknown> {
           transactionId: string;
           /** 派彩金額 */
           winGold: string;
-          /** 派彩金額(KOKON) */
-          winGoldKokon: string;
+          /** 派彩金額(平台幣) */
+          winGoldPCoin: string;
         } | null)[];
         /** 統計 */
         summary?: {
           /** 總投注金額 */
           totalBetGold: string;
-          /** 總投注金額(KOKON) */
-          totalBetGoldKokon: string;
+          /** 總投注金額(平台幣) */
+          totalBetGoldPCoin: string;
           /** 總派彩金額 */
           totalWinGold: string;
-          /** 總派彩金額(KOKON) */
-          totalWinGoldKokon: string;
+          /** 總派彩金額(平台幣) */
+          totalWinGoldPCoin: string;
         };
       },
       any
@@ -180,8 +180,8 @@ export class Game<SecurityDataType = unknown> {
         balance: string;
         /** 幣種 */
         currency: string;
-        /** KOKON餘額 */
-        kokonBalance: string;
+        /** 平台幣餘額 */
+        pCoinBalance: string;
       },
       any
     >({
