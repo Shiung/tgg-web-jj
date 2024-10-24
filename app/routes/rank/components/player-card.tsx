@@ -1,10 +1,10 @@
 import React, { useMemo, useRef, useEffect, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import { Truncate } from '@re-dev/react-truncate'
 import { Crypto, cryptoDetails } from '~/consts/crypto'
 import Icons from '~/icons'
 import { cn } from '~/lib/utils'
-
 import Amount from '~/components/amount'
-import { Trans, useTranslation } from 'react-i18next'
 
 type Props = {
   type: 'crypto' | 'share'
@@ -72,7 +72,7 @@ const Layout = ({
         )}
         style={fixedStyle}
       >
-        <div className="relative w-9">{slot_first}</div>
+        <div className="relative w-9 flex-shrink-0">{slot_first}</div>
         <div className="flex-1 space-y-1">{slot_second}</div>
         <div className="flex min-w-[100px] items-center justify-end space-x-1">{slot_third}</div>
       </div>
@@ -118,6 +118,7 @@ const Title: React.FC<Pick<Props, 'rewardLock' | 'type'>> = ({ rewardLock = fals
 const PlayerCard: React.FC<Props> & {
   Title: typeof Title
 } = ({ currency, rank, name, reward, scoreCount, type, isSelf = false, rewardLock = false }) => {
+  const { t } = useTranslation()
   const currencyIcon = useMemo(() => currency && cryptoDetails?.[currency], [currency])
 
   return (
@@ -132,7 +133,9 @@ const PlayerCard: React.FC<Props> & {
       }
       slot_second={
         <>
-          <div className="text-sm font-ultra">{isSelf ? 'Me' : name}</div>
+          <div className="whitespace-nowrap text-sm font-ultra">
+            <Truncate>{isSelf ? t('Me') : name}</Truncate>
+          </div>
           <div className="flex items-center space-x-1 text-xs text-white/70">
             {type === 'crypto' && <Icons.BetIcon className="h-3 w-3" />}
             {type === 'share' && <Icons.CatIcon className="h-3 w-3" />}
@@ -158,7 +161,7 @@ const PlayerCard: React.FC<Props> & {
         ) : (
           <>
             {currencyIcon?.icon && <currencyIcon.icon className="h-4 w-4" />}
-            <span>
+            <span className="font-ultra">
               <Amount value={reward} crypto={currency} />
             </span>
           </>
