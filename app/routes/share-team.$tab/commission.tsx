@@ -154,7 +154,6 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
   }, [commissionListData])
 
   const latestSummary = useMemo(() => {
-    if (!displayName && !Number(selectedLevel)) return null
     if (!commissionListData?.pages) return null
     for (let i = commissionListData.pages.length - 1; i >= 0; i--) {
       const page = commissionListData.pages[i].data
@@ -163,7 +162,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
       }
     }
     return null
-  }, [commissionListData?.pages, displayName, selectedLevel])
+  }, [commissionListData?.pages])
 
   // 回到顶部
   const [topRef, istopflagVisible, scrollToTop] = useIntersectionObserver<HTMLDivElement>()

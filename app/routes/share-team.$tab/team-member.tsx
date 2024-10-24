@@ -187,13 +187,6 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
 
   // 獲取最新的匯總數據
   const latestSummary = useMemo(() => {
-    if (
-      !selectedDisplayName &&
-      !selectedSort.sortOrder &&
-      !selectedSort.sortField &&
-      !Number(selectedLevel)
-    )
-      return null
     if (!teamPerformanceListData?.pages) return null
     for (let i = teamPerformanceListData.pages.length - 1; i >= 0; i--) {
       const page = teamPerformanceListData.pages[i].data
@@ -202,7 +195,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
       }
     }
     return null
-  }, [teamPerformanceListData?.pages, selectedDisplayName, selectedLevel, selectedSort])
+  }, [teamPerformanceListData?.pages])
 
   // 回到顶部
   const [topRef, istopflagVisible, scrollToTop] = useIntersectionObserver<HTMLDivElement>()
