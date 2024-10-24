@@ -43,11 +43,21 @@ const MainNav: React.FC = () => {
 
   const isActive = useCallback(
     (href: (typeof links)[number]['href']) => {
-      return href === '/' ? activeLink === href : activeLink.startsWith(href)
+      if (href === '/') {
+        return activeLink === href
+      }
+      const activePath = activeLink.split('/')[1]
+      const hrefPath = href.split('/')[1]
+
+      // share 相關路徑特殊處理
+      if (href.startsWith('/share')) {
+        return activePath.startsWith('share')
+      }
+
+      return activePath === hrefPath
     },
     [activeLink]
   )
-
   const handleClick = useCallback(
     (href: string) => {
       setActiveLink(href)
