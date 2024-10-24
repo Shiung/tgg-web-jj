@@ -34,15 +34,20 @@ const LevelupDialog: React.FC<LevelupDialogProps> = ({ isOpen, onClose, finalCla
       apis.customer.customerUpgradeAnimationDelete({ finalClass }),
   })
 
+  const handleOpenChange = (open: boolean) => {
+    // 只允許按下 Close 按鈕時關閉
+    if (!open) return
+  }
+
   const handleOK = useCallback(() => {
     mutate(finalClass)
     onClose()
-  }, [mutate, finalClass, onClose])
+  }, [finalClass, mutate, onClose])
 
   if (!finalClass) return null
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent defaultClose={false} className="bg-transparent">
         <div className="relative flex flex-col items-center justify-center text-center text-lg font-ultra">
           <div>{t('Congratulations')},</div>
