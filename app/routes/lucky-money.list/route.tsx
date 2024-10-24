@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { Link, useNavigate } from '@remix-run/react'
+import { Link, useNavigate, useOutletContext } from '@remix-run/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import qs from 'qs'
@@ -12,6 +12,7 @@ import LoadingIcon from '~/icons/loading.svg?react'
 import LuckyMoneyItem from './lucky-money-item'
 import SwitchTab from '../lucky-money/switch-tab'
 import { ListSkeleton } from './skeleton'
+import { OutletProps } from '../lucky-money/route'
 
 const QUERY_STATE = [1]
 
@@ -28,6 +29,8 @@ export const EmptyList = () => {
 export default function LuckyMoneyList() {
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const { isFirstLoad, setIsFirstLoad } = useOutletContext<OutletProps>()
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, isFetched } =
     useInfiniteQuery({
       queryKey: ['packetsList', QUERY_STATE],
@@ -60,10 +63,12 @@ export default function LuckyMoneyList() {
   const list = useMemo(() => data?.pages.flatMap(page => page.list) ?? [], [data?.pages])
 
   useEffect(() => {
-    if (isFetched && !list.length) {
+    if (!isFetched) return
+    if (isFirstLoad && !list.length) {
       navigate('/lucky-money/share')
     }
-  }, [isFetched, list.length, navigate])
+    setIsFirstLoad(false)
+  }, [isFetched, isFirstLoad, list.length, navigate, setIsFirstLoad])
 
   return (
     <div className="-mt-4 flex w-full flex-1 flex-col items-stretch justify-between rounded-[12px] bg-black p-4">

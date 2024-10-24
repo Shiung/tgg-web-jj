@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Outlet, Link } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
 
@@ -6,9 +6,15 @@ import useStore from '~/stores/useStore'
 import X from '~/icons/x.svg?react'
 import { Button } from '~/components/ui/button'
 
+export type OutletProps = {
+  isFirstLoad: boolean
+  setIsFirstLoad: (value: boolean) => void
+}
+
 export default function LuckyMoney() {
   const { t } = useTranslation()
   const setNavVisibility = useStore(state => state.setNavVisibility)
+  const [isFirstLoad, setIsFirstLoad] = useState(true)
 
   useEffect(() => {
     setNavVisibility(false)
@@ -41,7 +47,7 @@ export default function LuckyMoney() {
           </div>
         </div>
       </div>
-      <Outlet />
+      <Outlet context={{ isFirstLoad, setIsFirstLoad }} />
     </div>
   )
 }
