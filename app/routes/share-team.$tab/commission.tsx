@@ -97,7 +97,10 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
     defaultValues: {
       displayName: '',
       level: '0',
-      dateTimeRange: { from: startOfDay(new Date()), to: endOfDay(new Date()) },
+      dateTimeRange: {
+        from: startOfDay(subDays(new Date(), 29)),
+        to: endOfDay(new Date()),
+      },
       page: 1,
       pageSize: 20,
     },
