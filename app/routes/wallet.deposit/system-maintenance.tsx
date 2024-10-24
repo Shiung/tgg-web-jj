@@ -1,8 +1,11 @@
 import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
+import { useCustomSupport } from '~/hooks/useCustomSupport'
 
 const SystemMaintenance: React.FC = () => {
   const { t } = useTranslation()
+  const { handleCustomSupport } = useCustomSupport()
+
   return (
     <div className="flex aspect-square flex-col items-stretch justify-center space-y-2 p-4">
       <img
@@ -14,7 +17,9 @@ const SystemMaintenance: React.FC = () => {
         <p className="text-base font-ultra text-white">{t('SystemMaintenance')}</p>
         <p className="text-xs font-normal text-white/70">{t('SystemMaintenanceContent')}</p>
       </div>
-      <Button catEars>{t('ContactSupport')}</Button>
+      <Button catEars onClick={handleCustomSupport}>
+        {t('ContactSupport')}
+      </Button>
     </div>
   )
 }

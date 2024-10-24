@@ -1,12 +1,14 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
+import { useCustomSupport } from '~/hooks/useCustomSupport'
 import useStore from '~/stores/useStore'
 
 export default function Maintenance() {
   const { t } = useTranslation()
   const setHeaderVisibility = useStore(state => state.setHeaderVisibility)
   const setNavVisibility = useStore(state => state.setNavVisibility)
+  const { handleCustomSupport } = useCustomSupport()
 
   useEffect(() => {
     setNavVisibility(false)
@@ -31,7 +33,7 @@ export default function Maintenance() {
         {t('MaintenanceDescription')}
       </span>
       <div className="px-4">
-        <Button className="w-full" catEars>
+        <Button className="w-full" catEars onClick={handleCustomSupport}>
           {t('ContactSupport')}
         </Button>
       </div>
