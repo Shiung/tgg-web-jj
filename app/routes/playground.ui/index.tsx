@@ -261,38 +261,38 @@ export default function Ui() {
       {/* Amount */}
       <h1 className="mt-4 text-xl font-bold">Amount</h1>
       <div className="flex flex-col space-y-1">
-        <h3>USDT</h3>
+        <h3 className="font-ultra">USDT Test Case</h3>
         <p>
           {`123456789.12300000 ->`}
           <Amount value={'123456789.12300000'} crypto="USDT" />
         </p>
-        <h3>TON</h3>
+        <h3 className="font-ultra">TON Test Case</h3>
         <p>
-          {`123456.123456789 ->`} <Amount value={'123456.123456789'} crypto="TON" />
+          {`123456.123456789 ->`} <Amount value={'123456.123456789'} crypto="TON" /> <br />
+          {`-0.000000004 ->`} <Amount value="-0.000000004" crypto="TON" /> <br />
+          {`0.000000003 ->`} <Amount value="0.000000003" crypto="TON" /> <br />
+          {`0.000000001 ->`} <Amount value="0.000000001" crypto="TON" /> <br />
+          {`-0.000234593450001 ->`} <Amount value="-0.000234593450001" crypto="TON" /> <br />
+          {`00123455.00300000 ->`} <Amount value="00123455.00300000" crypto="TON" /> <br />
+          {`-0.176349202 ->`} <Amount value="-0.176349202" crypto="TON" /> <br />
+          {`1.75613299 ->`} <Amount value="1.75613299" crypto="TON" /> <br />
+          {`-0.176344688999 ->`} <Amount value="-0.176344688999" crypto="TON" /> <br />
+          {`0.2057676117 ->`} <Amount value="0.2057676117" crypto="TON" /> <br />
         </p>
-        <h3>KOKON</h3>
-        <p>
-          {`123 ->`} <Amount value={'123'} useKM crypto="KOKON" />
-        </p>
-        <p>
-          {`1000 ->`} <Amount value={'1000'} useKM crypto="KOKON" />
-        </p>
-        <p>
-          {`12345 ->`} <Amount value={'12345'} useKM crypto="KOKON" />
-        </p>
-        <p>
-          {`1000001 ->`} <Amount value={'1000001'} useKM crypto="KOKON" />
-        </p>
-        <p>
-          {`1234567890 ->`} <Amount value={'1234567890'} useKM crypto="KOKON" />
-        </p>
+        <h3 className="font-ultra">KOKON Test Case</h3>
         <p>
           {`1234 ->`} <Amount value={'1234'} useKM crypto="KOKON" /> <br />
           {`12345 ->`} <Amount value={'12345'} useKM crypto="KOKON" /> <br />
-          {`123456789 ->`} <Amount value={'123456789'} useKM crypto="KOKON" />
-        </p>
-        <p>
-          {`123456789012345678 ->`} <Amount value={'123456789012345678'} crypto="KOKON" />
+          {`123456789 ->`} <Amount value={'123456789'} useKM crypto="KOKON" /> <br />
+          {`123456789012345678 ->`} <Amount value={'123456789012345678'} crypto="KOKON" /> <br />
+          {`12345678901234567893123123 ->`}{' '}
+          <Amount value={'123456789012345678'} useKM crypto="KOKON" />
+          <br />
+          {`12345 ->`} <Amount value={'12345'} crypto="KOKON" /> <br />
+          {`1234 ->`} <Amount value={'1234'} crypto="KOKON" /> <br />
+          {`1234.001 ->`} <Amount value={'1234.001'} useKM crypto="KOKON" /> <br />
+          {`123456.301 ->`} <Amount value={'123456.301'} useKM crypto="KOKON" /> <br />
+          {`123456.991 ->`} <Amount value={'123456.991'} useKM crypto="KOKON" /> <br />
         </p>
       </div>
       {/* Truncate */}

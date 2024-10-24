@@ -86,10 +86,12 @@ export const formatAmount = (
 
   const _value = new BigNumber(value || 0)
 
-  const formatted =
-    removeTrailingZeros && maxDec > 0
-      ? _value.decimalPlaces(maxDec, BigNumber.ROUND_DOWN).toString() // 使用 ROUND_DOWN 來避免四捨五入
-      : _value.toFixed(maxDec, BigNumber.ROUND_DOWN) // 保留所有小數位且不進行四捨五入
+  let formatted: string
+  formatted = _value.toFixed(maxDec, BigNumber.ROUND_DOWN)
+
+  if (removeTrailingZeros && maxDec > 0) {
+    formatted = formatted.replace(/\.?0+$/, '')
+  }
 
   const [intPart, decPart] = formatted.split('.')
   const truncatedIntPart = intPart.length > maxInt ? intPart.slice(0, maxInt) : intPart

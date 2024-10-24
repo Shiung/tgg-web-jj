@@ -61,7 +61,6 @@ const RewardDialog: React.FC<RewardDialogProps> = ({
                   {treasureSetting?.distributionMethod === 'FIXED' && (
                     <Amount
                       value={parseAmount(treasureSetting?.fixedAmount ?? 0)}
-                      thousandSeparator
                       crypto={treasureSetting?.rewardType}
                     />
                   )}
@@ -69,13 +68,11 @@ const RewardDialog: React.FC<RewardDialogProps> = ({
                     <div className="flex items-center space-x-1 text-xs font-ultra">
                       <Amount
                         value={parseAmount(treasureSetting?.minAmount ?? 0)}
-                        thousandSeparator
                         crypto={treasureSetting?.rewardType}
                       />
                       <span>~</span>
                       <Amount
                         value={parseAmount(treasureSetting?.maxAmount ?? 0)}
-                        thousandSeparator
                         crypto={treasureSetting?.rewardType}
                       />
                     </div>

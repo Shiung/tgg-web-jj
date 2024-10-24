@@ -51,7 +51,7 @@ const UnitCard: React.FC<WPunitCard> & { Skeleton: React.FunctionComponent } = p
       header={
         <>
           <props.icon className="h-4 w-4" />
-          <Amount value={props.applyAmount} crypto={props.currency} thousandSeparator />
+          <Amount value={props.applyAmount} crypto={props.currency} />
         </>
       }
       contentSubmissionTime={format(props.submissionTime, 'MM-dd HH:mm')}
