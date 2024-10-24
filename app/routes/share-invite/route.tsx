@@ -144,17 +144,18 @@ const ShareInvite: React.FC = () => {
 
   // 檢查是否要跳升級動畫
   const [showLevelup, setShowLevelup] = useState(false)
-  // apis.customer.customerUpgradeAnimationList
   const { data: upgradeAnimationList } = useQuery({
     queryKey: ['customerUpgradeAnimationList'],
     queryFn: () => apis.customer.customerUpgradeAnimationList(),
+    gcTime: 0, // 避免快取
     retry: false,
   })
+
   useEffect(() => {
     if (upgradeAnimationList?.data?.shouldPlayUpgradeAnimation) {
       setShowLevelup(true)
     }
-  }, [upgradeAnimationList])
+  }, [upgradeAnimationList?.data?.shouldPlayUpgradeAnimation])
 
   return (
     <div className="container flex flex-1 flex-col p-0">

@@ -187,13 +187,6 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
 
   // 獲取最新的匯總數據
   const latestSummary = useMemo(() => {
-    if (
-      !selectedDisplayName &&
-      !selectedSort.sortOrder &&
-      !selectedSort.sortField &&
-      !Number(selectedLevel)
-    )
-      return null
     if (!teamPerformanceListData?.pages) return null
     for (let i = teamPerformanceListData.pages.length - 1; i >= 0; i--) {
       const page = teamPerformanceListData.pages[i].data
@@ -202,7 +195,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
       }
     }
     return null
-  }, [teamPerformanceListData?.pages, selectedDisplayName, selectedLevel, selectedSort])
+  }, [teamPerformanceListData?.pages])
 
   // 回到顶部
   const [topRef, istopflagVisible, scrollToTop] = useIntersectionObserver<HTMLDivElement>()
@@ -441,6 +434,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
                   <LoadingIcon className="h-6 w-6 animate-spin" />
                 </div>
               )}
+              <div className="h-10" />
             </InfiniteScroll>
           </>
         ) : (
@@ -465,7 +459,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
           >
             <div className="flex flex-1 flex-col items-center justify-center space-y-1">
               <div className="text-xs text-[#FFFFFFB2]">{t('Member')}</div>
-              <div className="text-xs font-ultra">{latestSummary.teamSize}</div>
+              <div className="text-xs font-ultra">{latestSummary?.teamSize || '-'}</div>
             </div>
             <div className="flex flex-1 flex-col items-center justify-center space-y-1">
               <div className="text-xs text-[#FFFFFFB2]">{t('Bets')}</div>
@@ -473,7 +467,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
                 <UsdtIcon className="h-3 w-3" />
                 <Amount
                   className="text-xs font-ultra"
-                  value={parseAmount(latestSummary.totalBets)}
+                  value={parseAmount(latestSummary?.totalBets)}
                   customMaxInt={7}
                   customMaxDec={6}
                   crypto={Crypto.USDT}
@@ -486,7 +480,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
                 <UsdtIcon className="h-3 w-3" />
                 <Amount
                   className="text-xs font-ultra"
-                  value={parseAmount(latestSummary.totalDeposit)}
+                  value={parseAmount(latestSummary?.totalDeposit)}
                   customMaxInt={7}
                   customMaxDec={6}
                   crypto={Crypto.USDT}

@@ -97,7 +97,10 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
     defaultValues: {
       displayName: '',
       level: '0',
-      dateTimeRange: { from: startOfDay(new Date()), to: endOfDay(new Date()) },
+      dateTimeRange: {
+        from: startOfDay(subDays(new Date(), 29)),
+        to: endOfDay(new Date()),
+      },
       page: 1,
       pageSize: 20,
     },
@@ -154,7 +157,6 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
   }, [commissionListData])
 
   const latestSummary = useMemo(() => {
-    if (!displayName && !Number(selectedLevel)) return null
     if (!commissionListData?.pages) return null
     for (let i = commissionListData.pages.length - 1; i >= 0; i--) {
       const page = commissionListData.pages[i].data
@@ -163,7 +165,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
       }
     }
     return null
-  }, [commissionListData?.pages, displayName, selectedLevel])
+  }, [commissionListData?.pages])
 
   // 回到顶部
   const [topRef, istopflagVisible, scrollToTop] = useIntersectionObserver<HTMLDivElement>()
@@ -397,6 +399,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
                   <LoadingIcon className="h-6 w-6 animate-spin" />
                 </div>
               )}
+              <div className="h-10" />
             </InfiniteScroll>
           </>
         ) : (
@@ -419,7 +422,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
         >
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
             <div className="text-xs text-[#FFFFFFB2]">{t('Total')}</div>
-            <div className="text-xs font-ultra">{latestSummary.totalCount}</div>
+            <div className="text-xs font-ultra">{latestSummary?.totalCount || '-'}</div>
           </div>
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
             <div className="text-xs text-[#FFFFFFB2]">{t('Bets')}</div>
@@ -427,7 +430,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
               <UsdtIcon className="h-3 w-3" />
               <Amount
                 className="text-xs font-ultra"
-                value={parseAmount(latestSummary.totalBet)}
+                value={parseAmount(latestSummary?.totalBet)}
                 crypto="USDT"
               />
             </div>
@@ -438,7 +441,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
               <KatonIcon className="h-3 w-3" />
               <Amount
                 className="text-xs font-ultra"
-                value={parseAmount(latestSummary.totalCommission)}
+                value={parseAmount(latestSummary?.totalCommission)}
                 crypto="KATON"
               />
             </div>
