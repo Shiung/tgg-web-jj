@@ -67,7 +67,7 @@ const CurrencyConversionDialog: React.FC<CurrencyConversionDialogProps> = ({
                 <Skeleton className="h-4 w-14" />
               ) : (
                 <Amount
-                  value={gameWalletData?.data.kokonBalance}
+                  value={gameWalletData?.data.pCoinBalance}
                   crypto="KATON"
                   className="text-lg font-ultra"
                 />
