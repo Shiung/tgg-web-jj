@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { format, parseISO } from 'date-fns'
 import { useTranslation } from 'react-i18next'
-import { CheckIcon, WaitingIcon, UsdtIcon, KokonIcon } from '~/components/color-icons'
+import { CheckIcon, WaitingIcon, UsdtIcon, KatonIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
 
 interface CommissionItem {
@@ -65,7 +65,7 @@ const CommissionTableList: React.FC<CommissionTableListProps> = ({ data }) => {
                   </th>
                   <th className="text-right">
                     <div className="flex items-center justify-end">
-                      <KokonIcon className="mr-1 h-3 w-3" />
+                      <KatonIcon className="mr-1 h-3 w-3" />
                       <div>{t('Commission')}</div>
                     </div>
                   </th>
@@ -88,7 +88,7 @@ const CommissionTableList: React.FC<CommissionTableListProps> = ({ data }) => {
                       <Amount value={row.betAmount} crypto="USDT" />
                     </td>
                     <td className="text-right">
-                      <Amount value={row.commissionAmount} crypto="KOKON" />
+                      <Amount value={row.commissionAmount} crypto="KATON" />
                     </td>
                     <td className="text-right align-middle">
                       <SendStatusIcon sendStatus={row.sendStatus} />

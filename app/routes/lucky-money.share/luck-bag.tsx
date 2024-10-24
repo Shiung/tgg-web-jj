@@ -79,11 +79,11 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 getInputRef={ref}
                 customInput={Input}
                 allowNegative={false}
-                decimalScale={cryptoRules.KOKON.maxDec}
+                decimalScale={cryptoRules.KATON.maxDec}
                 isAllowed={({ floatValue }) => {
                   if (floatValue === undefined || floatValue === null) return true
                   // 整數部分位數限制
-                  const maxIntegerLength = cryptoRules.KOKON.maxInt
+                  const maxIntegerLength = cryptoRules.KATON.maxInt
                   const integerPart = String(floatValue).split('.')[0]
                   return integerPart.length <= maxIntegerLength
                 }}
@@ -96,7 +96,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 placeholder={t('PleaseEnter')}
                 onValueChange={({ floatValue }) => onChange(floatValue)}
                 className="h-9"
-                fieldSuffix={Crypto.KOKON}
+                fieldSuffix={Crypto.KATON}
                 error={errors.quota?.message}
                 clearable
                 onClear={() => setValue('quota', 0, { shouldValidate: true })}
@@ -114,7 +114,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 className="h-7 flex-1"
                 onClick={() => setValue('quota', +amount, { shouldValidate: true })}
               >
-                <Amount value={amount} crypto={Crypto.KOKON} />
+                <Amount value={amount} crypto={Crypto.KATON} />
               </Button>
             ))
           ) : (
@@ -140,7 +140,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 getInputRef={ref}
                 customInput={Input}
                 allowNegative={false}
-                decimalScale={cryptoRules.KOKON.maxDec}
+                decimalScale={cryptoRules.KATON.maxDec}
                 thousandSeparator
                 type="text"
                 inputMode="decimal"
@@ -157,7 +157,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 }}
                 onBlur={handleMinValueBlur}
                 className="h-9 flex-1"
-                fieldSuffix={Crypto.KOKON}
+                fieldSuffix={Crypto.KATON}
               />
             )
           }}
@@ -176,7 +176,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 getInputRef={ref}
                 customInput={Input}
                 allowNegative={false}
-                decimalScale={cryptoRules.KOKON.maxDec}
+                decimalScale={cryptoRules.KATON.maxDec}
                 thousandSeparator
                 type="text"
                 inputMode="decimal"
@@ -188,7 +188,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 }}
                 onBlur={handleMaxValueBlur}
                 className="h-9 flex-1"
-                fieldSuffix={Crypto.KOKON}
+                fieldSuffix={Crypto.KATON}
               />
             )
           }}

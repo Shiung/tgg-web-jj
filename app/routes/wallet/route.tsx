@@ -45,7 +45,7 @@ export default function Wallet() {
     () =>
       (data?.data.wallets || []).map<UserWalletItem>(wallet => ({
         ...wallet,
-        icon: cryptoDetails[wallet.currency as CryptoUnion].icon,
+        icon: cryptoDetails[wallet.currency as CryptoUnion]?.icon,
       })),
     [data?.data.wallets]
   )
@@ -191,7 +191,7 @@ export default function Wallet() {
                     className="flex items-center justify-between rounded-lg bg-[#1C1C1C] px-3 py-2 font-ultra"
                   >
                     <div className="flex items-center space-x-1">
-                      <wallet.icon className="h-6 w-6" />
+                      {wallet.icon && <wallet.icon className="h-6 w-6" />}
                       <div className="flex flex-col space-y-[2px]">
                         <p className="text-xs">{wallet.currency}</p>
                         <Amount

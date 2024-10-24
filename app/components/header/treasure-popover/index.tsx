@@ -199,7 +199,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                               className="text-xs font-ultra -tracking-[1px]"
                               value={treasure?.rewardAmount}
                               crypto={treasure?.rewardType}
-                              useKM={treasure?.rewardType === 'KOKON'}
+                              useKM={treasure?.rewardType === 'KATON'}
                             />
                           </div>
                         </div>
@@ -207,7 +207,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                           <Amount
                             crypto={treasure.rewardType}
                             value={treasure.remainingUnlockAmount}
-                            useKM={treasure?.rewardType === 'KOKON'}
+                            useKM={treasure?.rewardType === 'KATON'}
                             className="text-xl font-ultra text-primary"
                           />
                           <p className="text-xs text-white/70">{t('WaitingForUnlock')}</p>
@@ -222,7 +222,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                           }
                           to={parseAmount(treasure.remainingClaimAmount)}
                           crypto={treasure.rewardType}
-                          useKM={treasure?.rewardType === 'KOKON'}
+                          useKM={treasure?.rewardType === 'KATON'}
                           animationOptions={{ duration: 1 }}
                           className="text-base font-ultra text-app-green"
                         />

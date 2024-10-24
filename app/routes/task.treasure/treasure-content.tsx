@@ -34,7 +34,7 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
                   className="break-all text-xs font-ultra -tracking-[1px]"
                   value={treasure?.rewardAmount}
                   crypto={treasure?.rewardType}
-                  useKM={treasure?.rewardType === 'KOKON'}
+                  useKM={treasure?.rewardType === 'KATON'}
                 />
               </div>
             </div>
@@ -48,7 +48,7 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
                       treasure?.remainingUnlockAmount.length > 10 && 'text-sm'
                     )}
                     value={treasure?.remainingUnlockAmount}
-                    useKM={treasure?.rewardType === 'KOKON'}
+                    useKM={treasure?.rewardType === 'KATON'}
                   />
                 </>
               ) : (
@@ -65,7 +65,7 @@ const TreasureContent: React.FC<TreasureContentProps> = ({ treasure }) => {
                   crypto={treasure?.rewardType}
                   className="text-base font-ultra text-[#3AE45A]"
                   value={treasure?.remainingClaimAmount}
-                  useKM={treasure?.rewardType === 'KOKON'}
+                  useKM={treasure?.rewardType === 'KATON'}
                 />
               </>
             ) : (

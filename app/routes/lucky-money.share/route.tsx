@@ -57,7 +57,7 @@ export default function LuckyMoneyShare() {
     queryFn: apis.packetSetting.packetSettingList,
   })
 
-  const kokonWallet = useGetCryptoWallet(Crypto.KOKON)
+  const katonWallet = useGetCryptoWallet(Crypto.KATON)
 
   const methods = useForm<FormData>({
     defaultValues: {
@@ -79,14 +79,14 @@ export default function LuckyMoneyShare() {
     ])
 
   useEffect(() => {
-    const kokonBalance = parseAmount(kokonWallet?.balance)
+    const katonBalance = parseAmount(katonWallet?.balance)
 
     if (distributeKind === 'FIXED') {
       // 固定紅包
       const distributedAmount = (fixedValue || 0) * (quantity || 0)
       methods.setValue(
         'errorMessage',
-        distributedAmount > kokonBalance ? t('InsufficientBalanceInWallet') : ''
+        distributedAmount > katonBalance ? t('InsufficientBalanceInWallet') : ''
       )
     } else {
       // 隨機紅包
@@ -100,7 +100,7 @@ export default function LuckyMoneyShare() {
 
       methods.setValue(
         'errorMessage',
-        _quota > kokonBalance ? t('InsufficientBalanceInWallet') : ''
+        _quota > katonBalance ? t('InsufficientBalanceInWallet') : ''
       )
       methods.setValue(
         'hintMessage',
@@ -115,11 +115,11 @@ export default function LuckyMoneyShare() {
     fixedValue,
     minValue,
     maxValue,
-    kokonWallet?.balance,
     methods,
     quantity,
     quota,
     t,
+    katonWallet?.balance,
   ])
 
   return (

@@ -1,9 +1,9 @@
-import { KokonIcon, UsdtIcon, TonIcon } from '~/components/color-icons'
+import { KatonIcon, UsdtIcon, TonIcon } from '~/components/color-icons'
 
 export enum Crypto {
   USDT = 'USDT',
   TON = 'TON',
-  KOKON = 'KOKON',
+  KATON = 'KATON',
 }
 
 export type CryptoUnion = keyof typeof Crypto
@@ -23,10 +23,10 @@ export const cryptoDetails: Record<
 > = {
   [Crypto.USDT]: { name: 'USDT', icon: UsdtIcon, img: '/images/crypto/usdt.png', network: 'TON' },
   [Crypto.TON]: { name: 'TON', icon: TonIcon, img: '/images/crypto/ton.png', network: 'TON' },
-  [Crypto.KOKON]: {
-    name: 'KOKON',
-    icon: KokonIcon,
-    img: '/images/crypto/kokon.png',
+  [Crypto.KATON]: {
+    name: 'KATON',
+    icon: KatonIcon,
+    img: '/images/crypto/katon.png',
     network: 'TON',
   },
 }
@@ -42,7 +42,7 @@ export const cryptoRules: Record<
 > = {
   [Crypto.USDT]: { maxInt: 9, maxDec: 6 },
   [Crypto.TON]: { maxInt: 6, maxDec: 9 },
-  [Crypto.KOKON]: { maxInt: 15, maxDec: 0 },
+  [Crypto.KATON]: { maxInt: 15, maxDec: 0 },
 }
 
 export const isValidCrypto = (currency?: string): currency is Crypto => {

@@ -202,7 +202,7 @@ const RuleSheet: React.FC<RuleSheetProps> = ({ teamSettingList }) => {
             <img src="/images/share/referralDiagram.png" alt="progress-1" className="w-full" />
             <div>
               {t('rule.referralTeam.description', {
-                value: formatAmount(teamSettingList.activeSetting, { crypto: Crypto.KOKON }) || '-',
+                value: formatAmount(teamSettingList.activeSetting, { crypto: Crypto.KATON }) || '-',
               })}
             </div>
           </div>

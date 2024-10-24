@@ -18,7 +18,7 @@ export const useTaskTypeDisplayMap = () => {
 }
 
 // 獎勵類型
-export type RewardType = 'USDT' | 'TON' | 'KOKON' | 'TREASURE' | 'HAMMER'
+export type RewardType = 'USDT' | 'TON' | 'KATON' | 'TREASURE' | 'HAMMER'
 
 /** 任務領取狀態,
  *  INELIGIBLE: 不符合領取條件

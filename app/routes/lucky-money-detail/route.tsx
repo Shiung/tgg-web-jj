@@ -13,7 +13,7 @@ import LoadingIcon from '~/icons/loading.svg?react'
 import SvgCopy from '~/icons/copy.svg?react'
 import { Button } from '~/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '~/components/ui/avatar'
-import { KokonIcon } from '~/components/color-icons'
+import { KatonIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
 import { PacketResponse, PacketsResponse } from '~/api/codegen/data-contracts'
 import { apis } from '~/api'
@@ -205,9 +205,9 @@ const LuckyMoneyDetail = () => {
           <div className="flex items-center justify-between font-ultra">
             <p className="text-base">{t('TotalAmount')}</p>
             <div className="flex items-center justify-center space-x-1 text-lg text-primary">
-              <KokonIcon className="h-4 w-4" />
+              <KatonIcon className="h-4 w-4" />
               <Amount
-                crypto={Crypto.KOKON}
+                crypto={Crypto.KATON}
                 value={
                   parseAmount(detailData.distributedAmount) +
                   parseAmount(detailData.remainingAmount)
@@ -219,8 +219,8 @@ const LuckyMoneyDetail = () => {
           <div className="flex justify-between font-ultra">
             <p className="text-base">{t('Remaining')}</p>
             <div className="flex items-center justify-center space-x-1 text-lg text-primary">
-              <KokonIcon className="h-4 w-4" />
-              <Amount crypto={Crypto.KOKON} value={detailData.remainingAmount} useKM />
+              <KatonIcon className="h-4 w-4" />
+              <Amount crypto={Crypto.KATON} value={detailData.remainingAmount} useKM />
             </div>
           </div>
         </div>
@@ -228,24 +228,24 @@ const LuckyMoneyDetail = () => {
           <div className="flex items-center justify-center">
             <p className="text-xs font-normal text-white/70">{t('EachBagAmount')}</p>
             <div className="ml-2 flex items-center justify-center space-x-1">
-              <KokonIcon className="h-4 w-4" />
+              <KatonIcon className="h-4 w-4" />
               {detailData.distributeKind === 'FIXED' ? (
                 <Amount
                   className="font-ultra"
-                  crypto={Crypto.KOKON}
+                  crypto={Crypto.KATON}
                   value={detailData.eachBagAmount}
                 />
               ) : (
                 <>
                   <Amount
                     className="font-ultra"
-                    crypto={Crypto.KOKON}
+                    crypto={Crypto.KATON}
                     value={detailData.minBagAmount}
                   />
                   <span> ~ </span>
                   <Amount
                     className="font-ultra"
-                    crypto={Crypto.KOKON}
+                    crypto={Crypto.KATON}
                     value={detailData.maxBagAmount}
                   />
                 </>
@@ -310,9 +310,9 @@ const LuckyMoneyDetail = () => {
                       <span className="ml-2 text-xs font-normal">{receiverItem?.name}</span>
                     </div>
                     <div className="flex items-center justify-center space-x-1">
-                      <KokonIcon className="h-4 w-4" />
+                      <KatonIcon className="h-4 w-4" />
                       <Amount
-                        crypto={Crypto.KOKON}
+                        crypto={Crypto.KATON}
                         value={receiverItem?.amount}
                         className="text-sm font-ultra"
                       />

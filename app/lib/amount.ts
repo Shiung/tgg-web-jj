@@ -36,7 +36,7 @@ export interface FormatAmountOptions {
    * 币种类型, 接受 `CryptoEnum` 中定义的值:
    * - `Crypto.TON`
    * - `Crypto.USDT`
-   * - `Crypto.KOKON`
+   * - `Crypto.KATON`
    * @see {@link ~/consts/crypto.Crypto
    */
   crypto?: string | keyof typeof Crypto

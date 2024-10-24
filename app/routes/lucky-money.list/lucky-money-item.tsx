@@ -2,7 +2,7 @@ import { Link } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
 
 import ArrowLineRight from '~/icons/arrow-line-right.svg?react'
-import { KokonIcon } from '~/components/color-icons'
+import { KatonIcon } from '~/components/color-icons'
 import { PacketsResponse } from '~/api/codegen/data-contracts'
 import { formatDate } from '~/lib/date'
 import Amount from '~/components/amount'
@@ -78,12 +78,12 @@ const LuckyMoneyItem: React.FC<LuckyMoneyItemProps> = ({
         <div className="flex items-center">
           <div className="flex flex-col items-end">
             <div className="flex items-center space-y-1 text-sm font-ultra">
-              <KokonIcon className="h-4 w-4" />
-              <Amount crypto={Crypto.KOKON} value={withholdAmount} useKM className="ml-1" />
+              <KatonIcon className="h-4 w-4" />
+              <Amount crypto={Crypto.KATON} value={withholdAmount} useKM className="ml-1" />
             </div>
             {state === 1 && (
               <div className="text-xs font-normal text-white/70">
-                <Amount crypto={Crypto.KOKON} value={remainingAmount} useKM /> {t('remaining')}
+                <Amount crypto={Crypto.KATON} value={remainingAmount} useKM /> {t('remaining')}
               </div>
             )}
           </div>

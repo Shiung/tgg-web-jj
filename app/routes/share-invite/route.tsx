@@ -14,7 +14,7 @@ import SvgCommission from '~/icons/commission.svg?react'
 import SvgInvite from '~/icons/invite.svg?react'
 import CatEarsCard from '~/components/cat-ears-card'
 import { Button } from '~/components/ui/button'
-import { KokonIcon, StarIcon } from '~/components/color-icons'
+import { KatonIcon, StarIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
 import InfoTooltip from '~/components/info-tooltip'
 import { Input } from '~/components/ui/input'
@@ -262,11 +262,11 @@ const ShareInvite: React.FC = () => {
                 <div className="flex flex-col items-center space-y-1">
                   <div className="flex h-7 items-center">{t('Today')}</div>
                   <div className="flex items-center space-x-1">
-                    <KokonIcon className="h-4 w-4" />
+                    <KatonIcon className="h-4 w-4" />
                     <Amount
                       className="font-ultra text-white"
                       value={customerTeamInfo?.data?.todayCommission}
-                      crypto="KOKON"
+                      crypto="KATON"
                       useKM
                     />
                   </div>
@@ -274,11 +274,11 @@ const ShareInvite: React.FC = () => {
                 <div className="flex flex-col items-center space-y-1">
                   <div className="flex h-7 items-center">{t('TotalReceived')}</div>
                   <div className="flex items-center space-x-1">
-                    <KokonIcon className="h-4 w-4" />
+                    <KatonIcon className="h-4 w-4" />
                     <Amount
                       className="font-ultra text-white"
                       value={customerTeamInfo?.data?.totalCommission}
-                      crypto="KOKON"
+                      crypto="KATON"
                       useKM
                     />
                   </div>

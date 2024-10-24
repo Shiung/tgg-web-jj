@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useQuery } from '@tanstack/react-query'
+import { useUtils } from '@telegram-apps/sdk-react'
 import { useTranslation } from 'react-i18next'
 import {
   Dialog,
@@ -27,13 +28,13 @@ import { emitter } from '~/lib/emitter'
 const links = {
   support: {
     title: 'Support',
-    value: 'www.kokon.io', // TODO: replace with real link
-    text: 'kokon.io',
+    value: 'https://t.me/katon_cs',
+    text: '@katon_cs',
   },
   officialLinks: {
     title: 'Official Links',
     value: [
-      { icon: TwitterIcon, url: '' },
+      { icon: TwitterIcon, url: 'https://x.com/katon_games' },
       // { icon: GlobalIcon, url: '' },
     ],
   },
@@ -46,12 +47,21 @@ const ProfileDialog: React.FC = () => {
   const [open, setIsOpen] = useState(false)
   const { i18n, t } = useTranslation()
   const { inTelegram, isLoggedIn, telegramUserData, setUserInfo, logout } = useStore(state => state)
+  const utils = useUtils()
   const { data, refetch } = useQuery({
     queryKey: ['customerInfo'],
     queryFn: apis.customer.customerInfoList,
     enabled: !!isLoggedIn,
   })
   const userData = useMemo(() => data?.data ?? empty, [data])
+
+  const handleOpenLink = (url: string) => {
+    if (inTelegram) {
+      utils.openLink(url)
+    } else {
+      window.open(url, '_blank', 'noreferrer')
+    }
+  }
 
   useEffect(() => {
     emitter.on('openProfileDialog', v => setIsOpen(v))
@@ -156,9 +166,14 @@ const ProfileDialog: React.FC = () => {
           {/* Support */}
           <div className="flex items-center justify-between">
             <span>{t('Support')}</span>
-            <a href={links.support.value} className="font-ultra text-app-blue">
+            <Button
+              variant="link"
+              size="link"
+              className="font-ultra text-app-blue"
+              onClick={() => handleOpenLink(links.support.value)}
+            >
               {links.support.text}
-            </a>
+            </Button>
           </div>
 
           {/* Official Links */}
@@ -166,9 +181,15 @@ const ProfileDialog: React.FC = () => {
             <span>{t('OfficialLinks')}</span>
             <div className="flex space-x-2">
               {links.officialLinks.value.map((link, index) => (
-                <a key={index} href={link.url}>
+                <Button
+                  variant="icon"
+                  size="icon"
+                  key={index}
+                  className="opacity-100"
+                  onClick={() => handleOpenLink(link.url)}
+                >
                   <link.icon className="h-6 w-6" />
-                </a>
+                </Button>
               ))}
             </div>
           </div>

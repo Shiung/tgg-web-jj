@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
-import { KokonIcon } from '~/components/color-icons'
+import { KatonIcon } from '~/components/color-icons'
 import SwapIcon from '~/icons/swap.svg?react'
 import Amount from '~/components/amount'
 import { errorToast } from '~/lib/toast'
@@ -60,15 +60,15 @@ const CurrencyConversionDialog: React.FC<CurrencyConversionDialogProps> = ({
           <div className="flex w-full flex-col items-center justify-center space-y-1">
             <div className="flex w-full items-center justify-between">
               <div className="flex items-center justify-center space-x-1">
-                <KokonIcon className="h-4 w-4" />
-                <div className="text-sm font-ultra">KOKON</div>
+                <KatonIcon className="h-4 w-4" />
+                <div className="text-sm font-ultra">KATON</div>
               </div>
               {gameWalletLoading ? (
                 <Skeleton className="h-4 w-14" />
               ) : (
                 <Amount
                   value={gameWalletData?.data.kokonBalance}
-                  crypto="KOKON"
+                  crypto="KATON"
                   className="text-lg font-ultra"
                 />
               )}

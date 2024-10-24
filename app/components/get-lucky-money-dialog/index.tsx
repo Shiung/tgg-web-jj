@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Dialog, DialogContent } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
-import { KokonIcon } from '~/components/color-icons'
+import { KatonIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
 import useStore from '~/stores/useStore'
 import { apis } from '~/api'
@@ -126,17 +126,17 @@ const GetLuckyMoneyDialog: React.FC = () => {
                   alt="open-lucky-bag"
                 />
                 <div className="absolute bottom-[36%] flex aspect-square w-[32.25%] items-center justify-center text-center text-lg font-ultra text-[#FE8C02]">
-                  {isPending ? <Loader2 className="h-8 w-8 animate-spin" /> : t('Open')}
+                  {isPending ? <Loader2 className="h-8 w-8 animate-spin" /> : t('OPEN')}
                 </div>
                 {showPotential && (
                   <div className="absolute bottom-[9%] flex w-full flex-col items-center space-y-1 font-ultra">
                     <span className="text-base text-white">{t('PotentialGain')}</span>
                     <span className="flex items-center justify-center text-sm">
-                      <KokonIcon className="h-5 w-5" />
+                      <KatonIcon className="h-5 w-5" />
                       <span className="ml-[2px] flex items-center justify-center space-x-1 text-primary">
-                        <Amount value={minValue} crypto={Crypto.KOKON} />
+                        <Amount value={minValue} crypto={Crypto.KATON} />
                         <span className="mx-1">~</span>
-                        <Amount value={maxValue} crypto={Crypto.KOKON} />
+                        <Amount value={maxValue} crypto={Crypto.KATON} />
                       </span>
                     </span>
                   </div>
@@ -181,9 +181,9 @@ const GetLuckyMoneyDialog: React.FC = () => {
                     })}
                   </p>
                   <div className="flex items-center self-center">
-                    <KokonIcon className="h-8 w-8" />
+                    <KatonIcon className="h-8 w-8" />
                     <div className="ml-1 text-3xl text-primary">
-                      <Amount value={drawResult?.amount} crypto={Crypto.KOKON} />
+                      <Amount value={drawResult?.amount} crypto={Crypto.KATON} />
                     </div>
                   </div>
                 </>

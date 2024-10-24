@@ -59,7 +59,7 @@ const TerminateSharingDialog: React.FC<TerminateSharingDialogProps> = ({
           <div className="flex items-center justify-between rounded-xl bg-[#1C1C1C] p-3 font-ultra">
             <div>{t('Remaining')}</div>
             <div className="text-2xl text-primary">
-              <Amount value={remaining} crypto={Crypto.KOKON} />
+              <Amount value={remaining} crypto={Crypto.KATON} />
             </div>
           </div>
           <div className="whitespace-pre-wrap text-start text-sm">

@@ -12,7 +12,7 @@ import {
   DialogTitle,
 } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
-import { KokonIcon } from '~/components/color-icons'
+import { KatonIcon } from '~/components/color-icons'
 import GoRechargeDialog from './go-recharge-dialog'
 
 interface BuyEnergyDialogProps {
@@ -102,7 +102,7 @@ const BuyEnergyDialog: React.FC<BuyEnergyDialogProps> = ({ isOpen, onClose }) =>
                 {t('PAY')} {gameSetting?.costPerGame}
               </div>
             )}
-            <KokonIcon className="ml-1 h-4 w-4" />
+            <KatonIcon className="ml-1 h-4 w-4" />
             <div className="ml-2">{t('FOR')}</div>
             <img src="/images/energy.png" alt="energy" className="ml-1 h-6 w-6" />
           </Button>

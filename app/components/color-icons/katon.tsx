@@ -1,5 +1,5 @@
 import type { SVGProps } from 'react'
-const SvgKokon = (props: SVGProps<SVGSVGElement>) => (
+const SvgKaton = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" {...props}>
     <circle cx={12} cy={12} r={11} fill="#FFF200" />
     <circle cx={12.001} cy={12} r={8.556} fill="#FFD500" />
@@ -9,4 +9,4 @@ const SvgKokon = (props: SVGProps<SVGSVGElement>) => (
     />
   </svg>
 )
-export default SvgKokon
+export default SvgKaton

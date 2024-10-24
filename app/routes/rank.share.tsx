@@ -36,7 +36,7 @@ export default function Share() {
         theme="share"
         dataLs={dataLs.top}
         rewardLock={!dataLs.isReward}
-        currency={Crypto.KOKON}
+        currency={Crypto.KATON}
       />
       <div className="relative -mt-4 flex-1 rounded-t-xl bg-black">
         <div className="space-y-3 p-4">

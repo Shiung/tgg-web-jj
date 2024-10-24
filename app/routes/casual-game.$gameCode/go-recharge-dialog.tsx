@@ -15,7 +15,7 @@ import {
   DialogTitle,
 } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
-import { KokonIcon } from '~/components/color-icons'
+import { KatonIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
 
 interface GoRechargeDialogProps {
@@ -25,13 +25,13 @@ interface GoRechargeDialogProps {
 
 const GoRechargeDialog: React.FC<GoRechargeDialogProps> = ({ isOpen, onClose }) => {
   const { t } = useTranslation()
-  // 取 KOKON 錢包
+  // 取 KATON 錢包
   const { data, isLoading: isWalletLoading } = useGetHeaderWallet()
   const wallets = (data?.data.wallets || []).map<UserWallet>(wallet => ({
     ...wallet,
   }))
-  const kokonBalance = useMemo(() => {
-    return wallets.find(wallet => wallet.currency === 'KOKON')?.balance
+  const katonBalance = useMemo(() => {
+    return wallets.find(wallet => wallet.currency === 'KATON')?.balance
   }, [wallets])
 
   // 取得遊戲設定
@@ -53,7 +53,7 @@ const GoRechargeDialog: React.FC<GoRechargeDialogProps> = ({ isOpen, onClose }) 
           <div className="flex w-full flex-col space-y-1">
             <div className="flex w-full justify-between text-white">
               <div className="flex items-center space-x-1">
-                <KokonIcon className="h-4 w-4" />
+                <KatonIcon className="h-4 w-4" />
                 <span className="text-sm font-ultra">{t('Payment')}</span>
               </div>
               {gameSettingLoading ? (
@@ -62,22 +62,22 @@ const GoRechargeDialog: React.FC<GoRechargeDialogProps> = ({ isOpen, onClose }) 
                 <Amount
                   className="text-lg font-ultra"
                   value={gameSetting?.costPerGame}
-                  crypto="KOKON"
+                  crypto="KATON"
                 />
               )}
             </div>
             <div className="flex w-full justify-between text-white">
               <div className="flex items-center space-x-1">
-                <KokonIcon className="h-4 w-4" />
+                <KatonIcon className="h-4 w-4" />
                 <span className="text-sm font-ultra">{t('Balance')}</span>
               </div>
               {isWalletLoading ? (
                 <Skeleton className="h-4 w-24" />
               ) : (
                 <Amount
-                  value={kokonBalance}
+                  value={katonBalance}
                   className="text-lg font-ultra text-red-600"
-                  crypto="KOKON"
+                  crypto="KATON"
                 />
               )}
             </div>

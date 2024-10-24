@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react'
-import { UsdtIcon, KokonIcon, TonIcon } from '~/components/color-icons'
+import { UsdtIcon, KatonIcon, TonIcon } from '~/components/color-icons'
 import { CryptoUnion } from '~/consts/crypto'
 
 export type CurrencyType = CryptoUnion | null | undefined
@@ -14,8 +14,8 @@ export const CurrencyIcon: React.FC<CurrencyIconProps> = ({ currency, className 
     switch (currency) {
       case 'USDT':
         return <UsdtIcon className={className} />
-      case 'KOKON':
-        return <KokonIcon className={className} />
+      case 'KATON':
+        return <KatonIcon className={className} />
       case 'TON':
         return <TonIcon className={className} />
       default:

@@ -16,7 +16,7 @@ import { parseAmount } from '~/lib/amount'
 import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
 import useIntersectionObserver from '~/hooks/useIntersectionObserver'
 import CatEarsCard from '~/components/cat-ears-card'
-import { UsdtIcon, KokonIcon } from '~/components/color-icons'
+import { UsdtIcon, KatonIcon } from '~/components/color-icons'
 import InfoTooltip from '~/components/info-tooltip'
 import Amount from '~/components/amount'
 import { DropdownOption, DropdownSheet } from '~/components/dropdown-sheet'
@@ -232,10 +232,10 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
               <div className="flex flex-1 flex-col items-center space-y-1">
                 <div>{t('TotalCommissions')}</div>
                 <div className="flex items-center space-x-1 text-sm text-white">
-                  <KokonIcon className="h-4 w-4" />
+                  <KatonIcon className="h-4 w-4" />
                   <Amount
                     value={parseAmount(customerTeamInfo?.totalCommission)}
-                    crypto={Crypto.KOKON}
+                    crypto={Crypto.KATON}
                     useKM
                   />
                 </div>
@@ -435,11 +435,11 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
           <div className="flex flex-1 flex-col items-center justify-center space-y-1">
             <div className="text-xs text-[#FFFFFFB2]">{t('Commissions')}</div>
             <div className="flex items-center space-x-1">
-              <KokonIcon className="h-3 w-3" />
+              <KatonIcon className="h-3 w-3" />
               <Amount
                 className="text-xs font-ultra"
                 value={parseAmount(latestSummary.totalCommission)}
-                crypto="KOKON"
+                crypto="KATON"
               />
             </div>
           </div>

@@ -3,7 +3,7 @@ import { cn } from '~/lib/utils'
 import { Crypto } from '~/consts/crypto'
 
 interface CurrencySwitchProps {
-  currency: Crypto.USDT | Crypto.KOKON
+  currency: Crypto.USDT | Crypto.KATON
   toggleCurrency: () => void
 }
 

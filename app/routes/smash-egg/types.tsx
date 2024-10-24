@@ -12,7 +12,7 @@ export enum Status {
 // Cryptocurrency type
 export enum Crypto {
   USDT = 'USDT',
-  KOKON = 'KOKON',
+  KATON = 'KATON',
 }
 
 // Egg level

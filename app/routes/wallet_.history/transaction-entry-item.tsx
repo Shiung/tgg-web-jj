@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import Amount from '~/components/amount'
-import { KokonIcon, TonIcon, UsdtIcon } from '~/components/color-icons'
+import { KatonIcon, TonIcon, UsdtIcon } from '~/components/color-icons'
 import { TransactionEntry } from './transaction-record'
 import { useTranslation } from 'react-i18next'
 
@@ -26,8 +26,8 @@ const TransactionEntryItem = ({ record }: { record: TransactionEntry }) => {
         <UsdtIcon className="my-auto h-3 w-3" />
       ) : record.currency === 'TON' ? (
         <TonIcon className="my-auto h-3 w-3" />
-      ) : record.currency === 'KOKON' ? (
-        <KokonIcon className="my-auto h-3 w-3" />
+      ) : record.currency === 'KATON' ? (
+        <KatonIcon className="my-auto h-3 w-3" />
       ) : (
         <div />
       )}

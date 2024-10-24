@@ -26,7 +26,7 @@ import CurrencyConversionDialog from './currency-conversion-dialog'
 import { addHours, format } from 'date-fns'
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'KOKON' }, { name: 'description', content: 'Welcome to KOKON!' }]
+  return [{ title: 'Katon' }, { name: 'description', content: 'Welcome to Katon!' }]
 }
 
 const GameMainTenance = ({
@@ -199,7 +199,7 @@ export default function Index() {
               <div className="absolute inset-3 flex flex-col text-start text-lg font-ultra">
                 <span>{t('SmashEgg')}</span>
                 <span className="text-sm font-normal">
-                  {t('UpTo')} <span className="font-ultra text-primary">1000</span> KOKON
+                  {t('UpTo')} <span className="font-ultra text-primary">1000</span> KATON
                 </span>
               </div>
               <img

@@ -279,20 +279,20 @@ export default function Ui() {
           {`-0.176344688999 ->`} <Amount value="-0.176344688999" crypto="TON" /> <br />
           {`0.2057676117 ->`} <Amount value="0.2057676117" crypto="TON" /> <br />
         </p>
-        <h3 className="font-ultra">KOKON Test Case</h3>
+        <h3 className="font-ultra">KATON Test Case</h3>
         <p>
-          {`1234 ->`} <Amount value={'1234'} useKM crypto="KOKON" /> <br />
-          {`12345 ->`} <Amount value={'12345'} useKM crypto="KOKON" /> <br />
-          {`123456789 ->`} <Amount value={'123456789'} useKM crypto="KOKON" /> <br />
-          {`123456789012345678 ->`} <Amount value={'123456789012345678'} crypto="KOKON" /> <br />
+          {`1234 ->`} <Amount value={'1234'} useKM crypto="KATON" /> <br />
+          {`12345 ->`} <Amount value={'12345'} useKM crypto="KATON" /> <br />
+          {`123456789 ->`} <Amount value={'123456789'} useKM crypto="KATON" /> <br />
+          {`123456789012345678 ->`} <Amount value={'123456789012345678'} crypto="KATON" /> <br />
           {`12345678901234567893123123 ->`}{' '}
-          <Amount value={'123456789012345678'} useKM crypto="KOKON" />
+          <Amount value={'123456789012345678'} useKM crypto="KATON" />
           <br />
-          {`12345 ->`} <Amount value={'12345'} crypto="KOKON" /> <br />
-          {`1234 ->`} <Amount value={'1234'} crypto="KOKON" /> <br />
-          {`1234.001 ->`} <Amount value={'1234.001'} useKM crypto="KOKON" /> <br />
-          {`123456.301 ->`} <Amount value={'123456.301'} useKM crypto="KOKON" /> <br />
-          {`123456.991 ->`} <Amount value={'123456.991'} useKM crypto="KOKON" /> <br />
+          {`12345 ->`} <Amount value={'12345'} crypto="KATON" /> <br />
+          {`1234 ->`} <Amount value={'1234'} crypto="KATON" /> <br />
+          {`1234.001 ->`} <Amount value={'1234.001'} useKM crypto="KATON" /> <br />
+          {`123456.301 ->`} <Amount value={'123456.301'} useKM crypto="KATON" /> <br />
+          {`123456.991 ->`} <Amount value={'123456.991'} useKM crypto="KATON" /> <br />
         </p>
       </div>
       {/* Truncate */}

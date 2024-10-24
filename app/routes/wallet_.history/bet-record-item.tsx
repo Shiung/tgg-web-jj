@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { format } from 'date-fns'
 import { Button } from '~/components/ui/button'
-import { KokonIcon, UsdtIcon } from '~/components/color-icons'
+import { KatonIcon, UsdtIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
 import CopyIcon from '~/icons/copy.svg?react'
 import { Crypto } from '~/consts/crypto'
@@ -38,13 +38,13 @@ export default function BetRecordItem({
                 {currency === Crypto.USDT ? (
                   <Amount value={record.betGold} crypto={Crypto.USDT} />
                 ) : (
-                  <Amount value={record.betGoldKokon} crypto={Crypto.KOKON} />
+                  <Amount value={record.betGoldKokon} crypto={Crypto.KATON} />
                 )}
               </span>
               {currency === Crypto.USDT ? (
                 <UsdtIcon className="my-auto h-3 w-3" />
               ) : (
-                <KokonIcon className="my-auto h-3 w-3" />
+                <KatonIcon className="my-auto h-3 w-3" />
               )}
             </div>
           </div>
@@ -83,14 +83,14 @@ export default function BetRecordItem({
                 ) : (
                   <Amount
                     value={Math.abs(Number(record.winGoldKokon) - Number(record.betGoldKokon))}
-                    crypto={Crypto.KOKON}
+                    crypto={Crypto.KATON}
                   />
                 )}
               </span>
               {currency === Crypto.USDT ? (
                 <UsdtIcon className="my-auto h-3 w-3" />
               ) : (
-                <KokonIcon className="my-auto h-3 w-3" />
+                <KatonIcon className="my-auto h-3 w-3" />
               )}
             </div>
           </div>

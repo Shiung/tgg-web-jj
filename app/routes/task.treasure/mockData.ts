@@ -45,7 +45,7 @@ const mockAxiosResponse: AxiosResponse<GetTreasuresResponse> = {
         remainingClaimAmount: '0.00',
         remainingUnlockAmount: '0.00',
         rewardAmount: '180.00',
-        rewardType: 'KOKON',
+        rewardType: 'KATON',
         status: 'UNLOCKED',
       },
       {
@@ -56,7 +56,7 @@ const mockAxiosResponse: AxiosResponse<GetTreasuresResponse> = {
         remainingClaimAmount: '300.00',
         remainingUnlockAmount: '300.00',
         rewardAmount: '300.00',
-        rewardType: 'KOKON',
+        rewardType: 'KATON',
         status: 'STANDBY',
       },
       {
@@ -90,7 +90,7 @@ const mockAxiosResponse: AxiosResponse<GetTreasuresResponse> = {
         remainingClaimAmount: (0.3 + Math.random() * 0.5).toFixed(1),
         remainingUnlockAmount: (0.3 + Math.random() * 0.5).toFixed(1),
         rewardAmount: (0.3 + Math.random() * 0.5).toFixed(1),
-        rewardType: 'USDT' as 'USDT' | 'TON' | 'KOKON',
+        rewardType: 'USDT' as 'USDT' | 'TON' | 'KATON',
         status: 'UNLOCKED' as 'STANDBY' | 'UNLOCKING' | 'UNLOCKED',
       })),
     ],

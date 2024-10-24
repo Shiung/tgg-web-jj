@@ -19,7 +19,7 @@ import BetRecordItem from './bet-record-item'
 import BetSkeleton from './bet-skeleton'
 import NoDataView from './no-data-view'
 import Amount from '~/components/amount'
-import { KokonIcon, UsdtIcon } from '~/components/color-icons'
+import { KatonIcon, UsdtIcon } from '~/components/color-icons'
 import { useTranslation } from 'react-i18next'
 
 interface FormValues {
@@ -90,7 +90,7 @@ const SummaryItem = ({
 )
 
 export default function BetRecord({ currentTab }: { currentTab: string }) {
-  const [currency, setCurrency] = useState<Crypto.USDT | Crypto.KOKON>(Crypto.KOKON)
+  const [currency, setCurrency] = useState<Crypto.USDT | Crypto.KATON>(Crypto.KATON)
   const [isFirstLoading, setIsFirstLoading] = useState(true)
   const { t } = useTranslation()
 
@@ -102,7 +102,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
   const formValues = watch()
 
   const toggleCurrency = () => {
-    setCurrency(currency === Crypto.KOKON ? Crypto.USDT : Crypto.KOKON)
+    setCurrency(currency === Crypto.KATON ? Crypto.USDT : Crypto.KATON)
   }
 
   const { data: gameListRaw, error: gameListError } = useQuery<GetActiveGamesResponse, Error>({
@@ -321,7 +321,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
                 currency === Crypto.USDT ? (
                   <UsdtIcon className="my-auto h-3 w-3" />
                 ) : (
-                  <KokonIcon className="my-auto h-3 w-3" />
+                  <KatonIcon className="my-auto h-3 w-3" />
                 )
               }
             />
@@ -347,7 +347,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
                 currency === Crypto.USDT ? (
                   <UsdtIcon className="my-auto h-3 w-3" />
                 ) : (
-                  <KokonIcon className="my-auto h-3 w-3" />
+                  <KatonIcon className="my-auto h-3 w-3" />
                 )
               }
             />

@@ -278,7 +278,7 @@ const TeamMember: React.FC<TeamMemberProps> = ({ customerTeamInfo, teamSettingLi
           <span>{t('AllMembers')}</span>
           <InfoTooltip
             content={t('AllMembers.Description', {
-              value: formatAmount(teamSettingList?.activeSetting, { crypto: Crypto.KOKON }),
+              value: formatAmount(teamSettingList?.activeSetting, { crypto: Crypto.KATON }),
             })}
           />
         </div>

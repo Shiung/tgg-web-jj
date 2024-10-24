@@ -123,7 +123,7 @@ export default function Swap() {
     formState: { errors, isValid, isSubmitting },
   } = useForm<SwapFormData>({
     resolver: zodResolver(formSchema),
-    defaultValues: { currency: Crypto.KOKON, amount: '' },
+    defaultValues: { currency: Crypto.KATON, amount: '' },
     mode: 'onChange',
   })
 
@@ -154,9 +154,9 @@ export default function Swap() {
     if (currentTab === 'buy') {
       /** buy */
       return selectCurrency === Crypto.USDT
-        ? /** KOKON to USDT */
+        ? /** KATON to USDT */
           BigNumber(inputAmount).div(BigNumber(settingRule.origin.usdt2KokonRate)).toNumber()
-        : /** KOKON to USDT to TON */
+        : /** KATON to USDT to TON */
           BigNumber(inputAmount)
             .div(BigNumber(settingRule.origin.depositRate))
             .div(BigNumber(settingRule.origin.usdt2KokonRate))
@@ -164,9 +164,9 @@ export default function Swap() {
     } else {
       /** sell */
       return selectCurrency === Crypto.USDT
-        ? /** KOKON to USDT */
+        ? /** KATON to USDT */
           BigNumber(inputAmount).div(BigNumber(settingRule.origin.usdt2KokonRate)).toNumber()
-        : /** KOKON to USDT to TON */
+        : /** KATON to USDT to TON */
           BigNumber(inputAmount)
             .div(BigNumber(settingRule.origin.withdrawRate))
             .div(BigNumber(settingRule.origin.usdt2KokonRate))
@@ -183,7 +183,7 @@ export default function Swap() {
     } else {
       const inputAmount = parseAmount(amountCurrent.replace(/,/g, ''))
       return BigNumber(inputAmount).lte(
-        BigNumber(state.wallets?.find(({ currency }) => currency === Crypto.KOKON)?.balance ?? 0)
+        BigNumber(state.wallets?.find(({ currency }) => currency === Crypto.KATON)?.balance ?? 0)
       )
     }
   }, [calculateAmoutTransfer, state.wallets, currentTab, selectCurrency, amountCurrent])
@@ -294,7 +294,7 @@ export default function Swap() {
                 <p className="pl-4">
                   {t('RatioRule', {
                     amount: formatAmount(settingRule?.origin.usdt2KokonRate, {
-                      crypto: Crypto.KOKON,
+                      crypto: Crypto.KATON,
                     }),
                   })}
                 </p>

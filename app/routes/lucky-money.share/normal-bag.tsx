@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { Crypto, cryptoRules } from '~/consts/crypto'
 import AddIcon from '~/icons/add.svg?react'
 import MinusIcon from '~/icons/minus.svg?react'
-import { KokonIcon } from '~/components/color-icons'
+import { KatonIcon } from '~/components/color-icons'
 import { Button } from '~/components/ui/button'
 import { Input } from '~/components/ui/input'
 import Amount from '~/components/amount'
@@ -68,11 +68,11 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 getInputRef={ref}
                 customInput={Input}
                 allowNegative={false}
-                decimalScale={cryptoRules.KOKON.maxDec}
+                decimalScale={cryptoRules.KATON.maxDec}
                 isAllowed={({ floatValue }) => {
                   if (floatValue === undefined || floatValue === null) return true
                   // 整數部分位數限制
-                  const maxIntegerLength = cryptoRules.KOKON.maxInt
+                  const maxIntegerLength = cryptoRules.KATON.maxInt
                   const integerPart = String(floatValue).split('.')[0]
 
                   return integerPart.length <= maxIntegerLength
@@ -86,7 +86,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 placeholder={t('PleaseEnter')}
                 onValueChange={({ floatValue }) => onChange(floatValue)}
                 className="h-9"
-                fieldSuffix={Crypto.KOKON}
+                fieldSuffix={Crypto.KATON}
                 error={errors.fixedValue?.message}
                 clearable
                 onClear={() => setValue('fixedValue', 0, { shouldValidate: true })}
@@ -104,7 +104,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 className="h-7 flex-1"
                 onClick={() => setValue('fixedValue', +amount, { shouldValidate: true })}
               >
-                <Amount value={amount} crypto={Crypto.KOKON} />
+                <Amount value={amount} crypto={Crypto.KATON} />
               </Button>
             ))
           ) : (
@@ -196,11 +196,11 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
       <div className="flex items-center space-x-2 break-all p-3 text-xs font-normal text-white/70">
         <div className="flex flex-[1_1_0] flex-col items-center space-y-1">
           <div className="flex items-center space-x-1">
-            <KokonIcon className="h-5 w-5" />
+            <KatonIcon className="h-5 w-5" />
             <Amount
               className="text-sm font-ultra text-white"
               value={fixedValue}
-              crypto={Crypto.KOKON}
+              crypto={Crypto.KATON}
             />
           </div>
           <span>{t('EachBag')}</span>
@@ -213,11 +213,11 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
         <div className="flex-shrink-0">=</div>
         <div className="flex flex-[1_1_0] flex-col items-center space-y-1">
           <div className="flex items-center space-x-1">
-            <KokonIcon className="h-5 w-5" />
+            <KatonIcon className="h-5 w-5" />
             <Amount
               className="text-sm font-ultra text-white"
               value={fixedValue * quantity}
-              crypto={Crypto.KOKON}
+              crypto={Crypto.KATON}
             />
           </div>
           <div>{t('TotalAmount')}</div>

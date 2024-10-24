@@ -15,7 +15,7 @@ import Amount from '~/components/amount'
 import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import CheckIcon from '~/icons/check.svg?react'
 import {
-  KokonIcon,
+  KatonIcon,
   UsdtIcon,
   ClockIcon,
   TonIcon,
@@ -139,16 +139,16 @@ export const TaskIcon: React.FC<{
           />
         )
       return <TonIcon className={cn('h-[18px] w-[18px]', className)} />
-    case 'KOKON':
+    case 'KATON':
       if (imgIcon)
         return (
           <img
             className={cn('h-[100px] w-[100px]', className)}
-            src="/images/task/reward-kokon.png"
+            src="/images/task/reward-katon.png"
             alt="taskIcon"
           />
         )
-      return <KokonIcon className={cn('h-[18px] w-[18px]', className)} />
+      return <KatonIcon className={cn('h-[18px] w-[18px]', className)} />
     case 'TREASURE':
       if (imgIcon)
         return treasureType === 'RANDOM' ? (

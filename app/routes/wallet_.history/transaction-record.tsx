@@ -16,7 +16,7 @@ import TransactionEntryItem from './transaction-entry-item'
 import NoDataView from './no-data-view'
 import styles from './index.module.scss'
 import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
-import { KokonIcon, TonIcon, UsdtIcon } from '~/components/color-icons'
+import { KatonIcon, TonIcon, UsdtIcon } from '~/components/color-icons'
 import XIcon from '~/icons/x.svg?react'
 import { Button } from '~/components/ui/button'
 import { useTranslation } from 'react-i18next'
@@ -61,7 +61,7 @@ const fakeData = async (params: TransactionRecordRequest): Promise<any> => {
       const staticData: TransactionEntry[] = Array.from({ length: 20 }, (_, index) => ({
         transactionTime: formatRFC3339(new Date('2024-08-31T11:31:00')),
         type: 'Deposit',
-        currency: ['USDT', 'TON', 'KOKON'][Math.floor(Math.random() * 3)],
+        currency: ['USDT', 'TON', 'KATON'][Math.floor(Math.random() * 3)],
         amount:
           (Math.random() < 0.5 ? '-' : '') +
           (Math.floor(Math.random() * 9999999) + Math.random()).toFixed(8),
@@ -124,11 +124,11 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
       ),
     },
     {
-      value: 'KOKON',
+      value: 'KATON',
       label: (
         <div className="flex items-center space-x-1">
-          <KokonIcon className="h-6 w-6 flex-shrink-0" />
-          <div>KOKON</div>
+          <KatonIcon className="h-6 w-6 flex-shrink-0" />
+          <div>KATON</div>
         </div>
       ),
     },
