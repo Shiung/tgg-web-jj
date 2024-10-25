@@ -80,7 +80,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 thousandSeparator
                 type="text"
                 inputMode="decimal"
-                pattern="[0-9]*"
+                pattern="[0-9,]*"
                 id="distributedEachAmount"
                 label={t('AmountRangeOfEachBag')}
                 placeholder={t('PleaseEnter')}
@@ -132,7 +132,7 @@ const NormalBag: React.FC<NormalBagProps> = ({ packetSetting }) => {
                 allowNegative={false}
                 type="text"
                 inputMode="decimal"
-                pattern="[0-9]*"
+                pattern="[0-9,]*"
                 decimalScale={0}
                 id="quantity"
                 label={t('Quantity')}
