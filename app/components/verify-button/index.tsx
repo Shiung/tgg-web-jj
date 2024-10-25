@@ -39,8 +39,8 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
     const { t } = useTranslation()
     const {
       userInfo: { email: storeEmail },
-      verificationTs,
-      setVerificationTs,
+      verificationEventTs,
+      setVerificationEventTs,
     } = useStore(state => state)
     const [isCount, setIsCount] = useState<boolean>(false)
     const countRef = useRef<Ref>(null)
@@ -54,7 +54,9 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
         errorToast(t('EmailNotSet'))
         return
       }
-      setVerificationTs(Date.now() + 60 * 1000)
+      setVerificationEventTs({
+        [kind]: Date.now() + 60 * 1000,
+      })
       countRef.current?.handler(60)
       validEmailHandler(sendEmail, kind, successCallBack, errorCallBack)
     }, [
@@ -64,8 +66,8 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
       validEmailHandler,
       successCallBack,
       errorCallBack,
-      setVerificationTs,
       t,
+      setVerificationEventTs,
     ])
 
     useImperativeHandle(ref, () => ({
@@ -75,14 +77,17 @@ const VerifyButton = React.forwardRef<VerifyButtonExpose, Props>(
     }))
 
     useEffect(() => {
-      if (verificationTs === 0) return
-      const remainingTime = Math.max(0, Math.floor((verificationTs - Date.now()) / 1000))
+      if (!verificationEventTs[kind] || verificationEventTs[kind] === 0) return
+      const remainingTime = Math.max(0, Math.floor((verificationEventTs[kind] - Date.now()) / 1000))
       if (remainingTime > 0) {
         countRef.current?.handler(remainingTime)
       } else {
-        setVerificationTs(0)
+        setVerificationEventTs({
+          ...verificationEventTs,
+          [kind]: 0,
+        })
       }
-    }, [verificationTs, setVerificationTs])
+    }, [verificationEventTs, setVerificationEventTs, kind])
 
     return (
       <Button

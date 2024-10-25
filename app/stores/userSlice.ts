@@ -1,14 +1,16 @@
 import { StateCreator } from 'zustand'
 import type { InfoResponse } from '~/api/codegen/data-contracts'
 
+import { type ValidCode } from '~/components/verify-button'
+
 export interface UserSlice {
   userInfo: InfoResponse
   packet: NonNullable<InfoResponse['packet']>
-  verificationTs: number
+  verificationEventTs: Partial<Record<ValidCode, number>>
   baseTreasure: { [id: number]: string } | null
   setUserInfo: (info: InfoResponse) => void
   clearPacket: () => void
-  setVerificationTs: (ts: number) => void
+  setVerificationEventTs: (event: Partial<Record<ValidCode, number>>) => void
   setBaseTreasure: (data: { [id: number]: string } | null) => void
 }
 
@@ -21,7 +23,7 @@ const createUserSlice: StateCreator<UserSlice, [], [], UserSlice> = set => ({
     referralCode: '',
   },
   packet: {},
-  verificationTs: 0,
+  verificationEventTs: {},
   baseTreasure: null,
   setUserInfo: info => {
     const updateInfo = {
@@ -49,8 +51,13 @@ const createUserSlice: StateCreator<UserSlice, [], [], UserSlice> = set => ({
   clearPacket: () => {
     set({ packet: {} })
   },
-  setVerificationTs: ts => {
-    set({ verificationTs: ts })
+  setVerificationEventTs: event => {
+    set(state => ({
+      verificationEventTs: {
+        ...state.verificationEventTs,
+        ...event,
+      },
+    }))
   },
   setBaseTreasure: baseTreasure => {
     set({ baseTreasure })
