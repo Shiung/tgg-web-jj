@@ -9,6 +9,32 @@
  * ---------------------------------------------------------------
  */
 
+export interface BCPublicRankInfoResponse {
+  /** 排行榜 */
+  rank: {
+    /** 會員名稱 */
+    customerName: string;
+    /**
+     * 排名
+     * @format int64
+     * @min 1
+     */
+    ranking: number;
+    /**
+     * 獎金
+     * @format decimal
+     */
+    reward?: string;
+    /** 獎金幣別 */
+    rewardType?: string;
+    /**
+     * 有效下注金額
+     * @format decimal
+     */
+    validBetGold: string;
+  }[];
+}
+
 export interface BCRankInfoRequest {
   /** 排行榜類型 */
   RankType: string;
@@ -579,6 +605,8 @@ export interface GetPCoinWalletBalanceResponse {
 
 export type GetPCoinWalletRequest = object;
 
+export type GetRankConfigPublicRequest = object;
+
 export interface GetRateResponse {
   /**
    * 最大買入平台幣數量
@@ -598,7 +626,7 @@ export interface GetRateResponse {
   /** 買入快捷設定 */
   depositSpeedAmount: number[];
   /**
-   * USDT轉KOKON匯率
+   * USDT轉平台幣匯率
    * @format decimal
    */
   usdt2PCoinRate: string;
@@ -673,8 +701,8 @@ export interface GetTreasuresResponse {
      * @format decimal
      */
     rewardAmount: string;
-    /** 獎勵類型. Allowed Enum */
-    rewardType: "USDT" | "TON" | "KOKON";
+    /** 獎勵類型 */
+    rewardType: string;
     /** 狀態: 待解鎖、解鎖中、已解鎖. Allowed Enum */
     status: "STANDBY" | "UNLOCKING" | "UNLOCKED";
   } | null)[];
@@ -1260,6 +1288,34 @@ export interface SettingResponse {
 export interface ShareLinkRequest {
   /** 用戶分享時使用的推薦代碼 */
   referralCode?: string;
+}
+
+export type ShareRankInfoPublicRequest = object;
+
+export interface ShareRankInfoPublicResponse {
+  /** 排行榜 */
+  rank: {
+    /** 會員名稱 */
+    customerName: string;
+    /**
+     * 排名
+     * @format int64
+     * @min 1
+     */
+    ranking: number;
+    /**
+     * 獎金
+     * @format decimal
+     */
+    reward?: string;
+    /** 獎金幣別 */
+    rewardType?: string;
+    /**
+     * 直属下级人数
+     * @format uint64
+     */
+    subordinatesCount?: number;
+  }[];
 }
 
 export interface ShareRankInfoResponse {
@@ -2294,7 +2350,7 @@ export interface GameTransactionsListParams {
   /** @format uint64 */
   gameId?: number;
   /**
-   * 分頁頁數 (Required, Minimum: 1)
+   * 分頁頁數 (Minimum: 1, Required)
    * @format int64
    * @min 1
    */
@@ -2386,6 +2442,11 @@ export interface PacketsListParams {
   pageSize: number;
 }
 
+export interface PublicRankBcListParams {
+  /** 排行榜類型 (Required) */
+  rankType: string;
+}
+
 export interface RankBcListParams {
   /** 排行榜類型 (Required) */
   rankType: string;
@@ -2459,7 +2520,7 @@ export interface WalletHistoryListListParams {
   /** 收支 Income Expense (Allowed values: Income, Expense) */
   balance?: "Income" | "Expense";
   /**
-   * 頁碼 (Minimum: 1, Required)
+   * 頁碼 (Required, Minimum: 1)
    * @format int64
    * @min 1
    */

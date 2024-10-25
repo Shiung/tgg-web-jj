@@ -1,34 +1,62 @@
 import { useMemo } from 'react'
-import Board from './rank/components/board'
-import PlayerCard from './rank/components/player-card'
-import Skeleton from './rank/components/skeleton'
-import { useRankContext } from './rank/provider'
-import { Crypto } from '~/consts/crypto'
-
 import { useQuery } from '@tanstack/react-query'
+import { Crypto } from '~/consts/crypto'
 import { apis } from '~/api'
 import type { ShareRankInfoResponse } from '~/api/codegen/data-contracts'
+import useStore from '~/stores/useStore'
+
+import { useRankContext } from './rank/provider'
+import Skeleton from './rank/components/skeleton'
+import PlayerCard from './rank/components/player-card'
+import Board from './rank/components/board'
 
 export default function Share() {
   const { state } = useRankContext()
+  const isLoggedIn = useStore(state => state.isLoggedIn)
 
-  const { data, isLoading } = useQuery({
-    queryKey: [''],
+  // 未登入
+  const { data: unLoggedInShareData, isLoading: unLoggedInIsLoading } = useQuery({
+    queryKey: ['publicRankShareList'],
+    queryFn: () => apis.public.publicRankShareList(),
+    enabled: !isLoggedIn,
+  })
+
+  // 已登入
+  const { data: loggedInShareData, isLoading: loggedInIsLoading } = useQuery({
+    queryKey: ['rankShareList'],
     queryFn: () => apis.rank.rankShareList(),
+    enabled: isLoggedIn,
   })
 
   const dataLs = useMemo(() => {
     const isReward = state.rankConfigList.shareRankReward ?? false
-    const { rank, selfRank } = data?.data ?? { rank: [], selfRank: {} }
+
+    let rank: ShareRankInfoResponse['rank'] = [],
+      selfRank: ShareRankInfoResponse['selfRank'] | null = null
+
+    if (isLoggedIn) {
+      rank = loggedInShareData?.data?.rank ?? []
+      selfRank = loggedInShareData?.data?.selfRank ?? null
+    } else {
+      rank = unLoggedInShareData?.data?.rank ?? []
+      selfRank = null
+    }
+
     return {
       top: rank.slice(0, 3).map(l => ({ ...l, scoreCount: l?.subordinatesCount })),
       others: rank.slice(3),
-      self: selfRank as ShareRankInfoResponse['selfRank'],
+      self: selfRank,
       isReward,
     }
-  }, [data, state.rankConfigList])
+  }, [
+    isLoggedIn,
+    loggedInShareData?.data?.rank,
+    loggedInShareData?.data?.selfRank,
+    state.rankConfigList.shareRankReward,
+    unLoggedInShareData?.data?.rank,
+  ])
 
-  if (isLoading) return <Skeleton />
+  if (unLoggedInIsLoading || loggedInIsLoading) return <Skeleton />
 
   return (
     <div className="flex flex-1 flex-col">
@@ -55,16 +83,18 @@ export default function Share() {
               />
             )
           })}
-          <PlayerCard
-            type="share"
-            rank={dataLs?.self?.ranking ?? 0}
-            name={dataLs.self?.customerName ?? ''}
-            scoreCount={dataLs.self?.subordinatesCount?.toString() ?? ''}
-            reward={dataLs.self?.reward ?? ''}
-            currency={dataLs.self?.rewardType as Crypto}
-            isSelf
-            rewardLock={!dataLs.isReward || !dataLs.self?.rewardType}
-          />
+          {dataLs?.self && (
+            <PlayerCard
+              type="share"
+              rank={dataLs.self.ranking ?? 0}
+              name={dataLs.self.customerName ?? ''}
+              scoreCount={dataLs.self.subordinatesCount?.toString() ?? ''}
+              reward={dataLs.self.reward ?? ''}
+              currency={dataLs.self.rewardType as Crypto}
+              isSelf
+              rewardLock={!dataLs.isReward || !dataLs.self?.rewardType}
+            />
+          )}
         </div>
       </div>
     </div>

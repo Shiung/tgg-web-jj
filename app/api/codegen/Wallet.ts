@@ -235,7 +235,7 @@ export class Wallet<SecurityDataType = unknown> {
         /** 買入快捷設定 */
         depositSpeedAmount: number[];
         /**
-         * USDT轉KOKON匯率
+         * USDT轉平台幣匯率
          * @format decimal
          */
         usdt2PCoinRate: string;

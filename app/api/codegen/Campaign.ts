@@ -267,8 +267,8 @@ export class Campaign<SecurityDataType = unknown> {
            * @format decimal
            */
           rewardAmount: string;
-          /** 獎勵類型. Allowed Enum */
-          rewardType: "USDT" | "TON" | "KOKON";
+          /** 獎勵類型 */
+          rewardType: string;
           /** 狀態: 待解鎖、解鎖中、已解鎖. Allowed Enum */
           status: "STANDBY" | "UNLOCKING" | "UNLOCKED";
         } | null)[];

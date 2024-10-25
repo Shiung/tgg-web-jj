@@ -3,6 +3,7 @@ import { useOutletContext } from '@remix-run/react'
 import { useQuery } from '@tanstack/react-query'
 import { apis } from '~/api'
 import type { RankConfigResponse } from '~/api/codegen/data-contracts'
+import useStore from '~/stores/useStore'
 
 type State = {
   isLoading: boolean
@@ -59,10 +60,11 @@ const reducer = (state: State, action: Action) => {
 
 export const useRankProvider = () => {
   const [state, action] = useReducer(reducer, InitState)
+  const isLoggedIn = useStore(state => state.isLoggedIn)
 
   const { data, isLoading } = useQuery({
-    queryKey: ['rankConfigList'],
-    queryFn: () => apis.rank.rankConfigList(),
+    queryKey: ['rankConfigList', isLoggedIn],
+    queryFn: () => (isLoggedIn ? apis.rank.rankConfigList() : apis.public.publicRankConfigList()),
   })
 
   useEffect(() => {

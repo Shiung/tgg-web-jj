@@ -9,6 +9,7 @@
  * ---------------------------------------------------------------
  */
 
+import { PublicRankBcListParams } from "./data-contracts";
 import { HttpClient, RequestParams } from "./http-client";
 
 export class Public<SecurityDataType = unknown> {
@@ -152,6 +153,120 @@ export class Public<SecurityDataType = unknown> {
       any
     >({
       path: `/ajax/public/games/active`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*BCRankController)
+   * @name PublicRankBcList
+   * @request GET:/ajax/public/rank/bc
+   */
+  publicRankBcList = (query: PublicRankBcListParams, params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /** 排行榜 */
+        rank: {
+          /** 會員名稱 */
+          customerName: string;
+          /**
+           * 排名
+           * @format int64
+           * @min 1
+           */
+          ranking: number;
+          /**
+           * 獎金
+           * @format decimal
+           */
+          reward?: string;
+          /** 獎金幣別 */
+          rewardType?: string;
+          /**
+           * 有效下注金額
+           * @format decimal
+           */
+          validBetGold: string;
+        }[];
+      },
+      any
+    >({
+      path: `/ajax/public/rank/bc`,
+      method: "GET",
+      query: query,
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*BCRankController)
+   * @name PublicRankConfigList
+   * @request GET:/ajax/public/rank/config
+   */
+  publicRankConfigList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /** BC每日排行榜 */
+        bcRankDailyEntrance: boolean;
+        /** BC每日排行榜獎金 */
+        bcRankDailyReward: boolean;
+        /** BC每月排行榜 */
+        bcRankMonthlyEntrance: boolean;
+        /** BC每月排行榜獎金 */
+        bcRankMonthlyReward: boolean;
+        /** BC每周排行榜 */
+        bcRankWeeklyEntrance: boolean;
+        /** BC每周排行榜獎金 */
+        bcRankWeeklyReward: boolean;
+        /** 分享排行榜 */
+        shareRankEntrance: boolean;
+        /** 分享排行榜獎金 */
+        shareRankReward: boolean;
+      },
+      any
+    >({
+      path: `/ajax/public/rank/config`,
+      method: "GET",
+      ...params,
+    });
+  /**
+   * @description Auto-generated API documentation
+   *
+   * @tags (*ShareRankController)
+   * @name PublicRankShareList
+   * @request GET:/ajax/public/rank/share
+   */
+  publicRankShareList = (params: RequestParams = {}) =>
+    this.http.request<
+      {
+        /** 排行榜 */
+        rank: {
+          /** 會員名稱 */
+          customerName: string;
+          /**
+           * 排名
+           * @format int64
+           * @min 1
+           */
+          ranking: number;
+          /**
+           * 獎金
+           * @format decimal
+           */
+          reward?: string;
+          /** 獎金幣別 */
+          rewardType?: string;
+          /**
+           * 直属下级人数
+           * @format uint64
+           */
+          subordinatesCount?: number;
+        }[];
+      },
+      any
+    >({
+      path: `/ajax/public/rank/share`,
       method: "GET",
       ...params,
     });

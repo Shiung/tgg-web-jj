@@ -666,13 +666,8 @@
                         "format": "decimal"
                       },
                       "rewardType": {
-                        "description": "獎勵類型. Allowed Enum",
-                        "type": "string",
-                        "enum": [
-                          "USDT",
-                          "TON",
-                          "KOKON"
-                        ]
+                        "description": "獎勵類型",
+                        "type": "string"
                       },
                       "status": {
                         "description": "狀態: 待解鎖、解鎖中、已解鎖. Allowed Enum",
@@ -1604,7 +1599,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Required, Minimum: 1)",
+            "description": "分頁頁數 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -2810,6 +2805,192 @@
                             }
                           }
                         }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/public/rank/bc": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*BCRankController)"
+        ],
+        "parameters": [
+          {
+            "type": "string",
+            "description": "排行榜類型 (Required)",
+            "name": "rankType",
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "rank"
+              ],
+              "properties": {
+                "rank": {
+                  "description": "排行榜",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "ranking",
+                      "customerName",
+                      "validBetGold"
+                    ],
+                    "properties": {
+                      "customerName": {
+                        "description": "會員名稱",
+                        "type": "string"
+                      },
+                      "ranking": {
+                        "description": "排名",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1
+                      },
+                      "reward": {
+                        "description": "獎金",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "rewardType": {
+                        "description": "獎金幣別",
+                        "type": "string"
+                      },
+                      "validBetGold": {
+                        "description": "有效下注金額",
+                        "type": "string",
+                        "format": "decimal"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/public/rank/config": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*BCRankController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "bcRankDailyEntrance",
+                "bcRankDailyReward",
+                "bcRankWeeklyEntrance",
+                "bcRankWeeklyReward",
+                "bcRankMonthlyEntrance",
+                "bcRankMonthlyReward",
+                "shareRankEntrance",
+                "shareRankReward"
+              ],
+              "properties": {
+                "bcRankDailyEntrance": {
+                  "description": "BC每日排行榜",
+                  "type": "boolean"
+                },
+                "bcRankDailyReward": {
+                  "description": "BC每日排行榜獎金",
+                  "type": "boolean"
+                },
+                "bcRankMonthlyEntrance": {
+                  "description": "BC每月排行榜",
+                  "type": "boolean"
+                },
+                "bcRankMonthlyReward": {
+                  "description": "BC每月排行榜獎金",
+                  "type": "boolean"
+                },
+                "bcRankWeeklyEntrance": {
+                  "description": "BC每周排行榜",
+                  "type": "boolean"
+                },
+                "bcRankWeeklyReward": {
+                  "description": "BC每周排行榜獎金",
+                  "type": "boolean"
+                },
+                "shareRankEntrance": {
+                  "description": "分享排行榜",
+                  "type": "boolean"
+                },
+                "shareRankReward": {
+                  "description": "分享排行榜獎金",
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ajax/public/rank/share": {
+      "get": {
+        "description": "Auto-generated API documentation",
+        "tags": [
+          "(*ShareRankController)"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "required": [
+                "rank"
+              ],
+              "properties": {
+                "rank": {
+                  "description": "排行榜",
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "ranking",
+                      "customerName"
+                    ],
+                    "properties": {
+                      "customerName": {
+                        "description": "會員名稱",
+                        "type": "string"
+                      },
+                      "ranking": {
+                        "description": "排名",
+                        "type": "integer",
+                        "format": "int64",
+                        "minimum": 1
+                      },
+                      "reward": {
+                        "description": "獎金",
+                        "type": "string",
+                        "format": "decimal"
+                      },
+                      "rewardType": {
+                        "description": "獎金幣別",
+                        "type": "string"
+                      },
+                      "subordinatesCount": {
+                        "description": "直属下级人数",
+                        "type": "integer",
+                        "format": "uint64"
                       }
                     }
                   }
@@ -5646,7 +5827,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Minimum: 1, Required)",
+            "description": "頁碼 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5923,7 +6104,7 @@
                   }
                 },
                 "usdt2PCoinRate": {
-                  "description": "USDT轉KOKON匯率",
+                  "description": "USDT轉平台幣匯率",
                   "type": "string",
                   "format": "decimal"
                 },
@@ -6202,6 +6383,52 @@
     }
   },
   "definitions": {
+    "BCPublicRankInfoResponse": {
+      "type": "object",
+      "required": [
+        "rank"
+      ],
+      "properties": {
+        "rank": {
+          "description": "排行榜",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ranking",
+              "customerName",
+              "validBetGold"
+            ],
+            "properties": {
+              "customerName": {
+                "description": "會員名稱",
+                "type": "string"
+              },
+              "ranking": {
+                "description": "排名",
+                "type": "integer",
+                "format": "int64",
+                "minimum": 1
+              },
+              "reward": {
+                "description": "獎金",
+                "type": "string",
+                "format": "decimal"
+              },
+              "rewardType": {
+                "description": "獎金幣別",
+                "type": "string"
+              },
+              "validBetGold": {
+                "description": "有效下注金額",
+                "type": "string",
+                "format": "decimal"
+              }
+            }
+          }
+        }
+      }
+    },
     "BCRankInfoRequest": {
       "type": "object",
       "required": [
@@ -7171,6 +7398,9 @@
     "GetPCoinWalletRequest": {
       "type": "object"
     },
+    "GetRankConfigPublicRequest": {
+      "type": "object"
+    },
     "GetRateResponse": {
       "type": "object",
       "required": [
@@ -7209,7 +7439,7 @@
           }
         },
         "usdt2PCoinRate": {
-          "description": "USDT轉KOKON匯率",
+          "description": "USDT轉平台幣匯率",
           "type": "string",
           "format": "decimal"
         },
@@ -7322,13 +7552,8 @@
                 "format": "decimal"
               },
               "rewardType": {
-                "description": "獎勵類型. Allowed Enum",
-                "type": "string",
-                "enum": [
-                  "USDT",
-                  "TON",
-                  "KOKON"
-                ]
+                "description": "獎勵類型",
+                "type": "string"
               },
               "status": {
                 "description": "狀態: 待解鎖、解鎖中、已解鎖. Allowed Enum",
@@ -8360,6 +8585,54 @@
         "referralCode": {
           "description": "用戶分享時使用的推薦代碼",
           "type": "string"
+        }
+      }
+    },
+    "ShareRankInfoPublicRequest": {
+      "type": "object"
+    },
+    "ShareRankInfoPublicResponse": {
+      "type": "object",
+      "required": [
+        "rank"
+      ],
+      "properties": {
+        "rank": {
+          "description": "排行榜",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "ranking",
+              "customerName"
+            ],
+            "properties": {
+              "customerName": {
+                "description": "會員名稱",
+                "type": "string"
+              },
+              "ranking": {
+                "description": "排名",
+                "type": "integer",
+                "format": "int64",
+                "minimum": 1
+              },
+              "reward": {
+                "description": "獎金",
+                "type": "string",
+                "format": "decimal"
+              },
+              "rewardType": {
+                "description": "獎金幣別",
+                "type": "string"
+              },
+              "subordinatesCount": {
+                "description": "直属下级人数",
+                "type": "integer",
+                "format": "uint64"
+              }
+            }
+          }
         }
       }
     },
