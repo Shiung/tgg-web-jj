@@ -36,6 +36,13 @@ type FormData = {
   verificationCode: string
 }
 
+const formatPercentage = (value: string | undefined): string => {
+  if (!value) return '0'
+  const floatValue = parseFloat(value) / 100
+  const formatted = floatValue.toFixed(4)
+  return formatted.replace(/\.?0+$/, '')
+}
+
 export default function Withdraw() {
   // 當前選擇幣種
   const [selectedCurrency, setSelectedCurrency] = useState<'USDT' | 'TON'>('USDT')
@@ -359,7 +366,7 @@ export default function Withdraw() {
                     thousandSeparator
                     type="text"
                     inputMode="decimal"
-                    pattern="[0-9.]*"
+                    pattern="[0-9.,]*"
                     id="amount"
                     label={t('Amount')}
                     placeholder={t('PlaceholderEnter')}
@@ -392,6 +399,7 @@ export default function Withdraw() {
             <div className="mt-2 flex flex-wrap justify-between space-x-2">
               {currentSetting.presentAmounts.map((presentAmount, index) => (
                 <Button
+                  type="button"
                   key={`amount_${index}`}
                   className="mb-2 h-7 flex-1"
                   variant="outlineSoft"
@@ -404,6 +412,7 @@ export default function Withdraw() {
                 </Button>
               ))}
               <Button
+                type="button"
                 className="mb-2 h-7 flex-1"
                 variant="outlineSoft"
                 onClick={() => {
@@ -444,7 +453,7 @@ export default function Withdraw() {
                   <span className="pr-1 text-white">
                     {currentSetting?.feeType === 'fixed' && currentSetting?.feeSettingValue}
                     {currentSetting?.feeType === 'percentage' &&
-                      `${watch('amount') || 0} x ${(parseFloat(currentSetting?.feeSettingValue) / 100).toFixed(2)}`}
+                      `${watch('amount') || 0} x ${formatPercentage(currentSetting?.feeSettingValue)}`}
                   </span>
                   <ActiveIcon currency={currentSetting?.currency} className="h-3 w-3" />
                 </div>

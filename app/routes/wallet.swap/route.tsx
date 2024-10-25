@@ -262,7 +262,7 @@ export default function Swap() {
                     thousandSeparator
                     type="text"
                     inputMode="decimal"
-                    // pattern="[0-9.]*"
+                    pattern="[0-9.,]*"
                     id="amount"
                     label={t('Amount')}
                     placeholder={t('PlaceholderEnter')}

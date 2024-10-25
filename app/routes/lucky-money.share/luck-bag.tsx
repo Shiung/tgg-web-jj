@@ -93,7 +93,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 thousandSeparator
                 type="text"
                 inputMode="decimal"
-                pattern="[0-9]*"
+                pattern="[0-9,]*"
                 id="quota"
                 label={t('AmountOfTotalBag')}
                 placeholder={t('PleaseEnter')}
@@ -147,7 +147,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 thousandSeparator
                 type="text"
                 inputMode="decimal"
-                pattern="[0-9]*"
+                pattern="[0-9,]*"
                 id="minValue"
                 label={
                   <div className="flex w-full justify-between pr-3">
@@ -183,7 +183,7 @@ const LuckBag: React.FC<LuckBagProps> = ({ packetSetting }) => {
                 thousandSeparator
                 type="text"
                 inputMode="decimal"
-                pattern="[0-9]*"
+                pattern="[0-9,]*"
                 id="maxValue"
                 label={t('Maximum')}
                 onValueChange={({ floatValue }) => {
