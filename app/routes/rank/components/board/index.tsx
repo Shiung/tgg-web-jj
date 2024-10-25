@@ -5,6 +5,8 @@ import Amount from '~/components/amount'
 import Icons from '~/icons'
 import { Crypto, cryptoDetails } from '~/consts/crypto'
 
+import { Truncate } from '@re-dev/react-truncate'
+
 import type { BCRankInfoResponse, ShareRankInfoResponse } from '~/api/codegen/data-contracts'
 import Rules from './rules'
 import { useTranslation } from 'react-i18next'
@@ -43,7 +45,9 @@ const UnitBoard = ({
   return (
     <div className={cn('px-2 [&>div]:w-full', rewardLock ? 'space-y-3' : 'space-y-7')}>
       <div className="space-y-1 text-center">
-        <div className="text-[14px] font-ultra">{name}</div>
+        <div className="text-[14px] font-ultra">
+          <Truncate>{name}</Truncate>
+        </div>
         <div className="text-[12px]">{scoreCount}</div>
         <div className="relative w-full">
           <img src={imgHeader} alt="background-board-header" className="w-full" />
@@ -59,7 +63,7 @@ const UnitBoard = ({
           <div className="primary-gradient-border-rounded !absolute -top-4 left-1/2 flex h-[30px] min-w-[50%] -translate-x-1/2 items-center rounded-[100px] bg-black px-2 before:rounded-[100px]">
             {currencyIcon?.icon && <currencyIcon.icon className="mr-1 h-4 w-4" />}
             <span className="whitespace-nowrap text-base font-ultra">
-              <Amount value={reward} crypto={currency} />
+              <Amount value={reward} crypto={currency} useKM={currency === Crypto.KATON} />
             </span>
           </div>
         )}
