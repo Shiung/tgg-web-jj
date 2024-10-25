@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { MetaFunction } from '@remix-run/node'
 import { Link, useNavigate } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
@@ -18,62 +18,15 @@ import { GameCode, getGameRoute, VenueType } from '~/consts/game'
 import useStore from '~/stores/useStore'
 import { buildResourceImageUrl, cn } from '~/lib/utils'
 
-import { useBanner, useBannerRedirect } from './useBanner'
 import GameImg from './game-img'
+import { useBanner, useBannerRedirect } from './useBanner'
 import { GameEntranceSkeleton, NewReleaseCarouselContentSkeleton } from './skeleton'
-// import Footer from './footer'
 import CurrencyConversionDialog from './currency-conversion-dialog'
-import { addHours, format } from 'date-fns'
+import GameMainTenance from './gameM-mainTenance'
+// import Footer from './footer'
 
 export const meta: MetaFunction = () => {
   return [{ title: 'Katon' }, { name: 'description', content: 'Welcome to Katon!' }]
-}
-
-const GameMainTenance = ({
-  maintainStartAt,
-  maintainEndAt,
-  className,
-}: {
-  maintainStartAt?: string
-  maintainEndAt?: string
-  className?: string
-}) => {
-  const { t } = useTranslation()
-  const [isMaintenance, setIsMaintenance] = useState(false)
-
-  useEffect(() => {
-    if (!maintainStartAt || !maintainEndAt) {
-      return setIsMaintenance(false)
-    }
-
-    const start = new Date(maintainStartAt)
-    const end = new Date(maintainEndAt)
-    const now = new Date()
-
-    setIsMaintenance(now >= start && now <= end)
-  }, [maintainEndAt, maintainStartAt])
-
-  if (!isMaintenance) return null
-  return (
-    <div
-      className={cn(
-        'pointer-events-auto absolute inset-0 z-10 flex flex-col items-stretch justify-center space-y-1 bg-black/70 px-4 text-base font-ultra',
-        className
-      )}
-      onClick={e => e.stopPropagation()}
-      onKeyDown={e => e.stopPropagation()}
-      role="button"
-      tabIndex={0}
-    >
-      <img src="/images/home/traffic-cone.png" alt="maintenance" className="h-6 w-6 self-center" />
-      <p className="self-center whitespace-pre-wrap text-center text-primary">
-        {t('UnderMainTenance')}
-      </p>
-      <p className="self-center text-center text-white">
-        {maintainEndAt && format(addHours(new Date(maintainEndAt), 8), 'MM-dd HH:mm') + ' (UTC+8)'}
-      </p>
-    </div>
-  )
 }
 
 /* Home */
@@ -181,6 +134,7 @@ export default function Index() {
                     className="h-full w-full object-cover"
                   />
                   <GameMainTenance
+                    isGameMaintain={currentGameInfo.isGameMaintain}
                     maintainStartAt={currentGameInfo.maintainStartAt}
                     maintainEndAt={currentGameInfo.maintainEndAt}
                   />
@@ -259,6 +213,7 @@ export default function Index() {
                     />
                     <GameMainTenance
                       className="text-sm"
+                      isGameMaintain={game.isGameMaintain}
                       maintainStartAt={game.maintainStartAt}
                       maintainEndAt={game.maintainEndAt}
                     />
