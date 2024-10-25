@@ -18,7 +18,7 @@ function updateTonConnectManifest(domain: string, manifestFilePath: string) {
 
     // 更新 url 和 iconUrl
     manifest.url = domain
-    manifest.iconUrl = `${domain}/logo.png`
+    manifest.iconUrl = `${domain}/logo-180x180.png`
 
     // 将更新后的内容写回文件
     fs.writeFileSync(manifestFilePath, JSON.stringify(manifest, null, 2))
