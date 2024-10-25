@@ -14,7 +14,20 @@ interface RulesSheetProps {
   type: 'crypto' | 'share'
 }
 
-const infoConf = {
+const infoConf: Record<
+  'crypto' | 'share',
+  {
+    title: string
+    content: Array<{
+      subTitle: string
+      content: string
+      hasChild?: Array<{
+        subTitle: string
+        content: string
+      }>
+    }>
+  }
+> = {
   crypto: {
     title: 'rank.rules.crypto.title',
     content: [
@@ -29,18 +42,20 @@ const infoConf = {
       {
         subTitle: 'rank.rules.crypto.content3.subTitle',
         content: '',
-      },
-      {
-        subTitle: 'rank.rules.crypto.content4.subTitle',
-        content: 'rank.rules.crypto.content4.content',
-      },
-      {
-        subTitle: 'rank.rules.crypto.content5.subTitle',
-        content: 'rank.rules.crypto.content5.content',
-      },
-      {
-        subTitle: 'rank.rules.crypto.content6.subTitle',
-        content: 'rank.rules.crypto.content6.content',
+        hasChild: [
+          {
+            subTitle: 'rank.rules.crypto.content4.subTitle',
+            content: 'rank.rules.crypto.content4.content',
+          },
+          {
+            subTitle: 'rank.rules.crypto.content5.subTitle',
+            content: 'rank.rules.crypto.content5.content',
+          },
+          {
+            subTitle: 'rank.rules.crypto.content6.subTitle',
+            content: 'rank.rules.crypto.content6.content',
+          },
+        ],
       },
       {
         subTitle: 'rank.rules.crypto.content7.subTitle',
@@ -62,10 +77,12 @@ const infoConf = {
       {
         subTitle: 'rank.rules.share.content3.subTitle',
         content: '',
-      },
-      {
-        subTitle: 'rank.rules.share.content4.subTitle',
-        content: 'rank.rules.share.content4.content',
+        hasChild: [
+          {
+            subTitle: 'rank.rules.share.content4.subTitle',
+            content: 'rank.rules.share.content4.content',
+          },
+        ],
       },
       {
         subTitle: 'rank.rules.share.content5.subTitle',
@@ -73,7 +90,7 @@ const infoConf = {
       },
     ],
   },
-} as const
+}
 
 export default function Rules({ children, type }: React.PropsWithChildren<RulesSheetProps>) {
   const { t } = useTranslation()
@@ -98,7 +115,7 @@ export default function Rules({ children, type }: React.PropsWithChildren<RulesS
         </SheetHeader>
         <SheetClose />
         <div className="mx-auto max-h-[calc(100vh_-_48px-_44px)] w-full space-y-6 overflow-y-auto p-4 text-start">
-          {infoConf?.[type].content.map(({ subTitle, content }, idx) => {
+          {infoConf?.[type].content.map(({ subTitle, content, hasChild }, idx) => {
             return (
               <div key={`${type}-${idx}`}>
                 {subTitle && (
@@ -106,9 +123,27 @@ export default function Rules({ children, type }: React.PropsWithChildren<RulesS
                     {t(subTitle)}
                   </div>
                 )}
-                {content && (
+                {!hasChild && content && (
                   <div className="text-sm font-normal leading-[18px] text-white/70">
                     {t(content)}
+                  </div>
+                )}
+                {hasChild && (
+                  <div className="space-y-2">
+                    {hasChild.map((c, idx) => (
+                      <div key={`child-${idx}`}>
+                        {c.subTitle && (
+                          <div className="text-sm font-ultra leading-[18px] text-white">
+                            {t(c.subTitle)}
+                          </div>
+                        )}
+                        {c.content && (
+                          <div className="text-sm font-normal leading-[18px] text-white/70">
+                            {t(c.content)}
+                          </div>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>

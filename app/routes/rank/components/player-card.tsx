@@ -162,7 +162,7 @@ const PlayerCard: React.FC<Props> & {
           <>
             {currencyIcon?.icon && <currencyIcon.icon className="h-4 w-4" />}
             <span className="font-ultra">
-              <Amount value={reward} crypto={currency} />
+              <Amount value={reward} crypto={currency} useKM={currency === Crypto.KATON} />
             </span>
           </>
         )
