@@ -46,18 +46,14 @@ const GetLuckyMoneyDialog: React.FC = () => {
     // setStatus('loading')
 
     try {
-      const res = await packetDraw({})
-      console.log('draw occur res', res)
-
+      await packetDraw({})
       setStatus('animation')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      // 错误处理
       console.error('draw occur error', error)
-      if (error?.errorCode in packetDrawErrorCodes) {
-        setPacketDrawFailTitle(
-          packetDrawErrorCodes[error.errorCode as keyof typeof packetDrawErrorCodes]
-        )
+      const errorCode = error?.response?.data?.errorCode
+      if (errorCode && errorCode in packetDrawErrorCodes) {
+        setPacketDrawFailTitle(packetDrawErrorCodes[errorCode as keyof typeof packetDrawErrorCodes])
         setStatus('result')
       } else {
         error?.message && errorToast(error.message)

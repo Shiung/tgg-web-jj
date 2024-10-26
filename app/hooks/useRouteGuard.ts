@@ -33,7 +33,7 @@ export default function useRouteGuard() {
     } else if (/^r_/.test(_startParam)) {
       // 實作分享/紅包邀請碼功能，預期以某字符開頭 例如r_ 開頭 eg: r_xdgYdr6
       localStorage.setItem('referralCode', _startParam)
-    } else if (_startParam === 'debug') {
+    } else if (_startParam === 'debug' && process.env.NODE_ENV === 'development') {
       import('eruda').then(lib => lib.default.init())
     } else {
       console.warn(`Unknown startapp param: ${startApp || tgWebAppStartParam}`)
