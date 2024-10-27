@@ -13,7 +13,7 @@ export function useCustomSupport() {
    */
   const handleCustomSupport = useCallback(() => {
     if (inTelegram) {
-      utils.openLink(supportUrl)
+      utils.openTelegramLink(supportUrl)
     } else {
       window.open(supportUrl, '_blank', 'noreferrer')
     }

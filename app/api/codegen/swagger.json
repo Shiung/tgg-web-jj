@@ -633,6 +633,7 @@
                       "betRequirement": {
                         "description": "會員投注BC遊戲比例",
                         "type": "string",
+                        "nullable": true,
                         "format": "decimal"
                       },
                       "createdAt": {
@@ -643,6 +644,7 @@
                       "directSubBetRequirement": {
                         "description": "直屬下線投注BC遊戲比例",
                         "type": "string",
+                        "nullable": true,
                         "format": "decimal"
                       },
                       "id": {
@@ -1172,7 +1174,7 @@
               "asc"
             ],
             "type": "string",
-            "description": "排序欄位升降冪(asc,desc) (Allowed values: desc, asc, Required when SortField is present)",
+            "description": "排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc)",
             "name": "sortOrder",
             "in": "query"
           },
@@ -1193,7 +1195,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Required, Minimum: 1)",
+            "description": "分頁頁數 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -1599,7 +1601,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Minimum: 1, Required)",
+            "description": "分頁頁數 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -2484,7 +2486,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Required, Minimum: 1)",
+            "description": "頁碼 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5462,7 +5464,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -7519,6 +7521,7 @@
               "betRequirement": {
                 "description": "會員投注BC遊戲比例",
                 "type": "string",
+                "nullable": true,
                 "format": "decimal"
               },
               "createdAt": {
@@ -7529,6 +7532,7 @@
               "directSubBetRequirement": {
                 "description": "直屬下線投注BC遊戲比例",
                 "type": "string",
+                "nullable": true,
                 "format": "decimal"
               },
               "id": {

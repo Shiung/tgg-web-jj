@@ -1,13 +1,17 @@
-import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
 import { Link, useNavigate } from '@remix-run/react'
+import { useTranslation } from 'react-i18next'
+import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
+import { useCustomSupport } from '~/hooks/useCustomSupport'
 
 import UnitCard from './unit-card'
 import { useActions } from './hooks'
-import { useTranslation } from 'react-i18next'
+import { Button } from '~/components/ui/button'
 
 export default function WithdrawalProcessing() {
   const { t } = useTranslation()
   const { ls, isLoading } = useActions()
+  const { handleCustomSupport } = useCustomSupport()
+
   const navigate = useNavigate()
   return (
     <div className="container m-0 flex flex-1 flex-col rounded-t-xl bg-black p-0 text-white">
@@ -50,9 +54,14 @@ export default function WithdrawalProcessing() {
 
       <div className="sticky bottom-0 mb-4 text-center text-[12px] text-white/70">
         {t('QuestionContact')}
-        <Link className="font-ultra text-primary" to="/">
+        <Button
+          variant="link"
+          size="link"
+          className="font-ultra text-primary"
+          onClick={handleCustomSupport}
+        >
           {t('Support')}
-        </Link>
+        </Button>
       </div>
     </div>
   )

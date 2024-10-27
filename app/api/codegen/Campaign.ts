@@ -231,12 +231,12 @@ export class Campaign<SecurityDataType = unknown> {
     this.http.request<
       {
         /** 列表 */
-        list: ({
+        list: {
           /**
            * 會員投注BC遊戲比例
            * @format decimal
            */
-          betRequirement: string;
+          betRequirement?: string | null;
           /**
            * 創建時間(領取時間)
            * @format date-time
@@ -246,7 +246,7 @@ export class Campaign<SecurityDataType = unknown> {
            * 直屬下線投注BC遊戲比例
            * @format decimal
            */
-          directSubBetRequirement: string;
+          directSubBetRequirement?: string | null;
           /**
            * TreasureID
            * @format uint64
@@ -271,7 +271,7 @@ export class Campaign<SecurityDataType = unknown> {
           rewardType: string;
           /** 狀態: 待解鎖、解鎖中、已解鎖. Allowed Enum */
           status: "STANDBY" | "UNLOCKING" | "UNLOCKED";
-        } | null)[];
+        }[];
       },
       any
     >({

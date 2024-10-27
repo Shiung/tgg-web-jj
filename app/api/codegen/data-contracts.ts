@@ -665,12 +665,12 @@ export type GetTreasuresRequest = object;
 
 export interface GetTreasuresResponse {
   /** 列表 */
-  list: ({
+  list: {
     /**
      * 會員投注BC遊戲比例
      * @format decimal
      */
-    betRequirement: string;
+    betRequirement?: string | null;
     /**
      * 創建時間(領取時間)
      * @format date-time
@@ -680,7 +680,7 @@ export interface GetTreasuresResponse {
      * 直屬下線投注BC遊戲比例
      * @format decimal
      */
-    directSubBetRequirement: string;
+    directSubBetRequirement?: string | null;
     /**
      * TreasureID
      * @format uint64
@@ -705,7 +705,7 @@ export interface GetTreasuresResponse {
     rewardType: string;
     /** 狀態: 待解鎖、解鎖中、已解鎖. Allowed Enum */
     status: "STANDBY" | "UNLOCKING" | "UNLOCKED";
-  } | null)[];
+  }[];
 }
 
 export interface GoldenActivityInfoResponse {
@@ -2280,7 +2280,7 @@ export interface CustomerShareCreatePayload {
 export interface CustomerTeamPerformanceListParams {
   /** 排序欄位,可帶入level,bet,deposit任一，未帶時預設會員id正序 (Allowed values: level, bet, deposit) */
   sortField?: "level" | "bet" | "deposit";
-  /** 排序欄位升降冪(asc,desc) (Allowed values: desc, asc, Required when SortField is present) */
+  /** 排序欄位升降冪(asc,desc) (Required when SortField is present, Allowed values: desc, asc) */
   sortOrder?: "desc" | "asc";
   /** 團員名稱 */
   name?: string;
@@ -2290,7 +2290,7 @@ export interface CustomerTeamPerformanceListParams {
    */
   level?: number;
   /**
-   * 分頁頁數 (Required, Minimum: 1)
+   * 分頁頁數 (Minimum: 1, Required)
    * @format int64
    * @min 1
    */
@@ -2350,7 +2350,7 @@ export interface GameTransactionsListParams {
   /** @format uint64 */
   gameId?: number;
   /**
-   * 分頁頁數 (Minimum: 1, Required)
+   * 分頁頁數 (Required, Minimum: 1)
    * @format int64
    * @min 1
    */
@@ -2429,7 +2429,7 @@ export interface PacketsListParams {
   /** 查詢狀態 1:進行中 2:已終止 3:已完成 (Allowed values: 1, 2, 3) */
   states?: "1" | "2" | "3";
   /**
-   * 頁碼 (Required, Minimum: 1)
+   * 頁碼 (Minimum: 1, Required)
    * @format int64
    * @min 1
    */
@@ -2477,7 +2477,7 @@ export interface TeamCommissionListListParams {
    */
   page: number;
   /**
-   * 分頁筆數 (Required, Minimum: 20)
+   * 分頁筆數 (Minimum: 20, Required)
    * @format int64
    * @min 20
    */

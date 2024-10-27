@@ -24,20 +24,14 @@ import useStore from '~/stores/useStore'
 import type { UserSlice } from '~/stores/userSlice'
 import { successToast } from '~/lib/toast'
 import { emitter } from '~/lib/emitter'
+import { useCustomSupport } from '~/hooks/useCustomSupport'
 
-const links = {
-  support: {
-    title: 'Support',
-    value: 'https://t.me/katon_cs',
-    text: '@katon_cs',
-  },
-  officialLinks: {
-    title: 'Official Links',
-    value: [
-      { icon: XIcon, url: 'https://x.com/katon_games' },
-      // { icon: GlobalIcon, url: '' },
-    ],
-  },
+const officialLinks = {
+  title: 'Official Links',
+  value: [
+    { icon: XIcon, url: 'https://x.com/katon_games' },
+    // { icon: GlobalIcon, url: '' },
+  ],
 }
 
 const empty: UserSlice['userInfo'] = {}
@@ -54,6 +48,8 @@ const ProfileDialog: React.FC = () => {
     enabled: !!isLoggedIn,
   })
   const userData = useMemo(() => data?.data ?? empty, [data])
+
+  const { handleCustomSupport } = useCustomSupport()
 
   const handleOpenLink = (url: string) => {
     if (inTelegram) {
@@ -170,9 +166,9 @@ const ProfileDialog: React.FC = () => {
               variant="link"
               size="link"
               className="font-ultra text-app-blue"
-              onClick={() => handleOpenLink(links.support.value)}
+              onClick={() => handleCustomSupport()}
             >
-              {links.support.text}
+              @katon_cs
             </Button>
           </div>
 
@@ -180,7 +176,7 @@ const ProfileDialog: React.FC = () => {
           <div className="flex items-center justify-between">
             <span>{t('OfficialLinks')}</span>
             <div className="flex space-x-2">
-              {links.officialLinks.value.map((link, index) => (
+              {officialLinks.value.map((link, index) => (
                 <Button
                   variant="icon"
                   size="icon"
