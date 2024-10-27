@@ -58,7 +58,7 @@ const TaskNameFormat = (task: NonNullable<TaskQueryResponse['dailyList']>[number
   }
 }
 
-type Desci18nkeyMapFnProps = Pick<
+type Desc18nKeyMapFnProps = Pick<
   NonNullable<TaskQueryResponse['dailyList']>[number],
   'inviteFriendsCondition' | 'teamRechargeCondition' | 'rechargeCondition'
 >
@@ -66,7 +66,7 @@ type Desci18nkeyMapFnProps = Pick<
  * 特定類型要顯示的 desc
  * @interface
  */
-const Desci18nkeyMap: Record<TaskActionType, null | ((p: Desci18nkeyMapFnProps) => string | null)> =
+const DescI18nKeyMap: Record<TaskActionType, null | ((p: Desc18nKeyMapFnProps) => string | null)> =
   {
     LOGIN: null,
     RECHARGE: p => {
@@ -305,7 +305,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
   }
 
   const showDesc = useMemo(() => {
-    return t(Desci18nkeyMap[task.actionType]?.(task) ?? '')
+    return t(DescI18nKeyMap[task.actionType]?.(task) ?? '')
   }, [task, t])
 
   return (

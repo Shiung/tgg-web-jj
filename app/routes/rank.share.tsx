@@ -67,7 +67,7 @@ export default function Share() {
         currency={Crypto.KATON}
       />
       <div className="relative -mt-4 flex-1 rounded-t-xl bg-black">
-        <div className="space-y-3 p-4">
+        <div className="space-y-3 px-4 pt-4">
           <PlayerCard.Title type="share" rewardLock={!dataLs.isReward} />
           {dataLs.others.map(({ customerName, reward, rewardType, ranking, subordinatesCount }) => {
             return (
@@ -83,18 +83,16 @@ export default function Share() {
               />
             )
           })}
-          {dataLs?.self && (
-            <PlayerCard
-              type="share"
-              rank={dataLs.self.ranking ?? 0}
-              name={dataLs.self.customerName ?? ''}
-              scoreCount={dataLs.self.subordinatesCount?.toString() ?? ''}
-              reward={dataLs.self.reward ?? ''}
-              currency={dataLs.self.rewardType as Crypto}
-              isSelf
-              rewardLock={!dataLs.isReward || !dataLs.self?.rewardType}
-            />
-          )}
+          <PlayerCard
+            type="share"
+            rank={dataLs.self?.ranking ?? 1000}
+            name={dataLs.self?.customerName ?? ''}
+            scoreCount={dataLs.self?.subordinatesCount?.toString() ?? '0'}
+            reward={dataLs.self?.reward ?? ''}
+            currency={dataLs.self?.rewardType as Crypto}
+            isSelf
+            rewardLock={!dataLs.isReward || !dataLs.self?.rewardType}
+          />
         </div>
       </div>
     </div>

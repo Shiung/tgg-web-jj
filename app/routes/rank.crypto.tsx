@@ -125,7 +125,7 @@ export default function Crypto() {
           })}
         </TabsList>
         <TabsContent value={currentTab.value} className="mt-0 flex flex-1 flex-col items-stretch">
-          <div className="flex flex-1 flex-col space-y-3 bg-black p-4">
+          <div className="flex flex-1 flex-col space-y-3 bg-black px-4 pt-4">
             <PlayerCard.Title type="crypto" rewardLock={!dataLs.isReward} />
             {dataLs.others.map(({ customerName, reward, rewardType, ranking, validBetGold }) => {
               return (
@@ -141,18 +141,16 @@ export default function Crypto() {
                 />
               )
             })}
-            {dataLs.self && (
-              <PlayerCard
-                type="crypto"
-                rank={dataLs.self.ranking ?? 0}
-                name={dataLs.self.customerName ?? ''}
-                scoreCount={dataLs.self.validBetGold ?? ''}
-                reward={dataLs.self.reward ?? ''}
-                currency={dataLs.self.rewardType as CryptoConst}
-                isSelf
-                rewardLock={!dataLs.isReward}
-              />
-            )}
+            <PlayerCard
+              type="crypto"
+              rank={dataLs.self?.ranking ?? 1000}
+              name={dataLs.self?.customerName ?? ''}
+              scoreCount={dataLs.self?.validBetGold ?? '0'}
+              reward={dataLs.self?.reward ?? ''}
+              currency={dataLs.self?.rewardType as CryptoConst}
+              isSelf
+              rewardLock={!dataLs.isReward}
+            />
           </div>
         </TabsContent>
       </Tabs>

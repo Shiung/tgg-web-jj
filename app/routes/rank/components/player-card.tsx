@@ -52,7 +52,7 @@ const Layout = ({
         width: `${width}px`,
         height: `${height}px`,
         position: 'fixed',
-        bottom: '100px',
+        bottom: '88px',
       })
     }
 
@@ -134,7 +134,7 @@ const PlayerCard: React.FC<Props> & {
       slot_second={
         <>
           <div className="whitespace-nowrap text-sm font-ultra">
-            <Truncate>{isSelf ? t('Me') : name}</Truncate>
+            {isSelf ? t('Me') : <Truncate>{name}</Truncate>}
           </div>
           <div className="flex items-center space-x-1 text-xs text-white/70">
             {type === 'crypto' && <Icons.BetIcon className="h-3 w-3" />}
