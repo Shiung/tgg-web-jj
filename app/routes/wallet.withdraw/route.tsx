@@ -4,6 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NumericFormat } from 'react-number-format'
+import { useTranslation } from 'react-i18next'
 
 import { parseAmount } from '~/lib/amount'
 import { successToast, errorToast } from '~/lib/toast'
@@ -24,7 +25,6 @@ import WithdrawSuccessDialog from './withdraw-success-dialog'
 import WithdrawDeniedDialog from './withdraw-denied-dialog'
 import WithdrewSkeleton from './withdrew-skeleton'
 import SystemMaintenance from './system-maintenance'
-import { useTranslation } from 'react-i18next'
 
 type FormData = {
   amount: string
@@ -39,7 +39,7 @@ type FormData = {
 const formatPercentage = (value: string | undefined): string => {
   if (!value) return '0'
   const floatValue = parseFloat(value) / 100
-  const formatted = floatValue.toFixed(4)
+  const formatted = floatValue.toFixed(6)
   return formatted.replace(/\.?0+$/, '')
 }
 
@@ -109,7 +109,7 @@ export default function Withdraw() {
         })
         .refine(
           () => {
-            return currentSetting?.appliedTimes < currentSetting?.dailyLimitTimes
+            return (currentSetting?.appliedTimes || 0) < (currentSetting?.dailyLimitTimes || 0)
           },
           {
             message: t('YouHaveReachedTheLimitOfDailyWithdrawal'),
@@ -252,7 +252,8 @@ export default function Withdraw() {
     onSuccess: () => {
       setIsSuccessDialogOpen(true)
     },
-    onError: error => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    onError: (error: any) => {
       errorToast(error?.response?.data.message || error.message)
     },
   })
@@ -303,7 +304,7 @@ export default function Withdraw() {
                 className="h-7 flex-1"
                 variant="outlineSoft"
                 isSelected={selectedCurrency === coin.name}
-                onClick={() => setSelectedCurrency(coin.name)}
+                onClick={() => setSelectedCurrency(coin.name as 'USDT' | 'TON')}
               >
                 <coin.icon className="h-[18px] w-[18px]" />
                 <span className="pl-1">{coin.name}</span>

@@ -73,7 +73,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
     reset,
     setValue,
     getValues,
@@ -122,7 +122,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
     setOpen(isOpen)
   }
 
-  const vaildCheckOldEmailCallBack = useCallback(() => {
+  const validCheckOldEmailCallBack = useCallback(() => {
     // TODO add valid origin email api
     const codeVal = getValues('verificationCode')
     verifyCodeEmailHandler(
@@ -219,9 +219,10 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
               className="flex-1"
               catEars
               disabled={!isValid}
+              loading={isSubmitting}
               {...(stepStatus === EmailBindStep.validOldEmail && {
                 type: 'button',
-                onClick: vaildCheckOldEmailCallBack,
+                onClick: validCheckOldEmailCallBack,
               })}
             >
               {t('Ok')}

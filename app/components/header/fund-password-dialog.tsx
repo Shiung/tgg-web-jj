@@ -64,7 +64,7 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isValid },
+    formState: { errors, isValid, isSubmitting },
     reset,
     watch,
   } = useForm<FormValues>({ resolver: zodResolver(formSchema), mode: 'onChange' })
@@ -183,7 +183,7 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
                 {t('Cancel')}
               </Button>
             </DialogClose>
-            <Button className="flex-1" catEars disabled={!isValid}>
+            <Button className="flex-1" catEars disabled={!isValid} loading={isSubmitting}>
               {t('Ok')}
             </Button>
           </DialogFooter>
