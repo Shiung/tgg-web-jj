@@ -30,6 +30,8 @@ export class PacketDraw<SecurityDataType = unknown> {
       {
         /** 中獎金額 */
         amount?: string;
+        /** 中獎幣別 */
+        currency?: string;
         /** 是否中獎 */
         isWinned?: boolean;
       },

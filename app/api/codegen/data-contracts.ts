@@ -299,7 +299,7 @@ export interface CustomerWalletChangeGetRequest {
    * @format date-time
    */
   TransactionTimeTo?: string | null;
-  /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw. Allowed Enum */
+  /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite. Allowed Enum */
   TxCategory?:
     | "Adjustment"
     | "Bet"
@@ -313,7 +313,8 @@ export interface CustomerWalletChangeGetRequest {
     | "Swap(sell)"
     | "Task"
     | "Treasure"
-    | "Withdraw";
+    | "Withdraw"
+    | "Invite";
 }
 
 export interface CustomerWalletChangeGetResponse {
@@ -321,6 +322,8 @@ export interface CustomerWalletChangeGetResponse {
   list?: {
     /** 帳變金額 */
     amount: string;
+    /** 交易備註 */
+    comment?: string;
     /** 幣種 */
     currency: string;
     /**
@@ -328,7 +331,32 @@ export interface CustomerWalletChangeGetResponse {
      * @format date-time
      */
     transactionTime: string;
-    /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw. Allowed Enum */
+    /** 交易類型. Allowed Enum */
+    txType:
+      | "omitempty"
+      | "deposit"
+      | "withdraw"
+      | "swapBuy"
+      | "swapSell"
+      | "adjustCoin"
+      | "adjustCrypto"
+      | "bet"
+      | "winLose"
+      | "casualGameReward"
+      | "casualGameTicket"
+      | "betRankBonus"
+      | "teamRankBonus"
+      | "luckMoneyInvite"
+      | "luckyMoneyCycleOpen"
+      | "luckyMoneyCycleClose"
+      | "smashEgg"
+      | "luckMoneyDrop"
+      | "dailyTask"
+      | "oneTimeTask"
+      | "specialTask"
+      | "treasure"
+      | "commission";
+    /** 交易項目 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite. Allowed Enum */
     type:
       | "Adjustment"
       | "Bet"
@@ -342,7 +370,8 @@ export interface CustomerWalletChangeGetResponse {
       | "Swap(sell)"
       | "Task"
       | "Treasure"
-      | "Withdraw";
+      | "Withdraw"
+      | "Invite";
   }[];
   /** 分頁資訊 */
   pagination?: {
@@ -407,6 +436,8 @@ export type DrawRequest = object;
 export interface DrawResponse {
   /** 中獎金額 */
   amount?: string;
+  /** 中獎幣別 */
+  currency?: string;
   /** 是否中獎 */
   isWinned?: boolean;
 }
@@ -2290,7 +2321,7 @@ export interface CustomerTeamPerformanceListParams {
    */
   level?: number;
   /**
-   * 分頁頁數 (Minimum: 1, Required)
+   * 分頁頁數 (Required, Minimum: 1)
    * @format int64
    * @min 1
    */
@@ -2429,7 +2460,7 @@ export interface PacketsListParams {
   /** 查詢狀態 1:進行中 2:已終止 3:已完成 (Allowed values: 1, 2, 3) */
   states?: "1" | "2" | "3";
   /**
-   * 頁碼 (Minimum: 1, Required)
+   * 頁碼 (Required, Minimum: 1)
    * @format int64
    * @min 1
    */
@@ -2477,7 +2508,7 @@ export interface TeamCommissionListListParams {
    */
   page: number;
   /**
-   * 分頁筆數 (Minimum: 20, Required)
+   * 分頁筆數 (Required, Minimum: 20)
    * @format int64
    * @min 20
    */
@@ -2502,7 +2533,7 @@ export interface WalletHistoryListListParams {
   transactionTimeTo?: string;
   /** 幣種 TON USDT 平台幣 */
   currency?: string;
-  /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw (Allowed values: Adjustment, Bet, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw) */
+  /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite (Allowed values: Adjustment, Bet, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw, Invite) */
   type?:
     | "Adjustment"
     | "Bet"
@@ -2516,7 +2547,8 @@ export interface WalletHistoryListListParams {
     | "Swap(sell)"
     | "Task"
     | "Treasure"
-    | "Withdraw";
+    | "Withdraw"
+    | "Invite";
   /** 收支 Income Expense (Allowed values: Income, Expense) */
   balance?: "Income" | "Expense";
   /**

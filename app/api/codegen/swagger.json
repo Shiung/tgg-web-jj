@@ -1195,7 +1195,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Minimum: 1, Required)",
+            "description": "分頁頁數 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -2232,6 +2232,10 @@
                   "description": "中獎金額",
                   "type": "string"
                 },
+                "currency": {
+                  "description": "中獎幣別",
+                  "type": "string"
+                },
                 "isWinned": {
                   "description": "是否中獎",
                   "type": "boolean"
@@ -2486,7 +2490,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "頁碼 (Minimum: 1, Required)",
+            "description": "頁碼 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5464,7 +5468,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -5808,10 +5812,11 @@
               "Swap(sell)",
               "Task",
               "Treasure",
-              "Withdraw"
+              "Withdraw",
+              "Invite"
             ],
             "type": "string",
-            "description": "交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw (Allowed values: Adjustment, Bet, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw)",
+            "description": "交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite (Allowed values: Adjustment, Bet, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw, Invite)",
             "name": "type",
             "in": "query"
           },
@@ -5858,12 +5863,17 @@
                     "required": [
                       "transactionTime",
                       "type",
+                      "txType",
                       "amount",
                       "currency"
                     ],
                     "properties": {
                       "amount": {
                         "description": "帳變金額",
+                        "type": "string"
+                      },
+                      "comment": {
+                        "description": "交易備註",
                         "type": "string"
                       },
                       "currency": {
@@ -5875,8 +5885,37 @@
                         "type": "string",
                         "format": "date-time"
                       },
+                      "txType": {
+                        "description": "交易類型. Allowed Enum",
+                        "type": "string",
+                        "enum": [
+                          "omitempty",
+                          "deposit",
+                          "withdraw",
+                          "swapBuy",
+                          "swapSell",
+                          "adjustCoin",
+                          "adjustCrypto",
+                          "bet",
+                          "winLose",
+                          "casualGameReward",
+                          "casualGameTicket",
+                          "betRankBonus",
+                          "teamRankBonus",
+                          "luckMoneyInvite",
+                          "luckyMoneyCycleOpen",
+                          "luckyMoneyCycleClose",
+                          "smashEgg",
+                          "luckMoneyDrop",
+                          "dailyTask",
+                          "oneTimeTask",
+                          "specialTask",
+                          "treasure",
+                          "commission"
+                        ]
+                      },
                       "type": {
-                        "description": "交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw. Allowed Enum",
+                        "description": "交易項目 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite. Allowed Enum",
                         "type": "string",
                         "enum": [
                           "Adjustment",
@@ -5891,7 +5930,8 @@
                           "Swap(sell)",
                           "Task",
                           "Treasure",
-                          "Withdraw"
+                          "Withdraw",
+                          "Invite"
                         ]
                       }
                     }
@@ -6862,7 +6902,7 @@
           "format": "date-time"
         },
         "TxCategory": {
-          "description": "交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw. Allowed Enum",
+          "description": "交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite. Allowed Enum",
           "type": "string",
           "enum": [
             "Adjustment",
@@ -6877,7 +6917,8 @@
             "Swap(sell)",
             "Task",
             "Treasure",
-            "Withdraw"
+            "Withdraw",
+            "Invite"
           ]
         }
       }
@@ -6893,12 +6934,17 @@
             "required": [
               "transactionTime",
               "type",
+              "txType",
               "amount",
               "currency"
             ],
             "properties": {
               "amount": {
                 "description": "帳變金額",
+                "type": "string"
+              },
+              "comment": {
+                "description": "交易備註",
                 "type": "string"
               },
               "currency": {
@@ -6910,8 +6956,37 @@
                 "type": "string",
                 "format": "date-time"
               },
+              "txType": {
+                "description": "交易類型. Allowed Enum",
+                "type": "string",
+                "enum": [
+                  "omitempty",
+                  "deposit",
+                  "withdraw",
+                  "swapBuy",
+                  "swapSell",
+                  "adjustCoin",
+                  "adjustCrypto",
+                  "bet",
+                  "winLose",
+                  "casualGameReward",
+                  "casualGameTicket",
+                  "betRankBonus",
+                  "teamRankBonus",
+                  "luckMoneyInvite",
+                  "luckyMoneyCycleOpen",
+                  "luckyMoneyCycleClose",
+                  "smashEgg",
+                  "luckMoneyDrop",
+                  "dailyTask",
+                  "oneTimeTask",
+                  "specialTask",
+                  "treasure",
+                  "commission"
+                ]
+              },
               "type": {
-                "description": "交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw. Allowed Enum",
+                "description": "交易項目 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite. Allowed Enum",
                 "type": "string",
                 "enum": [
                   "Adjustment",
@@ -6926,7 +7001,8 @@
                   "Swap(sell)",
                   "Task",
                   "Treasure",
-                  "Withdraw"
+                  "Withdraw",
+                  "Invite"
                 ]
               }
             }
@@ -7057,6 +7133,10 @@
       "properties": {
         "amount": {
           "description": "中獎金額",
+          "type": "string"
+        },
+        "currency": {
+          "description": "中獎幣別",
           "type": "string"
         },
         "isWinned": {

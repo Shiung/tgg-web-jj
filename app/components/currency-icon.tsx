@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { UsdtIcon, KatonIcon, TonIcon } from '~/components/color-icons'
 import { CryptoUnion } from '~/consts/crypto'
 
-export type CurrencyType = CryptoUnion | null | undefined
+export type CurrencyType = CryptoUnion | string | null | undefined
 
 interface CurrencyIconProps {
   currency: CurrencyType
@@ -19,7 +19,7 @@ export const CurrencyIcon: React.FC<CurrencyIconProps> = ({ currency, className 
       case 'TON':
         return <TonIcon className={className} />
       default:
-        return <div>null</div>
+        return null
     }
   }, [currency, className])
 

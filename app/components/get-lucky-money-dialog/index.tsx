@@ -7,13 +7,13 @@ import { useTranslation } from 'react-i18next'
 
 import { Dialog, DialogContent } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
-import { KatonIcon } from '~/components/color-icons'
 import Amount from '~/components/amount'
 import useStore from '~/stores/useStore'
 import { apis } from '~/api'
 import { Crypto } from '~/consts/crypto'
 import { errorToast } from '~/lib/toast'
 
+import { CurrencyIcon } from '../currency-icon'
 import luckyBagAnimationData from './lottie/lucky-bag.json'
 
 const packetDrawErrorCodes = {
@@ -26,9 +26,14 @@ const GetLuckyMoneyDialog: React.FC = () => {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const [status, setStatus] = useState<'initial' | 'animation' | 'result'>('initial')
-  const { giverName, isQualified, maxValue, minValue, showPotential } = useStore(
-    state => state.packet
-  )
+  const {
+    giverName,
+    isQualified,
+    maxValue,
+    minValue,
+    showPotential,
+    currency: packetCurrency,
+  } = useStore(state => state.packet)
   const [packetDrawFailTitle, setPacketDrawFailTitle] = useState('')
 
   const {
@@ -129,7 +134,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
                   <div className="absolute bottom-[9%] flex w-full flex-col items-center space-y-1 font-ultra">
                     <span className="text-base text-white">{t('PotentialGain')}</span>
                     <span className="flex items-center justify-center text-sm">
-                      <KatonIcon className="h-5 w-5" />
+                      <CurrencyIcon currency={packetCurrency} className="h-5 w-5" />
                       <span className="ml-[2px] flex items-center justify-center space-x-1 text-primary">
                         <Amount value={minValue} crypto={Crypto.KATON} />
                         <span className="mx-1">~</span>
@@ -178,7 +183,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
                     })}
                   </p>
                   <div className="flex items-center self-center">
-                    <KatonIcon className="h-8 w-8" />
+                    <CurrencyIcon currency={drawResult?.currency} className="h-8 w-8" />
                     <div className="ml-1 text-3xl text-primary">
                       <Amount value={drawResult?.amount} crypto={Crypto.KATON} />
                     </div>
