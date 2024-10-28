@@ -6,6 +6,7 @@
   "errorMessage.under.maintenance": "メンテナンス中",
   "errorMessage.packet.been.sent.out": "申し訳ありません、\n すべてのバッグは発送済みです！",
   "errorMessage.packet.claimer.not.qualified": "申し訳ありません、\n あなたには資格がありません。",
+  "errorMessage.packet.deactivate.temporary": "申し訳ありませんが、\n イベントは中止となりました。",
   "Game": "ゲーム",
   "Rank": "順位",
   "Task": "タスク",

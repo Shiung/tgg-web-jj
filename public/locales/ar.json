@@ -6,6 +6,7 @@
   "errorMessage.under.maintenance": "تحت الصيانة",
   "errorMessage.packet.been.sent.out": "آسف,\n تم إرسال جميع الحقائب!",
   "errorMessage.packet.claimer.not.qualified": "أنا آسف,\n أنت غير مؤهل.",
+  "errorMessage.packet.deactivate.temporary": "عذراً، لقد تم تعليق الحدث.",
   "Game": "اللعبة",
   "Rank": "الرتبة",
   "Task": "المهمة",

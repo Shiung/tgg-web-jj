@@ -19,6 +19,7 @@ import luckyBagAnimationData from './lottie/lucky-bag.json'
 const packetDrawErrorCodes = {
   'packet.been.sent.out': 'errorMessage.packet.been.sent.out', // 紅包已發完
   'packet.claimer.not.qualified': 'errorMessage.packet.claimer.not.qualified', // 不符合領取資格
+  'packet.deactivate.temporary': 'errorMessage.packet.deactivate.temporary', // 紅包暫時停用
 }
 
 const GetLuckyMoneyDialog: React.FC = () => {
@@ -158,7 +159,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
             </motion.div>
           )}
 
-          {status === 'result' && drawResult && (
+          {status === 'result' && (
             <motion.div
               key="result-screen"
               // layout

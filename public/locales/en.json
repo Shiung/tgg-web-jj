@@ -6,6 +6,7 @@
   "errorMessage.under.maintenance": "Under maintenance",
   "errorMessage.packet.been.sent.out": "Sorry,\n all bags have been sent out!",
   "errorMessage.packet.claimer.not.qualified": "Sorry,\n you are not qualified.",
+  "errorMessage.packet.deactivate.temporary": "Sorry,\n the event is suspended.",
   "Game": "Game",
   "Rank": "Rank",
   "Task": "Task",

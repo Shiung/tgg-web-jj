@@ -6,6 +6,7 @@
   "errorMessage.under.maintenance": "유지 보수 중",
   "errorMessage.packet.been.sent.out": "죄송합니다,\n 모든 가방이 발송되었습니다!",
   "errorMessage.packet.claimer.not.qualified": "죄송합니다,\n 자격이 없습니다.",
+  "errorMessage.packet.deactivate.temporary": "죄송합니다,\n 이벤트가 일시 중단되었습니다.",
   "Game": "게임",
   "Rank": "순위",
   "Task": "작업",

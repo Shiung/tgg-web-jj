@@ -6,6 +6,7 @@
   "errorMessage.under.maintenance": "Sous maintenance",
   "errorMessage.packet.been.sent.out": "Désolé,\n tous les sacs ont été envoyés !",
   "errorMessage.packet.claimer.not.qualified": "Désolé,\n vous n'êtes pas qualifié.",
+  "errorMessage.packet.deactivate.temporary": "Désolé,\n l'événement est suspendu.",
   "Game": "Jeu",
   "Rank": "Rang",
   "Task": "Tâche",
