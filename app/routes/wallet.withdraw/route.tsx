@@ -19,7 +19,7 @@ import { UsdtIcon } from '~/components/color-icons'
 import { Label } from '~/components/ui/label'
 import InfoTooltip from '~/components/info-tooltip'
 import VerifyButton, { type VerifyButtonExpose } from '~/components/verify-button'
-import { cryptoDetails, isValidCrypto, cryptoRules } from '~/consts/crypto'
+import { cryptoDetails, isValidCrypto, cryptoRules, Crypto } from '~/consts/crypto'
 
 import WithdrawSuccessDialog from './withdraw-success-dialog'
 import WithdrawDeniedDialog from './withdraw-denied-dialog'
@@ -435,7 +435,9 @@ export default function Withdraw() {
                     <div className="flex w-72 items-center justify-between space-x-1 text-xs">
                       <div className="text-[#FFFFFFB2]">{t('WagerRequirement')}</div>
                       <div className="flex items-center">
-                        <span className="pr-1 text-white">{currentSetting?.wagerRequirement}</span>
+                        <span className="pr-1 text-white">
+                          <Amount value={currentSetting?.wagerRequirement} crypto={Crypto.USDT} />
+                        </span>
                         <UsdtIcon className="h-3 w-3" />
                       </div>
                     </div>
