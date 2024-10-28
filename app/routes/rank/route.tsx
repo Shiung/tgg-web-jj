@@ -78,9 +78,14 @@ export default function Layout() {
 
   useEffect(() => {
     const setting = contextVal.state.pageExist
-    if (!setting || init) return
+    // if (!setting || init) return
+    if (!setting) return
 
-    let needReplace = pathname === '/rank' || pathname.includes('coming-soon')
+    let needReplace = pathname === '/rank'
+
+    if (init && !needReplace) return
+
+    needReplace = needReplace || pathname.includes('coming-soon')
 
     if (!contextVal.state.pageExist?.crypto && !contextVal.state.pageExist?.share) {
       navigate('/rank/coming-soon', { replace: true })
