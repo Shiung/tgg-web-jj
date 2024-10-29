@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { Link } from '@remix-run/react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import Lottie, { type LottieRefCurrentProps } from 'lottie-react'
 import { useTranslation } from 'react-i18next'
 import useStore from '~/stores/useStore'
@@ -60,6 +60,7 @@ export default function SmashEgg() {
 
   const statusRef = useRef(status)
   const nextEggRef = useRef(nextEgg)
+  const isInitialized = useRef(false)
 
   // 初始化 API
   const {
@@ -150,17 +151,20 @@ export default function SmashEgg() {
   })
 
   // 跑馬燈
-  const {
-    data: marqueeData,
-    error: marqueeError,
-    isError: isMarqueeError,
-  } = useQuery({
-    queryKey: ['marqueeInfo'],
-    queryFn: async () => {
-      const response = await apis.campaign.campaignEggMarqueeList({ size: 30 })
-      return response.data
+  const marqueeQuery = useMutation({
+    mutationFn: async () => {
+      const { data } = await apis.campaign.campaignEggMarqueeList({ size: 30 })
+      return data
     },
-    enabled: status === Status.Init,
+    onSuccess: ({ result = [] }) => {
+      if (!isInitialized.current) {
+        setMarqueeList(result)
+        isInitialized.current = true
+      }
+    },
+    onError: (error: Error) => {
+      errorToast(error?.message || t('error.default'))
+    },
   })
 
   // 创建一个函数来处理放弃操作
@@ -286,14 +290,6 @@ export default function SmashEgg() {
   }, [status, setupImageAndAnimaiton])
 
   useEffect(() => {
-    if (isMarqueeError) {
-      errorToast(marqueeError?.message || 'An error occurred')
-    } else if (marqueeData) {
-      setMarqueeList(marqueeData.result || [])
-    }
-  }, [marqueeData, marqueeError, isMarqueeError])
-
-  useEffect(() => {
     if (isClaimError) {
       errorToast(claimError?.message || 'An error occurred')
     } else if (!isClaimError && claimData) {
@@ -397,6 +393,7 @@ export default function SmashEgg() {
   useEffect(() => {
     setHeaderVisibility(false)
     setNavVisibility(false)
+    marqueeQuery.mutate()
     return () => {
       queryClient.clear()
       setHeaderVisibility(true)
