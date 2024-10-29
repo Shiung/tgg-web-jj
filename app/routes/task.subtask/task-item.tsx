@@ -62,36 +62,6 @@ type Desc18nKeyMapFnProps = Pick<
   NonNullable<TaskQueryResponse['dailyList']>[number],
   'inviteFriendsCondition' | 'teamRechargeCondition' | 'rechargeCondition'
 >
-/**
- * 特定類型要顯示的 desc
- * @interface
- */
-const DescI18nKeyMap: Record<TaskActionType, null | ((p: Desc18nKeyMapFnProps) => string | null)> =
-  {
-    LOGIN: null,
-    RECHARGE: p => {
-      return ['RECHARGE_AMOUNT', 'RECHARGE_COUNT'].some(
-        key => p.rechargeCondition?.parameterType === key
-      )
-        ? 'task.depositDescription'
-        : null
-    },
-    INVITE_FRIENDS: p => {
-      return p.inviteFriendsCondition?.parameterValue === 'INVITE_VALID_USER'
-        ? 'task.inviteFriendsDescription'
-        : null
-    },
-    TEAM_CLASS_ACHIEVEMENT: null,
-    PLAY_GAMES: null,
-    OPEN_LINK: null,
-    TEAM_RECHARGE: p => {
-      return ['TEAM_RECHARGE_AMOUNT', 'DIRECT_SUBORDINATE_RECHARGE_AMOUNT'].some(
-        key => p.teamRechargeCondition?.parameterType === key
-      )
-        ? 'task.depositDescription'
-        : null
-    },
-  }
 
 // 限量時間格式化
 const limitTimeString = (
@@ -304,9 +274,48 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
     }
   }
 
+  /**
+   * 特定類型要顯示的 desc
+   * @interface
+   */
   const showDesc = useMemo(() => {
-    return t(DescI18nKeyMap[task.actionType]?.(task) ?? '')
-  }, [task, t])
+    switch (task.actionType) {
+      case 'RECHARGE':
+        return ['RECHARGE_AMOUNT', 'RECHARGE_COUNT'].some(
+          key => task.rechargeCondition?.parameterType === key
+        )
+          ? t('task.depositDescription')
+          : null
+      case 'INVITE_FRIENDS':
+        return task.inviteFriendsCondition?.parameterValue === 'INVITE_VALID_USER'
+          ? t('task.inviteFriendsDescription')
+          : null
+      case 'TEAM_RECHARGE':
+        return ['TEAM_RECHARGE_AMOUNT', 'DIRECT_SUBORDINATE_RECHARGE_AMOUNT'].some(
+          key => task.teamRechargeCondition?.parameterType === key
+        )
+          ? t('task.depositDescription')
+          : null
+      case 'TEAM_CLASS_ACHIEVEMENT':
+        if (!task.teamClassRewardSetting) return null
+        return (
+          <>
+            {Object.keys(task?.teamClassRewardSetting ?? {}).map(key => {
+              return (
+                <>
+                  {Number(key.replace(/[^0-9]/g, ''))} star {task.rewardType} x{' '}
+                  {task?.teamClassRewardSetting?.[key as keyof typeof task.teamClassRewardSetting]}
+                  <br />
+                </>
+              )
+            })}
+            {t('task.teamClassRewardDescription')}
+          </>
+        )
+      default:
+        return null
+    }
+  }, [t, task])
 
   return (
     <div
@@ -411,7 +420,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
           }`}
         >
           <div className="pt-3 text-xs font-normal text-white/70">
-            <p>{showDesc}</p>
+            <p className="pr-1">{showDesc}</p>
             <div className="mt-1 text-xs text-app-red">
               {task.endTime && (
                 <p>

@@ -11,7 +11,7 @@ const SystemMaintenance: React.FC = () => {
       <img
         src="/images/system-maintenance.png"
         alt="system maintenance"
-        className="h-auto w-[128px] self-center object-contain"
+        className="h-auto w-32 self-center object-contain"
       />
       <div className="space-y-1 text-center">
         <p className="text-base font-ultra text-white">{t('SystemMaintenance')}</p>
