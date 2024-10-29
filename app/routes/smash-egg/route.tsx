@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useRef } from 'react'
 import { Link } from '@remix-run/react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Lottie, { type LottieRefCurrentProps } from 'lottie-react'
+import { useTranslation } from 'react-i18next'
 import useStore from '~/stores/useStore'
 import AppLoading from '~/components/app-loading/index'
 import { Button } from '~/components/ui/button'
@@ -16,7 +17,6 @@ import CardTemplate from './card-template'
 import AlertDialog from './alert-dialog'
 import { Status, EggRecord, EggMarquee, PrizePool } from './types'
 import { hammerFile, standbyArr, goldArr, silverArr, copperArr, changeArr } from './animation-data'
-import { useTranslation } from 'react-i18next'
 import Amount from '~/components/amount'
 import { formatAmount } from '~/lib/amount'
 
@@ -484,7 +484,7 @@ export default function SmashEgg() {
             className={`${status === Status.Standby || status === Status.Playing ? 'block' : 'hidden'}`}
           >
             <Lottie
-              id={`${EGG_AREA_CANVAS_ID}}`}
+              id={`${EGG_AREA_CANVAS_ID}`}
               lottieRef={lottieRefs}
               className={cn(
                 `absolute bottom-[-30px] left-[50%] z-20 aspect-[343/343] w-[100%] translate-x-[-50%]`,

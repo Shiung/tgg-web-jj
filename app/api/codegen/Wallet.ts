@@ -126,7 +126,6 @@ export class Wallet<SecurityDataType = unknown> {
           /** 交易項目 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite. Allowed Enum */
           type:
             | "Adjustment"
-            | "Bet"
             | "Commission"
             | "Deposit"
             | "Game"

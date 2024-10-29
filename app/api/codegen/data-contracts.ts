@@ -302,7 +302,6 @@ export interface CustomerWalletChangeGetRequest {
   /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite. Allowed Enum */
   TxCategory?:
     | "Adjustment"
-    | "Bet"
     | "Commission"
     | "Deposit"
     | "Game"
@@ -359,7 +358,6 @@ export interface CustomerWalletChangeGetResponse {
     /** 交易項目 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite. Allowed Enum */
     type:
       | "Adjustment"
-      | "Bet"
       | "Commission"
       | "Deposit"
       | "Game"
@@ -938,6 +936,8 @@ export interface InfoResponse {
   language?: string;
   /** 推薦碼開獎資訊 */
   packet?: {
+    /** 發送幣別 */
+    currency?: string;
     /** 紅包發送人名稱 */
     giverName?: string;
     /** 為true時需開獎 */
@@ -2321,7 +2321,7 @@ export interface CustomerTeamPerformanceListParams {
    */
   level?: number;
   /**
-   * 分頁頁數 (Required, Minimum: 1)
+   * 分頁頁數 (Minimum: 1, Required)
    * @format int64
    * @min 1
    */
@@ -2533,10 +2533,9 @@ export interface WalletHistoryListListParams {
   transactionTimeTo?: string;
   /** 幣種 TON USDT 平台幣 */
   currency?: string;
-  /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite (Allowed values: Adjustment, Bet, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw, Invite) */
+  /** 交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite (Allowed values: Adjustment, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw, Invite) */
   type?:
     | "Adjustment"
-    | "Bet"
     | "Commission"
     | "Deposit"
     | "Game"
@@ -2558,7 +2557,7 @@ export interface WalletHistoryListListParams {
    */
   page: number;
   /**
-   * 分頁筆數 (Required, Minimum: 20)
+   * 分頁筆數 (Minimum: 20, Required)
    * @format int64
    * @min 20
    */
