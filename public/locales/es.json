@@ -6,7 +6,7 @@
   "errorMessage.under.maintenance": "En mantenimiento",
   "errorMessage.packet.been.sent.out": "Lo sentimos,\n ¡todas las bolsas han sido enviadas!",
   "errorMessage.packet.claimer.not.qualified": "Lo sentimos,\n no estás cualificado.",
-  "errorMessage.packet.deactivate.temporary": "Lo siento,\n el evento está suspendido.",
+  "errorMessage.packet.deactivate.temporary": "Lo sentimos,\n el evento está suspendido.",
   "Game": "Juego",
   "Rank": "Rango",
   "Task": "Tarea",
@@ -94,7 +94,7 @@
   "rank.rules.share.content1.subTitle": "Amigos válidos",
   "rank.rules.share.content1.content": "Share Rank es una competición para ver quién invita a más amigos a unirse a Katon. El ranking es de acuerdo a cuantos amigos invites a convertirse en miembros válidos. Una vez que tus amigos tengan más de 100 KATON en su cartera, serán amigos válidos.",
   "rank.rules.share.content2.subTitle": "Tiempo de actualización",
-  "rank.rules.share.content2.content": "La lista de clasificación se actualiza una vez por hora.",
+  "rank.rules.share.content2.content": "La lista de clasificación se actualiza cada hora.",
   "rank.rules.share.content3.subTitle": "Hora de finalización",
   "rank.rules.share.content4.subTitle": "Diario",
   "rank.rules.share.content4.content": "Viernes 13:00 (UTC+8)",
@@ -112,6 +112,7 @@
   "transaction.type.luckyMoney": "Dinero de la suerte",
   "transaction.type.smashEgg": "Huevo picado",
   "transaction.type.adjustment": "Ajuste",
+  "transaction.type.invite": "Invite a",
   "transaction.type.bet": "Apuesta",
   "Income": "Ingresos",
   "Expense": "Gastos",
@@ -342,5 +343,6 @@
   "CheckAllTreasure": "Comprobar todos los tesoros",
   "MaintenanceDescription": "Katon no está disponible temporalmente debido al mantenimiento del sistema. Restableceremos el servicio normal lo antes posible. Disculpen las molestias.",
   "Loading": "Cargando",
-  "Me": "Yo"
+  "Me": "Yo",
+  "task.teamClassRewardDescription": "La recompensa depende de la valoración de tu equipo cuando accedas a Katon."
 }

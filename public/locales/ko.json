@@ -112,6 +112,7 @@
   "transaction.type.luckyMoney": "행운의 돈",
   "transaction.type.smashEgg": "스매시 에그",
   "transaction.type.adjustment": "조정",
+  "transaction.type.invite": "초대",
   "transaction.type.bet": "베팅",
   "Income": "수입",
   "Expense": "비용",
@@ -342,5 +343,6 @@
   "CheckAllTreasure": "모든 보물 확인",
   "MaintenanceDescription": "시스템 점검으로 인해 일시적으로 케이톤을 이용할 수 없습니다. 최대한 빠른 시일 내에 정상 서비스를 복구할 예정입니다. 불편을 드려 죄송합니다.",
   "Loading": "로드 중",
-  "Me": "나"
+  "Me": "나",
+  "task.teamClassRewardDescription": "보상은 카톤에 접속할 때 팀 등급에 따라 달라집니다."
 }

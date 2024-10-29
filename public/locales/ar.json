@@ -6,7 +6,7 @@
   "errorMessage.under.maintenance": "تحت الصيانة",
   "errorMessage.packet.been.sent.out": "آسف,\n تم إرسال جميع الحقائب!",
   "errorMessage.packet.claimer.not.qualified": "أنا آسف,\n أنت غير مؤهل.",
-  "errorMessage.packet.deactivate.temporary": "عذراً، لقد تم تعليق الحدث.",
+  "errorMessage.packet.deactivate.temporary": "آسف,\n تم تعليق الحدث.",
   "Game": "اللعبة",
   "Rank": "الرتبة",
   "Task": "المهمة",
@@ -71,7 +71,7 @@
   "rank.subNav.daily": "يومياً",
   "rank.subNav.weekly": "أسبوعياً",
   "rank.subNav.monthly": "شهرياً",
-  "rank.comingSoon": "قريباً",
+  "rank.comingSoon": "قريباً...",
   "rank.playerCard.table.title.playBet": "اللاعب والرهان",
   "rank.playerCard.table.title.playShare": "اللاعب والأصدقاء الصالحون",
   "rank.playerCard.table.title.reward": "المكافأة",
@@ -112,6 +112,7 @@
   "transaction.type.luckyMoney": "أموال محظوظة",
   "transaction.type.smashEgg": "سحق البيضة",
   "transaction.type.adjustment": "التعديل",
+  "transaction.type.invite": "دعوة",
   "transaction.type.bet": "الرهان",
   "Income": "الدخل",
   "Expense": "النفقات",
@@ -342,5 +343,6 @@
   "CheckAllTreasure": "تحقق من كل الكنز",
   "MaintenanceDescription": "Katon غير متاح مؤقتًا بسبب صيانة النظام. سنقوم باستعادة الخدمة المنتظمة في أقرب وقت ممكن. نعتذر عن أي إزعاج.",
   "Loading": "التحميل",
-  "Me": "أنا"
+  "Me": "أنا",
+  "task.teamClassRewardDescription": "تعتمد المكافأة على تصنيف فريقك عند الوصول إلى كاتون."
 }
