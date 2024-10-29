@@ -41,6 +41,8 @@ export interface TransactionEntry {
   amount: string
   currency: string
   transactionTime: string
+  comment?: string | null
+  txType?: string | null
 }
 
 interface TransactionRecordResponse {
@@ -97,6 +99,7 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
     { value: 'LuckyMoney', label: t('transaction.type.luckyMoney') }, // 红包
     { value: 'SmashEgg', label: t('transaction.type.smashEgg') }, // 砸金蛋
     { value: 'Adjustment', label: t('transaction.type.adjustment') }, // 人工调整
+    { value: 'Invite', label: t('transaction.type.invite') }, // 紅包邀請
   ]
 
   const balanceOptions = [
