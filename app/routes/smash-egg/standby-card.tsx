@@ -1,7 +1,7 @@
+import { useTranslation } from 'react-i18next'
 import { Button } from '~/components/ui/button'
-import type { StandbyCardProps } from './types'
-import { Trans, useTranslation } from 'react-i18next'
 import Amount from '~/components/amount'
+import type { StandbyCardProps } from './types'
 
 export default function StandbyCard({
   handleStartButtonClick,

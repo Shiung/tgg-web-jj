@@ -876,6 +876,10 @@
                   "description": "推薦碼開獎資訊",
                   "type": "object",
                   "properties": {
+                    "currency": {
+                      "description": "發送幣別",
+                      "type": "string"
+                    },
                     "giverName": {
                       "description": "紅包發送人名稱",
                       "type": "string"
@@ -1195,7 +1199,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Required, Minimum: 1)",
+            "description": "分頁頁數 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -5801,7 +5805,6 @@
           {
             "enum": [
               "Adjustment",
-              "Bet",
               "Commission",
               "Deposit",
               "Game",
@@ -5816,7 +5819,7 @@
               "Invite"
             ],
             "type": "string",
-            "description": "交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite (Allowed values: Adjustment, Bet, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw, Invite)",
+            "description": "交易類型 Adjustment Bet Commission Deposit Game LuckyMoney Rank SmashEgg Swap(buy) Swap(sell) Task Treasure Withdraw Invite (Allowed values: Adjustment, Commission, Deposit, Game, LuckyMoney, Rank, SmashEgg, Swap(buy), Swap(sell), Task, Treasure, Withdraw, Invite)",
             "name": "type",
             "in": "query"
           },
@@ -5843,7 +5846,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -5919,7 +5922,6 @@
                         "type": "string",
                         "enum": [
                           "Adjustment",
-                          "Bet",
                           "Commission",
                           "Deposit",
                           "Game",
@@ -6906,7 +6908,6 @@
           "type": "string",
           "enum": [
             "Adjustment",
-            "Bet",
             "Commission",
             "Deposit",
             "Game",
@@ -6990,7 +6991,6 @@
                 "type": "string",
                 "enum": [
                   "Adjustment",
-                  "Bet",
                   "Commission",
                   "Deposit",
                   "Game",
@@ -8024,6 +8024,10 @@
           "description": "推薦碼開獎資訊",
           "type": "object",
           "properties": {
+            "currency": {
+              "description": "發送幣別",
+              "type": "string"
+            },
             "giverName": {
               "description": "紅包發送人名稱",
               "type": "string"

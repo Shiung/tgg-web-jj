@@ -92,6 +92,8 @@ export class Customer<SecurityDataType = unknown> {
         language?: string;
         /** 推薦碼開獎資訊 */
         packet?: {
+          /** 發送幣別 */
+          currency?: string;
           /** 紅包發送人名稱 */
           giverName?: string;
           /** 為true時需開獎 */

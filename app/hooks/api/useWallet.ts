@@ -1,5 +1,5 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { WalletListResponse } from '~/api/codegen/data-contracts'
 import { apis } from '~/api/index'
 import useStore from '~/stores/useStore'
@@ -20,7 +20,7 @@ const useGetHeaderWallet = () => {
   return useQuery({
     queryKey: [getHeaderWalletQueryKey, isLoggedIn, customerId],
     queryFn: () => apis.header.headerWalletList(),
-    enabled: !!isLoggedIn,
+    enabled: !!isLoggedIn && !!customerId,
     staleTime: 30 * 1000, // 緩存 30 秒
   })
 }
