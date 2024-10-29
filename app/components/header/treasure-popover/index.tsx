@@ -196,7 +196,7 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
                           <div className="absolute -right-2 bottom-1 flex items-center space-x-1 rounded-full border-[0.5px] border-solid border-[#FFF200] bg-black px-1">
                             <CurrencyIcon currency={treasure?.rewardType} className="h-3 w-3" />
                             <Amount
-                              className="text-xs font-ultra -tracking-[1px]"
+                              className="whitespace-nowrap text-xs font-ultra -tracking-[1px]"
                               value={treasure?.rewardAmount}
                               crypto={treasure?.rewardType}
                               useKM={treasure?.rewardType === 'KATON'}

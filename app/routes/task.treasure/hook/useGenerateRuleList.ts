@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface GenerateRuleListProps {
-  betRequirement?: string
-  directSubBetRequirement?: string
+  betRequirement?: string | null
+  directSubBetRequirement?: string | null
 }
 
 export const useGenerateRuleList = () => {
