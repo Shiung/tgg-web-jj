@@ -1,5 +1,4 @@
 import { StateCreator } from 'zustand'
-import Cookies from 'js-cookie'
 import { v4 as uuidv4 } from 'uuid'
 import { setHeaderToken } from '~/api/api-client'
 
@@ -10,15 +9,9 @@ export interface AuthSlice {
   needLoginDialogOpen: boolean
   setToken: (token: string) => void
   setIsLoggedIn: (loggedIn: boolean) => void
-  checkIsLoggedIn: () => void
   logout: () => void
   openNeedLoginDialog: () => void
   closeNeedLoginDialog: () => void
-}
-
-const getCookieValue = (name: string): string | undefined => {
-  if (typeof document === 'undefined') return undefined
-  return Cookies.get(name)
 }
 
 const getStoredValue = (key: string): string | undefined => {
@@ -28,7 +21,8 @@ const getStoredValue = (key: string): string | undefined => {
   return undefined
 }
 
-const initialLoginStatus = !!getStoredValue('token')
+export const checkIsLoggedIn = () => !!getStoredValue('token')
+
 let initialDeviceId: string | undefined = getStoredValue('deviceId')
 
 // 初始化 deviceId
@@ -41,7 +35,7 @@ if (!initialDeviceId) {
 
 const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = set => ({
   deviceId: initialDeviceId,
-  isLoggedIn: initialLoginStatus,
+  isLoggedIn: false,
   needLoginDialogOpen: false,
   setIsLoggedIn: (loggedIn: boolean) => set({ isLoggedIn: loggedIn }),
   setToken: (token: string) => {
@@ -50,10 +44,6 @@ const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = set => ({
     if (typeof window !== 'undefined') {
       localStorage.setItem('token', token)
     }
-  },
-  checkIsLoggedIn: () => {
-    const hasSessionCookie = !!getCookieValue('website_session')
-    set({ isLoggedIn: hasSessionCookie })
   },
   logout: () => {
     set({ token: undefined, isLoggedIn: false })

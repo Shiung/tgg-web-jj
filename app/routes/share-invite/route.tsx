@@ -19,6 +19,8 @@ import Amount from '~/components/amount'
 import InfoTooltip from '~/components/info-tooltip'
 import { Input } from '~/components/ui/input'
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import useStore from '~/stores/useStore'
+
 import ShareInviteSkeleton from './share-invite-skeleton'
 import ProgressBar from './progress-bar'
 import RuleSheet from './rule-sheet'
@@ -40,23 +42,18 @@ const teamLevelCarouselImages = [
 
 const ShareInvite: React.FC = () => {
   const { t } = useTranslation()
-
-  // 取得用戶分享連結
-  const { data: customerInfo, isLoading: customerInfoLoading } = useQuery({
-    queryKey: ['customerInfo'],
-    queryFn: apis.customer.customerInfoList,
-  })
+  const userInfo = useStore(state => state.userInfo)
 
   // 剪貼簿 與分享功能
   const { share, isLoading, tDotMeBaseShareUrl } = useShare()
   const [state, copyToClipboard] = useCopyToClipboard()
 
   const shareUrlLink = useMemo(() => {
-    if (!customerInfo?.data?.referralCode) {
+    if (!userInfo?.referralCode) {
       return ''
     }
-    return `${tDotMeBaseShareUrl}/?startapp=${customerInfo.data.referralCode}`
-  }, [customerInfo, tDotMeBaseShareUrl])
+    return `${tDotMeBaseShareUrl}/?startapp=${userInfo.referralCode}`
+  }, [userInfo, tDotMeBaseShareUrl])
 
   useEffect(() => {
     if (!state.value) return
@@ -174,7 +171,7 @@ const ShareInvite: React.FC = () => {
           </TabsTrigger>
         </TabsList>
       </Tabs>
-      {customerTeamInfoLoading || teamSettingListLoading || customerInfoLoading ? (
+      {customerTeamInfoLoading || teamSettingListLoading ? (
         <ShareInviteSkeleton />
       ) : (
         <>

@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useQuery } from '@tanstack/react-query'
 import { useUtils } from '@telegram-apps/sdk-react'
+import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import {
   Dialog,
@@ -15,16 +15,16 @@ import { Button } from '~/components/ui/button'
 import { XIcon } from '~/components/color-icons'
 import CopyIcon from '~/icons/copy.svg?react'
 import LogoutIcon from '~/icons/logout.svg?react'
-import EmailDialog from './email-dialog'
-import LanguageDialog from './language-dialog'
-import { languages } from './constants'
-import FundPasswordDialog from './fund-password-dialog'
-import { apis } from '~/api/index'
 import useStore from '~/stores/useStore'
-import type { UserSlice } from '~/stores/userSlice'
 import { successToast } from '~/lib/toast'
 import { emitter } from '~/lib/emitter'
 import { useCustomSupport } from '~/hooks/useCustomSupport'
+import { customerInfoQueryKey } from '~/hooks/api/useCustomer'
+
+import { languages } from './constants'
+import LanguageDialog from './language-dialog'
+import EmailDialog from './email-dialog'
+import FundPasswordDialog from './fund-password-dialog'
 
 const officialLinks = {
   title: 'Official Links',
@@ -34,20 +34,18 @@ const officialLinks = {
   ],
 }
 
-const empty: UserSlice['userInfo'] = {}
-
 const ProfileDialog: React.FC = () => {
   const [state, copyToClipboard] = useCopyToClipboard()
   const [open, setIsOpen] = useState(false)
   const { i18n, t } = useTranslation()
-  const { inTelegram, isLoggedIn, telegramUserData, setUserInfo, logout } = useStore(state => state)
   const utils = useUtils()
-  const { data, refetch } = useQuery({
-    queryKey: ['customerInfo'],
-    queryFn: apis.customer.customerInfoList,
-    enabled: !!isLoggedIn,
-  })
-  const userData = useMemo(() => data?.data ?? empty, [data])
+  const { inTelegram, telegramUserData, userInfo, logout } = useStore(state => state)
+
+  const queryClient = useQueryClient()
+  const refetchCustomerInfo = useCallback(
+    () => queryClient.invalidateQueries({ queryKey: [customerInfoQueryKey] }),
+    [queryClient]
+  )
 
   const { handleCustomSupport } = useCustomSupport()
 
@@ -65,10 +63,6 @@ const ProfileDialog: React.FC = () => {
       emitter.off('openProfileDialog')
     }
   }, [])
-
-  useEffect(() => {
-    setUserInfo(userData)
-  }, [userData, setUserInfo])
 
   useEffect(() => {
     if (!state.value) return
@@ -108,12 +102,12 @@ const ProfileDialog: React.FC = () => {
           <div className="flex items-center justify-between">
             <span>{t('PlayerId')}</span>
             <div className="flex items-center space-x-2">
-              <span className="font-ultra text-white">{userData.customerId}</span>
+              <span className="font-ultra text-white">{userInfo.customerId}</span>
               <Button
                 variant="icon"
                 size="icon"
                 className="h-4 w-4 text-white"
-                onClick={() => copyToClipboard(`${userData.customerId || ''}`)}
+                onClick={() => copyToClipboard(`${userInfo.customerId || ''}`)}
               >
                 <CopyIcon className="h-full w-full" />
               </Button>
@@ -123,20 +117,20 @@ const ProfileDialog: React.FC = () => {
           <div className="flex items-center justify-between">
             <span>{t('Email')}</span>
             <div className="flex items-center justify-end space-x-2">
-              {userData.email && (
-                <div className="w-5/6 truncate font-ultra text-white">{userData.email}</div>
+              {userInfo.email && (
+                <div className="w-5/6 truncate font-ultra text-white">{userInfo.email}</div>
               )}
-              <EmailDialog infoRefetch={refetch} />
+              <EmailDialog infoRefetch={refetchCustomerInfo} />
             </div>
           </div>
           {/* Fund Password */}
           <div className="flex items-center justify-between">
             <span>{t('FundPassword')}</span>
             <div className="flex items-center justify-end space-x-2">
-              {userData.pin && (
-                <div className="w-5/6 truncate font-ultra text-white">{userData.pin}</div>
+              {userInfo.pin && (
+                <div className="w-5/6 truncate font-ultra text-white">{userInfo.pin}</div>
               )}
-              <FundPasswordDialog infoRefetch={refetch} />
+              <FundPasswordDialog infoRefetch={refetchCustomerInfo} />
             </div>
           </div>
           {/* Language */}

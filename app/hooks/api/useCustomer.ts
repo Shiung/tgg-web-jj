@@ -1,5 +1,24 @@
-import { useMutation } from '@tanstack/react-query'
+import { useEffect } from 'react'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { apis } from '~/api/index'
+import useStore from '~/stores/useStore'
+
+const customerInfoQueryKey = 'customerInfo'
+
+const useGetCustomerInfoToStore = () => {
+  const isLoggedIn = useStore(state => state.isLoggedIn)
+  const setUserInfo = useStore(state => state.setUserInfo)
+  const { data } = useQuery({
+    queryKey: [customerInfoQueryKey],
+    queryFn: apis.customer.customerInfoList,
+    enabled: isLoggedIn,
+  })
+
+  useEffect(() => {
+    if (!data?.data) return
+    setUserInfo(data.data)
+  }, [setUserInfo, data?.data])
+}
 
 const useValidCodeEmail = () => {
   return useMutation({
@@ -37,4 +56,11 @@ const useBindFundPin = () => {
   })
 }
 
-export { useValidCodeEmail, useVerifyCodeEmail, useBindEmail, useBindFundPin }
+export {
+  useGetCustomerInfoToStore,
+  useValidCodeEmail,
+  useVerifyCodeEmail,
+  useBindEmail,
+  useBindFundPin,
+  customerInfoQueryKey,
+}

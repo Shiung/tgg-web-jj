@@ -7,8 +7,8 @@ import { isValidCrypto } from '~/consts/crypto'
 
 type UserWallet = NonNullable<WalletListResponse['wallets']>[number]
 
-const getHeaderWalletQueryKey = 'getHeaderWallet'
-const getWalletListQueryKey = 'getWalletList'
+const getHeaderWalletQueryKey = 'headerWalletList'
+const getWalletListQueryKey = 'walletListList'
 
 /**
  * Header 中錢包 popover 使用錢包資訊 api 的 hook
