@@ -112,6 +112,7 @@
   "transaction.type.luckyMoney": "Lucky money",
   "transaction.type.smashEgg": "Smash egg",
   "transaction.type.adjustment": "Adjustment",
+  "transaction.type.invite": "Invite",
   "transaction.type.bet": "Bet",
   "Income": "Income",
   "Expense": "Expense",
@@ -342,5 +343,6 @@
   "CheckAllTreasure": "Check all treasure",
   "MaintenanceDescription": "Katon is temporarily unavailable due to system maintenance. We will be restoring regular service as soon as possible. We apologize for any inconvenience.",
   "Loading": "Loading",
-  "Me": "Me"
+  "Me": "Me",
+  "task.teamClassRewardDescription": "The reward depends on your team rating when you access Katon."
 }

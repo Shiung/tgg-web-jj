@@ -1,18 +1,40 @@
+import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import Amount from '~/components/amount'
 import { KatonIcon, TonIcon, UsdtIcon } from '~/components/color-icons'
+import InfoTooltip from '~/components/info-tooltip'
 import { TransactionEntry } from './transaction-record'
-import { useTranslation } from 'react-i18next'
+
+const extractGameName = (comment: string) => {
+  const match = comment.match(/游戏名称：(.+)/)
+  return match ? match[1] : ''
+}
 
 const TransactionEntryItem = ({ record }: { record: TransactionEntry }) => {
   const { t } = useTranslation()
+
+  const getTransactionTypeKey = (type: string) => {
+    const formattedType =
+      type.replace(/\s+/g, '').charAt(0).toLowerCase() + type.replace(/\s+/g, '').slice(1)
+    return `transaction.type.${formattedType}`
+  }
+
   return (
     <div className="flex items-center space-x-2 pb-2.5 text-xs font-normal text-white">
       <p className="w-9">{format(new Date(record.transactionTime), 'MM-dd')}</p>
       <p className="w-9">{format(new Date(record.transactionTime), 'HH:mm')}</p>
-      <p className="flex-1 font-ultra">
-        {t(
-          `transaction.type.${record.type.replace(/\s+/g, '').charAt(0).toLowerCase() + record.type.replace(/\s+/g, '').slice(1)}`
+      <p className="flex flex-1 items-center font-ultra">
+        {record.type === 'Game' ? (
+          <InfoTooltip
+            customTrigger={
+              <div className="w-auto flex-grow-0 text-xs text-white underline opacity-100">
+                {t(getTransactionTypeKey(record.type))}
+              </div>
+            }
+            content={extractGameName(record.comment ?? '')}
+          />
+        ) : (
+          t(getTransactionTypeKey(record.type))
         )}
       </p>
       <p

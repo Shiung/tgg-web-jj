@@ -1,4 +1,4 @@
-import { SVGProps } from 'react'
+import { isValidElement, SVGProps } from 'react'
 import * as PopoverPrimitive from '@radix-ui/react-popover'
 import { Button } from '~/components/ui/button'
 import { cn } from '~/lib/utils'
@@ -16,15 +16,20 @@ const Arrow = (props: SVGProps<SVGSVGElement>) => (
 )
 
 interface InfoTooltipProps {
+  customTrigger?: React.ReactNode
   content: string | React.ReactNode
 }
 
-const InfoTooltip: React.FC<InfoTooltipProps> = ({ content }) => (
+const InfoTooltip: React.FC<InfoTooltipProps> = ({ customTrigger, content }) => (
   <PopoverPrimitive.Root>
     <PopoverPrimitive.Trigger asChild>
-      <Button variant="icon" size="icon" className="h-4 w-4">
-        <InfoIcon className="h-[14px] w-[14px]" />
-      </Button>
+      {isValidElement(customTrigger) ? (
+        customTrigger
+      ) : (
+        <Button variant="icon" size="icon" className="h-4 w-4">
+          <InfoIcon className="h-[14px] w-[14px]" />
+        </Button>
+      )}
     </PopoverPrimitive.Trigger>
     <PopoverPrimitive.Portal>
       <PopoverPrimitive.Content

@@ -68,9 +68,6 @@ const defaultValues = {
   dateTimeRange: { from: startOfDay(subDays(new Date(), 29)), to: endOfDay(new Date()) },
 }
 
-const calculateDifference = (win: number | undefined, bet: number | undefined) =>
-  (Number(win ?? 0) - Number(bet ?? 0)).toString()
-
 const SummaryItem = ({
   label,
   value,
@@ -330,15 +327,7 @@ export default function BetRecord({ currentTab }: { currentTab: string }) {
               value={
                 <Amount
                   value={
-                    currency === Crypto.USDT
-                      ? calculateDifference(
-                          Number(summary?.totalWinGold),
-                          Number(summary?.totalBetGold)
-                        )
-                      : calculateDifference(
-                          Number(summary?.totalWinGoldPCoin),
-                          Number(summary?.totalBetGoldPCoin)
-                        )
+                    currency === Crypto.USDT ? summary?.totalWinGold : summary?.totalWinGoldPCoin
                   }
                   crypto={currency}
                 />

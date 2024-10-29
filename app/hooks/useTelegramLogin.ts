@@ -14,6 +14,7 @@ interface UseTelegramLoginProps {
 
 export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
   const [scriptLoaded, setScriptLoaded] = useState(false)
+  const telegramBotId = useStore(state => state.telegramConfig.botId)
   const setTelegramInitDataByWidgetLogin = useStore(state => state.setTelegramInitDataByWidgetLogin)
   const { mutate: doLogin } = useLogin({
     onSuccess(data) {
@@ -23,7 +24,7 @@ export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
   })
 
   const handleLogin = useCallback(() => {
-    if (scriptLoaded && window.Telegram?.Login) {
+    if (scriptLoaded && window.Telegram?.Login && telegramBotId) {
       window.Telegram.Login.auth(
         {
           bot_id: BOT_ID,
@@ -44,8 +45,10 @@ export const useTelegramLogin = ({ onSuccess }: UseTelegramLoginProps = {}) => {
           }
         }
       )
+    } else {
+      console.error('Missing Telegram login params')
     }
-  }, [doLogin, scriptLoaded, setTelegramInitDataByWidgetLogin])
+  }, [doLogin, scriptLoaded, setTelegramInitDataByWidgetLogin, telegramBotId])
 
   useEffect(() => {
     // 避免重複載入
