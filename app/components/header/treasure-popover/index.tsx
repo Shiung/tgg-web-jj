@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { Link, useLocation } from '@remix-run/react'
+import { Link } from '@remix-run/react'
 import { motion, useAnimationControls } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import Lottie from 'lottie-react'
@@ -26,15 +26,9 @@ interface readyToShowChangeTreasureType {
 
 const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
   const { t } = useTranslation()
-  const [isOpen, setIsOpen] = useState(true)
-  const location = useLocation()
+  const [isOpen, setIsOpen] = useState(false)
   const { categorizedTreasures, claimAllBonuses, isClaimingAll, refetch } = useTreasuresList()
   const generateRuleList = useGenerateRuleList()
-
-  // 導頁行為關閉popover
-  useEffect(() => {
-    setIsOpen(false)
-  }, [location.pathname])
 
   // 是否有可以領的寶箱
   const treasureNotice = useMemo(() => {
@@ -156,7 +150,11 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
         onCloseAutoFocus={e => e.preventDefault()}
       >
         {categorizedTreasures.unlocking.length === 0 ? (
-          <Empty />
+          <Empty
+            onGo={() => {
+              setIsOpen(false)
+            }}
+          />
         ) : (
           <>
             <div className="flex-1 space-y-2 overflow-y-auto">
@@ -235,7 +233,14 @@ const TreasurePopover: React.FC<{ className: string }> = ({ className }) => {
             </div>
             {/* action */}
             <div className="mt-6 flex shrink-0 flex-row space-x-2">
-              <Link to="/task/treasure" prefetch="viewport" className="flex-1">
+              <Link
+                to="/task/treasure"
+                prefetch="viewport"
+                className="flex-1"
+                onClick={() => {
+                  setIsOpen(false)
+                }}
+              >
                 <Button variant="gray" catEars>
                   {t('CheckAllTreasure')}
                 </Button>
