@@ -13,7 +13,7 @@ import TaskCard from './task-card'
 import TaskSubtaskSkeleton from './task-subtask-seleton'
 import styles from './index.module.scss'
 import ArrowLineUpIcon from '~/icons/arrow-line-up.svg?react'
-
+import ComingSoon from './coming-soon'
 const TaskSubtask: React.FC = () => {
   const { t } = useTranslation()
   const maxWidth = useAppMaxWidth()
@@ -59,6 +59,8 @@ const TaskSubtask: React.FC = () => {
     return <TaskSubtaskSkeleton />
   }
 
+  if (Object.values(tasks?.data).every(arr => arr.length === 0)) return <ComingSoon />
+
   return (
     <div className="flex flex-1 flex-col">
       <div ref={topRef} className={cn(styles.header)}>
@@ -68,32 +70,39 @@ const TaskSubtask: React.FC = () => {
       <div className="relative -top-4 flex flex-1 flex-col overflow-y-hidden rounded-xl bg-black px-3 py-4">
         <div className="mb-5 flex space-x-2">
           {tasks?.data &&
-            Object.keys(tasks.data).map(type => (
-              <Button
-                className="h-7 flex-1"
-                variant="outlineSoft"
-                isSelected={taskType === type}
-                key={type}
-                onClick={() => handleTaskTypeClick(type as TaskType)}
-              >
-                {taskTypeDisplayMap[type as TaskType] || type}
-              </Button>
-            ))}
+            Object.keys(tasks.data).map(type => {
+              const _taskType = type as TaskType
+              if (tasks.data && tasks.data?.[_taskType]?.length === 0) return null
+              return (
+                <Button
+                  className="h-7 flex-1"
+                  variant="outlineSoft"
+                  isSelected={taskType === type}
+                  key={type}
+                  onClick={() => handleTaskTypeClick(type as TaskType)}
+                >
+                  {taskTypeDisplayMap[type as TaskType] || type}
+                </Button>
+              )
+            })}
         </div>
         <div className="flex flex-1 flex-col space-y-6">
           {tasks?.data &&
-            Object.keys(tasks?.data ?? {}).map((taskType, index) => (
-              <div key={index} ref={taskRefs.current[taskType as TaskType]}>
-                <TaskCard
-                  cardTitle={
-                    taskTypeDisplayMap[taskType as TaskType] + ' ' + t('Task') ||
-                    taskType + ' ' + t('Task')
-                  }
-                  updateTimeString={taskType === 'dailyList' ? t('subTaskUpdateTimeString') : ''}
-                  list={tasks?.data?.[taskType as keyof TaskQueryResponse]}
-                />
-              </div>
-            ))}
+            Object.keys(tasks?.data ?? {}).map((taskType, index) => {
+              if (tasks.data && tasks.data?.[taskType as TaskType]?.length === 0) return null
+              return (
+                <div key={index} ref={taskRefs.current[taskType as TaskType]}>
+                  <TaskCard
+                    cardTitle={
+                      taskTypeDisplayMap[taskType as TaskType] + ' ' + t('Task') ||
+                      taskType + ' ' + t('Task')
+                    }
+                    updateTimeString={taskType === 'dailyList' ? t('subTaskUpdateTimeString') : ''}
+                    list={tasks?.data?.[taskType as keyof TaskQueryResponse]}
+                  />
+                </div>
+              )
+            })}
         </div>
       </div>
       {!istopflagVisible && (
