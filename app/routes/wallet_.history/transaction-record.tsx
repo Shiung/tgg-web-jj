@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import { endOfDay, formatRFC3339, startOfDay, subDays } from 'date-fns'
 import InfiniteScroll from '~/components/ui/infinite-scroll'
 import DatePickerSheet from '~/components/date-picker-sheet/index'
@@ -19,7 +20,7 @@ import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import { KatonIcon, TonIcon, UsdtIcon } from '~/components/color-icons'
 import XIcon from '~/icons/x.svg?react'
 import { Button } from '~/components/ui/button'
-import { useTranslation } from 'react-i18next'
+
 interface TransactionRecordRequest {
   page: number
   pageSize: number
@@ -57,32 +58,32 @@ interface FormValues {
   dateTimeRange: { from: Date; to: Date }
 }
 
-const fakeData = async (params: TransactionRecordRequest): Promise<any> => {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      const staticData: TransactionEntry[] = Array.from({ length: 20 }, (_, index) => ({
-        transactionTime: formatRFC3339(new Date('2024-08-31T11:31:00')),
-        type: 'Deposit',
-        currency: ['USDT', 'TON', 'KATON'][Math.floor(Math.random() * 3)],
-        amount:
-          (Math.random() < 0.5 ? '-' : '') +
-          (Math.floor(Math.random() * 9999999) + Math.random()).toFixed(8),
-      }))
+// const fakeData = async (params: TransactionRecordRequest): Promise<any> => {
+//   return new Promise(resolve => {
+//     setTimeout(() => {
+//       const staticData: TransactionEntry[] = Array.from({ length: 20 }, (_, index) => ({
+//         transactionTime: formatRFC3339(new Date('2024-08-31T11:31:00')),
+//         type: 'Deposit',
+//         currency: ['USDT', 'TON', 'KATON'][Math.floor(Math.random() * 3)],
+//         amount:
+//           (Math.random() < 0.5 ? '-' : '') +
+//           (Math.floor(Math.random() * 9999999) + Math.random()).toFixed(8),
+//       }))
 
-      const res = {
-        data: {
-          list: staticData,
-          pagination: {
-            pageSize: 20,
-            totalPage: 3,
-            totalRecord: 60,
-          },
-        },
-      }
-      resolve(res)
-    }, 800)
-  })
-}
+//       const res = {
+//         data: {
+//           list: staticData,
+//           pagination: {
+//             pageSize: 20,
+//             totalPage: 3,
+//             totalRecord: 60,
+//           },
+//         },
+//       }
+//       resolve(res)
+//     }, 800)
+//   })
+// }
 
 export default function TransactionRecord({ currentTab }: { currentTab: string }) {
   const { t } = useTranslation()

@@ -101,7 +101,7 @@
   "rank.rules.share.content5.subTitle": "Ranking rewards",
   "rank.rules.share.content5.content": "Rewards will be distributed automatically in 2 hour after the final result of ranking come out.",
   "transaction.type.deposit": "Deposit",
-  "transaction.type.withdraw": "Treasure",
+  "transaction.type.withdraw": "Withdraw",
   "transaction.type.swap(sell)": "Swap(Sell)",
   "transaction.type.swap(buy)": "Swap(Buy)",
   "transaction.type.commission": "Commission",

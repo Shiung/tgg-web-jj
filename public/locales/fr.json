@@ -101,7 +101,7 @@
   "rank.rules.share.content5.subTitle": "Récompenses de classement",
   "rank.rules.share.content5.content": "Les récompenses seront distribuées automatiquement dans les 2 heures suivant le résultat final du classement.",
   "transaction.type.deposit": "Dépôt",
-  "transaction.type.withdraw": "Trésor",
+  "transaction.type.withdraw": "Se retirer",
   "transaction.type.swap(sell)": "Swap(Sell)",
   "transaction.type.swap(buy)": "Échange (achat)",
   "transaction.type.commission": "La Commission",

@@ -101,7 +101,7 @@
   "rank.rules.share.content5.subTitle": "랭킹 보상",
   "rank.rules.share.content5.content": "보상은 최종 순위 결과가 나온 후 2시간 후에 자동으로 지급됩니다.",
   "transaction.type.deposit": "입금",
-  "transaction.type.withdraw": "보물",
+  "transaction.type.withdraw": "철회",
   "transaction.type.swap(sell)": "스왑(매도)",
   "transaction.type.swap(buy)": "스왑(매수)",
   "transaction.type.commission": "커미션",

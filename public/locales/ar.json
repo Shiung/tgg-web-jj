@@ -101,7 +101,7 @@
   "rank.rules.share.content5.subTitle": "مكافآت الترتيب",
   "rank.rules.share.content5.content": "سيتم توزيع المكافآت تلقائيًا خلال ساعتين بعد ظهور النتيجة النهائية للترتيب.",
   "transaction.type.deposit": "الإيداع",
-  "transaction.type.withdraw": "كنز",
+  "transaction.type.withdraw": "سحب",
   "transaction.type.swap(sell)": "مقايضة (بيع)",
   "transaction.type.swap(buy)": "مقايضة (شراء)",
   "transaction.type.commission": "اللجنة",

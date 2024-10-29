@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import useStore from '~/stores/useStore'
 import ArrowLineLeftIcon from '~/icons/arrow-line-left.svg?react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '~/components/ui/tabs'
+import { cn } from '~/lib/utils'
+
 import TransactionRecord from './transaction-record'
 import BetRecord from './bet-record'
-import { cn } from '~/lib/utils'
-import { useTranslation } from 'react-i18next'
 
 const DEFAULT_TAB = 'transaction'
 
