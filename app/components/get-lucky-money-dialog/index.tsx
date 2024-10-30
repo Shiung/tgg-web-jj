@@ -31,6 +31,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
     isQualified,
     maxValue,
     minValue,
+    packetId,
     showPotential,
     currency: packetCurrency,
   } = useStore(state => state.packet)
@@ -52,7 +53,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
     // setStatus('loading')
 
     try {
-      await packetDraw({})
+      await packetDraw({ packetId })
       setStatus('animation')
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

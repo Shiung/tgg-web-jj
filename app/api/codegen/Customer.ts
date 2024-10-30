@@ -102,6 +102,8 @@ export class Customer<SecurityDataType = unknown> {
           maxValue?: string;
           /** potential gain (min) */
           minValue?: string;
+          /** 領取紅包 */
+          packetId?: string;
           /** 需顯示potential gain */
           showPotential?: boolean;
         };

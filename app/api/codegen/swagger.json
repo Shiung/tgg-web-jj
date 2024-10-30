@@ -896,6 +896,10 @@
                       "description": "potential gain (min)",
                       "type": "string"
                     },
+                    "packetId": {
+                      "description": "領取紅包",
+                      "type": "string"
+                    },
                     "showPotential": {
                       "description": "需顯示potential gain",
                       "type": "boolean"
@@ -1199,7 +1203,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Required, Minimum: 1)",
+            "description": "分頁頁數 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -1614,7 +1618,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Minimum: 20, Required)",
+            "description": "分頁筆數 (Required, Minimum: 20)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -2222,7 +2226,13 @@
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object"
+              "type": "object",
+              "properties": {
+                "packetId": {
+                  "description": "領取紅包",
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -2503,7 +2513,7 @@
             "minimum": 20,
             "type": "integer",
             "format": "int64",
-            "description": "分頁筆數 (Required, Minimum: 20)",
+            "description": "分頁筆數 (Minimum: 20, Required)",
             "name": "pageSize",
             "in": "query",
             "required": true
@@ -5463,7 +5473,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Required, Minimum: 1)",
+            "description": "分頁頁數 (Minimum: 1, Required)",
             "name": "page",
             "in": "query",
             "required": true
@@ -7126,7 +7136,13 @@
       }
     },
     "DrawRequest": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "packetId": {
+          "description": "領取紅包",
+          "type": "string"
+        }
+      }
     },
     "DrawResponse": {
       "type": "object",
@@ -8042,6 +8058,10 @@
             },
             "minValue": {
               "description": "potential gain (min)",
+              "type": "string"
+            },
+            "packetId": {
+              "description": "領取紅包",
               "type": "string"
             },
             "showPotential": {

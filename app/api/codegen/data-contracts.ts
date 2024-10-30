@@ -429,7 +429,10 @@ export interface DepositSettingGetResponse {
   }[];
 }
 
-export type DrawRequest = object;
+export interface DrawRequest {
+  /** 領取紅包 */
+  packetId?: string;
+}
 
 export interface DrawResponse {
   /** 中獎金額 */
@@ -946,6 +949,8 @@ export interface InfoResponse {
     maxValue?: string;
     /** potential gain (min) */
     minValue?: string;
+    /** 領取紅包 */
+    packetId?: string;
     /** 需顯示potential gain */
     showPotential?: boolean;
   };
@@ -2321,7 +2326,7 @@ export interface CustomerTeamPerformanceListParams {
    */
   level?: number;
   /**
-   * 分頁頁數 (Required, Minimum: 1)
+   * 分頁頁數 (Minimum: 1, Required)
    * @format int64
    * @min 1
    */
@@ -2387,7 +2392,7 @@ export interface GameTransactionsListParams {
    */
   page: number;
   /**
-   * 分頁筆數 (Minimum: 20, Required)
+   * 分頁筆數 (Required, Minimum: 20)
    * @format int64
    * @min 20
    */
@@ -2439,6 +2444,11 @@ export interface PacketCreatePayload {
   quota?: string;
 }
 
+export interface PacketDrawCreatePayload {
+  /** 領取紅包 */
+  packetId?: string;
+}
+
 export interface PacketDetailParams {
   /**
    * 頁碼 (Required, Minimum: 1)
@@ -2466,7 +2476,7 @@ export interface PacketsListParams {
    */
   page: number;
   /**
-   * 分頁筆數 (Required, Minimum: 20)
+   * 分頁筆數 (Minimum: 20, Required)
    * @format int64
    * @min 20
    */
@@ -2502,7 +2512,7 @@ export interface TeamCommissionListListParams {
    */
   endTime: string;
   /**
-   * 分頁頁數 (Required, Minimum: 1)
+   * 分頁頁數 (Minimum: 1, Required)
    * @format int64
    * @min 1
    */
