@@ -154,7 +154,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="absolute">
         <DialogHeader>
           <DialogTitle>{t(isEditEmail ? 'EmailEdit' : 'EmailAdd')}</DialogTitle>
         </DialogHeader>

@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useTranslation } from 'react-i18next'
 import {
   Dialog,
   DialogClose,
@@ -23,7 +24,7 @@ import { successToast, errorToast } from '~/lib/toast'
 import VerifyButton, { ValidCode, type VerifyButtonExpose } from '~/components/verify-button'
 
 import { useFundActions } from './hooks'
-import { useTranslation } from 'react-i18next'
+import { triggerTinyScrollAdjustment } from './utils'
 
 interface FundPasswordDialog {
   infoRefetch: () => void
@@ -136,7 +137,7 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="absolute">
         <DialogHeader>
           <DialogTitle>{t(isChangePin ? 'ChangePassword' : 'SetPassword')}</DialogTitle>
         </DialogHeader>
@@ -150,6 +151,9 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
               placeholder={t('PlaceholderEnter')}
               error={errors.password?.message && t(errors.password?.message)}
               {...register('password')}
+              onBlur={() => {
+                triggerTinyScrollAdjustment()
+              }}
             />
 
             <Input
@@ -159,6 +163,9 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
               placeholder={t('PlaceholderEnter')}
               error={errors.confirmPassword?.message && t(errors.confirmPassword?.message)}
               {...register('confirmPassword')}
+              onBlur={() => {
+                triggerTinyScrollAdjustment()
+              }}
             />
             {/* Verification Button */}
             <VerifyButton
@@ -175,6 +182,9 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
               placeholder={t('PlaceholderEnter')}
               error={errors.verificationCode?.message && t(errors.verificationCode?.message)}
               {...register('verificationCode')}
+              onBlur={() => {
+                triggerTinyScrollAdjustment()
+              }}
             />
           </div>
           <DialogFooter className="flex flex-row space-x-2 px-3 pb-4">
