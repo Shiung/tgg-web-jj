@@ -18,9 +18,10 @@ import GoRechargeDialog from './go-recharge-dialog'
 interface BuyEnergyDialogProps {
   isOpen: boolean
   onClose: () => void
+  gameId: number
 }
 
-const BuyEnergyDialog: React.FC<BuyEnergyDialogProps> = ({ isOpen, onClose }) => {
+const BuyEnergyDialog: React.FC<BuyEnergyDialogProps> = ({ isOpen, onClose, gameId }) => {
   const { t } = useTranslation()
   // 充值彈窗
   const [isRechargeDialogOpen, setIsRechargeDialogOpen] = useState(false)
@@ -47,7 +48,7 @@ const BuyEnergyDialog: React.FC<BuyEnergyDialogProps> = ({ isOpen, onClose }) =>
   const currentEnergy = energyData?.data?.amount ?? null
 
   const buyEnergyMutation = useMutation({
-    mutationFn: () => apis.game.gameEnergyUpdate({ gameId: 3 }),
+    mutationFn: () => apis.game.gameEnergyUpdate({ gameId }),
     onSuccess: () => {
       // 對第一個iframe發訊息
       window.frames[0].postMessage('CheckBalance', '*')
