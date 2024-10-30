@@ -1,18 +1,34 @@
-import styles from './index.module.scss'
-import { useMemo } from 'react'
-import type { FooterProps } from './types'
+// import styles from './index.module.scss'
+import { useEffect, useRef } from 'react'
+import { motion, useAnimation } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
 import { formatAmount } from '~/lib/amount'
+import type { FooterProps } from './types'
 
-const eggName = (string: string): string => {
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase()
-}
-
-export default function Footer({ marqueeList }: FooterProps) {
+export default function Footer({ marqueeList = [] }: FooterProps) {
   const { t } = useTranslation()
-  const repeatedMarqueeList = useMemo(() => {
-    return marqueeList ? [...marqueeList, ...marqueeList] : []
-  }, [marqueeList])
+  const containerRef = useRef<HTMLDivElement>(null)
+  const marqueeRef = useRef<HTMLDivElement>(null)
+  const controls = useAnimation()
+
+  useEffect(() => {
+    const containerWidth = containerRef.current ? containerRef.current.offsetWidth : 0
+    const marqueeWidth = marqueeRef.current ? marqueeRef.current.scrollWidth : 0
+    const speed = 100 // 每 100px 的移動時間（秒數）100px/s
+
+    controls.set({ x: containerWidth })
+    controls.start({
+      x: -marqueeWidth / 2,
+      transition: {
+        x: {
+          repeat: Infinity,
+          repeatType: 'loop',
+          ease: 'linear',
+          duration: marqueeWidth / speed,
+        },
+      },
+    })
+  }, [marqueeList, controls])
 
   return (
     <>
@@ -30,23 +46,25 @@ export default function Footer({ marqueeList }: FooterProps) {
         />
       </div>
 
-      <div className="rounded-[8px] bg-[#F54798] px-4 py-1 text-sm">
-        <div className={styles['marquee-container']}>
-          <div className={styles.marquee}>
-            {repeatedMarqueeList.map((item, index) => (
-              <p
-                key={`${item.customerName}-${index}`}
-                dangerouslySetInnerHTML={{
-                  __html: t('eggMarquee', {
-                    user: `<span> ${item.customerName}</span>`,
-                    eggName: `<span class="text-[#FFF200]"> ${t(`eggName.${item.eggLevel.toLocaleLowerCase()}`)}</span>`,
-                    amount: `<span class="text-4 px-1 font-ultra text-white"> ${formatAmount(item.reward, { crypto: 'USDT' })}</span>`,
-                  }),
-                }}
-              ></p>
-            ))}
-          </div>
-        </div>
+      <div
+        className="h-[30px] w-full overflow-hidden rounded-sm bg-app-pink px-4 py-1 text-sm"
+        ref={containerRef}
+      >
+        <motion.div className="flex flex-nowrap space-x-3" animate={controls} ref={marqueeRef}>
+          {marqueeList.map((item, index) => (
+            <p
+              className="whitespace-nowrap font-normal text-white"
+              key={`${item.customerName}-${index}`}
+              dangerouslySetInnerHTML={{
+                __html: t('eggMarquee', {
+                  user: `<span> ${item.customerName}</span>`,
+                  eggName: `<span class="text-primary"> ${t(`eggName.${item.eggLevel.toLocaleLowerCase()}`)}</span>`,
+                  amount: `<span class="text-4 px-1 font-ultra text-white"> ${formatAmount(item.reward, { crypto: 'USDT' })}</span>`,
+                }),
+              }}
+            ></p>
+          ))}
+        </motion.div>
       </div>
     </>
   )
