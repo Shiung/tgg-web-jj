@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import type { MetaFunction } from '@remix-run/node'
 import { Link, useNavigate } from '@remix-run/react'
 import { useTranslation } from 'react-i18next'
@@ -37,20 +37,23 @@ export default function Index() {
   const activeGameList = useStore(state => state.activeGameList)
   const isActiveGameListFetching = useStore(state => state.isActiveGameListFetching)
 
-  const { banners } = useBanner()
-  const bannerRedirect = useBannerRedirect()
-
   // Crypto類型遊戲 先顯示貨幣轉換對話框
   const [isCurrencyConversionDialogOpen, setIsCurrencyConversionDialogOpen] = useState(false)
   const [cryptoPageLink, setCryptoPageLink] = useState<string | null>(null)
-  const handleGameClick = (code: GameCode, gameType: VenueType) => {
-    if (gameType === VenueType.Crypto) {
-      setIsCurrencyConversionDialogOpen(true)
-      setCryptoPageLink(getGameRoute(code, gameType))
-    } else {
-      navigate(getGameRoute(code, gameType))
-    }
-  }
+  const handleGameClick = useCallback(
+    (code: GameCode, gameType: VenueType) => {
+      if (gameType === VenueType.Crypto) {
+        setIsCurrencyConversionDialogOpen(true)
+        setCryptoPageLink(getGameRoute(code, gameType))
+      } else {
+        navigate(getGameRoute(code, gameType))
+      }
+    },
+    [navigate]
+  )
+
+  const { banners } = useBanner()
+  const bannerRedirect = useBannerRedirect({ redirectGameFn: handleGameClick })
 
   return (
     <div className="container px-0">

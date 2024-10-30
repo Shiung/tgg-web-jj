@@ -1,11 +1,11 @@
 import { useCallback, useMemo } from 'react'
+import { useNavigate } from '@remix-run/react'
 import { useQuery } from '@tanstack/react-query'
 import { useUtils } from '@telegram-apps/sdk-react'
 import { useTranslation } from 'react-i18next'
 import { apis } from '~/api'
 import useStore from '~/stores/useStore'
-import { useNavigate } from '@remix-run/react'
-import { baseGameInfos, getGameRoute, isValidGameCode } from '~/consts/game'
+import { GameCode, VenueType, baseGameInfos, isValidGameCode } from '~/consts/game'
 
 const useBanner = () => {
   const isLoggedIn = useStore(state => state.isLoggedIn)
@@ -41,7 +41,11 @@ enum RedirectTypeEnum {
   WALLET = 'WALLET',
 }
 
-const useBannerRedirect = () => {
+const useBannerRedirect = ({
+  redirectGameFn,
+}: {
+  redirectGameFn: (gameCode: GameCode, gameType: VenueType) => void
+}) => {
   const navigate = useNavigate()
   const utils = useUtils()
   const inTelegram = useStore(state => state.inTelegram)
@@ -68,8 +72,7 @@ const useBannerRedirect = () => {
             const gameCode = redirectConfig
             if (isValidGameCode(gameCode)) {
               const currentGameInfo = baseGameInfos[gameCode]
-              const to = getGameRoute(gameCode, currentGameInfo.gameType)
-              if (to) navigate(to)
+              redirectGameFn(gameCode, currentGameInfo.gameType)
             }
           }
           console.error('Invalid gameCode:', redirectConfig)
