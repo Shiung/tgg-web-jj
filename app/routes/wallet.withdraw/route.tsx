@@ -446,7 +446,11 @@ export default function Withdraw() {
                 />
               </div>
               <div className="flex items-center">
-                <span className="pr-1 text-white">{currentSetting?.availableForWithdraw}</span>
+                <Amount
+                  className="pr-1 text-white"
+                  value={currentSetting?.availableForWithdraw}
+                  crypto={currentSetting?.currency}
+                />
                 <ActiveIcon currency={currentSetting?.currency} className="h-3 w-3" />
               </div>
             </div>
