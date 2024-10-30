@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -110,7 +112,7 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
   }
 
   const dialogHandler = useCallback(
-    (e: React.MouseEvent<HTMLButtonElement>) => {
+    (e: React.MouseEvent<HTMLDivElement>) => {
       e.preventDefault()
       if (!storeEmail) {
         return errorToast(t('EmailSetFirst'))
@@ -123,18 +125,16 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button
-          variant="icon"
-          size="icon"
-          className="h-4 w-4 flex-shrink-0 text-white"
-          onClick={dialogHandler}
-        >
-          {isChangePin ? (
-            <EditIcon className="h-full w-full" />
-          ) : (
-            <AddIcon className="h-full w-full" />
-          )}
-        </Button>
+        <div className="flex flex-1 items-center justify-end space-x-2" onClick={dialogHandler}>
+          {storePin && <div className="font-ultra text-white">{storePin}</div>}
+          <Button variant="icon" size="icon" className="h-4 w-4 flex-shrink-0 text-white">
+            {isChangePin ? (
+              <EditIcon className="h-full w-full" />
+            ) : (
+              <AddIcon className="h-full w-full" />
+            )}
+          </Button>
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

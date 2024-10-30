@@ -2,6 +2,8 @@ import { useState, useMemo, useCallback, useRef } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useTranslation } from 'react-i18next'
+import { Truncate } from '@re-dev/react-truncate'
 import {
   Dialog,
   DialogClose,
@@ -18,12 +20,12 @@ import { Button } from '~/components/ui/button'
 import AddIcon from '~/icons/add.svg?react'
 import EditIcon from '~/icons/edit.svg?react'
 import { successToast, errorToast } from '~/lib/toast'
-import { useEmailActions, useEmailStatus } from './hooks'
-import { ValidCode, EmailBindStep } from './constants'
 import useStore from '~/stores/useStore'
 import VerifyButton, { type VerifyButtonExpose } from '~/components/verify-button'
 
-import { useTranslation } from 'react-i18next'
+import { ValidCode, EmailBindStep } from './constants'
+import { useEmailActions, useEmailStatus } from './hooks'
+import { triggerTinyScrollAdjustment } from './utils'
 
 interface EmailDialogProps {
   infoRefetch: () => void
@@ -141,15 +143,16 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        {isEditEmail ? (
-          <Button variant="icon" size="icon" className="h-4 w-4 text-white">
-            <EditIcon className="h-full w-full" />
+        <div className="flex flex-1 items-center justify-end space-x-2">
+          {isEditEmail && <Truncate className="font-ultra text-white">{storeEmail}</Truncate>}
+          <Button variant="icon" size="icon" type="button" className="h-4 w-4 text-white">
+            {isEditEmail ? (
+              <EditIcon className="h-full w-full" />
+            ) : (
+              <AddIcon className="h-full w-full" />
+            )}
           </Button>
-        ) : (
-          <Button variant="icon" size="icon" className="h-4 w-4 text-white">
-            <AddIcon className="h-full w-full" />
-          </Button>
-        )}
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -178,6 +181,9 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
                 onClear={() => setValue('email', '', { shouldValidate: true })}
                 error={errors.email?.message && t(errors.email?.message)}
                 {...register('email')}
+                onBlur={() => {
+                  triggerTinyScrollAdjustment()
+                }}
               />
             )}
             {/* Verification Button */}
@@ -207,6 +213,9 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
               placeholder={t('PlaceholderEnter')}
               error={errors.verificationCode?.message && t(errors.verificationCode?.message)}
               {...register('verificationCode')}
+              onBlur={() => {
+                triggerTinyScrollAdjustment()
+              }}
             />
           </div>
           <DialogFooter className="flex flex-row space-x-2 px-3 pb-4">

@@ -10,13 +10,18 @@ import {
 } from '~/components/ui/dialog'
 import { Button } from '~/components/ui/button'
 import SettingIcon from '~/icons/setting.svg?react'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useMemo } from 'react'
 import { languages } from './constants'
 
 const LanguageDialog: React.FC = () => {
   const { i18n, t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [selectedLanguage, setSelectedLanguage] = useState(i18n.language)
+
+  const currentLanguage = useMemo(
+    () => languages.find(language => language.value === selectedLanguage),
+    [selectedLanguage]
+  )
 
   const handleLanguageSelect = (languageCode: string) => {
     setSelectedLanguage(languageCode)
@@ -38,9 +43,19 @@ const LanguageDialog: React.FC = () => {
   return (
     <Dialog open={open} onOpenChange={onOpenChangeHandler}>
       <DialogTrigger asChild>
-        <Button variant="icon" size="icon" className="h-4 w-4 text-white">
-          <SettingIcon className="h-full w-full" />
-        </Button>
+        <div className="flex items-center space-x-2">
+          {currentLanguage && (
+            <img
+              src={currentLanguage.icon}
+              alt={`${currentLanguage.name} icon`}
+              className="h-6 w-6"
+            />
+          )}
+          <span className="font-ultra text-white">{currentLanguage?.name}</span>
+          <Button variant="icon" size="icon" className="h-4 w-4 text-white">
+            <SettingIcon className="h-full w-full" />
+          </Button>
+        </div>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+import { useCallback, useEffect, useState } from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useUtils } from '@telegram-apps/sdk-react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -21,7 +23,6 @@ import { emitter } from '~/lib/emitter'
 import { useCustomSupport } from '~/hooks/useCustomSupport'
 import { customerInfoQueryKey } from '~/hooks/api/useCustomer'
 
-import { languages } from './constants'
 import LanguageDialog from './language-dialog'
 import EmailDialog from './email-dialog'
 import FundPasswordDialog from './fund-password-dialog'
@@ -37,7 +38,7 @@ const officialLinks = {
 const ProfileDialog: React.FC = () => {
   const [state, copyToClipboard] = useCopyToClipboard()
   const [open, setIsOpen] = useState(false)
-  const { i18n, t } = useTranslation()
+  const { t } = useTranslation()
   const utils = useUtils()
   const { inTelegram, telegramUserData, userInfo, logout } = useStore(state => state)
 
@@ -101,54 +102,30 @@ const ProfileDialog: React.FC = () => {
           {/* Player ID */}
           <div className="flex items-center justify-between">
             <span>{t('PlayerId')}</span>
-            <div className="flex items-center space-x-2">
+            <div
+              className="flex cursor-pointer items-center space-x-2"
+              onClick={() => copyToClipboard(`${userInfo.customerId || ''}`)}
+            >
               <span className="font-ultra text-white">{userInfo.customerId}</span>
-              <Button
-                variant="icon"
-                size="icon"
-                className="h-4 w-4 text-white"
-                onClick={() => copyToClipboard(`${userInfo.customerId || ''}`)}
-              >
+              <Button variant="icon" size="icon" className="h-4 w-4 text-white">
                 <CopyIcon className="h-full w-full" />
               </Button>
             </div>
           </div>
           {/* Email */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between space-x-2">
             <span>{t('Email')}</span>
-            <div className="flex items-center justify-end space-x-2">
-              {userInfo.email && (
-                <div className="w-5/6 truncate font-ultra text-white">{userInfo.email}</div>
-              )}
-              <EmailDialog infoRefetch={refetchCustomerInfo} />
-            </div>
+            <EmailDialog infoRefetch={refetchCustomerInfo} />
           </div>
           {/* Fund Password */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between space-x-2">
             <span>{t('FundPassword')}</span>
-            <div className="flex items-center justify-end space-x-2">
-              {userInfo.pin && (
-                <div className="w-5/6 truncate font-ultra text-white">{userInfo.pin}</div>
-              )}
-              <FundPasswordDialog infoRefetch={refetchCustomerInfo} />
-            </div>
+            <FundPasswordDialog infoRefetch={refetchCustomerInfo} />
           </div>
           {/* Language */}
           <div className="flex items-center justify-between">
             <span>{t('Language')}</span>
-            <div className="flex items-center space-x-2">
-              {useMemo(() => {
-                const getLang = languages.find(({ value }) => value === i18n.language)
-                if (!getLang) return ''
-                return (
-                  <>
-                    <img src={getLang.icon} alt={`${getLang.name} icon`} className="h-6 w-6" />
-                    <span className="font-ultra text-white">{getLang?.name}</span>
-                  </>
-                )
-              }, [i18n.language])}
-              <LanguageDialog />
-            </div>
+            <LanguageDialog />
           </div>
 
           <hr className="border-white/20" />
