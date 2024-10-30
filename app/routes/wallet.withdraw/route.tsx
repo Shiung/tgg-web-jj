@@ -54,7 +54,11 @@ export default function Withdraw() {
   }, [selectedCurrency])
 
   // 獲取提款設定
-  const { data: withdrawSettingsRaw, isLoading } = useQuery({
+  const {
+    data: withdrawSettingsRaw,
+    isLoading,
+    refetch: refetchWithdrawSettings,
+  } = useQuery({
     queryKey: ['walletWithdrawSettings'],
     queryFn: () => apis.wallet.walletWithdrawSettingList(),
   })
@@ -177,6 +181,7 @@ export default function Withdraw() {
     setFocus,
     handleSubmit,
     watch,
+    reset: resetForm,
     formState: { errors, isValid },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
@@ -252,6 +257,8 @@ export default function Withdraw() {
     mutationFn: (data: WithdrawRequest) => apis.wallet.walletWithdrawCreate(data),
     onSuccess: () => {
       setIsSuccessDialogOpen(true)
+      refetchWithdrawSettings()
+      resetForm()
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onError: (error: any) => {
