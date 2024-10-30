@@ -186,7 +186,7 @@ const GetLuckyMoneyDialog: React.FC = () => {
                   <div className="flex items-center self-center">
                     <CurrencyIcon currency={drawResult?.currency} className="h-8 w-8" />
                     <div className="ml-1 text-3xl text-primary">
-                      <Amount value={drawResult?.amount} crypto={Crypto.KATON} />
+                      <Amount value={drawResult?.amount} crypto={drawResult?.currency} />
                     </div>
                   </div>
                 </>
