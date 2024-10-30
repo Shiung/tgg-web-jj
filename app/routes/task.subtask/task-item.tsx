@@ -48,7 +48,7 @@ const TaskNameFormat = (task: NonNullable<TaskQueryResponse['dailyList']>[number
     case 'TEAM_CLASS_ACHIEVEMENT':
       return task.taskName
     case 'PLAY_GAMES':
-      return task.taskName
+      return `${task.taskName} (${task.accumulatedValue}/${task.playGameCondition?.playCount})`
     case 'OPEN_LINK':
       return task.taskName
     case 'TEAM_RECHARGE':
@@ -57,11 +57,6 @@ const TaskNameFormat = (task: NonNullable<TaskQueryResponse['dailyList']>[number
       return 'Unknown'
   }
 }
-
-type Desc18nKeyMapFnProps = Pick<
-  NonNullable<TaskQueryResponse['dailyList']>[number],
-  'inviteFriendsCondition' | 'teamRechargeCondition' | 'rechargeCondition'
->
 
 // 限量時間格式化
 const limitTimeString = (
