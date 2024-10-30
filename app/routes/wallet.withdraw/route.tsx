@@ -243,7 +243,8 @@ export default function Withdraw() {
     mutationFn: (code: string) => apis.customer.customerVerifycodeCreate({ code }),
     // TODO: spec 錯誤訊息 確認是哪一邊要維護 還有 i18n
     onError: (error: { response: { data: { message: string } } }) => {
-      errorToast(error?.response?.data?.message ?? 'Verification code is incorrect')
+      console.error('[ERROR] VerificationCodeIsIncorrect =>', error)
+      errorToast(t('VerificationCodeIsIncorrect'))
     },
   })
 

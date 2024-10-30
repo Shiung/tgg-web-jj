@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react'
 import { useNavigate, useParams } from '@remix-run/react'
 import useStore from '~/stores/useStore'
 import { useGetGameUrl } from '~/hooks/api/useGame'
@@ -28,6 +28,11 @@ const CasualGame: React.FC = () => {
   // 進入頁面去要遊戲連結
   const gameCode: string = params.gameCode || ''
   const { gameUrl, getUrl, isPending } = useGetGameUrl()
+
+  const gameInfoId = useMemo(() => {
+    const gameInfo = activeGameList.find(game => game.gameCode === gameCode)
+    return gameInfo?.id
+  }, [activeGameList, gameCode])
 
   const fetchGameUrl = useCallback(() => {
     if (!gameCode || hasRequestedRef.current) return
@@ -97,8 +102,13 @@ const CasualGame: React.FC = () => {
       ) : (
         <p className="text-center text-white">{t('NoGameURLProvided')}</p>
       )}
-
-      <BuyEnergyDialog isOpen={isBuyEnergyDialogOpen} onClose={handleCloseBuyEnergyDialog} />
+      {gameInfoId !== undefined && (
+        <BuyEnergyDialog
+          gameId={gameInfoId}
+          isOpen={isBuyEnergyDialogOpen}
+          onClose={handleCloseBuyEnergyDialog}
+        />
+      )}
       {isPending && <AppLoading variant="blur" />}
     </div>
   )

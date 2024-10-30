@@ -344,5 +344,6 @@
   "MaintenanceDescription": "Katon is temporarily unavailable due to system maintenance. We will be restoring regular service as soon as possible. We apologize for any inconvenience.",
   "Loading": "Loading",
   "Me": "Me",
-  "task.teamClassRewardDescription": "The reward depends on your team rating when you access Katon."
+  "task.teamClassRewardDescription": "The reward depends on your team rating when you access Katon",
+  "VerificationCodeIsIncorrect": "Verification code is incorrect"
 }
