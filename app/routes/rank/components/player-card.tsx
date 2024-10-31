@@ -144,7 +144,7 @@ const PlayerCard: React.FC<Props> & {
         </>
       }
       slot_third={
-        isSelf && type === 'crypto' && !rewardLock && Number(reward) === 0 ? (
+        isSelf && !rewardLock && Number(reward) === 0 ? (
           <div className="absolute bottom-0 right-0">
             <div
               className={cn(

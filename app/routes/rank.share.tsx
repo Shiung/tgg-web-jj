@@ -91,7 +91,7 @@ export default function Share() {
             reward={dataLs.self?.reward ?? ''}
             currency={dataLs.self?.rewardType as Crypto}
             isSelf
-            rewardLock={!dataLs.isReward || !dataLs.self?.rewardType}
+            rewardLock={!dataLs.isReward}
           />
         </div>
       </div>
