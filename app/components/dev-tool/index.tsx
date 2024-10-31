@@ -1,3 +1,4 @@
+import { useMemo, useState } from 'react'
 import { Link } from '@remix-run/react'
 import { Boxes, ChevronsLeft, ChevronsRight } from 'lucide-react'
 import useStore from '~/stores/useStore'
@@ -6,7 +7,6 @@ import InfoTooltip from '~/components/info-tooltip'
 
 import CurrentUrlPopover from './current-url-popover'
 import DevLoginDialog from './dev-login-dialog'
-import { useState } from 'react'
 import { Button } from '../ui/button'
 
 const Playground = () => (
@@ -19,9 +19,16 @@ const DevTool = () => {
   const maxWidth = useStore(state => state.maxWidth)
   const [isExpanded, setIsExpanded] = useState(false)
 
+  const notShow = useMemo(
+    () => process.env.NODE_ENV === 'production' && import.meta.env.VITE_ENV === 'prod',
+    []
+  )
+
   const toggleExpand = () => {
     setIsExpanded(prev => !prev)
   }
+
+  if (notShow) return null
 
   return (
     <div
