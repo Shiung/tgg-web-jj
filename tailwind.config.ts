@@ -95,9 +95,9 @@ const config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
-        'background-wave': {
-          '0%': { backgroundPosition: '0 0' },
-          '100%': { backgroundPosition: '200% 0' },
+        wave: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-100%)' },
         },
         'spin-with-pause': {
           '0%': { transform: 'rotate(0deg)' },
@@ -120,7 +120,7 @@ const config = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'background-wave': 'background-wave 4s linear infinite',
+        wave: 'wave 20s linear infinite',
         'spin-with-pause': 'spin-with-pause 1s cubic-bezier(0.55, 0.085, 0.68, 0.53) infinite',
         'fall-down': 'fall-down 0.3s ease-out forwards',
         'toast-enter': 'toast-enter 200ms ease-out',

@@ -59,9 +59,13 @@ export default function Index() {
     <div className="container px-0">
       {/* banner carousel */}
       <div className="relative aspect-[375/168] w-full rounded-t-xl bg-black">
-        <div className="absolute inset-0 py-3">
-          <div className="h-full w-full animate-background-wave bg-[url('/images/long-wave.png')] bg-cover bg-center bg-repeat-x" />
-        </div>
+        {[0, 1].map(index => (
+          <div
+            key={index}
+            className="animate-wave absolute inset-y-3 w-[200%] bg-[url('/images/long-wave.png')] bg-contain bg-center"
+            style={{ left: `${index * 200}%` }}
+          />
+        ))}
         <Carousel className="w-full py-3" plugins={[Autoplay({ delay: 3000 })]}>
           <CarouselContent className="ml-0">
             {banners.map(banner => (
