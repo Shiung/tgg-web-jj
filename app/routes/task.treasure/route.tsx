@@ -64,12 +64,12 @@ const TaskTreasure: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-1 flex-col rounded-xl bg-black px-3 py-4">
+    <div className="flex flex-1 flex-col rounded-xl bg-black">
       <div ref={topRef} className={cn(styles.header)}>
         <p>{t('UnlockTreasure')}</p>
         <p>{t('EarningBetter')}</p>
       </div>
-      <div className="relative -top-4 flex flex-1 flex-col space-y-4 rounded-xl">
+      <div className="relative -top-4 flex flex-1 flex-col space-y-4 rounded-xl bg-black px-3 py-4">
         {categorizedTreasures.unlocking.length > 0 && (
           <>
             <div className="flex items-center justify-between">
