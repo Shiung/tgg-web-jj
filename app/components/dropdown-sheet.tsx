@@ -8,6 +8,7 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { useTranslation } from 'react-i18next'
 import {
   Sheet,
   SheetTrigger,
@@ -53,6 +54,7 @@ const DropdownSheet = ({
   onReset,
   children,
 }: DropdownBottomSheetProps) => {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [selectedOption, setSelectedOption] = useState<
     { value: string | object; label: string | ReactNode } | undefined
@@ -161,10 +163,10 @@ const DropdownSheet = ({
           </div>
           <SheetFooter className="px-4 pb-4">
             <Button variant="gray" catEars onClick={handleClear} className="flex-1">
-              Clear
+              {t('Clear')}
             </Button>
             <Button variant="default" catEars onClick={handleConfirm} className="flex-1">
-              Confirm
+              {t('Confirm')}
             </Button>
           </SheetFooter>
         </SheetContent>

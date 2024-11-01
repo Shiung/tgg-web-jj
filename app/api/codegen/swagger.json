@@ -1203,7 +1203,7 @@
             "minimum": 1,
             "type": "integer",
             "format": "int64",
-            "description": "分頁頁數 (Minimum: 1, Required)",
+            "description": "分頁頁數 (Required, Minimum: 1)",
             "name": "page",
             "in": "query",
             "required": true
@@ -2227,6 +2227,9 @@
             "required": true,
             "schema": {
               "type": "object",
+              "required": [
+                "packetId"
+              ],
               "properties": {
                 "packetId": {
                   "description": "領取紅包",
@@ -7137,6 +7140,9 @@
     },
     "DrawRequest": {
       "type": "object",
+      "required": [
+        "packetId"
+      ],
       "properties": {
         "packetId": {
           "description": "領取紅包",

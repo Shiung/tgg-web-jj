@@ -345,5 +345,11 @@
   "Loading": "Loading",
   "Me": "Me",
   "task.teamClassRewardDescription": "The reward depends on your team rating when you access Katon",
-  "VerificationCodeIsIncorrect": "Verification code is incorrect"
+  "VerificationCodeIsIncorrect": "Verification code is incorrect",
+  "From": "From",
+  "To": "To",
+  "Clear": "Clear",
+  "Confirm": "Confirm",
+  "NoTreasureHint": "There is no treasure to unlock. Go get the treasure from the reward of task.",
+  "Commission": "Commission"
 }

@@ -63,7 +63,7 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
   const { t } = useTranslation()
   const {
     userInfo: { pin: storePin, email: storeEmail },
-    setToggleMainButton,
+    // setToggleMainButton,
     inTelegram,
   } = useStore(state => state)
   const {

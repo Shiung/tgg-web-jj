@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState, ReactNode } from 'react'
 import { type DateRange } from 'react-day-picker'
 import { format, isAfter, isBefore, setHours, setMinutes } from 'date-fns'
+import { useTranslation } from 'react-i18next'
 import {
   Sheet,
   SheetTrigger,
@@ -61,9 +62,10 @@ export default function DatePickerSheet({
   onChange,
   range = false,
   showTimePicker = false,
-  placeholder = 'Select Date',
+  placeholder,
   rangeLimits,
 }: DatePickerSheetProps) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [internalDate, setInternalDate] = useState<Date | DateRange | undefined>(value)
   const [internalTimeFrom, setInternalTimeFrom] = useState(DEFAULT_START_TIME)
@@ -76,7 +78,7 @@ export default function DatePickerSheet({
           internalDate.from,
           internalTimeFrom || DEFAULT_START_TIME
         )
-        const updatedTo = applyTimeToDate(internalDate.to, internalTimeTo || DEFAULT_END_TIME, true)
+        const updatedTo = applyTimeToDate(internalDate.to, internalTimeTo || DEFAULT_END_TIME)
         onChange({ from: updatedFrom, to: updatedTo })
       } else if (internalDate instanceof Date) {
         const updatedDate = applyTimeToDate(internalDate, internalTimeFrom || DEFAULT_START_TIME)
@@ -116,7 +118,7 @@ export default function DatePickerSheet({
   }, [internalDate, internalTimeFrom, internalTimeTo, range, showTimePicker])
 
   const displayTriggerDate = useMemo(() => {
-    if (!value) return placeholder
+    if (!value) return placeholder || t('SelectDate')
 
     if (range && isDateRange(value)) {
       const { from, to } = value
@@ -132,7 +134,7 @@ export default function DatePickerSheet({
       const formatTime = showTimePicker ? ` ${format(value, 'HH:mm')}` : ''
       return `${formatDate}${formatTime}`
     }
-  }, [placeholder, range, showTimePicker, value])
+  }, [placeholder, range, showTimePicker, t, value])
 
   const disabledDates = useMemo(() => {
     if (!rangeLimits) return undefined
@@ -237,8 +239,8 @@ export default function DatePickerSheet({
           {showTimePicker && (
             <div className="flex flex-1 flex-shrink-0 flex-col items-stretch overflow-hidden rounded-lg bg-[#1C1C1C]">
               <div className="flex border-b-[0.5px] border-white/20 bg-[#1C1C1C] py-1 text-center text-base font-normal text-white/70">
-                <div className="flex-1">From</div>
-                {range && <div className="flex-1">To</div>}
+                <div className="flex-1">{t('From')}</div>
+                {range && <div className="flex-1">{t('To')}</div>}
               </div>
               <div className="flex flex-1 items-center justify-between">
                 <TimePicker
@@ -257,10 +259,10 @@ export default function DatePickerSheet({
         </div>
         <SheetFooter className="px-4 pb-4 pt-2">
           <Button className="flex-1" variant="gray" catEars onClick={handleClear}>
-            Clear
+            {t('Clear')}
           </Button>
           <Button className="flex-1" catEars onClick={handleConfirm}>
-            Confirm
+            {t('Confirm')}
           </Button>
         </SheetFooter>
       </SheetContent>

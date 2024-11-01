@@ -36,8 +36,8 @@ const DepositViaAddressDialog: React.FC<DepositViaAddressDialogProps> = ({ curre
 
   useEffect(() => {
     if (!state.value) return
-    successToast('Copied')
-  }, [state])
+    successToast(t('Copied'))
+  }, [state, t])
 
   if (!info) return <Skeleton className="h-9 w-full rounded-full" />
   return (

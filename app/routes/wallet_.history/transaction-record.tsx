@@ -20,16 +20,7 @@ import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
 import { KatonIcon, TonIcon, UsdtIcon } from '~/components/color-icons'
 import XIcon from '~/icons/x.svg?react'
 import { Button } from '~/components/ui/button'
-
-interface TransactionRecordRequest {
-  page: number
-  pageSize: number
-  transactionTimeFrom?: string
-  transactionTimeTo?: string
-  currency?: string | undefined
-  type?: string
-  balance?: string
-}
+import { WalletHistoryListListParams } from '~/api/codegen/data-contracts'
 
 interface Pagination {
   pageSize: number
@@ -153,14 +144,14 @@ export default function TransactionRecord({ currentTab }: { currentTab: string }
 
   const fetchPosts = useCallback(
     async ({ pageParam = 1 }) => {
-      const queryString: TransactionRecordRequest = {
+      const queryString: WalletHistoryListListParams = {
         page: pageParam,
         pageSize: 20,
         transactionTimeFrom: formatRFC3339(formValues.dateTimeRange.from),
         transactionTimeTo: formatRFC3339(formValues.dateTimeRange.to),
         currency: formValues.currency,
-        type: formValues.type,
-        balance: formValues.balance,
+        type: formValues.type as WalletHistoryListListParams['type'],
+        balance: formValues.balance as WalletHistoryListListParams['balance'],
       }
       const res = await apis.wallet.walletHistoryListList(queryString)
       // const res = await fakeData(queryString)

@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react'
 import { Link } from '@remix-run/react'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import qs from 'qs'
 
 import useStore from '~/stores/useStore'
@@ -17,10 +18,11 @@ import { ListSkeleton } from './skeleton'
 const QUERY_STATE = [2, 3]
 
 export const EmptyList = () => {
+  const { t } = useTranslation()
   return (
     <div className="m-auto flex flex-col items-center justify-center space-y-2 text-xs font-semibold text-white/70">
       <img className="w-32 self-center" src="/images/system-no-data.png" alt="No data" />
-      <p className="self-center text-xs font-semibold text-white/70">No data available</p>
+      <p className="self-center text-xs font-semibold text-white/70">{t('NoDataAvailable')}</p>
     </div>
   )
 }

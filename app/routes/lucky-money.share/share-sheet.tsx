@@ -99,8 +99,8 @@ const ShareSheet: React.FC = () => {
 
   useEffect(() => {
     if (!state.value) return
-    successToast('Copied')
-  }, [state])
+    successToast(t('Copied'))
+  }, [state, t])
 
   return (
     <Sheet open={open} onOpenChange={handleSheetChange}>

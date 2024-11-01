@@ -431,7 +431,7 @@ export interface DepositSettingGetResponse {
 
 export interface DrawRequest {
   /** 領取紅包 */
-  packetId?: string;
+  packetId: string;
 }
 
 export interface DrawResponse {
@@ -2326,7 +2326,7 @@ export interface CustomerTeamPerformanceListParams {
    */
   level?: number;
   /**
-   * 分頁頁數 (Minimum: 1, Required)
+   * 分頁頁數 (Required, Minimum: 1)
    * @format int64
    * @min 1
    */
@@ -2446,7 +2446,7 @@ export interface PacketCreatePayload {
 
 export interface PacketDrawCreatePayload {
   /** 領取紅包 */
-  packetId?: string;
+  packetId: string;
 }
 
 export interface PacketDetailParams {

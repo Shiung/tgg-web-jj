@@ -353,7 +353,7 @@ const Commission: React.FC<CommissionProps> = ({ customerTeamInfo, teamSettingLi
             render={({ field }) => (
               <DatePickerSheet
                 id="datetime-range-picker"
-                title="Select Date"
+                title={t('SelectDate')}
                 value={field.value}
                 customTrigger={({ displayTriggerDate }) => {
                   const { from, to } = field.value

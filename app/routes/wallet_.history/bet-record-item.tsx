@@ -21,8 +21,8 @@ export default function BetRecordItem({
   const { t } = useTranslation()
   useEffect(() => {
     if (!state.value) return
-    successToast('Copied')
-  }, [state])
+    successToast(t('Copied'))
+  }, [state, t])
 
   return (
     <div className="w-full rounded-xl bg-[#1C1C1C]">

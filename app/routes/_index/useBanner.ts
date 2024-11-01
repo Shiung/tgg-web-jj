@@ -23,7 +23,9 @@ const useBanner = () => {
     const banners = (data?.data?.list || [])
       .map(banner => ({
         ...banner,
-        currentLangNames: banner?.language?.find(t => t?.code === currentLang),
+        currentLangNames:
+          banner?.language?.find(t => t?.code === currentLang) ||
+          banner?.language?.find(t => t?.code === 'en'),
       }))
       .filter(Boolean)
 
