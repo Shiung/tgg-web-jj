@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useMemo, useRef, useState } from 'react'
-import { cn } from '~/lib/utils'
+import { cn, triggerTinyScrollAdjustment } from '~/lib/utils'
 import WarningIcon from '~/icons/warning.svg?react'
 import XIcon from '~/icons/x.svg?react'
 import PasswordShowIcon from '~/icons/password-show.svg?react'
@@ -20,7 +20,19 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
-    { className, type, clearable = false, error, label, id, hint, fieldSuffix, onClear, ...props },
+    {
+      className,
+      type,
+      clearable = false,
+      error,
+      label,
+      id,
+      hint,
+      fieldSuffix,
+      onClear,
+      onBlur,
+      ...props
+    },
     ref
   ) => {
     const [inputType, setInputType] = useState(type)
@@ -67,6 +79,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
             style={{ paddingRight }}
             ref={ref}
+            onBlur={e => {
+              triggerTinyScrollAdjustment()
+              onBlur?.(e)
+            }}
             {...props}
           />
           {/* suffix area */}

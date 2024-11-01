@@ -1,19 +1,15 @@
 import React, { useState, useMemo, useEffect } from 'react'
+import { useUtils } from '@telegram-apps/sdk-react'
+import { useTranslation } from 'react-i18next'
+import { useMutation } from '@tanstack/react-query'
+import { format } from 'date-fns'
 import { cn } from '~/lib/utils'
-import { type RewardType, type rewardClaimStatus } from './type'
 import { parseAmount } from '~/lib/amount'
 import { type TaskQueryResponse } from '~/api/codegen/data-contracts'
-import { format } from 'date-fns'
-import { useMutation } from '@tanstack/react-query'
 import { apis } from '~/api/index'
-import { useUtils } from '@telegram-apps/sdk-react'
 import useStore from '~/stores/useStore'
-import { useTranslation } from 'react-i18next'
-
 import { Button } from '~/components/ui/button'
 import Amount from '~/components/amount'
-import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
-import CheckIcon from '~/icons/check.svg?react'
 import {
   KatonIcon,
   UsdtIcon,
@@ -24,11 +20,14 @@ import {
   SmashEggIcon,
 } from '~/components/color-icons'
 import { CurrencyIcon } from '~/components/currency-icon'
-import styles from './index.module.scss'
+import ArrowLineDownIcon from '~/icons/arrow-line-down.svg?react'
+import CheckIcon from '~/icons/check.svg?react'
 import { errorToast } from '~/lib/toast'
-import RewardDialog from './reward-dialog'
-
 import { emitter } from '~/lib/emitter'
+
+import RewardDialog from './reward-dialog'
+import { type RewardType, type rewardClaimStatus } from './type'
+import styles from './index.module.scss'
 
 type TaskActionType = NonNullable<TaskQueryResponse['dailyList']>[number]['actionType']
 
@@ -259,7 +258,7 @@ const TaskItem: React.FC<TaskItemProps> = ({ task }) => {
 
       await openLinkAsync(id)
       if (inTelegram) {
-        utils.openLink(link)
+        link.startsWith('https://t.me/') ? utils.openTelegramLink(link) : utils.openLink(link)
       } else {
         window.open(link, '_blank')
       }

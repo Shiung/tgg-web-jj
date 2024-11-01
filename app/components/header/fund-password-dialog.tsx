@@ -21,10 +21,10 @@ import EditIcon from '~/icons/edit.svg?react'
 import { useState, useRef, useMemo, useCallback } from 'react'
 import useStore from '~/stores/useStore'
 import { successToast, errorToast } from '~/lib/toast'
+import { cn } from '~/lib/utils'
 import VerifyButton, { ValidCode, type VerifyButtonExpose } from '~/components/verify-button'
 
 import { useFundActions } from './hooks'
-import { triggerTinyScrollAdjustment } from './utils'
 
 interface FundPasswordDialog {
   infoRefetch: () => void
@@ -63,6 +63,8 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
   const { t } = useTranslation()
   const {
     userInfo: { pin: storePin, email: storeEmail },
+    setToggleMainButton,
+    inTelegram,
   } = useStore(state => state)
   const {
     register,
@@ -87,6 +89,14 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
     reset() // 重置表單
     vbRef.current?.resetTimer() // 重置倒計時
   }
+
+  // const handleFocus = () => {
+  //   setToggleMainButton(true)
+  // }
+
+  // const handleBlur = () => {
+  //   setToggleMainButton(false)
+  // }
 
   const onSubmit = (values: FormValues) => {
     // console.log(values)
@@ -137,7 +147,12 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="absolute">
+      <DialogContent
+        className={cn('absolute top-[50vh]', inTelegram && '-translate-y-[60%]')}
+        onInteractOutside={e => {
+          e.preventDefault()
+        }}
+      >
         <DialogHeader>
           <DialogTitle>{t(isChangePin ? 'ChangePassword' : 'SetPassword')}</DialogTitle>
         </DialogHeader>
@@ -151,9 +166,6 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
               placeholder={t('PlaceholderEnter')}
               error={errors.password?.message && t(errors.password?.message)}
               {...register('password')}
-              onBlur={() => {
-                triggerTinyScrollAdjustment()
-              }}
             />
 
             <Input
@@ -163,9 +175,6 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
               placeholder={t('PlaceholderEnter')}
               error={errors.confirmPassword?.message && t(errors.confirmPassword?.message)}
               {...register('confirmPassword')}
-              onBlur={() => {
-                triggerTinyScrollAdjustment()
-              }}
             />
             {/* Verification Button */}
             <VerifyButton
@@ -182,9 +191,6 @@ const FundPasswordDialog: React.FC<FundPasswordDialog> = ({ infoRefetch }) => {
               placeholder={t('PlaceholderEnter')}
               error={errors.verificationCode?.message && t(errors.verificationCode?.message)}
               {...register('verificationCode')}
-              onBlur={() => {
-                triggerTinyScrollAdjustment()
-              }}
             />
           </div>
           <DialogFooter className="flex flex-row space-x-2 px-3 pb-4">

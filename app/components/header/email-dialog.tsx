@@ -20,12 +20,12 @@ import { Button } from '~/components/ui/button'
 import AddIcon from '~/icons/add.svg?react'
 import EditIcon from '~/icons/edit.svg?react'
 import { successToast, errorToast } from '~/lib/toast'
+import { cn } from '~/lib/utils'
 import useStore from '~/stores/useStore'
 import VerifyButton, { type VerifyButtonExpose } from '~/components/verify-button'
 
 import { ValidCode, EmailBindStep } from './constants'
 import { useEmailActions, useEmailStatus } from './hooks'
-import { triggerTinyScrollAdjustment } from './utils'
 
 interface EmailDialogProps {
   infoRefetch: () => void
@@ -47,6 +47,7 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
   const { t } = useTranslation()
   const {
     userInfo: { email: storeEmail },
+    inTelegram,
   } = useStore(state => state)
 
   const { isEditEmail, stepStatus, isVerifyCurrentHandler } = useEmailStatus({
@@ -154,7 +155,12 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="absolute">
+      <DialogContent
+        className={cn('absolute top-[50vh]', inTelegram && '-translate-y-[60%]')}
+        onInteractOutside={e => {
+          e.preventDefault()
+        }}
+      >
         <DialogHeader>
           <DialogTitle>{t(isEditEmail ? 'EmailEdit' : 'EmailAdd')}</DialogTitle>
         </DialogHeader>
@@ -181,9 +187,6 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
                 onClear={() => setValue('email', '', { shouldValidate: true })}
                 error={errors.email?.message && t(errors.email?.message)}
                 {...register('email')}
-                onBlur={() => {
-                  triggerTinyScrollAdjustment()
-                }}
               />
             )}
             {/* Verification Button */}
@@ -213,9 +216,6 @@ const EmailDialog: React.FC<EmailDialogProps> = ({ infoRefetch }) => {
               placeholder={t('PlaceholderEnter')}
               error={errors.verificationCode?.message && t(errors.verificationCode?.message)}
               {...register('verificationCode')}
-              onBlur={() => {
-                triggerTinyScrollAdjustment()
-              }}
             />
           </div>
           <DialogFooter className="flex flex-row space-x-2 px-3 pb-4">

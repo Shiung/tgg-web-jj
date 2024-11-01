@@ -81,6 +81,10 @@ const config = {
         'header-safe': 'var(--top-header-safe-padding)',
         'nav-safe': 'var(--bottom-nav-safe-padding)',
       },
+      margin: {
+        'header-safe': 'var(--top-header-safe-padding)',
+        'nav-safe': 'var(--bottom-nav-safe-padding)',
+      },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',

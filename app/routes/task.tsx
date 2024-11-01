@@ -22,7 +22,7 @@ export default function Task() {
     <div className="container flex flex-1 flex-col p-0">
       {/* Top Navigation */}
       <Tabs defaultValue="task" value={currentTab} className="flex flex-1 flex-col">
-        <TabsList className="relative left-[50%] mb-3 w-[94%] -translate-x-[50%]">
+        <TabsList className="mx-3">
           <TabsTrigger value="subtask" className="flex-1" asChild>
             <Link prefetch="viewport" to="subtask">
               Task
@@ -34,7 +34,7 @@ export default function Task() {
             </Link>
           </TabsTrigger>
         </TabsList>
-        <TabsContent value={currentTab} className="flex flex-1 flex-col">
+        <TabsContent value={currentTab} className="mt-3 flex flex-1 flex-col">
           <Outlet />
         </TabsContent>
       </Tabs>

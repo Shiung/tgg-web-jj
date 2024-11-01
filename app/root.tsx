@@ -11,11 +11,11 @@ import NeedLoginDialog from '~/components/need-login-dialog'
 import DevTool from '~/components/dev-tool/index'
 import GetLuckyMoneyDialog from '~/components/get-lucky-money-dialog'
 import { useAppMaxWidth } from '~/hooks/useAppMaxWidth'
-import { useSafePaddingClass } from '~/hooks/useSafePaddingClass'
 import useRouteGuard from '~/hooks/useRouteGuard'
 import { cn } from '~/lib/utils'
 import { iconsLinks, prefetchAssetsLinks } from '~/consts/prefetch'
 import { fallbackLng } from '~/consts/i18n'
+import useStore from '~/stores/useStore'
 
 import './tailwind.css'
 
@@ -25,6 +25,7 @@ export const links: LinksFunction = () => {
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { i18n } = useTranslation()
+  const inTelegram = useStore(state => state.inTelegram)
 
   return (
     <html lang={i18n.language || fallbackLng}>
@@ -37,7 +38,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="dark relative bg-background font-sans antialiased">
+      <body
+        className={cn(
+          'dark relative bg-background font-sans antialiased',
+          inTelegram ? 'overflow-hidden' : ''
+        )}
+      >
         {children}
         <ScrollRestoration />
         <Scripts />
@@ -51,7 +57,6 @@ export default function App() {
   useRouteGuard()
   // layout settings
   const maxWidth = useAppMaxWidth()
-  const safePaddingClass = useSafePaddingClass()
 
   return (
     <>
@@ -59,8 +64,7 @@ export default function App() {
         <Header />
         <main
           className={cn(
-            'main relative z-10 mx-auto flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden rounded-xl',
-            safePaddingClass
+            'main relative z-10 mx-auto flex w-full flex-1 flex-col overflow-y-auto overflow-x-hidden rounded-xl'
           )}
           style={{ maxWidth: maxWidth }}
         >

@@ -4,6 +4,8 @@ import {
   useLaunchParams,
   useMiniApp,
   useSwipeBehavior,
+  useViewport,
+  useMainButton,
 } from '@telegram-apps/sdk-react'
 import { TonConnectUIProvider } from '@tonconnect/ui-react'
 import { QueryClientProvider } from '@tanstack/react-query'
@@ -19,6 +21,7 @@ import { useMaintenancePolling, usePingPolling } from '~/hooks/api/usePolling'
 import { useGetTelegramConfigToStore } from '~/hooks/api/useConfig'
 import { useGetCustomerInfoToStore } from '~/hooks/api/useCustomer'
 import useWebCheckIsLoggedIn from '~/hooks/useWebCheckIsLoggedIn'
+import { useAppLayoutClass } from '~/hooks/useAppLayoutClass'
 import { cn, mapSystemLanguageCode } from '~/lib/utils'
 
 import { TonClientProvider } from './ton-client-context'
@@ -29,10 +32,19 @@ import classes from './index.module.scss'
 const TelegramInit: React.FC = () => {
   useTelegramNavigate()
   const { i18n } = useTranslation()
-  const setTelegramInitDataByInitData = useStore(state => state.setTelegramInitDataByInitData)
+  const { setTelegramPlatform, setTelegramInitDataByInitData, toggleMainButton } = useStore(
+    state => ({
+      setTelegramPlatform: state.setTelegramPlatform,
+      setTelegramInitDataByInitData: state.setTelegramInitDataByInitData,
+      toggleMainButton: state.toggleMainButton,
+    })
+  )
+
   const swipeBehavior = useSwipeBehavior()
   const launchParams = useLaunchParams(true)
   const miniApp = useMiniApp()
+  const viewport = useViewport()
+  const mainButton = useMainButton()
 
   // 自動登入
   useTelegramMiniAppAutoLogin(launchParams?.initData)
@@ -49,15 +61,55 @@ const TelegramInit: React.FC = () => {
     miniApp.setBgColor('#242424')
   }, [miniApp])
 
+  // viewport
+  useEffect(() => {
+    if (!viewport) return
+    if (!viewport.isExpanded) {
+      viewport.expand()
+    }
+  }, [viewport])
+
+  // mainButton, TODO: 待測試
+  useEffect(() => {
+    if (launchParams?.platform !== 'ios') return
+    if (!mainButton) return
+
+    const handleMainButtonClick = () => {
+      const activeElement = document.activeElement as HTMLElement
+      console.log('handleMainButtonClick', activeElement)
+      if (activeElement && activeElement.tagName === 'INPUT') {
+        activeElement.blur() // 取消 focus 並收起鍵盤
+      }
+    }
+
+    if (toggleMainButton) {
+      mainButton.setParams({
+        bgColor: '#00000000',
+        textColor: '#00000000',
+        text: 'close',
+        isVisible: true,
+      })
+      mainButton.on('click', handleMainButtonClick)
+    } else {
+      mainButton.hide()
+      mainButton.off('click', handleMainButtonClick)
+    }
+  }, [mainButton, toggleMainButton, launchParams?.platform])
+
   // 設置系統語言 與 initData
   useEffect(() => {
-    if (!launchParams?.initData) return
+    if (!launchParams) return
+    if (launchParams.platform) {
+      setTelegramPlatform(launchParams.platform)
+    }
 
+    if (!launchParams.initData) return
     const initData = launchParams.initData
+
     const systemLanguageCode = mapSystemLanguageCode(initData.user?.languageCode)
     initData?.user && setTelegramInitDataByInitData(initData.user)
     i18n.changeLanguage(systemLanguageCode)
-  }, [i18n, launchParams, miniApp, setTelegramInitDataByInitData])
+  }, [i18n, setTelegramInitDataByInitData, setTelegramPlatform, launchParams])
 
   return null
 }
@@ -83,10 +135,7 @@ export default function AppRoot({ children }: PropsWithChildren) {
   // prepare layout params
   const isHeaderVisible = useStore(state => state.isHeaderVisible)
   const maxWidth = useStore(state => state.maxWidth)
-  const minHClass = useMemo(() => {
-    if (inTelegram) return 'h-dvh'
-    return 'min-h-dvh'
-  }, [inTelegram])
+  const appLayoutClass = useAppLayoutClass()
 
   // prepare manifestUrl
   const manifestUrl = useMemo(() => {
@@ -108,7 +157,7 @@ export default function AppRoot({ children }: PropsWithChildren) {
               style={{ maxWidth }}
             />
             {/* app框容器 */}
-            <div className={cn('flex flex-col', minHClass)}>{children}</div>
+            <div className={cn('flex flex-col', appLayoutClass)}>{children}</div>
             {/* app初始相關數據獲取 */}
             <AppInit />
             {/* Telegram 相關初始化 */}
